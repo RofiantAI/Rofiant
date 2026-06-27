@@ -1,0 +1,56 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { HeroSection } from "@/components/sections/hero-section";
+
+export const metadata: Metadata = {
+  title: "Rofiant — AI for Government & Enterprise",
+  description:
+    "Rofiant is the AI platform built for government agencies and enterprises. Secure, compliant, and ready for mission-critical workloads.",
+  alternates: { canonical: "https://rofiant.ca" },
+};
+import { UnifySection } from "@/components/sections/unify-section";
+import { DeploySection } from "@/components/sections/deploy-section";
+import { ProtectSection } from "@/components/sections/protect-section";
+import { ScaleSection } from "@/components/sections/scale-section";
+import { MonitorSection } from "@/components/sections/monitor-section";
+import { DeveloperSection } from "@/components/sections/developer-section";
+import { PublicAISection } from "@/components/sections/public-ai-section";
+import { FooterCtaSection } from "@/components/sections/footer-cta-section";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect("/dashboard");
+
+  return (
+    <>
+      <HeroSection />
+      <ScrollReveal>
+        <PublicAISection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <UnifySection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <DeploySection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <ProtectSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <ScaleSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <MonitorSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <DeveloperSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <FooterCtaSection />
+      </ScrollReveal>
+    </>
+  );
+}
