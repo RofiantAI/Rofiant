@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { type ChatSettings, DEFAULT_SETTINGS, loadSettings, saveSettings, clampModelForPlan } from "@/lib/chat-settings";
 
 type ChatSettingsContextValue = {
@@ -27,26 +27,36 @@ export function ChatSettingsProvider({
   const [settings, setSettings] = useState<ChatSettings>(DEFAULT_SETTINGS);
 
   useEffect(() => {
-    const loaded = loadSettings(isPro);
-    setSettings(loaded);
+    setSettings(loadSettings(isPro));
   }, [isPro]);
 
-  function update(patch: Partial<ChatSettings>) {
-    setSettings((prev) => {
-      const next = { ...prev, ...patch };
-      if (patch.model) next.model = clampModelForPlan(patch.model, isPro);
-      return next;
-    });
-  }
+  const update = useCallback(
+    (patch: Partial<ChatSettings>) => {
+      setSettings((prev) => {
+        const next = { ...prev, ...patch };
+        if (patch.model) next.model = clampModelForPlan(patch.model, isPro);
+        return next;
+      });
+    },
+    [isPro],
+  );
 
-  function save(s: ChatSettings) {
-    const clamped = { ...s, model: clampModelForPlan(s.model, isPro) };
-    saveSettings(clamped);
-    setSettings(clamped);
-  }
+  const save = useCallback(
+    (s: ChatSettings) => {
+      const clamped = { ...s, model: clampModelForPlan(s.model, isPro) };
+      saveSettings(clamped);
+      setSettings(clamped);
+    },
+    [isPro],
+  );
+
+  const value = useMemo(
+    () => ({ settings, isPro, update, save }),
+    [settings, isPro, update, save],
+  );
 
   return (
-    <ChatSettingsContext.Provider value={{ settings, isPro, update, save }}>
+    <ChatSettingsContext.Provider value={value}>
       {children}
     </ChatSettingsContext.Provider>
   );

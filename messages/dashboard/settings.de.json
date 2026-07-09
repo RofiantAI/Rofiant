@@ -1,0 +1,236 @@
+{
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Verwalte dein Konto, deine Sicherheit und deine Einstellungen",
+    "tabs": {
+      "account": "Konto",
+      "security": "Sicherheit",
+      "notifications": "Benachrichtigungen",
+      "preferences": "Einstellungen",
+      "appearance": "Erscheinungsbild",
+      "danger": "Gefahrenzone"
+    },
+    "account": {
+      "heading": "Konto",
+      "displayName": "Anzeigename",
+      "displayNamePlaceholder": "Dein Name",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "bio": "Bio",
+      "bioPlaceholder": "Eine kurze Beschreibung über dich",
+      "bioCount": "{count}/200",
+      "saveBio": "Bio speichern",
+      "email": "E-Mail",
+      "emailHint": "Wende dich an den Support, um deine E-Mail-Adresse zu ändern.",
+      "userId": "Benutzer-ID",
+      "password": "Passwort",
+      "passwordHint": "Ändere das Passwort deines Kontos",
+      "change": "Ändern",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Neues Passwort bestätigen",
+      "passwordUpdated": "Passwort aktualisiert.",
+      "passwordTooShort": "Mindestens 8 Zeichen erforderlich.",
+      "passwordMismatch": "Passwörter stimmen nicht überein.",
+      "cancel": "Abbrechen",
+      "photoUpload": "Foto hochladen",
+      "photoRemove": "Foto entfernen",
+      "photoUploading": "Wird hochgeladen…",
+      "photoHint": "JPG, PNG, WebP oder GIF. Max. 5 MB.",
+      "photoInvalidType": "JPG, PNG, WebP oder GIF verwenden.",
+      "photoTooLarge": "Bild darf maximal 5 MB groß sein.",
+      "photoUploadError": "Upload fehlgeschlagen: {message}"
+    },
+    "security": {
+      "twoFactor": "Zwei-Faktor-Authentifizierung",
+      "active": "Aktiv",
+      "totpProtected": "Dein Konto ist mit einer Authenticator-App (TOTP) geschützt.",
+      "disable2fa": "2FA deaktivieren",
+      "scanQr": "Scanne diesen QR-Code mit deiner Authenticator-App (Google Authenticator, Authy, 1Password usw.)",
+      "manualKey": "Oder gib den Schlüssel manuell ein:",
+      "enterCode": "Gib den 6-stelligen Code aus deiner App ein",
+      "verifyAndEnable": "Verifizieren & aktivieren",
+      "cancel": "Abbrechen",
+      "twoFaEnabled": "2FA erfolgreich aktiviert.",
+      "twoFaDesc": "Füge mit einer TOTP-Authenticator-App eine zusätzliche Sicherheitsebene hinzu. In allen Tarifen verfügbar.",
+      "loading": "Wird geladen…",
+      "setup2fa": "2FA einrichten",
+      "sessions": "Sitzungen",
+      "currentSession": "Aktuelle Sitzung",
+      "signedIn": "Angemeldet seit",
+      "account": "Konto",
+      "signOutOthersDesc": "Melde dich auf allen anderen aktiven Sitzungen auf deinen übrigen Geräten ab.",
+      "allOthersSignedOut": "Alle anderen Sitzungen wurden abgemeldet.",
+      "signingOut": "Wird abgemeldet…",
+      "signOutOthers": "Andere Sitzungen abmelden",
+      "auditLog": {
+        "title": "Audit-Protokoll",
+        "desc": "Sicherheitsrelevante Aktionen wie API-Schlüsseländerungen, Webhooks und Datenexporte einsehen.",
+        "view": "Audit-Protokoll anzeigen"
+      }
+    },
+    "notifications": {
+      "heading": "Benachrichtigungen",
+      "usageAlerts": {
+        "label": "Nutzungswarnungen",
+        "desc": "Benachrichtigen, wenn Plan-Limits erreicht werden"
+      },
+      "securityAlerts": {
+        "label": "Sicherheitswarnungen",
+        "desc": "Neue Anmeldung erkannt oder API-Schlüssel erstellt"
+      },
+      "productUpdates": {
+        "label": "Produkt-Updates",
+        "desc": "Neue Funktionen und Verbesserungen"
+      },
+      "weeklyDigest": {
+        "label": "Wöchentliche Zusammenfassung",
+        "desc": "Zusammenfassung deiner Nutzung jede Woche"
+      },
+      "apiFailures": {
+        "label": "API-Fehler",
+        "desc": "Benachrichtigen bei wiederholt fehlschlagenden API-Anfragen"
+      },
+      "billingAlerts": {
+        "label": "Abrechnungswarnungen",
+        "desc": "Anstehende Verlängerungen und Zahlungsprobleme"
+      }
+    },
+    "preferences": {
+      "heading": "Einstellungen",
+      "language": "Sprache",
+      "timezone": "Zeitzone",
+      "currentTime": "Aktuelle Uhrzeit:",
+      "dateFormat": "Datumsformat",
+      "timeFormat": "Zeitformat",
+      "time12h": "12-Stunden (2:30 PM)",
+      "time24h": "24-Stunden (14:30)",
+      "dataRegion": "Datenregion",
+      "dataRegionDesc": "Legt fest, wo deine Daten gespeichert und verarbeitet werden.",
+      "regions": {
+        "usEast": "USA Ost",
+        "usWest": "USA West",
+        "euWest": "EU West",
+        "euCentral": "EU Zentral",
+        "asiaPacific": "Asien-Pazifik"
+      },
+      "savePreferences": "Einstellungen speichern",
+      "saved": "Gespeichert"
+    },
+    "appearance": {
+      "heading": "Erscheinungsbild",
+      "theme": "Design",
+      "themes": {
+        "light": {
+          "label": "Hell",
+          "desc": "Heller Hintergrund, dunkler Text"
+        },
+        "dark": {
+          "label": "Dunkel",
+          "desc": "Dunkler Hintergrund, heller Text"
+        },
+        "system": {
+          "label": "System",
+          "desc": "Entspricht der Geräteeinstellung"
+        }
+      },
+      "accentColor": "Akzentfarbe",
+      "selected": "Ausgewählt:",
+      "uiDensity": "UI-Dichte",
+      "densities": {
+        "compact": {
+          "label": "Kompakt",
+          "desc": "Engerer Abstand, mehr Inhalt auf dem Bildschirm"
+        },
+        "comfortable": {
+          "label": "Komfortabel",
+          "desc": "Ausgewogen — die Standardeinstellung"
+        },
+        "spacious": {
+          "label": "Geräumig",
+          "desc": "Mehr Abstand zwischen den Elementen"
+        }
+      },
+      "accentNames": {
+        "yellow": "Bernstein",
+        "blue": "Blau",
+        "green": "Grün",
+        "purple": "Lila"
+      },
+      "apply": "Anwenden",
+      "applied": "Angewendet"
+    },
+    "danger": {
+      "exportData": "Daten exportieren",
+      "exportDesc": "Lade alle deine Daten herunter, einschließlich Unterhaltungen, Dokumente, Agenten und Kontoeinstellungen.",
+      "requestExport": "Export anfordern",
+      "exportAlert": "Ein Datenexport wird vorbereitet und innerhalb von 24 Stunden an {email} gesendet.",
+      "deleteAccount": "Konto löschen",
+      "deleteDesc": "Löscht dein Konto und alle zugehörigen Daten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "typeToConfirm": "Gib {email} ein, um zu bestätigen",
+      "deleting": "Wird gelöscht…",
+      "deleteMyAccount": "Mein Konto löschen",
+      "deleteAlert": "Die Kontolöschung erfordert eine Verifizierung durch einen Administrator. Eine Löschanfrage wurde für {email} an den Support gesendet.",
+      "exporting": "Wird exportiert…"
+    }
+  },
+  "sidebar": {
+    "product": "Produkt",
+    "agency": "Organisation",
+    "developer": "Sicherheit & API",
+    "nav": {
+      "overview": "Übersicht",
+      "chatAi": "Chat AI",
+      "voiceAi": "Voice AI",
+      "documents": "Dokumente",
+      "agents": "Agenten",
+      "apiKeys": "API-Schlüssel",
+      "usage": "Nutzung",
+      "agencyOverview": "Übersicht",
+      "missionSolutions": "Workflows",
+      "toolsHub": "Tools",
+      "intelligence": "Intelligence",
+      "members": "Mitglieder",
+      "billing": "Abrechnung",
+      "agencySettings": "Einstellungen",
+      "broadcast": "Broadcast",
+      "accessReview": "Zugriffsüberprüfung",
+      "knowledgeBases": "Wissensdatenbanken",
+      "auditLog": "Audit-Protokoll",
+      "siteBroadcast": "Site-Broadcast"
+    },
+    "siteAdmin": "Site-Admin",
+    "sitePages": "Site-Seiten",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "accountMenu": "Kontomenü",
+    "accountSettings": "Einstellungen",
+    "planSuffix": "Tarif",
+    "signOut": "Abmelden",
+    "upgrade": "Upgrade",
+    "plans": {
+      "enterprise": "Enterprise",
+      "agency": "Agency",
+      "pilot": "Pilot",
+      "team": "Team",
+      "pro": "Pro",
+      "free": "Free"
+    }
+  },
+  "announcementBanner": {
+    "dismiss": "Ankündigung schließen"
+  },
+  "inviteBanner": {
+    "invitedTo": "Du wurdest eingeladen, beizutreten zu",
+    "asRole": "als",
+    "accept": "Annehmen",
+    "decline": "Ablehnen"
+  },
+  "chatRedirect": {
+    "title": "Dieser Tab wird verlassen",
+    "desc": "Chat AI öffnet sich in einem neuen Tab. Deine aktuelle Sitzung bleibt hier geöffnet.",
+    "dontShowAgain": "Nicht mehr anzeigen",
+    "back": "Zurück",
+    "continue": "Weiter"
+  }
+}

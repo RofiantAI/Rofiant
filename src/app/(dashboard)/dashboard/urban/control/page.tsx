@@ -1,10 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
-  Copy, Check, Save, RefreshCw, Terminal,
-  Sliders, Wifi, WifiOff, ChevronDown,
+  Copy, Check, Save, RefreshCw, ChevronDown, Wifi, WifiOff,
 } from "lucide-react";
+import {
+  DashboardPage,
+  DashboardHeader,
+  DashboardCard,
+  DashboardSection,
+  DashboardPrimaryButton,
+  DashboardSecondaryButton,
+} from "@/components/dashboard/ui/page-shell";
 
 type Config = {
   datasource_url:    string;
@@ -65,6 +73,7 @@ function Select({ value, onChange, options }: {
 }
 
 function CopyButton({ text }: { text: string }) {
+  const t = useTranslations("dashboard.urban.control");
   const [copied, setCopied] = useState(false);
   function copy() {
     navigator.clipboard.writeText(text);
@@ -74,7 +83,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button onClick={copy} className="shrink-0 h-8 px-3 border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary transition-colors inline-flex items-center gap-1.5 text-xs">
       {copied ? <Check className="w-3.5 h-3.5 text-accent-success" /> : <Copy className="w-3.5 h-3.5" />}
-      {copied ? "Copied" : "Copy"}
+      {copied ? t("setup.copied") : t("setup.copy")}
     </button>
   );
 }
@@ -87,6 +96,7 @@ function levelColor(level: string) {
 }
 
 export default function UrbanControlPage() {
+  const t = useTranslations("dashboard.urban.control");
   const [apiKey, setApiKey] = useState<string>("");
   const [config, setConfig] = useState<Config | null>(null);
   const [draft, setDraft] = useState<Config | null>(null);
@@ -155,29 +165,24 @@ export default function UrbanControlPage() {
       });
       if (!res.ok) {
         const e = await res.json().catch(() => ({}));
-        setSaveError(e.error ?? "Save failed");
+        setSaveError(e.error ?? t("settings.saveError"));
       } else {
         const updated = await res.json();
         setConfig(updated); setDraft(updated); setSaved(true);
         setTimeout(() => setSaved(false), 2500);
       }
-    } catch { setSaveError("Network error"); }
+    } catch { setSaveError(t("settings.networkError")); }
     finally { setSaving(false); }
   }
 
-  const startCmd = `ROFIANT_API_KEY=rofiant_sk_YOUR_KEY python urban_ai.py`;
+  const startCmd = `ROFIANT_API_KEY=sk_YOUR_KEY python urban_ai.py`;
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-normal text-foreground">Urban AI — Control Panel</h1>
-        <p className="mt-1 text-sm text-foreground-secondary">
-          Configure the Python service and monitor its activity from here.
-        </p>
-      </div>
+    <DashboardPage>
+      <div className="max-w-3xl space-y-8">
+      <DashboardHeader title={t("title")} description={t("subtitle")} />
 
-      {/* Service status */}
-      <div className={`flex items-center gap-2 mb-6 px-4 py-3 border text-sm ${
+      <div className={`flex items-center gap-2 rounded-lg px-4 py-3 border text-sm ${
         serviceUp === true
           ? "bg-green-500/5 border-green-500/20 text-green-400"
           : serviceUp === false
@@ -185,24 +190,20 @@ export default function UrbanControlPage() {
             : "bg-background-secondary border-border text-foreground-muted"
       }`}>
         {serviceUp === true
-          ? <><Wifi className="w-3.5 h-3.5" /> Service is running</>
+          ? <><Wifi className="w-3.5 h-3.5" /> {t("status.running")}</>
           : serviceUp === false
-            ? <><WifiOff className="w-3.5 h-3.5" /> Service is not running — see start command below</>
-            : <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Checking…</>}
+            ? <><WifiOff className="w-3.5 h-3.5" /> {t("status.notRunning")}</>
+            : <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> {t("status.checking")}</>}
       </div>
 
-      {/* ── Setup ── */}
-      <section className="mb-8">
-        <h2 className="text-xs font-medium uppercase tracking-widest text-foreground-muted mb-4">
-          Start the service
-        </h2>
-        <div className="bg-card border border-border p-5 space-y-4">
+      <DashboardSection title={t("setup.title")}>
+        <DashboardCard className="space-y-4">
           <div>
             <p className="text-sm text-foreground-secondary mb-3">
-              1. Go to <a href="/dashboard/api-keys" className="text-accent-primary hover:underline">API Keys</a> and create a key, then copy it.
+              {t("setup.step1Before")} <a href="/dashboard/api-keys" className="text-accent-primary hover:underline">{t("setup.apiKeysLinkText")}</a> {t("setup.step1After")}
             </p>
             <p className="text-sm text-foreground-secondary mb-3">
-              2. Run this command in your terminal (replace with your full key):
+              {t("setup.step2")}
             </p>
             <div className="flex items-center gap-2">
               <code className="flex-1 px-3 py-2 bg-background border border-border text-xs font-mono text-foreground-secondary overflow-x-auto whitespace-nowrap">
@@ -212,68 +213,64 @@ export default function UrbanControlPage() {
             </div>
           </div>
           <p className="text-xs text-foreground-muted">
-            The service reads all other settings (data source, scan interval, model, thresholds) from this
-            page automatically — no editing config files needed.
+            {t("setup.note")}
           </p>
-        </div>
-      </section>
+        </DashboardCard>
+      </DashboardSection>
 
-      {/* ── Settings ── */}
-      <section className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-medium uppercase tracking-widest text-foreground-muted flex items-center gap-2">
-            <Sliders className="w-3.5 h-3.5" /> Settings
-          </h2>
-          {draft && config && JSON.stringify(draft) !== JSON.stringify(config) && (
-            <span className="text-[10px] text-foreground-muted">Unsaved changes</span>
-          )}
-        </div>
-
+      <DashboardSection
+        title={t("settings.title")}
+        action={
+          draft && config && JSON.stringify(draft) !== JSON.stringify(config) ? (
+            <span className="text-xs text-foreground-muted">{t("settings.unsavedChanges")}</span>
+          ) : undefined
+        }
+      >
         {draft ? (
-          <div className="bg-card border border-border p-5 space-y-5">
+          <DashboardCard className="space-y-5">
             <div className="grid grid-cols-2 gap-5">
-              <Field label="Camera data source URL" hint="CSV or JSON API. Leave blank for bundled Toronto TMC cameras.">
+              <Field label={t("settings.fields.datasourceUrl.label")} hint={t("settings.fields.datasourceUrl.hint")}>
                 <Input value={draft.datasource_url}
                   onChange={(v) => set("datasource_url", v)} />
               </Field>
-              <Field label="Data source auth key" hint="Bearer token if the source requires auth.">
+              <Field label={t("settings.fields.datasourceAuth.label")} hint={t("settings.fields.datasourceAuth.hint")}>
                 <Input value={draft.datasource_auth}
                   onChange={(v) => set("datasource_auth", v)} />
               </Field>
             </div>
 
             <div className="grid grid-cols-3 gap-5">
-              <Field label="Scan interval (seconds)" hint="How often the service scans all cameras.">
+              <Field label={t("settings.fields.scanInterval.label")} hint={t("settings.fields.scanInterval.hint")}>
                 <Input type="number" value={draft.scan_interval}
                   onChange={(v) => set("scan_interval", Number(v))} />
               </Field>
-              <Field label="Concurrency" hint="Parallel camera requests per scan.">
+              <Field label={t("settings.fields.concurrency.label")} hint={t("settings.fields.concurrency.hint")}>
                 <Input type="number" value={draft.concurrency}
                   onChange={(v) => set("concurrency", Number(v))} />
               </Field>
-              <Field label="Confidence threshold" hint="Lower = more detections, more false positives.">
+              <Field label={t("settings.fields.confidence.label")} hint={t("settings.fields.confidence.hint")}>
                 <Input type="number" step="0.05" value={draft.confidence}
                   onChange={(v) => set("confidence", Number(v))} />
               </Field>
             </div>
 
             <div className="grid grid-cols-3 gap-5">
-              <Field label="YOLO model" hint="Larger = more accurate but slower.">
+              <Field label={t("settings.fields.model.label")} hint={t("settings.fields.model.hint")}>
                 <Select value={draft.model_name} options={MODELS}
                   onChange={(v) => set("model_name", v)} />
               </Field>
-              <Field label="Inference size (px)" hint="Image size fed to YOLO. 1280 is best for traffic cams.">
+              <Field label={t("settings.fields.inferSize.label")} hint={t("settings.fields.inferSize.hint")}>
                 <Select value={draft.infer_size} options={INFER_SIZES}
                   onChange={(v) => set("infer_size", Number(v))} />
               </Field>
-              <Field label="Crowd threshold" hint="People count that triggers LARGE_CROWD anomaly.">
+              <Field label={t("settings.fields.crowdThreshold.label")} hint={t("settings.fields.crowdThreshold.hint")}>
                 <Input type="number" value={draft.crowd_threshold}
                   onChange={(v) => set("crowd_threshold", Number(v))} />
               </Field>
             </div>
 
             <div className="grid grid-cols-3 gap-5">
-              <Field label="Traffic threshold" hint="Car count that triggers TRAFFIC_JAM anomaly.">
+              <Field label={t("settings.fields.trafficThreshold.label")} hint={t("settings.fields.trafficThreshold.hint")}>
                 <Input type="number" value={draft.traffic_threshold}
                   onChange={(v) => set("traffic_threshold", Number(v))} />
               </Field>
@@ -284,53 +281,42 @@ export default function UrbanControlPage() {
             )}
 
             <div className="flex items-center gap-3 pt-2 border-t border-border">
-              <button
-                onClick={save}
-                disabled={saving}
-                className="h-8 px-4 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors inline-flex items-center gap-1.5"
-              >
+              <DashboardPrimaryButton onClick={save} disabled={saving}>
                 {saved
-                  ? <><Check className="w-3.5 h-3.5" /> Saved</>
+                  ? <><Check className="w-3.5 h-3.5" /> {t("settings.saved")}</>
                   : saving
-                    ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Saving…</>
-                    : <><Save className="w-3.5 h-3.5" /> Save settings</>}
-              </button>
+                    ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> {t("settings.saving")}</>
+                    : <><Save className="w-3.5 h-3.5" /> {t("settings.save")}</>}
+              </DashboardPrimaryButton>
               <p className="text-xs text-foreground-muted">
-                The running service picks up changes within {draft.scan_interval}s automatically.
+                {t("settings.autoApply", { seconds: draft.scan_interval })}
               </p>
             </div>
-          </div>
+          </DashboardCard>
         ) : (
-          <div className="bg-card border border-border p-8 text-center text-sm text-foreground-muted">
-            Loading settings…
-          </div>
+          <DashboardCard className="py-8 text-center text-sm text-foreground-muted">
+            {t("settings.loading")}
+          </DashboardCard>
         )}
-      </section>
+      </DashboardSection>
 
-      {/* ── Logs ── */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-medium uppercase tracking-widest text-foreground-muted flex items-center gap-2">
-            <Terminal className="w-3.5 h-3.5" /> Service logs
-          </h2>
-          <button
-            onClick={fetchLogs}
-            disabled={logsLoading}
-            className="h-7 px-2.5 text-xs border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary transition-colors inline-flex items-center gap-1.5"
-          >
+      <DashboardSection
+        title={t("logs.title")}
+        action={
+          <DashboardSecondaryButton onClick={fetchLogs} disabled={logsLoading}>
             <RefreshCw className={`w-3 h-3 ${logsLoading ? "animate-spin" : ""}`} />
-            Refresh
-          </button>
-        </div>
-
-        <div className="bg-card border border-border">
+            {t("logs.refresh")}
+          </DashboardSecondaryButton>
+        }
+      >
+        <DashboardCard padding={false}>
           {serviceUp === false ? (
             <div className="p-8 text-center text-sm text-foreground-muted">
-              Service is not running — logs will appear here once started.
+              {t("logs.notRunning")}
             </div>
           ) : logs.length === 0 ? (
             <div className="p-8 text-center text-sm text-foreground-muted">
-              {logsLoading ? "Loading logs…" : "No logs yet."}
+              {logsLoading ? t("logs.loading") : t("logs.empty")}
             </div>
           ) : (
             <div className="font-mono text-[11px] max-h-[480px] overflow-y-auto p-3 space-y-0.5">
@@ -346,8 +332,9 @@ export default function UrbanControlPage() {
               <div ref={logEndRef} />
             </div>
           )}
-        </div>
-      </section>
-    </div>
+        </DashboardCard>
+      </DashboardSection>
+      </div>
+    </DashboardPage>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import {
   AlertTriangle,
@@ -12,6 +13,12 @@ import {
   Clock,
 } from "lucide-react";
 import { IntelAnalytics } from "./intel-analytics";
+import {
+  DashboardPage,
+  DashboardHeader,
+  DashboardList,
+  DashboardAlert,
+} from "@/components/dashboard/ui/page-shell";
 
 type IntelEvent = {
   id: string;
@@ -29,43 +36,36 @@ type IntelEvent = {
   created_at: string;
 };
 
-const severityConfig = {
-  critical: {
-    label: "Critical",
-    icon: XCircle,
-    color: "text-red-400 border-red-400/30 bg-red-400/10",
-  },
-  high: {
-    label: "High",
-    icon: AlertTriangle,
-    color: "text-orange-400 border-orange-400/30 bg-orange-400/10",
-  },
-  medium: {
-    label: "Medium",
-    icon: Info,
-    color: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
-  },
-  low: {
-    label: "Low",
-    icon: CheckCircle2,
-    color: "text-foreground-muted border-border bg-background-tertiary",
-  },
+const severityIcons = {
+  critical: XCircle,
+  high: AlertTriangle,
+  medium: Info,
+  low: CheckCircle2,
+};
+
+const severityColors = {
+  critical: "text-red-400 border-red-400/30 bg-red-400/10",
+  high: "text-orange-400 border-orange-400/30 bg-orange-400/10",
+  medium: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
+  low: "text-foreground-muted border-border bg-background-tertiary",
 };
 
 function SeverityBadge({ severity }: { severity: IntelEvent["severity"] }) {
-  const { label, color } = severityConfig[severity] ?? severityConfig.low;
+  const t = useTranslations("dashboard.agency.intelligence");
+  const color = severityColors[severity] ?? severityColors.low;
   return (
     <span
       className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 border ${color}`}
     >
-      {label}
+      {t(`severity.${severity}`)}
     </span>
   );
 }
 
 function EventRow({ event, isNew }: { event: IntelEvent; isNew: boolean }) {
-  const cfg = severityConfig[event.severity] ?? severityConfig.low;
-  const Icon = cfg.icon;
+  const t = useTranslations("dashboard.agency.intelligence");
+  const Icon = severityIcons[event.severity] ?? severityIcons.low;
+  const color = severityColors[event.severity] ?? severityColors.low;
   const time = new Date(event.created_at);
 
   return (
@@ -75,7 +75,7 @@ function EventRow({ event, isNew }: { event: IntelEvent; isNew: boolean }) {
       }`}
     >
       <div className="mt-0.5 shrink-0">
-        <Icon className={`w-4 h-4 ${cfg.color.split(" ")[0]}`} />
+        <Icon className={`w-4 h-4 ${color.split(" ")[0]}`} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4 mb-1">
@@ -94,7 +94,7 @@ function EventRow({ event, isNew }: { event: IntelEvent; isNew: boolean }) {
             </span>
           )}
           {event.confidence != null && (
-            <span>{Math.round(event.confidence * 100)}% confidence</span>
+            <span>{t("event.confidence", { percent: Math.round(event.confidence * 100) })}</span>
           )}
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
@@ -108,7 +108,7 @@ function EventRow({ event, isNew }: { event: IntelEvent; isNew: boolean }) {
         {event.image_url && (
           <img
             src={event.image_url}
-            alt="Intel frame"
+            alt={t("event.imageAlt")}
             className="mt-3 max-h-40 border border-border object-cover"
           />
         )}
@@ -124,6 +124,7 @@ export function IntelligenceClient({
   agencyId: string;
   initial: IntelEvent[];
 }) {
+  const t = useTranslations("dashboard.agency.intelligence");
   const [events, setEvents] = useState<IntelEvent[]>(initial);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
   const [live, setLive] = useState(false);
@@ -175,54 +176,47 @@ export function IntelligenceClient({
   ).length;
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-normal text-foreground">
-            Intelligence Feed
-          </h1>
-        </div>{" "}
-      </div>
+    <DashboardPage>
+      <DashboardHeader title={t("title")} />
 
-      {/* Summary strip */}
       {(critical > 0 || high > 0) && (
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-wrap gap-3">
           {critical > 0 && (
-            <div className="flex items-center gap-2 px-4 py-3 border border-red-400/30 bg-red-400/10 text-red-400">
-              <XCircle className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {critical} critical unresolved
+            <DashboardAlert variant="error">
+              <span className="inline-flex items-center gap-2">
+                <XCircle className="w-4 h-4 shrink-0" />
+                {t("criticalUnresolved", { count: critical })}
               </span>
-            </div>
+            </DashboardAlert>
           )}
           {high > 0 && (
-            <div className="flex items-center gap-2 px-4 py-3 border border-orange-400/30 bg-orange-400/10 text-orange-400">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="text-sm font-medium">{high} high priority</span>
-            </div>
+            <DashboardAlert variant="warning">
+              <span className="inline-flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                {t("highPriority", { count: high })}
+              </span>
+            </DashboardAlert>
           )}
         </div>
       )}
 
       <IntelAnalytics events={events} />
 
-      {/* Feed */}
-      <div className="border border-border bg-card">
+      <DashboardList>
         <div className="flex items-center justify-between px-5 py-3 border-b border-border">
-          <span className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted">
-            Events — last {events.length}
+          <span className="text-sm font-medium text-foreground">
+            {t("feed.title", { count: events.length })}
           </span>
         </div>
         {events.length === 0 ? (
           <div className="px-5 py-16 text-center">
             <Radio className="w-6 h-6 text-foreground-muted mx-auto mb-3" />
-            <p className="text-sm text-foreground-secondary">
-              Waiting for data from your program…
-            </p>
-            <p className="text-xs text-foreground-muted mt-1">
-              POST to <code className="font-mono">/api/intelligence</code> to
-              push events
+            <p className="text-sm font-medium text-foreground">{t("feed.emptyTitle")}</p>
+            <p className="text-sm text-foreground-secondary mt-1">
+              {t.rich("feed.emptyDescription", {
+                endpoint: "/api/intelligence",
+                code: (chunks) => <code className="font-mono text-xs">{chunks}</code>,
+              })}
             </p>
           </div>
         ) : (
@@ -232,7 +226,7 @@ export function IntelligenceClient({
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </DashboardList>
+    </DashboardPage>
   );
 }

@@ -1,7 +1,11 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
+:root,
+.dark {
   /* Background colors */
   --background: #0a0a0a;
   --background-secondary: #111111;
@@ -42,7 +46,52 @@
   --button-secondary-foreground: #ffffff;
   --button-outline: transparent;
   --button-outline-foreground: #ffffff;
+}
 
+.light {
+  /* Background colors */
+  --background: #ffffff;
+  --background-secondary: #f7f7f8;
+  --background-tertiary: #eeeeef;
+
+  /* Foreground colors */
+  --foreground: #0a0a0a;
+  --foreground-secondary: #52525b;
+  --foreground-muted: #71717a;
+
+  /* Accent colors */
+  --accent-primary: #eab308;
+  --accent-secondary: #3b82f6;
+  --accent-success: #16a34a;
+  --accent-warning: #d97706;
+  --accent-orange: #ea580c;
+
+  /* Border colors */
+  --border: #e4e4e7;
+  --border-light: #d4d4d8;
+
+  /* Card colors */
+  --card: #ffffff;
+  --card-hover: #f4f4f5;
+
+  /* Badge colors */
+  --badge-bg: #f4f4f5;
+  --badge-border: #d4d4d8;
+
+  /* Code colors */
+  --code-bg: #f4f4f5;
+  --code-border: #e4e4e7;
+
+  /* Button colors */
+  --button-primary: #0a0a0a;
+  --button-primary-foreground: #ffffff;
+  --button-secondary: #f4f4f5;
+  --button-secondary-foreground: #0a0a0a;
+  --button-outline: transparent;
+  --button-outline-foreground: #0a0a0a;
+}
+
+:root {
   /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -112,6 +161,14 @@ html {
   scroll-behavior: smooth;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -126,28 +183,8 @@ body {
     text-wrap: balance;
   }
 
-  .gradient-text {
-    background: linear-gradient(135deg, var(--foreground) 0%, var(--foreground-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glow-yellow {
-    box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
-  }
-
-  .glow-blue {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { opacity: 0.12; }
-    50% { opacity: 0.25; }
-  }
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  @keyframes toast-in {
+    0% { opacity: 0; transform: translateY(8px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
   }
 }

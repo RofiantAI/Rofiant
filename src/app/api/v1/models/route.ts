@@ -1,4 +1,5 @@
 import { validateApiKey, apiError } from "@/lib/api-auth";
+import { apiRatelimit, enforceRatelimit } from "@/lib/ratelimit";
 
 const MODELS = [
   {
@@ -30,6 +31,9 @@ const MODELS = [
 export async function GET(req: Request) {
   const apiKeyUser = await validateApiKey(req.headers.get("authorization"));
   if (!apiKeyUser) return apiError("Invalid or missing API key", 401);
+
+  const limited = await enforceRatelimit(apiRatelimit, apiKeyUser.keyId);
+  if (limited) return limited;
 
   return Response.json({ object: "list", data: MODELS });
 }

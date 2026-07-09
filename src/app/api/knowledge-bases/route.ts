@@ -1,14 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-
-const KB_LIMITS: Record<string, number> = {
-  free:       0,
-  pro:        1,
-  team:       3,
-  pilot:      3,
-  agency:     Infinity,
-  enterprise: Infinity,
-};
+import { kbLimitForPlan } from "@/lib/service-plan-access";
 
 export async function GET() {
   const supabase = await createClient();
@@ -31,7 +23,7 @@ export async function POST(req: NextRequest) {
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
   const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
-  const limit = KB_LIMITS[plan] ?? 0;
+  const limit = kbLimitForPlan(plan);
 
   if (limit === 0) {
     return NextResponse.json({ error: "Knowledge bases require a paid plan" }, { status: 403 });

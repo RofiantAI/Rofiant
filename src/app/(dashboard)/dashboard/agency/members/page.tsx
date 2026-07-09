@@ -1,15 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { MembersClient } from "./members-client";
+import { routing } from "@/i18n/routing";
 
 export default async function AgencyMembersPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login");
+  if (!user) redirect(`/${routing.defaultLocale}/auth/login`);
 
   const plan: string = (user.user_metadata?.plan ?? "free" as string).toLowerCase();
-  const isPaid = ["pro", "team", "pilot", "agency", "enterprise"].includes(plan);
-  if (!isPaid) redirect("/dashboard/agency");
+  const isTeamOrAbove = ["team", "pilot", "agency", "enterprise"].includes(plan);
+  if (!isTeamOrAbove) redirect("/dashboard/agency");
 
   let { data: agency } = await supabase
     .from("agencies")
@@ -50,7 +51,7 @@ export default async function AgencyMembersPage() {
     <MembersClient
       initialMembers={members}
       ownerEmail={user.email ?? ""}
-      isTeamPlan={plan === "team"}
+      isTeamPlan={isTeamOrAbove}
     />
   );
 }

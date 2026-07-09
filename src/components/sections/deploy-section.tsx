@@ -1,115 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Database, MessageSquare, Link2, FileText } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Check } from "lucide-react";
 
-const tabs = ["Chat", "Voice", "Documents", "Agents", "Integrate"] as const;
+const tabs = ["chat", "voice", "documents", "agents"] as const;
+
+const voiceLanguages = ["english", "spanish", "arabic", "mandarin"] as const;
 
 type TabKey = (typeof tabs)[number];
 
-interface TabContent {
-  title: string;
-  subtitle: string;
-  description: string;
-}
-
-const tabContent: Record<TabKey, TabContent> = {
-  Chat: {
-    title: "Deploy conversational AI instantly",
-    subtitle: "Chat that understands your domain",
-    description:
-      "Launch a ChatGPT-like experience customized to your data, policies, and workflows. Users get instant answers from your knowledge base.",
-  },
-  Voice: {
-    title: "Voice AI for meetings and calls",
-    subtitle: "Real-time transcription and summarization",
-    description:
-      "Transcribe meetings, calls, and interviews in real time. Generate summaries with action items and key decisions.",
-  },
-  Documents: {
-    title: "Unstructured document intelligence",
-    subtitle: "Extract, classify, and summarize at scale",
-    description:
-      "Process reports, filings, and documents automatically. RAG-powered search across millions of pages.",
-  },
-  Agents: {
-    title: "AI workflow assistants",
-    subtitle: "Multi-step reasoning, governed execution",
-    description:
-      "Deploy agents that plan, reason, and execute complex workflows — with guardrails, approvals, and full audit trails.",
-  },
-  Integrate: {
-    title: "Integrate with existing systems",
-    subtitle: "APIs that plug into your stack",
-    description:
-      "Connect Rofiant to your existing tools — case management, CRM, ticketing — via REST APIs and webhooks.",
-  },
-};
-
 export function DeploySection() {
-  const [activeTab, setActiveTab] = useState<TabKey>("Chat");
-  const content = tabContent[activeTab];
+  const t = useTranslations("home.deploy");
+  const [activeTab, setActiveTab] = useState<TabKey>("chat");
 
   return (
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
           <Badge variant="success" dot className="mb-6">
-            AI PLATFORM
+            {t("badge")}
           </Badge>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-start">
-            <h2 className="text-4xl md:text-5xl font-semibold leading-tight tracking-tight">
-              Deploy AI in minutes.
+            <h2 className="text-4xl md:text-5xl font-normal leading-tight tracking-tight">
+              {t("titleLine1")}
               <br />
-              Scale to millions of
+              {t("titleLine2")}
               <br />
-              conversations.
+              {t("titleLine3")}
             </h2>
             <p className="text-foreground-secondary text-base max-w-sm pt-2">
-              From prototype to production in minutes. Chat, voice, documents,
-              and workflow assistants — all on one platform.
+              {t("subtitle")}
             </p>
           </div>
         </div>
 
         <div className="border border-border  overflow-hidden">
-          <div className="flex border-b border-border">
+          <div className="flex overflow-x-auto border-b border-border">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+                className={`flex-1 shrink-0 px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
                   tab === activeTab
                     ? "text-foreground bg-background-secondary"
                     : "text-foreground-muted hover:text-foreground-secondary hover:bg-background-secondary/50"
                 }`}
               >
-                {tab}
+                {t(`tabs.${tab}`)}
               </button>
             ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">
             <div className="p-8 lg:p-12 flex flex-col justify-center">
-              <h3 className="text-2xl font-semibold mb-2">{content.title}</h3>
+              <h3 className="text-2xl font-semibold mb-2">
+                {t(`content.${activeTab}.title`)}
+              </h3>
               <p className="text-foreground-secondary text-lg mb-4">
-                {content.subtitle}
+                {t(`content.${activeTab}.subtitle`)}
               </p>
               <p className="text-foreground-muted leading-relaxed">
-                {content.description}
+                {t(`content.${activeTab}.description`)}
               </p>
 
-              {activeTab === "Voice" && (
-                <div className="flex items-center gap-6 mt-8 pt-6 border-t border-border">
-                  {["English", "Spanish", "Arabic", "Mandarin"].map((lang) => (
+              {activeTab === "voice" && (
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border">
+                  {voiceLanguages.map((lang) => (
                     <span
                       key={lang}
                       className="text-foreground-muted text-sm font-medium"
                     >
-                      {lang}
+                      {t(`content.voice.languages.${lang}`)}
                     </span>
                   ))}
                 </div>
@@ -117,11 +83,10 @@ export function DeploySection() {
             </div>
 
             <div className="relative bg-background-secondary border-l border-border p-6 flex items-center justify-center">
-              {activeTab === "Chat" && <ChatMockup />}
-              {activeTab === "Voice" && <VoiceMockup />}
-              {activeTab === "Documents" && <DocsMockup />}
-              {activeTab === "Agents" && <AgentsMockup />}
-              {activeTab === "Integrate" && <IntegrateMockup />}
+              {activeTab === "chat" && <ChatMockup />}
+              {activeTab === "voice" && <VoiceMockup />}
+              {activeTab === "documents" && <DocsMockup />}
+              {activeTab === "agents" && <AgentsMockup />}
             </div>
           </div>
         </div>
@@ -171,12 +136,12 @@ function VoiceMockup() {
       </div>
       <div className="p-6 flex flex-col items-center gap-4">
         <div className="w-20 h-20  bg-accent-secondary/20 flex items-center justify-center">
-          <div className="w-3 h-3  bg-accent-secondary animate-pulse" />
+        <div className="w-3 h-3 bg-accent-secondary" />
         </div>
         <div className="text-center">
           <p className="text-sm font-medium">Listening...</p>
           <p className="text-xs text-foreground-muted mt-1">
-            Transcribing in real-time
+            Transcribing uploaded audio
           </p>
         </div>
         <div className="w-full bg-background-tertiary  p-3 text-xs text-foreground-secondary font-mono">
@@ -241,7 +206,37 @@ function DocsMockup() {
   );
 }
 
+const PIPELINE_STEPS = [
+  "1. Receive query",
+  "2. Search knowledge base",
+  "3. Cross-reference data",
+  "4. Generate summary",
+  "5. Return response",
+] as const;
+
+const STEP_DURATION_MS = 1400;
+
+type StepStatus = "done" | "running" | "pending";
+
 function AgentsMockup() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    if (activeStep >= PIPELINE_STEPS.length) return;
+
+    const timer = window.setTimeout(() => {
+      setActiveStep((prev) => prev + 1);
+    }, STEP_DURATION_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [activeStep]);
+
+  function getStepStatus(index: number): StepStatus {
+    if (index < activeStep) return "done";
+    if (index === activeStep && activeStep < PIPELINE_STEPS.length) return "running";
+    return "pending";
+  }
+
   return (
     <Card variant="bordered" className="w-full max-w-md">
       <div className="p-4 border-b border-border">
@@ -251,65 +246,42 @@ function AgentsMockup() {
         </p>
       </div>
       <div className="p-4 space-y-2">
-        {[
-          { step: "1. Receive query", status: "done" },
-          { step: "2. Search knowledge base", status: "done" },
-          { step: "3. Cross-reference data", status: "running" },
-          { step: "4. Generate summary", status: "pending" },
-          { step: "5. Return response", status: "pending" },
-        ].map((item) => (
-          <div key={item.step} className="flex items-center gap-3 p-2">
-            {item.status === "done" && (
-              <div className="w-5 h-5  bg-accent-success flex items-center justify-center text-[10px] text-white">
-                ✓
-              </div>
-            )}
-            {item.status === "running" && (
-              <div className="w-5 h-5 border-2 border-accent-secondary border-t-transparent  animate-spin" />
-            )}
-            {item.status === "pending" && (
-              <div className="w-5 h-5  border-2 border-foreground-muted" />
-            )}
-            <span className="text-sm">{item.step}</span>
-          </div>
-        ))}
-      </div>
-    </Card>
-  );
-}
+        {PIPELINE_STEPS.map((step, index) => {
+          const status = getStepStatus(index);
 
-function IntegrateMockup() {
-  return (
-    <Card variant="bordered" className="w-full max-w-md">
-      <div className="p-4 border-b border-border">
-        <h4 className="font-semibold">System Integrations</h4>
-        <p className="text-xs text-foreground-muted mt-1">Connected systems</p>
-      </div>
-      <div className="p-4 space-y-3">
-        {[
-          { name: "CRM", status: "Connected", icon: Database },
-          { name: "Slack", status: "Connected", icon: MessageSquare },
-          { name: "Jira", status: "Pending", icon: Link2 },
-          { name: "Notion", status: "Connected", icon: FileText },
-        ].map((sys) => {
-          const Icon = sys.icon;
           return (
-          <div
-            key={sys.name}
-            className="flex items-center justify-between p-3  border border-border"
-          >
-            <div className="flex items-center gap-3">
-              <Icon className="w-5 h-5" />
-              <span className="text-sm font-medium">{sys.name}</span>
+            <div key={step} className="flex items-center gap-3 p-2">
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center">
+                {status === "done" && (
+                  <div className="flex h-5 w-5 items-center justify-center bg-accent-success text-white">
+                    <Check className="h-3 w-3" strokeWidth={3} />
+                  </div>
+                )}
+                {status === "running" && (
+                  <Spinner
+                    size="sm"
+                    className="text-accent-secondary"
+                    aria-label={`Running: ${step}`}
+                  />
+                )}
+                {status === "pending" && (
+                  <div className="h-5 w-5 border-2 border-foreground-muted/40" />
+                )}
+              </div>
+              <span
+                className={`text-sm transition-colors ${
+                  status === "running"
+                    ? "text-foreground font-medium"
+                    : status === "done"
+                      ? "text-foreground-secondary"
+                      : "text-foreground-muted"
+                }`}
+              >
+                {step}
+              </span>
             </div>
-            <Badge
-              variant={sys.status === "Connected" ? "success" : "warning"}
-              dot
-            >
-              {sys.status}
-            </Badge>
-          </div>
-        );})}
+          );
+        })}
       </div>
     </Card>
   );

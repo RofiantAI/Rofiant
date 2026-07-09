@@ -2,6 +2,7 @@ export type ChatSettings = {
   model: string;
   customInstructions: string;
   contextLimit: number;
+  knowledgeBaseId: string;
   enterToSend: boolean;
   autoTitle: boolean;
   fontSize: "sm" | "md" | "lg";
@@ -11,13 +12,13 @@ export type ChatSettings = {
 };
 
 export const FREE_MODELS = [
-  { id: "llama-3.1-8b-instant",   name: "Llama 3.1 8B",   desc: "Fast, lightweight" },
-  { id: "gemma2-9b-it",            name: "Gemma 2 9B",     desc: "Google open model" },
+  { id: "llama-3.1-8b-instant",   name: "Llama 3.1 8B",   desc: "Fast — great for quick back-and-forth" },
+  { id: "gemma2-9b-it",            name: "Gemma 2 9B",     desc: "Balanced speed and quality" },
 ] as const;
 
 export const PRO_MODELS = [
-  { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B",   desc: "Best quality, recommended" },
-  { id: "openai/gpt-oss-120b",     name: "GPT OSS 120B",    desc: "Highest capability" },
+  { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B",   desc: "Strong all-rounder for harder questions" },
+  { id: "openai/gpt-oss-120b",     name: "GPT OSS 120B",    desc: "Best for deep thinking and tough problems" },
 ] as const;
 
 export const ALL_MODELS = [...FREE_MODELS, ...PRO_MODELS];
@@ -32,6 +33,7 @@ export const DEFAULT_SETTINGS: ChatSettings = {
   model: DEFAULT_FREE_MODEL,
   customInstructions: "",
   contextLimit: 20,
+  knowledgeBaseId: "",
   enterToSend: true,
   autoTitle: true,
   fontSize: "md",

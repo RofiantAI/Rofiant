@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import "./(app)/globals.css";
 import { CookieBanner } from "@/components/ui/cookie-banner";
+import { OfflineToast } from "@/components/ui/offline-toast";
 import { PostHogProvider } from "@/components/posthog-provider";
+import { MinorDataGuard } from "@/components/minor-data-guard";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site-metadata";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -13,12 +18,20 @@ const geist = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL("https://rofiant.ca"),
   title: {
-    default: "Rofiant — AI for Government & Enterprise",
-    template: "%s — Rofiant",
+    default: SITE_TITLE,
+    template: "%s | Rofiant",
   },
-  description:
-    "Rofiant is the AI platform built for government agencies and enterprises. Secure, compliant, and ready for mission-critical workloads.",
-  keywords: ["AI platform", "government AI", "enterprise AI", "secure AI", "FedRAMP", "ITAR", "document intelligence", "voice AI"],
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "AI platform",
+    "government AI",
+    "enterprise AI",
+    "secure AI",
+    "FedRAMP",
+    "ITAR",
+    "document intelligence",
+    "voice AI",
+  ],
   authors: [{ name: "Rofiant", url: "https://rofiant.ca" }],
   creator: "Rofiant",
   openGraph: {
@@ -26,16 +39,14 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "https://rofiant.ca",
     siteName: "Rofiant",
-    title: "Rofiant — AI for Government & Enterprise",
-    description:
-      "Rofiant is the AI platform built for government agencies and enterprises. Secure, compliant, and ready for mission-critical workloads.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [{ url: "/hero.png", width: 1200, height: 630, alt: "Rofiant" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rofiant — AI for Government & Enterprise",
-    description:
-      "Rofiant is the AI platform built for government agencies and enterprises. Secure, compliant, and ready for mission-critical workloads.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ["/hero.png"],
   },
   robots: {
@@ -48,23 +59,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale().catch(() => "en");
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Rofiant",
     url: "https://rofiant.ca",
     logo: "https://rofiant.ca/logo.svg",
-    description: "AI platform built for government agencies and enterprises. Secure, compliant, and ready for mission-critical workloads.",
+    description:
+      "AI platform for government, enterprise, and everyone. Secure, compliant, and ready for mission-critical workloads.",
     sameAs: [],
   };
 
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
+    <html
+      lang={locale}
+      className={`${geist.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <head>
         <script
           type="application/ld+json"
@@ -72,10 +89,19 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <PostHogProvider>
-          {children}
-        </PostHogProvider>
-        <CookieBanner />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <PostHogProvider>
+            <MinorDataGuard />
+            {children}
+          </PostHogProvider>
+          <CookieBanner />
+          <OfflineToast />
+        </ThemeProvider>
       </body>
     </html>
   );

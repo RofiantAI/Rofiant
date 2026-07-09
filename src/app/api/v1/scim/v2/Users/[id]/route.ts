@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { apiRatelimit, enforceRatelimit } from "@/lib/ratelimit";
 
 async function resolveAgency(req: NextRequest) {
   const auth = req.headers.get("authorization") ?? "";
@@ -12,6 +13,10 @@ async function resolveAgency(req: NextRequest) {
 
 // PATCH /api/v1/scim/v2/Users/[id] — update (e.g. deactivate)
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const limited = await enforceRatelimit(apiRatelimit, ip);
+  if (limited) return limited;
+
   const { id } = await params;
   const agency = await resolveAgency(req);
   if (!agency) return new NextResponse(JSON.stringify({ detail: "Unauthorized" }), { status: 401 });
@@ -43,6 +48,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
 // DELETE /api/v1/scim/v2/Users/[id] — deprovision
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const limited = await enforceRatelimit(apiRatelimit, ip);
+  if (limited) return limited;
+
   const { id } = await params;
   const agency = await resolveAgency(req);
   if (!agency) return new NextResponse(JSON.stringify({ detail: "Unauthorized" }), { status: 401 });

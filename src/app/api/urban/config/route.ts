@@ -17,7 +17,7 @@ const DEFAULTS = {
 // Called by the Python service using its API key (Bearer token)
 async function resolveUserFromApiKey(req: NextRequest): Promise<string | null> {
   const key = req.headers.get("authorization")?.replace("Bearer ", "").trim();
-  if (!key?.startsWith("rofiant_sk_")) return null;
+  if (!key?.startsWith("sk_")) return null;
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("api_keys")

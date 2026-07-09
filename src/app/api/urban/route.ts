@@ -21,6 +21,11 @@ export async function GET(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
+  const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
+  if (plan !== "agency" && plan !== "enterprise") {
+    return NextResponse.json({ error: "Agency or Enterprise plan required" }, { status: 403 });
+  }
+
   const action       = req.nextUrl.searchParams.get("action") ?? "stats";
   const limit        = Number(req.nextUrl.searchParams.get("limit") ?? "100");
   const anomaliesOnly = req.nextUrl.searchParams.get("anomalies_only") === "true";
@@ -89,7 +94,9 @@ export async function POST(req: NextRequest) {
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
   const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
-  if (plan === "free") return NextResponse.json({ error: "Paid plan required" }, { status: 403 });
+  if (plan !== "agency" && plan !== "enterprise") {
+    return NextResponse.json({ error: "Agency or Enterprise plan required" }, { status: 403 });
+  }
 
   const body = await req.json().catch(() => ({}));
   const qs = new URLSearchParams();

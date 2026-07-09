@@ -22,7 +22,7 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <section className={compact ? "py-16" : "py-24"}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className={compact ? "max-w-4xl" : "max-w-4xl"}>
           {badge && (
             <Badge variant={badgeVariant} dot className="mb-6">

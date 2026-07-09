@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
 
 function AgentVisualization() {
   return (
@@ -106,7 +107,7 @@ function AgentVisualization() {
 
 function SecurityPanel() {
   const checks = [
-    { label: "SOC 2 Type II", status: "Certified" },
+    { label: "SOC 2 Type II", status: "In progress" },
     { label: "Data encryption", status: "At rest & in transit" },
     { label: "Role-based access", status: "Built-in" },
     { label: "Audit logging", status: "Automatic" },
@@ -332,69 +333,66 @@ function UsageChart() {
   );
 }
 
-export function UnifySection() {
+export async function UnifySection() {
+  const t = await getTranslations("home.unify");
+
   return (
     <section className="py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl leading-[1.15]">
-            One platform for{" "}
+            {t("titlePrefix")}{" "}
             <span className="bg-accent-primary px-1 text-background">
-              AI, security, and compliance.
+              {t("titleHighlight")}
             </span>
           </h2>
           <p className="mt-6 text-lg leading-8 text-foreground-secondary">
-            Stop stitching together AI tools, security scanners, and compliance
-            platforms. Rofiant unifies chat, voice, agents, and document
-            intelligence — with security built in from the start.
+            {t("subtitle")}
           </p>
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <Card variant="bordered" className="p-6">
+          <Card variant="bordered" noHover className="p-6">
             <h3 className="text-sm font-medium text-foreground-secondary">
-              AI Agents
+              {t("cards.agents.label")}
             </h3>
             <AgentVisualization />
             <p className="mt-4 text-sm text-foreground-secondary">
-              <strong className="text-foreground">Conversational AI.</strong>{" "}
-              Build and deploy intelligent agents for chat, voice, and document
-              workflows.
+              <strong className="text-foreground">{t("cards.agents.strong")}</strong>{" "}
+              {t("cards.agents.text")}
             </p>
           </Card>
 
-          <Card variant="bordered" className="p-6">
+          <Card variant="bordered" noHover className="p-6">
             <h3 className="text-sm font-medium text-foreground-secondary">
-              Security & Compliance
+              {t("cards.security.label")}
             </h3>
             <SecurityPanel />
             <p className="mt-4 text-sm text-foreground-secondary">
-              <strong className="text-foreground">Secure by default.</strong>{" "}
-              Encryption, RBAC, and audit logging built into every feature.
+              <strong className="text-foreground">{t("cards.security.strong")}</strong>{" "}
+              {t("cards.security.text")}
             </p>
           </Card>
 
-          <Card variant="bordered" className="p-6">
+          <Card variant="bordered" noHover className="p-6">
             <h3 className="text-sm font-medium text-foreground-secondary">
-              Control Plane
+              {t("cards.control.label")}
             </h3>
             <ControlPlane />
             <p className="mt-4 text-sm text-foreground-secondary">
-              <strong className="text-foreground">Unified management.</strong>{" "}
-              Models, agents, RAG pipelines, and audit logs in one pane of
-              glass.
+              <strong className="text-foreground">{t("cards.control.strong")}</strong>{" "}
+              {t("cards.control.text")}
             </p>
           </Card>
 
-          <Card variant="bordered" className="p-6">
+          <Card variant="bordered" noHover className="p-6">
             <h3 className="text-sm font-medium text-foreground-secondary">
-              Usage 30 Days
+              {t("cards.usage.label")}
             </h3>
             <UsageChart />
             <p className="mt-4 text-sm text-foreground-secondary">
-              <strong className="text-foreground">Full observability.</strong>{" "}
-              Every inference, every decision, every token — logged and
-              auditable.
+              <strong className="text-foreground">{t("cards.usage.strong")}</strong>{" "}
+              {t("cards.usage.text")}
             </p>
           </Card>
         </div>

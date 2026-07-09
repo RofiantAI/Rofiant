@@ -1,7 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
-export function MonitorSection() {
+export async function MonitorSection() {
+  const t = await getTranslations("home.monitor");
   const barData = [
     { h: 25, yellow: false },
     { h: 30, yellow: true },
@@ -37,14 +40,14 @@ export function MonitorSection() {
 
   return (
     <section className="py-24 bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <Badge variant="info" dot className="mb-6">
-          OBSERVABILITY
+          {t("badge")}
         </Badge>
         <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl leading-tight max-w-3xl">
-          Monitor every inference in real time.{" "}
+          {t("titlePrefix")}{" "}
           <span className="text-foreground-muted">
-            Full visibility into cost, latency, and usage.
+            {t("titleMuted")}
           </span>
         </h2>
 
@@ -81,28 +84,26 @@ export function MonitorSection() {
 
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <a href="/resources/documentation">
+            <Link href="/resources/documentation">
               <Button variant="outline" size="md" className="mb-8">
-                Read the docs
+                {t("readDocs")}
               </Button>
-            </a>
+            </Link>
           </div>
           <div>
             <h3 className="font-semibold text-foreground">
-              Automatic token and cost tracking.
+              {t("cards.tokenTracking.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Monitor token usage, API costs, and inference performance across every
-              department and use case in real time.
+              {t("cards.tokenTracking.desc")}
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-foreground">
-              Usage alerting and monitoring.
+              {t("cards.alerting.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Set alerts for unusual usage patterns, rate limit breaches, and
-              budget thresholds. Stay ahead of cost overruns.
+              {t("cards.alerting.desc")}
             </p>
           </div>
         </div>
@@ -111,20 +112,18 @@ export function MonitorSection() {
           <div />
           <div>
             <h3 className="font-semibold text-foreground">
-              Compliance dashboards.
+              {t("cards.compliance.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Pre-built dashboards for FedRAMP, SOC 2, and agency-specific
-              compliance frameworks. Export-ready audit reports.
+              {t("cards.compliance.desc")}
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-foreground">
-              API-first analytics.
+              {t("cards.analytics.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Query your usage data via API and pipe it into existing SIEM, SOC,
-              or command dashboards.
+              {t("cards.analytics.desc")}
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   AlertTriangle,
@@ -12,7 +13,21 @@ import {
   Eye,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  DashboardPage,
+  DashboardHeader,
+  DashboardCard,
+  DashboardMetricGrid,
+  DashboardMetric,
+  DashboardList,
+  DashboardEmptyState,
+  DashboardAlert,
+  DashboardPrimaryButton,
+  DashboardSecondaryButton,
+} from "@/components/dashboard/ui/page-shell";
+import { SkeletonListRows } from "@/components/ui/skeleton";
 
 type Detection = {
   id: string;
@@ -53,33 +68,21 @@ type Health = {
 };
 
 function StatCard({
-  icon: Icon,
+  icon,
   label,
   value,
   sub,
 }: {
-  icon: React.ElementType;
+  icon: LucideIcon;
   label: string;
   value: string | number;
   sub?: string;
 }) {
-  return (
-    <div className="bg-card border border-border px-5 py-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-3.5 h-3.5 text-foreground-muted" />
-        <span className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted">
-          {label}
-        </span>
-      </div>
-      <div className="text-2xl font-light font-mono text-foreground">
-        {value}
-      </div>
-      {sub && <div className="text-xs text-foreground-muted mt-0.5">{sub}</div>}
-    </div>
-  );
+  return <DashboardMetric label={label} value={String(value)} sub={sub} icon={icon} />;
 }
 
 function SeverityBadge({ type }: { type: string }) {
+  const t = useTranslations("dashboard.urban");
   const colors: Record<string, string> = {
     TRAFFIC_JAM: "text-orange-400 bg-orange-400/10 border-orange-400/20",
     LARGE_CROWD: "text-red-400 bg-red-400/10 border-red-400/20",
@@ -89,20 +92,21 @@ function SeverityBadge({ type }: { type: string }) {
     <span
       className={`px-1.5 py-0.5 text-[10px] font-medium border ${colors[type] ?? "text-foreground-muted border-border"}`}
     >
-      {type.replace("_", " ")}
+      {t.has(`anomalyTypes.${type}`) ? t(`anomalyTypes.${type}`) : type.replace("_", " ")}
     </span>
   );
 }
 
-function relTime(iso: string) {
+function relTime(iso: string, t: ReturnType<typeof useTranslations>) {
   const diff = Date.now() - new Date(iso).getTime();
   const m = Math.floor(diff / 60000);
-  if (m < 1) return "just now";
-  if (m < 60) return `${m}m ago`;
-  return `${Math.floor(m / 60)}h ago`;
+  if (m < 1) return t("list.justNow");
+  if (m < 60) return t("list.minutesAgo", { count: m });
+  return t("list.hoursAgo", { count: Math.floor(m / 60) });
 }
 
 export default function UrbanAIPage() {
+  const t = useTranslations("dashboard.urban");
   const [health, setHealth] = useState<Health | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [detections, setDetections] = useState<Detection[]>([]);
@@ -167,10 +171,10 @@ export default function UrbanAIPage() {
         body: JSON.stringify({ max_cameras: max }),
       });
       const data = await res.json();
-      if (!res.ok) setScanError(data.error ?? "Scan failed");
+      if (!res.ok) setScanError(data.error ?? t("banners.scanFailed"));
       else setTimeout(fetchData, 5000);
     } catch {
-      setScanError("Service unavailable");
+      setScanError(t("banners.serviceUnavailable"));
     } finally {
       setScanning(false);
     }
@@ -185,49 +189,36 @@ export default function UrbanAIPage() {
         : detections;
 
   return (
-    <div>
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-normal text-foreground">
-            Urban AI Monitor
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={fetchData}
-            className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary transition-colors inline-flex items-center gap-1.5"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Refresh
-          </button>
-          <button
-            onClick={() => triggerScan(20)}
-            disabled={scanning || health?.scan_running}
-            className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors inline-flex items-center gap-1.5"
-          >
-            <Radio className="w-3.5 h-3.5" />
-            {scanning || health?.scan_running
-              ? "Scanning…"
-              : "Run scan (20 cameras)"}
-          </button>
-        </div>
-      </div>
+    <DashboardPage>
+      <DashboardHeader
+        title={t("header.title")}
+        action={
+          <div className="flex items-center gap-2">
+            <DashboardSecondaryButton onClick={fetchData}>
+              <RefreshCw className="w-3.5 h-3.5" />
+              {t("header.refresh")}
+            </DashboardSecondaryButton>
+            <DashboardPrimaryButton
+              onClick={() => triggerScan(20)}
+              disabled={scanning || health?.scan_running}
+            >
+              <Radio className="w-3.5 h-3.5" />
+              {scanning || health?.scan_running ? t("header.scanning") : t("header.runScan")}
+            </DashboardPrimaryButton>
+          </div>
+        }
+      />
 
-      {/* Service down banner */}
       {serviceDown && (
-        <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 text-sm text-red-400">
-          Urban AI service is not reachable. Start it with:{" "}
-          <code className="font-mono text-xs bg-red-500/10 px-1">
+        <DashboardAlert variant="error">
+          {t("banners.serviceDown")}{" "}
+          <code className="font-mono text-xs bg-red-500/10 px-1 rounded">
             cd ~/Desktop/rofiant && python urban_ai.py
           </code>
-        </div>
+        </DashboardAlert>
       )}
 
-      {scanError && (
-        <div className="mb-4 px-4 py-3 bg-red-500/10 border border-red-500/30 text-xs text-red-400">
-          {scanError}
-        </div>
-      )}
+      {scanError && <DashboardAlert variant="error">{scanError}</DashboardAlert>}
 
       {/* Health strip */}
       {health && (
@@ -238,23 +229,23 @@ export default function UrbanAIPage() {
             <span
               className={`w-1.5 h-1.5 rounded-full ${health.status === "ok" ? "bg-accent-success" : "bg-red-400"}`}
             />
-            Service {health.status}
+            {t("health.serviceStatus", { status: health.status })}
           </span>
           <span>
-            Model:{" "}
+            {t("health.model")}{" "}
             <span className="text-foreground font-mono">{health.model}</span>
           </span>
           {health.last_scan_at && (
             <span>
-              Last scan:{" "}
+              {t("health.lastScan")}{" "}
               <span className="text-foreground">
-                {relTime(health.last_scan_at)}
+                {relTime(health.last_scan_at, t)}
               </span>
             </span>
           )}
           {health.scan_running && (
-            <span className="text-accent-primary animate-pulse">
-              ● Scanning…
+            <span className="text-accent-primary">
+              {t("health.scanning")}
             </span>
           )}
         </div>
@@ -262,38 +253,13 @@ export default function UrbanAIPage() {
 
       {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-5 gap-4 mb-8">
-          <StatCard
-            icon={Eye}
-            label="Cameras seen"
-            value={stats.cameras_seen}
-            sub="in last 500 records"
-          />
-          <StatCard
-            icon={Car}
-            label="Cars"
-            value={stats.total_cars.toLocaleString()}
-            sub={`avg ${stats.avg_cars_per_camera}/camera`}
-          />
-          <StatCard
-            icon={Car}
-            label="Trucks"
-            value={(stats.total_trucks ?? 0).toLocaleString()}
-            sub="heavy vehicles"
-          />
-          <StatCard
-            icon={Users}
-            label="People"
-            value={stats.total_people.toLocaleString()}
-            sub={`avg ${stats.avg_people_per_camera}/camera`}
-          />
-          <StatCard
-            icon={AlertTriangle}
-            label="Anomalies"
-            value={stats.total_anomalies}
-            sub="across all scans"
-          />
-        </div>
+        <DashboardMetricGrid>
+          <StatCard icon={Eye} label={t("stats.camerasSeen.label")} value={stats.cameras_seen} sub={t("stats.camerasSeen.sub")} />
+          <StatCard icon={Car} label={t("stats.cars.label")} value={stats.total_cars.toLocaleString()} sub={t("stats.cars.sub", { avg: stats.avg_cars_per_camera })} />
+          <StatCard icon={Car} label={t("stats.trucks.label")} value={(stats.total_trucks ?? 0).toLocaleString()} sub={t("stats.trucks.sub")} />
+          <StatCard icon={Users} label={t("stats.people.label")} value={stats.total_people.toLocaleString()} sub={t("stats.people.sub", { avg: stats.avg_people_per_camera })} />
+          <StatCard icon={AlertTriangle} label={t("stats.anomalies.label")} value={stats.total_anomalies} sub={t("stats.anomalies.sub")} />
+        </DashboardMetricGrid>
       )}
 
       {/* Tabs */}
@@ -302,15 +268,15 @@ export default function UrbanAIPage() {
           [
             {
               id: "detections",
-              label: "All detections",
+              label: t("tabs.detections"),
               count: detections.length,
             },
             {
               id: "anomalies",
-              label: "Anomalies",
+              label: t("tabs.anomalies"),
               count: anomalyDetections.length,
             },
-            { id: "live", label: "Live stream", count: liveEvents.length },
+            { id: "live", label: t("tabs.live"), count: liveEvents.length },
           ] as const
         ).map(({ id, label, count }) => (
           <button
@@ -334,36 +300,28 @@ export default function UrbanAIPage() {
 
       {/* Detection list */}
       {loading ? (
-        <div className="bg-card border border-border p-8 text-center text-sm text-foreground-muted">
-          Loading…
-        </div>
+        <DashboardList>
+          <SkeletonListRows rows={6} />
+        </DashboardList>
       ) : activeList.length === 0 ? (
-        <div className="bg-card border border-border p-12 text-center">
-          <Activity className="w-6 h-6 text-foreground-muted mx-auto mb-3" />
-          <p className="text-sm text-foreground-secondary">
-            {tab === "live"
-              ? "Waiting for live events…"
-              : "No data yet. Run a scan to populate."}
-          </p>
-        </div>
+        <DashboardEmptyState
+          icon={Activity}
+          title={tab === "live" ? t("list.emptyLive") : t("list.emptyDefault")}
+        />
       ) : (
-        <div className="bg-card border border-border">
-          {/* Header */}
+        <DashboardList>
           <div className="grid grid-cols-[56px_2fr_1fr_1fr_1fr_1fr_1fr_2fr] gap-3 px-4 py-2.5 border-b border-border bg-background-secondary">
             {[
               "",
-              "Location",
-              "Cars",
-              "Trucks",
-              "Motos",
-              "People",
-              "Anomalies",
-              "Time",
+              t("list.columns.location"),
+              t("list.columns.cars"),
+              t("list.columns.trucks"),
+              t("list.columns.motos"),
+              t("list.columns.people"),
+              t("list.columns.anomalies"),
+              t("list.columns.time"),
             ].map((h) => (
-              <span
-                key={h}
-                className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted"
-              >
+              <span key={h || "thumb"} className="text-xs font-medium text-foreground-muted">
                 {h}
               </span>
             ))}
@@ -398,7 +356,7 @@ export default function UrbanAIPage() {
                   </div>
                   <div className="text-[11px] text-foreground-muted truncate flex items-center gap-1 mt-0.5">
                     <MapPin className="w-2.5 h-2.5 shrink-0" />
-                    {d.cross_street} · cam {d.camera_id}
+                    {d.cross_street} · {t("list.camLabel", { id: d.camera_id })}
                   </div>
                 </div>
                 <span className="text-sm font-mono text-foreground">
@@ -417,18 +375,18 @@ export default function UrbanAIPage() {
                   {d.anomaly_count === 0 ? (
                     <span className="text-[10px] text-foreground-muted">—</span>
                   ) : (
-                    (d.anomaly_types ?? []).map((t) => (
-                      <SeverityBadge key={t} type={t} />
+                    (d.anomaly_types ?? []).map((at) => (
+                      <SeverityBadge key={at} type={at} />
                     ))
                   )}
                 </div>
                 <span className="text-xs text-foreground-muted font-mono">
-                  {d.created_at ? relTime(d.created_at) : "live"}
+                  {d.created_at ? relTime(d.created_at, t) : t("list.live")}
                 </span>
               </div>
             ))}
           </div>
-        </div>
+        </DashboardList>
       )}
 
       {/* Lightbox */}
@@ -447,16 +405,20 @@ export default function UrbanAIPage() {
                   {lightbox.main_road}
                 </span>
                 <span className="text-xs text-foreground-muted ml-2">
-                  {lightbox.cross_street} · cam {lightbox.camera_id}
+                  {lightbox.cross_street} · {t("lightbox.camLabel", { id: lightbox.camera_id })}
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs text-foreground-muted">
                 <span>
-                  {lightbox.cars} cars · {lightbox.trucks ?? 0} trucks ·{" "}
-                  {lightbox.motorcycles ?? 0} motos · {lightbox.people} people
+                  {t("lightbox.summary", {
+                    cars: lightbox.cars,
+                    trucks: lightbox.trucks ?? 0,
+                    motos: lightbox.motorcycles ?? 0,
+                    people: lightbox.people,
+                  })}
                 </span>
-                {(lightbox.anomaly_types ?? []).map((t) => (
-                  <SeverityBadge key={t} type={t} />
+                {(lightbox.anomaly_types ?? []).map((at) => (
+                  <SeverityBadge key={at} type={at} />
                 ))}
                 <button
                   onClick={() => setLightbox(null)}
@@ -473,8 +435,9 @@ export default function UrbanAIPage() {
             />
             <div className="px-4 py-2 text-[11px] text-foreground-muted flex items-center gap-4">
               <span>
-                Captured{" "}
-                {lightbox.created_at ? relTime(lightbox.created_at) : "live"}
+                {t("lightbox.captured", {
+                  time: lightbox.created_at ? relTime(lightbox.created_at, t) : t("list.live"),
+                })}
               </span>
               <a
                 href={lightbox.image_url}
@@ -483,7 +446,7 @@ export default function UrbanAIPage() {
                 className="text-accent-primary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                Open full size ↗
+                {t("lightbox.openFullSize")}
               </a>
             </div>
           </div>
@@ -492,52 +455,27 @@ export default function UrbanAIPage() {
 
       {/* Trend summary */}
       {stats && (
-        <div className="mt-6 grid grid-cols-3 gap-4">
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <TrendingUp className="w-3.5 h-3.5 text-foreground-muted" />
-              <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-                Anomaly rate
-              </span>
-            </div>
-            <div className="text-2xl font-light font-mono text-foreground">
-              {stats.rows_analyzed > 0
-                ? `${((stats.total_anomalies / stats.rows_analyzed) * 100).toFixed(1)}%`
-                : "—"}
-            </div>
-            <p className="text-xs text-foreground-muted mt-1">
-              of camera readings flagged
-            </p>
-          </div>
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Car className="w-3.5 h-3.5 text-foreground-muted" />
-              <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-                Busiest type
-              </span>
-            </div>
-            <div className="text-2xl font-light text-foreground">Vehicles</div>
-            <p className="text-xs text-foreground-muted mt-1">
-              {stats.total_cars.toLocaleString()} cars across{" "}
-              {stats.rows_analyzed} readings
-            </p>
-          </div>
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Activity className="w-3.5 h-3.5 text-foreground-muted" />
-              <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-                Coverage
-              </span>
-            </div>
-            <div className="text-2xl font-light font-mono text-foreground">
-              {health?.cameras ?? "—"}
-            </div>
-            <p className="text-xs text-foreground-muted mt-1">
-              cameras available to scan
-            </p>
-          </div>
-        </div>
+        <DashboardMetricGrid>
+          <DashboardMetric
+            label={t("trends.anomalyRate.title")}
+            value={stats.rows_analyzed > 0 ? `${((stats.total_anomalies / stats.rows_analyzed) * 100).toFixed(1)}%` : "—"}
+            sub={t("trends.anomalyRate.sub")}
+            icon={TrendingUp}
+          />
+          <DashboardMetric
+            label={t("trends.busiestType.title")}
+            value={t("trends.busiestType.vehicles")}
+            sub={t("trends.busiestType.sub", { cars: stats.total_cars.toLocaleString(), readings: stats.rows_analyzed })}
+            icon={Car}
+          />
+          <DashboardMetric
+            label={t("trends.coverage.title")}
+            value={String(health?.cameras ?? "—")}
+            sub={t("trends.coverage.sub")}
+            icon={Activity}
+          />
+        </DashboardMetricGrid>
       )}
-    </div>
+    </DashboardPage>
   );
 }

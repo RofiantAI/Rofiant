@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { apiRatelimit, enforceRatelimit } from "@/lib/ratelimit";
+import { findOrCreateAuthUser } from "@/lib/agency-provision";
 
 // SCIM 2.0 Users endpoint — supports provisioning from IdPs like Okta/Azure AD.
-// Auth: Bearer token stored in agencies.scim_token (agency/enterprise plans only).
+// Auth: Bearer token stored in agencies.scim_token (Agency and Enterprise plans only).
 
 function scimUser(member: { id: string; email: string; role: string; status: string; user_id?: string }) {
   const active = member.status === "active";
@@ -33,6 +34,10 @@ async function resolveAgency(req: NextRequest) {
 
 // GET /api/v1/scim/v2/Users
 export async function GET(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const limited = await enforceRatelimit(apiRatelimit, ip);
+  if (limited) return limited;
+
   const agency = await resolveAgency(req);
   if (!agency) return new NextResponse(JSON.stringify({ detail: "Unauthorized" }), { status: 401 });
 
@@ -55,6 +60,10 @@ export async function GET(req: NextRequest) {
 
 // POST /api/v1/scim/v2/Users — provision a new user
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const limited = await enforceRatelimit(apiRatelimit, ip);
+  if (limited) return limited;
+
   const agency = await resolveAgency(req);
   if (!agency) return new NextResponse(JSON.stringify({ detail: "Unauthorized" }), { status: 401 });
 
@@ -63,11 +72,17 @@ export async function POST(req: NextRequest) {
   if (!email) return NextResponse.json({ detail: "userName required" }, { status: 400 });
 
   const supabase = createAdminClient();
+  const { user: authUser, error: provisionError } = await findOrCreateAuthUser(supabase, email);
+  if (!authUser) {
+    return NextResponse.json({ detail: provisionError ?? "Failed to provision user" }, { status: 500 });
+  }
+
   const { data, error } = await supabase
     .from("agency_members")
     .insert({
       agency_id: agency.id,
-      email,
+      user_id: authUser.id,
+      email: email.trim().toLowerCase(),
       role: "member",
       status: "active",
       invited_at: new Date().toISOString(),

@@ -2,22 +2,27 @@ import { type HTMLAttributes, forwardRef } from "react";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "bordered" | "elevated";
+  noHover?: boolean;
 }
 
 const variantStyles: Record<string, string> = {
   default: "bg-card",
-  bordered:
-    "bg-card border border-border transition-all duration-300 hover:border-border-light hover:shadow-lg hover:-translate-y-0.5",
-  elevated:
-    "bg-card border border-border shadow-lg transition-all duration-300 hover:border-border-light hover:shadow-xl hover:-translate-y-0.5",
+  bordered: "bg-card border border-border",
+  elevated: "bg-card border border-border shadow-lg",
+};
+
+const hoverStyles: Record<string, string> = {
+  default: "",
+  bordered: "",
+  elevated: "",
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ variant = "bordered", className = "", children, ...props }, ref) => {
+  ({ variant = "bordered", noHover = false, className = "", children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={` overflow-hidden ${variantStyles[variant]} ${className}`}
+        className={` overflow-hidden ${variantStyles[variant]} ${noHover ? "" : hoverStyles[variant]} ${className}`}
         {...props}
       >
         {children}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInviteEmail } from "@/lib/email";
+import { findOrCreateAuthUser } from "@/lib/agency-provision";
 
 
 export async function GET() {
@@ -52,8 +53,9 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const plan: string = (user.user_metadata?.plan ?? "free" as string).toLowerCase();
-  if (plan !== "team") {
-    return NextResponse.json({ error: "Team plan required to invite members" }, { status: 403 });
+  const isTeamOrAbove = ["team", "pilot", "agency", "enterprise"].includes(plan);
+  if (!isTeamOrAbove) {
+    return NextResponse.json({ error: "Team plan or above required to invite members" }, { status: 403 });
   }
 
   const { email, role } = await req.json();
@@ -89,14 +91,9 @@ export async function POST(req: NextRequest) {
   const normalizedEmail = email.trim().toLowerCase();
   const admin = createAdminClient();
 
-  // Only registered users can be added
-  const { data: { users } } = await admin.auth.admin.listUsers({ perPage: 1000 });
-  const existingUser = users.find((u) => u.email?.toLowerCase() === normalizedEmail);
-  if (!existingUser) {
-    return NextResponse.json(
-      { error: "No account found with that email. They must sign up first." },
-      { status: 404 }
-    );
+  const { user: authUser, error: provisionError } = await findOrCreateAuthUser(admin, normalizedEmail);
+  if (!authUser) {
+    return NextResponse.json({ error: provisionError ?? "Failed to provision user" }, { status: 500 });
   }
 
   // Check not already a member
@@ -114,7 +111,7 @@ export async function POST(req: NextRequest) {
     .from("agency_members")
     .insert({
       agency_id: agency.id,
-      user_id: existingUser.id,
+      user_id: authUser.id,
       email: normalizedEmail,
       role,
       status: "pending",

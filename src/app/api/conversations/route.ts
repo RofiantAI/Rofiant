@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { isMinorUser } from "@/lib/minor-account";
 import { NextResponse } from "next/server";
 
 export async function DELETE() {
@@ -19,6 +20,16 @@ export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
+
+  if (isMinorUser(user)) {
+    const filename = `rofiant-chats-${new Date().toISOString().slice(0, 10)}.json`;
+    return new NextResponse(JSON.stringify({ exported_at: new Date().toISOString(), conversations: [] }, null, 2), {
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+      },
+    });
+  }
 
   const { data: conversations, error } = await supabase
     .from("conversations")
@@ -43,6 +54,18 @@ export async function POST(req: Request) {
   if (!user) return new Response("Unauthorized", { status: 401 });
 
   const { title, firstMessage } = await req.json();
+
+  if (isMinorUser(user)) {
+    const now = new Date().toISOString();
+    return NextResponse.json({
+      id: crypto.randomUUID(),
+      user_id: user.id,
+      title: title ?? "New chat",
+      created_at: now,
+      updated_at: now,
+      ephemeral: true,
+    });
+  }
 
   const { data: conversation, error } = await supabase
     .from("conversations")

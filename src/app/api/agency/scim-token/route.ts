@@ -9,8 +9,8 @@ export async function POST() {
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
   const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
-  if (!["pilot", "agency", "enterprise"].includes(plan)) {
-    return NextResponse.json({ error: "SCIM requires Pilot, Agency, or Enterprise plan" }, { status: 403 });
+  if (!["agency", "enterprise"].includes(plan)) {
+    return NextResponse.json({ error: "SCIM requires Agency or Enterprise plan" }, { status: 403 });
   }
 
   const admin = createAdminClient();

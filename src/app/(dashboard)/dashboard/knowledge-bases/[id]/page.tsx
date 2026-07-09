@@ -3,6 +3,16 @@
 import { BookOpen, FileText, Plus, Trash2, ArrowLeft, Pencil, Check, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState, use } from "react";
+import { useTranslations } from "next-intl";
+import {
+  DashboardPage,
+  DashboardCard,
+  DashboardList,
+  DashboardEmptyState,
+  DashboardPrimaryButton,
+  DashboardSecondaryButton,
+} from "@/components/dashboard/ui/page-shell";
+import { SkeletonListRows, SkeletonPageHeader } from "@/components/ui/skeleton";
 
 type Doc = { id: string; name: string; type: string; size: number };
 type KBDoc = { id: string; document_id: string; added_at: string; documents: Doc };
@@ -24,6 +34,7 @@ function formatBytes(b: number) {
 
 export default function KBDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const t = useTranslations("dashboard.knowledgeBases.detail");
   const [kb, setKb] = useState<KB | null>(null);
   const [loading, setLoading] = useState(true);
   const [userDocs, setUserDocs] = useState<UserDoc[]>([]);
@@ -54,7 +65,7 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
     });
     if (!res.ok) {
       const d = await res.json();
-      setAddError(d.error ?? "Failed to add");
+      setAddError(d.error ?? t("failedToAdd"));
       setAdding(null);
       return;
     }
@@ -66,7 +77,7 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
   }
 
   async function removeDoc(docId: string) {
-    if (!confirm("Remove this document from the knowledge base?")) return;
+    if (!confirm(t("removeConfirm"))) return;
     await fetch(`/api/knowledge-bases/${id}/documents`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -97,57 +108,71 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
   const docIds = new Set(kb?.knowledge_base_documents.map((d) => d.document_id) ?? []);
   const availableDocs = userDocs.filter((d) => !docIds.has(d.id));
 
-  if (loading) return <div className="text-sm text-foreground-muted p-8">Loading…</div>;
-  if (!kb) return (
-    <div className="p-8">
-      <p className="text-sm text-foreground-secondary">Knowledge base not found.</p>
-      <Link href="/dashboard/knowledge-bases" className="text-sm text-accent-primary hover:underline mt-2 inline-block">← Back</Link>
-    </div>
-  );
+  if (loading) {
+    return (
+      <DashboardPage>
+        <SkeletonPageHeader />
+        <div className="mt-8">
+          <DashboardList>
+            <SkeletonListRows rows={5} />
+          </DashboardList>
+        </div>
+      </DashboardPage>
+    );
+  }
+  if (!kb) {
+    return (
+      <DashboardPage>
+        <p className="text-sm text-foreground-secondary">{t("notFound")}</p>
+        <Link href="/dashboard/knowledge-bases" className="text-sm text-accent-primary hover:underline mt-2 inline-block">
+          {t("backLink")}
+        </Link>
+      </DashboardPage>
+    );
+  }
 
   return (
-    <div>
-      <div className="mb-6">
-        <Link href="/dashboard/knowledge-bases" className="inline-flex items-center gap-1.5 text-xs text-foreground-muted hover:text-foreground-secondary transition-colors mb-4">
-          <ArrowLeft className="w-3 h-3" /> Knowledge Bases
-        </Link>
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            {editingName ? (
-              <div className="flex items-center gap-2">
-                <input
-                  autoFocus
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") saveName(); if (e.key === "Escape") setEditingName(false); }}
-                  className="text-2xl font-normal bg-transparent border-b border-border text-foreground focus:outline-none focus:border-border-light w-full max-w-sm"
-                />
-                <button onClick={saveName} disabled={savingName} className="text-foreground-muted hover:text-accent-success"><Check className="w-4 h-4" /></button>
-                <button onClick={() => setEditingName(false)} className="text-foreground-muted hover:text-foreground"><X className="w-4 h-4" /></button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 group">
-                <h1 className="text-2xl font-normal text-foreground">{kb.name}</h1>
-                <button onClick={() => setEditingName(true)} className="opacity-0 group-hover:opacity-100 text-foreground-muted hover:text-foreground transition-opacity">
-                  <Pencil className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )}
-            {kb.description && <p className="mt-1 text-sm text-foreground-secondary">{kb.description}</p>}
-          </div>
-          <button
-            onClick={() => { setShowAddDoc(true); setAddError(""); }}
-            className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors inline-flex items-center gap-1.5 shrink-0"
-          >
-            <Plus className="w-3.5 h-3.5" /> Add document
-          </button>
+    <DashboardPage>
+      <Link
+        href="/dashboard/knowledge-bases"
+        className="inline-flex items-center gap-1.5 text-xs text-foreground-muted hover:text-foreground-secondary transition-colors -mt-2"
+      >
+        <ArrowLeft className="w-3 h-3" /> {t("back")}
+      </Link>
+
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          {editingName ? (
+            <div className="flex items-center gap-2">
+              <input
+                autoFocus
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") saveName(); if (e.key === "Escape") setEditingName(false); }}
+                className="text-2xl font-semibold tracking-tight bg-transparent border-b border-border text-foreground focus:outline-none focus:border-border-light w-full max-w-sm"
+              />
+              <button onClick={saveName} disabled={savingName} className="text-foreground-muted hover:text-accent-success"><Check className="w-4 h-4" /></button>
+              <button onClick={() => setEditingName(false)} className="text-foreground-muted hover:text-foreground"><X className="w-4 h-4" /></button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 group">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">{kb.name}</h1>
+              <button onClick={() => setEditingName(true)} className="opacity-0 group-hover:opacity-100 text-foreground-muted hover:text-foreground transition-opacity">
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+          {kb.description && <p className="mt-1 text-sm text-foreground-secondary">{kb.description}</p>}
         </div>
+        <DashboardPrimaryButton onClick={() => { setShowAddDoc(true); setAddError(""); }}>
+          <Plus className="w-3.5 h-3.5" /> {t("addDocument")}
+        </DashboardPrimaryButton>
       </div>
 
       {showAddDoc && (
-        <div className="mb-6 bg-card border border-border p-5">
+        <DashboardCard>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-medium text-foreground">Add document to knowledge base</h2>
+            <h2 className="text-sm font-medium text-foreground">{t("addDocForm.heading")}</h2>
             <button onClick={() => setShowAddDoc(false)} className="text-foreground-muted hover:text-foreground">
               <X className="w-4 h-4" />
             </button>
@@ -155,11 +180,11 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
           {availableDocs.length === 0 ? (
             <div className="text-sm text-foreground-secondary">
               {userDocs.length === 0
-                ? <>No documents uploaded yet. <Link href="/dashboard/documents" className="text-accent-primary hover:underline">Upload a document →</Link></>
-                : "All your documents are already in this knowledge base."}
+                ? <>{t("addDocForm.noDocsUploaded")} <Link href="/dashboard/documents" className="text-accent-primary hover:underline">{t("addDocForm.uploadLink")}</Link></>
+                : t("addDocForm.allDocsAdded")}
             </div>
           ) : (
-            <div className="divide-y divide-border border border-border">
+            <DashboardList>
               {availableDocs.map((doc) => (
                 <div key={doc.id} className="flex items-center gap-3 px-4 py-3">
                   <FileText className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
@@ -167,34 +192,30 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
                     <div className="text-sm text-foreground truncate">{doc.name}</div>
                     <div className="text-xs text-foreground-muted">{formatBytes(doc.size)}</div>
                   </div>
-                  <button
-                    onClick={() => addDoc(doc.id)}
-                    disabled={adding === doc.id}
-                    className="h-7 px-3 text-xs border border-border text-foreground-secondary hover:border-border-light hover:text-foreground disabled:opacity-40 transition-colors"
-                  >
-                    {adding === doc.id ? "Adding…" : "Add"}
-                  </button>
+                  <DashboardSecondaryButton onClick={() => addDoc(doc.id)} disabled={adding === doc.id}>
+                    {adding === doc.id ? t("addDocForm.adding") : t("addDocForm.add")}
+                  </DashboardSecondaryButton>
                 </div>
               ))}
-            </div>
+            </DashboardList>
           )}
           {addError && <p className="text-xs text-red-400 mt-3">{addError}</p>}
-        </div>
+        </DashboardCard>
       )}
 
       {kb.knowledge_base_documents.length === 0 ? (
-        <div className="bg-card border border-border p-16 text-center">
-          <BookOpen className="w-6 h-6 text-foreground-muted mx-auto mb-3" />
-          <p className="text-sm font-medium text-foreground mb-1">No documents yet</p>
-          <p className="text-sm text-foreground-secondary mb-4">
-            Add documents from your library to include them as AI context.
-          </p>
-          <button onClick={() => setShowAddDoc(true)} className="text-sm text-accent-primary hover:underline">
-            Add your first document →
-          </button>
-        </div>
+        <DashboardEmptyState
+          icon={BookOpen}
+          title={t("empty.heading")}
+          description={t("empty.description")}
+          action={
+            <button onClick={() => setShowAddDoc(true)} className="text-sm text-accent-primary hover:underline">
+              {t("empty.cta")}
+            </button>
+          }
+        />
       ) : (
-        <div className="border border-border bg-card divide-y divide-border">
+        <DashboardList>
           {kb.knowledge_base_documents.map((kbDoc) => {
             const doc = kbDoc.documents;
             if (!doc) return null;
@@ -204,7 +225,7 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-foreground truncate">{doc.name}</div>
                   <div className="text-xs text-foreground-muted">
-                    {formatBytes(doc.size)} · Added {new Date(kbDoc.added_at).toLocaleDateString()}
+                    {formatBytes(doc.size)} · {t("addedOn", { date: new Date(kbDoc.added_at).toLocaleDateString() })}
                   </div>
                 </div>
                 <button
@@ -216,13 +237,16 @@ export default function KBDetailPage({ params }: { params: Promise<{ id: string 
               </div>
             );
           })}
-        </div>
+        </DashboardList>
       )}
 
-      <p className="mt-4 text-xs text-foreground-muted">
-        {kb.knowledge_base_documents.length} document{kb.knowledge_base_documents.length !== 1 ? "s" : ""} ·
-        Last updated {new Date(kb.updated_at).toLocaleDateString()}
+      <p className="text-xs text-foreground-muted">
+        {t("footerSummary", {
+          count: kb.knowledge_base_documents.length,
+          plural: kb.knowledge_base_documents.length !== 1 ? "s" : "",
+          date: new Date(kb.updated_at).toLocaleDateString(),
+        })}
       </p>
-    </div>
+    </DashboardPage>
   );
 }

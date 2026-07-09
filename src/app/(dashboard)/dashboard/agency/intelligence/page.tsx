@@ -2,17 +2,18 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { IntelligenceClient } from "./intelligence-client";
+import { routing } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
 export default async function IntelligencePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login");
+  if (!user) redirect(`/${routing.defaultLocale}/auth/login`);
 
   const plan: string = (user.user_metadata?.plan ?? "free" as string).toLowerCase();
-  const isPaid = plan === "pro" || plan === "team";
-  if (!isPaid) redirect("/dashboard/agency");
+  const isGov = plan === "agency" || plan === "enterprise";
+  if (!isGov) redirect("/dashboard/agency");
 
   const admin = createAdminClient();
 

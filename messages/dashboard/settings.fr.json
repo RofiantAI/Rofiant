@@ -1,0 +1,236 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte, votre sécurité et vos préférences",
+    "tabs": {
+      "account": "Compte",
+      "security": "Sécurité",
+      "notifications": "Notifications",
+      "preferences": "Préférences",
+      "appearance": "Apparence",
+      "danger": "Zone de danger"
+    },
+    "account": {
+      "heading": "Compte",
+      "displayName": "Nom d'affichage",
+      "displayNamePlaceholder": "Votre nom",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré",
+      "bio": "Bio",
+      "bioPlaceholder": "Une courte description de vous-même",
+      "bioCount": "{count}/200",
+      "saveBio": "Enregistrer la bio",
+      "email": "E-mail",
+      "emailHint": "Contactez le support pour modifier votre adresse e-mail.",
+      "userId": "ID utilisateur",
+      "password": "Mot de passe",
+      "passwordHint": "Modifiez le mot de passe de votre compte",
+      "change": "Modifier",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "passwordUpdated": "Mot de passe mis à jour.",
+      "passwordTooShort": "Au moins 8 caractères requis.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas.",
+      "cancel": "Annuler",
+      "photoUpload": "Téléverser une photo",
+      "photoRemove": "Supprimer la photo",
+      "photoUploading": "Téléversement…",
+      "photoHint": "JPG, PNG, WebP ou GIF. 5 Mo max.",
+      "photoInvalidType": "Utilisez JPG, PNG, WebP ou GIF.",
+      "photoTooLarge": "L'image doit faire 5 Mo ou moins.",
+      "photoUploadError": "Échec du téléversement : {message}"
+    },
+    "security": {
+      "twoFactor": "Authentification à deux facteurs",
+      "active": "Active",
+      "totpProtected": "Votre compte est protégé par une application d'authentification (TOTP).",
+      "disable2fa": "Désactiver la 2FA",
+      "scanQr": "Scannez ce code QR avec votre application d'authentification (Google Authenticator, Authy, 1Password, etc.)",
+      "manualKey": "Ou saisissez la clé manuellement :",
+      "enterCode": "Saisissez le code à 6 chiffres de votre application",
+      "verifyAndEnable": "Vérifier et activer",
+      "cancel": "Annuler",
+      "twoFaEnabled": "2FA activée avec succès.",
+      "twoFaDesc": "Ajoutez une couche de sécurité supplémentaire avec une application d'authentification TOTP. Disponible sur tous les forfaits.",
+      "loading": "Chargement…",
+      "setup2fa": "Configurer la 2FA",
+      "sessions": "Sessions",
+      "currentSession": "Session actuelle",
+      "signedIn": "Connecté depuis",
+      "account": "Compte",
+      "signOutOthersDesc": "Déconnectez toutes les autres sessions actives sur vos autres appareils.",
+      "allOthersSignedOut": "Toutes les autres sessions ont été déconnectées.",
+      "signingOut": "Déconnexion…",
+      "signOutOthers": "Déconnecter les autres sessions",
+      "auditLog": {
+        "title": "Journal d'audit",
+        "desc": "Consultez les actions liées à la sécurité : clés API, webhooks et exportations de données.",
+        "view": "Voir le journal d'audit"
+      }
+    },
+    "notifications": {
+      "heading": "Notifications",
+      "usageAlerts": {
+        "label": "Alertes d'utilisation",
+        "desc": "Avertir en cas d'approche des limites du forfait"
+      },
+      "securityAlerts": {
+        "label": "Alertes de sécurité",
+        "desc": "Nouvelle connexion détectée ou clé API créée"
+      },
+      "productUpdates": {
+        "label": "Mises à jour produit",
+        "desc": "Nouvelles fonctionnalités et améliorations"
+      },
+      "weeklyDigest": {
+        "label": "Résumé hebdomadaire",
+        "desc": "Résumé de votre utilisation chaque semaine"
+      },
+      "apiFailures": {
+        "label": "Échecs API",
+        "desc": "Alerter en cas d'échecs répétés des requêtes API"
+      },
+      "billingAlerts": {
+        "label": "Alertes de facturation",
+        "desc": "Prochains renouvellements et problèmes de paiement"
+      }
+    },
+    "preferences": {
+      "heading": "Préférences",
+      "language": "Langue",
+      "timezone": "Fuseau horaire",
+      "currentTime": "Heure actuelle :",
+      "dateFormat": "Format de date",
+      "timeFormat": "Format d'heure",
+      "time12h": "12 heures (2:30 PM)",
+      "time24h": "24 heures (14:30)",
+      "dataRegion": "Région des données",
+      "dataRegionDesc": "Contrôle l'endroit où vos données sont stockées et traitées.",
+      "regions": {
+        "usEast": "États-Unis Est",
+        "usWest": "États-Unis Ouest",
+        "euWest": "UE Ouest",
+        "euCentral": "UE Centrale",
+        "asiaPacific": "Asie-Pacifique"
+      },
+      "savePreferences": "Enregistrer les préférences",
+      "saved": "Enregistré"
+    },
+    "appearance": {
+      "heading": "Apparence",
+      "theme": "Thème",
+      "themes": {
+        "light": {
+          "label": "Clair",
+          "desc": "Fond clair, texte foncé"
+        },
+        "dark": {
+          "label": "Sombre",
+          "desc": "Fond foncé, texte clair"
+        },
+        "system": {
+          "label": "Système",
+          "desc": "Suit le réglage de votre appareil"
+        }
+      },
+      "accentColor": "Couleur d'accent",
+      "selected": "Sélectionné :",
+      "uiDensity": "Densité de l'interface",
+      "densities": {
+        "compact": {
+          "label": "Compacte",
+          "desc": "Espacement plus serré, plus de contenu à l'écran"
+        },
+        "comfortable": {
+          "label": "Confortable",
+          "desc": "Équilibrée — par défaut"
+        },
+        "spacious": {
+          "label": "Spacieuse",
+          "desc": "Plus d'espace entre les éléments"
+        }
+      },
+      "accentNames": {
+        "yellow": "Ambre",
+        "blue": "Bleu",
+        "green": "Vert",
+        "purple": "Violet"
+      },
+      "apply": "Appliquer",
+      "applied": "Appliqué"
+    },
+    "danger": {
+      "exportData": "Exporter les données",
+      "exportDesc": "Téléchargez toutes vos données, y compris les conversations, documents, agents et paramètres du compte.",
+      "requestExport": "Demander l'export",
+      "exportAlert": "Un export de données sera préparé et envoyé par e-mail à {email} sous 24 heures.",
+      "deleteAccount": "Supprimer le compte",
+      "deleteDesc": "Supprime définitivement votre compte et toutes les données associées. Cette action est irréversible.",
+      "typeToConfirm": "Saisissez {email} pour confirmer",
+      "deleting": "Suppression…",
+      "deleteMyAccount": "Supprimer mon compte",
+      "deleteAlert": "La suppression du compte nécessite une vérification par un administrateur. Une demande de suppression a été envoyée au support pour {email}.",
+      "exporting": "Exportation…"
+    }
+  },
+  "sidebar": {
+    "product": "Produit",
+    "agency": "Organisation",
+    "developer": "Sécurité et API",
+    "nav": {
+      "overview": "Vue d'ensemble",
+      "chatAi": "Chat AI",
+      "voiceAi": "Voice AI",
+      "documents": "Documents",
+      "agents": "Agents",
+      "apiKeys": "Clés API",
+      "usage": "Utilisation",
+      "agencyOverview": "Vue d'ensemble",
+      "missionSolutions": "Workflows",
+      "toolsHub": "Tools",
+      "intelligence": "Intelligence",
+      "members": "Membres",
+      "billing": "Facturation",
+      "agencySettings": "Paramètres",
+      "broadcast": "Diffusion",
+      "accessReview": "Revue d'accès",
+      "knowledgeBases": "Bases de connaissances",
+      "auditLog": "Journal d'audit",
+      "siteBroadcast": "Diffusion du site"
+    },
+    "siteAdmin": "Admin du site",
+    "sitePages": "Pages du site",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "accountMenu": "Menu du compte",
+    "accountSettings": "Paramètres",
+    "planSuffix": "forfait",
+    "signOut": "Se déconnecter",
+    "upgrade": "Passer à un forfait supérieur",
+    "plans": {
+      "enterprise": "Enterprise",
+      "agency": "Agency",
+      "pilot": "Pilot",
+      "team": "Team",
+      "pro": "Pro",
+      "free": "Free"
+    }
+  },
+  "announcementBanner": {
+    "dismiss": "Fermer l'annonce"
+  },
+  "inviteBanner": {
+    "invitedTo": "Vous avez été invité(e) à rejoindre",
+    "asRole": "en tant que",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "chatRedirect": {
+    "title": "Vous quittez cet onglet",
+    "desc": "Chat AI s'ouvre dans un nouvel onglet. Votre session actuelle restera ouverte ici.",
+    "dontShowAgain": "Ne plus afficher ceci",
+    "back": "Retour",
+    "continue": "Continuer"
+  }
+}

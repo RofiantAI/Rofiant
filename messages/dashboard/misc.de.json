@@ -1,0 +1,566 @@
+{
+  "overview": {
+    "title": "Übersicht",
+    "subtitle": "Willkommen zurück, <bold>{name}</bold>.",
+    "newChat": "Neuer Chat",
+    "stats": {
+      "conversations": {
+        "label": "Unterhaltungen",
+        "sub": "Gesamt"
+      },
+      "messages": {
+        "label": "Nachrichten",
+        "sub": "Letzte 14 Tage"
+      },
+      "documents": {
+        "label": "Dokumente",
+        "sub": "Indexiert"
+      },
+      "tokens": {
+        "label": "Tokens",
+        "sub": "Letzte 14 Tage"
+      },
+      "apiRequests": {
+        "label": "API-Anfragen",
+        "sub": "Diesen Monat"
+      },
+      "todayDelta": "+{count} heute"
+    },
+    "activityChart": {
+      "title": "Aktivität",
+      "empty": "Noch keine Aktivität — starten Sie einen Chat oder nutzen Sie die API.",
+      "totalMessages": "{count} Nachrichten in diesem Zeitraum",
+      "summary": "{messages} Nachrichten · {tokens} Tokens",
+      "tooltipMessages": "{count} Nachrichten",
+      "tooltipTokens": "{count} Tokens",
+      "legendMessages": "Nachrichten",
+      "legendTokens": "Tokens"
+    },
+    "recentConversations": {
+      "title": "Letzte Chats",
+      "viewAll": "Alle anzeigen",
+      "empty": "Noch keine Unterhaltungen",
+      "startFirst": "Ersten Chat starten",
+      "justNow": "gerade eben",
+      "minutesAgo": "vor {count} Min.",
+      "hoursAgo": "vor {count} Std.",
+      "daysAgo": "vor {count} Tg."
+    },
+    "plan": {
+      "title": "Plan",
+      "free": "Kostenlos",
+      "pro": "Pro",
+      "team": "Team",
+      "pilot": "Pilot",
+      "agency": "Agency",
+      "enterprise": "Enterprise",
+      "freeDescription": "Bis zu {limit} Nachrichten pro Tag im kostenlosen Plan.",
+      "paidDescription": "Voller Zugriff auf Ihre Planfunktionen und Nutzungsanalysen.",
+      "upgrade": "Plan upgraden",
+      "viewUsage": "Nutzung anzeigen"
+    },
+    "shortcuts": {
+      "title": "Schnellaktionen",
+      "chat": "Neuer Chat",
+      "documents": "Dokumente",
+      "voice": "Voice AI",
+      "agents": "Agenten",
+      "usage": "Nutzung",
+      "apiKeys": "API-Schlüssel"
+    },
+    "dailyUsage": {
+      "title": "Nachrichten heute",
+      "used": "{used} von {limit} genutzt",
+      "resetsDaily": "Tägliche Zurücksetzung um Mitternacht UTC"
+    },
+    "recentDocuments": {
+      "title": "Letzte Dokumente",
+      "viewAll": "Alle anzeigen",
+      "empty": "Noch keine Dokumente hochgeladen",
+      "uploadFirst": "Dokument hochladen",
+      "statusIndexed": "Indexiert",
+      "statusProcessing": "Wird verarbeitet",
+      "statusFailed": "Fehlgeschlagen"
+    },
+    "planUsage": {
+      "tokens": "Tokens diesen Monat",
+      "apiRequests": "API-Anfragen diesen Monat"
+    },
+    "onboarding": {
+      "tour": {
+        "skip": "Tour überspringen",
+        "back": "Zurück",
+        "next": "Weiter",
+        "finish": "Fertig",
+        "stepIndicator": "Schritt {current} von {total}",
+        "steps": {
+          "welcome": {
+            "title": "Willkommen, {name}",
+            "description": "Dies ist Ihre Dashboard-Seitenleiste — alles ist nur einen Klick entfernt."
+          },
+          "overview": {
+            "title": "Übersicht",
+            "description": "Ihre Startseite für Metriken, Aktivität und Schnellaktionen."
+          },
+          "chat": {
+            "title": "Chat-KI",
+            "description": "Gespräche mit führenden Modellen starten und nahtlos fortsetzen."
+          },
+          "documents": {
+            "title": "Dokumente",
+            "description": "Dateien hochladen und für Suche und Q&A indexieren."
+          },
+          "agents": {
+            "title": "Agenten",
+            "description": "Agenten erstellen, die Aufgaben ausführen und Tools aufrufen."
+          },
+          "usage": {
+            "title": "Nutzung",
+            "description": "Tokens, API-Anfragen und Planlimits im Zeitverlauf verfolgen."
+          },
+          "apiKeys": {
+            "title": "API-Schlüssel",
+            "description": "Schlüssel erstellen, um Apps und Dienste mit der Rofiant-API zu verbinden."
+          },
+          "account": {
+            "title": "Ihr Konto",
+            "description": "Profil, Plan, Einstellungen und Abmeldung verwalten."
+          },
+          "workspace": {
+            "title": "Ihr Arbeitsbereich",
+            "description": "Jede Seite öffnet sich hier. Beginnen Sie mit der Übersicht."
+          }
+        }
+      }
+    },
+    "documentAlerts": {
+      "processing": "{count} Dokument(e) werden noch indexiert",
+      "failed": "{count} Dokument(e) konnten nicht indexiert werden",
+      "view": "Anzeigen"
+    },
+    "modelBreakdown": {
+      "title": "Top-Modelle",
+      "period": "Letzte 14 Tage",
+      "tokens": "{count} Tokens"
+    },
+    "recentActivity": {
+      "title": "Letzte Aktivität",
+      "viewAll": "Audit-Protokoll anzeigen",
+      "empty": "Noch keine Kontoaktivität"
+    },
+    "agentsPanel": {
+      "title": "Agenten",
+      "viewAll": "Verwalten",
+      "empty": "Noch keine Agenten",
+      "createFirst": "Agent erstellen",
+      "summary": "{active} von {total} aktiv",
+      "runs": "{count} Läufe"
+    },
+    "apiKeysPanel": {
+      "title": "API-Schlüssel",
+      "sub": "Aktive Schlüssel auf Ihrem Konto",
+      "manage": "Schlüssel verwalten"
+    }
+  },
+  "usage": {
+    "title": "Analysen",
+    "subtitle": "Nutzung, Kosten und Leistung für Chat und API",
+    "metrics": {
+      "conversations": {
+        "label": "Unterhaltungen",
+        "period": "Dieser Monat"
+      },
+      "messages": {
+        "label": "Nachrichten",
+        "period": "30 Tage"
+      },
+      "tokens": {
+        "label": "Tokens",
+        "period": "30 Tage"
+      },
+      "cost": {
+        "label": "Gesch. Kosten",
+        "period": "30 Tage"
+      },
+      "requests": {
+        "label": "Modellanfragen",
+        "period": "30 Tage"
+      },
+      "apiRequests": {
+        "label": "API-Anfragen",
+        "period": "Dieser Monat"
+      },
+      "todayDelta": "+{count} heute"
+    },
+    "summary": {
+      "avgTokens": "Ø Tokens / Anfrage",
+      "perRequest": "Über alle Modellaufrufe",
+      "peakDay": "Tag mit höchster Nutzung",
+      "peakTokens": "{count} Tokens",
+      "noPeak": "Keine Nutzung in diesem Zeitraum",
+      "tokenSplit": "Input / Output",
+      "inOut": "Token-Richtungsaufteilung"
+    },
+    "charts": {
+      "tokensTitle": "Token-Volumen — 30 Tage",
+      "requestsTitle": "Anfragen nach Quelle — 30 Tage",
+      "messagesTitle": "Nachrichten — 30 Tage",
+      "conversationsTitle": "Unterhaltungen — 30 Tage",
+      "tokenSplitTitle": "Input vs. Output Tokens — 30 Tage",
+      "tooltipMessages": "Nachrichten",
+      "tooltipConversations": "Unterhaltungen",
+      "tooltipTokens": "Tokens",
+      "tooltipChatRequests": "Chat-Anfragen",
+      "tooltipApiRequests": "API-Anfragen",
+      "tooltipInput": "Input-Tokens",
+      "tooltipOutput": "Output-Tokens",
+      "totalTokens": "{count} Tokens gesamt",
+      "modelsTitle": "Top-Modelle nach Tokens",
+      "noData": "Keine Daten für diesen Zeitraum"
+    },
+    "sourceBreakdown": {
+      "title": "Nutzung nach Quelle",
+      "detail": "{requests} Anfragen · {tokens} Tokens"
+    },
+    "sources": {
+      "chat": "Chat",
+      "api": "API",
+      "agents": "Agenten"
+    },
+    "modelUsage": {
+      "title": "Modellnutzung",
+      "tokens": "{count} Tokens",
+      "placeholder": "—",
+      "noData": "Noch keine Nutzung erfasst",
+      "columns": {
+        "model": "Modell",
+        "requests": "Anfragen",
+        "input": "Input",
+        "output": "Output",
+        "cost": "Kosten",
+        "share": "Anteil"
+      }
+    },
+    "recent": {
+      "title": "Letzte Anfragen",
+      "noData": "Noch keine Modellanfragen",
+      "tokens": "{count} Tokens",
+      "justNow": "gerade eben",
+      "minutesAgo": "vor {count} Min.",
+      "hoursAgo": "vor {count} Std.",
+      "daysAgo": "vor {count} Tg."
+    }
+  },
+  "urban": {
+    "header": {
+      "title": "Urban AI Monitor",
+      "refresh": "Aktualisieren",
+      "scanning": "Scanvorgang läuft…",
+      "runScan": "Scan starten (20 Kameras)"
+    },
+    "banners": {
+      "serviceDown": "Der Urban-AI-Dienst ist nicht erreichbar. Starten Sie ihn mit:",
+      "scanFailed": "Scan fehlgeschlagen",
+      "serviceUnavailable": "Dienst nicht verfügbar"
+    },
+    "health": {
+      "serviceStatus": "Dienst {status}",
+      "model": "Modell:",
+      "lastScan": "Letzter Scan:",
+      "scanning": "● Scanvorgang läuft…"
+    },
+    "stats": {
+      "camerasSeen": {
+        "label": "Erfasste Kameras",
+        "sub": "in den letzten 500 Einträgen"
+      },
+      "cars": {
+        "label": "Autos",
+        "sub": "Ø {avg}/Kamera"
+      },
+      "trucks": {
+        "label": "Lkw",
+        "sub": "Schwerfahrzeuge"
+      },
+      "people": {
+        "label": "Personen",
+        "sub": "Ø {avg}/Kamera"
+      },
+      "anomalies": {
+        "label": "Anomalien",
+        "sub": "über alle Scans"
+      }
+    },
+    "tabs": {
+      "detections": "Alle Erkennungen",
+      "anomalies": "Anomalien",
+      "live": "Live-Stream"
+    },
+    "list": {
+      "loading": "Wird geladen…",
+      "emptyLive": "Warten auf Live-Ereignisse…",
+      "emptyDefault": "Noch keine Daten. Führen Sie einen Scan aus, um Daten zu erfassen.",
+      "columns": {
+        "location": "Standort",
+        "cars": "Autos",
+        "trucks": "Lkw",
+        "motos": "Motorräder",
+        "people": "Personen",
+        "anomalies": "Anomalien",
+        "time": "Zeit"
+      },
+      "camLabel": "Kamera {id}",
+      "live": "live",
+      "justNow": "gerade eben",
+      "minutesAgo": "vor {count} Min.",
+      "hoursAgo": "vor {count} Std."
+    },
+    "anomalyTypes": {
+      "TRAFFIC_JAM": "VERKEHRSSTAU",
+      "LARGE_CROWD": "GROSSE MENSCHENANSAMMLUNG",
+      "EMPTY_ROAD": "LEERE STRASSE"
+    },
+    "lightbox": {
+      "camLabel": "Kamera {id}",
+      "summary": "{cars} Autos · {trucks} Lkw · {motos} Motorräder · {people} Personen",
+      "captured": "Aufgenommen {time}",
+      "openFullSize": "In voller Größe öffnen ↗"
+    },
+    "trends": {
+      "anomalyRate": {
+        "title": "Anomalierate",
+        "sub": "der markierten Kameraaufnahmen"
+      },
+      "busiestType": {
+        "title": "Häufigster Typ",
+        "vehicles": "Fahrzeuge",
+        "sub": "{cars} Autos bei {readings} Messungen"
+      },
+      "coverage": {
+        "title": "Abdeckung",
+        "sub": "verfügbare Kameras zum Scannen"
+      }
+    },
+    "control": {
+      "title": "Urban AI Kontrollzentrum",
+      "subtitle": "Konfigurieren Sie den Python-Dienst und überwachen Sie hier seine Aktivität.",
+      "status": {
+        "running": "Dienst läuft",
+        "notRunning": "Dienst läuft nicht. Siehe Startbefehl unten.",
+        "checking": "Wird überprüft…"
+      },
+      "setup": {
+        "title": "Dienst starten",
+        "step1Before": "1. Gehen Sie zu",
+        "step1After": ", erstellen Sie einen Schlüssel und kopieren Sie ihn.",
+        "apiKeysLinkText": "API-Schlüssel",
+        "step2": "2. Führen Sie diesen Befehl in Ihrem Terminal aus (durch Ihren vollständigen Schlüssel ersetzen):",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "note": "Der Dienst liest alle übrigen Einstellungen (Datenquelle, Scan-Intervall, Modell, Schwellenwerte) automatisch von dieser Seite. Keine Konfigurationsdateien zu bearbeiten."
+      },
+      "settings": {
+        "title": "Einstellungen",
+        "unsavedChanges": "Nicht gespeicherte Änderungen",
+        "loading": "Einstellungen werden geladen…",
+        "fields": {
+          "datasourceUrl": {
+            "label": "URL der Kamera-Datenquelle",
+            "hint": "CSV- oder JSON-API. Leer lassen, um die integrierten Toronto-TMC-Kameras zu verwenden."
+          },
+          "datasourceAuth": {
+            "label": "Authentifizierungsschlüssel der Datenquelle",
+            "hint": "Bearer-Token, falls die Quelle eine Authentifizierung erfordert."
+          },
+          "scanInterval": {
+            "label": "Scan-Intervall (Sekunden)",
+            "hint": "Wie oft der Dienst alle Kameras scannt."
+          },
+          "concurrency": {
+            "label": "Parallelität",
+            "hint": "Parallele Kameraanfragen pro Scan."
+          },
+          "confidence": {
+            "label": "Konfidenzschwelle",
+            "hint": "Niedriger = mehr Erkennungen, mehr Fehlalarme."
+          },
+          "model": {
+            "label": "YOLO-Modell",
+            "hint": "Größer = genauer, aber langsamer."
+          },
+          "inferSize": {
+            "label": "Inferenzgröße (px)",
+            "hint": "An YOLO übergebene Bildgröße. 1280 eignet sich am besten für Verkehrskameras."
+          },
+          "crowdThreshold": {
+            "label": "Schwellenwert für Menschenansammlung",
+            "hint": "Personenanzahl, die die Anomalie GROSSE MENSCHENANSAMMLUNG auslöst."
+          },
+          "trafficThreshold": {
+            "label": "Verkehrsschwellenwert",
+            "hint": "Fahrzeuganzahl, die die Anomalie VERKEHRSSTAU auslöst."
+          }
+        },
+        "saveError": "Speichern fehlgeschlagen",
+        "networkError": "Netzwerkfehler",
+        "save": "Einstellungen speichern",
+        "saving": "Wird gespeichert…",
+        "saved": "Gespeichert",
+        "autoApply": "Der laufende Dienst übernimmt Änderungen automatisch innerhalb von {seconds}s."
+      },
+      "logs": {
+        "title": "Dienstprotokolle",
+        "refresh": "Aktualisieren",
+        "notRunning": "Dienst läuft nicht. Protokolle erscheinen hier, sobald er gestartet wurde.",
+        "loading": "Protokolle werden geladen…",
+        "empty": "Noch keine Protokolle."
+      }
+    }
+  },
+  "siteAdmin": {
+    "broadcast": {
+      "title": "Site broadcast",
+      "subtitle": "Publish announcements and custom pages for all Rofiant users",
+      "tabs": {
+        "announcements": "Announcements",
+        "screens": "Custom pages"
+      },
+      "saving": "Saving…",
+      "inactive": "inactive",
+      "draft": "draft",
+      "delete": "Delete",
+      "errors": {
+        "createFailed": "Failed to create"
+      },
+      "announcements": {
+        "createTitle": "New site announcement",
+        "titlePlaceholder": "Announcement title",
+        "bodyPlaceholder": "Message for all users…",
+        "variantInfo": "Info",
+        "variantWarning": "Warning",
+        "variantCritical": "Critical",
+        "publish": "Publish announcement",
+        "listTitle": "Site announcements",
+        "empty": "No announcements yet",
+        "deactivate": "Hide",
+        "activate": "Show"
+      },
+      "screens": {
+        "createTitle": "New site page",
+        "titlePlaceholder": "Page title",
+        "slugPlaceholder": "url-slug (optional)",
+        "navLabelPlaceholder": "Sidebar label (optional)",
+        "contentPlaceholder": "Page content…",
+        "publish": "Create page",
+        "listTitle": "Site pages",
+        "empty": "No site pages yet",
+        "navLabel": "Nav label",
+        "preview": "Preview",
+        "unpublish": "Unpublish",
+        "publishAction": "Publish"
+      }
+    }
+  },
+  "auditLog": {
+    "title": "Audit-Protokoll",
+    "subtitle": "Eine Aufzeichnung sicherheitsrelevanter Aktionen in Ihrem Konto.",
+    "empty": "Noch keine Aktivität erfasst",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "actions": {
+      "api_key": {
+        "created": "API-Schlüssel erstellt",
+        "deleted": "API-Schlüssel gelöscht"
+      },
+      "data": {
+        "exported": "Daten exportiert"
+      },
+      "webhook": {
+        "created": "Webhook erstellt",
+        "deleted": "Webhook gelöscht"
+      },
+      "agent": {
+        "run": "Agent ausgeführt"
+      },
+      "federal_workflow": {
+        "run": "Missions-Workflow ausgeführt"
+      }
+    },
+    "detail": {
+      "name": "Name: {value}",
+      "keyId": "Schlüssel-ID: {value}",
+      "webhookId": "Webhook-ID: {value}",
+      "url": "URL: {value}",
+      "agentName": "Agent: {value}",
+      "task": "Aufgabe: {value}",
+      "solutionId": "Mission: {value}",
+      "runId": "Lauf: {value}"
+    }
+  },
+  "globalSearch": {
+    "placeholder": "Dashboard, Chats, Dokumente, Agenten suchen…",
+    "clear": "Suche löschen",
+    "searching": "Suche…",
+    "noResults": "Keine Ergebnisse für \"{query}\"",
+    "groups": {
+      "pages": "Seiten",
+      "conversations": "Chats",
+      "documents": "Dokumente",
+      "agents": "Agenten",
+      "knowledgeBases": "Wissensdatenbanken"
+    }
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "ariaLabel": "Benachrichtigungen",
+    "readAll": "Alle gelesen",
+    "clearAll": "Alle löschen",
+    "loading": "Benachrichtigungen werden geladen…",
+    "empty": "Alles erledigt",
+    "viewActivity": "Aktivitätsprotokoll anzeigen",
+    "justNow": "Gerade eben",
+    "minutesAgo": "vor {count} Min.",
+    "hoursAgo": "vor {count} Std.",
+    "daysAgo": "vor {count} T."
+  },
+  "planGate": {
+    "title": "Upgrade to {plan}",
+    "description": "{tool} is not included on your current plan.",
+    "cta": "View {plan} plans",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro",
+      "team": "Team",
+      "pilot": "Pilot",
+      "agency": "Agency",
+      "enterprise": "Enterprise"
+    },
+    "tools": {
+      "chat": "Chat AI",
+      "documents": "Documents",
+      "voice": "Voice AI",
+      "agents": "Agents",
+      "workflows": "Workflows",
+      "security": "Security",
+      "apiKeys": "API keys",
+      "knowledgeBases": "Knowledge bases",
+      "orgHub": "Organization hub",
+      "intelFeed": "Intel feed"
+    }
+  },
+  "servicesHub": {
+    "title": "Tools",
+    "subtitle": "Your {plan} plan includes the tools marked below. Upgrade to unlock the rest.",
+    "included": "Included",
+    "upgradeTo": "Requires {plan}",
+    "open": "Open tool",
+    "upgradeCta": "Upgrade to {plan}",
+    "descriptions": {
+      "documents": "Upload PDFs, search, and summarize with AI.",
+      "voice": "Transcribe audio and generate meeting summaries.",
+      "agents": "Multi-step AI assistants with approval gates.",
+      "workflows": "Ready-made workflow templates for repeatable tasks.",
+      "security": "Audit log and account activity history."
+    }
+  }
+}

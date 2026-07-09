@@ -1,0 +1,267 @@
+{
+  "productStatus": {
+    "beta": "Beta",
+    "voiceAi": "Datei-Upload und Transkription sind verfügbar. Echtzeit-Anrufintegration ist geplant.",
+    "agents": "Workflow-Agenten mit Freigabeschritten erstellen und ausführen. Erweiterte mehrstufige Pipelines sind in Entwicklung."
+  },
+  "agents": {
+    "title": "Agenten",
+    "subtitle": "KI-Workflow-Assistenten mit Freigabeschritten und Prüfprotokollen",
+    "newAgent": "Neuer Agent",
+    "customAgent": {
+      "heading": "Benutzerdefinierter Agent",
+      "namePlaceholder": "Agentenname",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "creating": "Wird erstellt…",
+      "create": "Erstellen",
+      "cancel": "Abbrechen"
+    },
+    "templates": {
+      "heading": "Vorlagen",
+      "creating": "Wird erstellt…",
+      "documentReviewer": {
+        "name": "Dokumentenprüfer",
+        "description": "Prüft hochgeladene Dokumente und markiert wichtige Punkte"
+      },
+      "meetingSummarizer": {
+        "name": "Besprechungszusammenfassung",
+        "description": "Fasst Transkripte zusammen und extrahiert Maßnahmen"
+      },
+      "dataExtractor": {
+        "name": "Datenextraktor",
+        "description": "Extrahiert strukturierte Daten aus unstrukturiertem Text"
+      }
+    },
+    "yourAgents": {
+      "heading": "Ihre Agenten",
+      "loading": "Wird geladen…",
+      "empty": "Noch keine Agenten erstellt. Wählen Sie oben eine Vorlage oder erstellen Sie einen von Grund auf.",
+      "runCount": "{count} Ausführungen",
+      "pause": "Pausieren",
+      "activate": "Aktivieren",
+      "statusActive": "aktiv",
+      "statusPaused": "pausiert"
+    },
+    "run": {
+      "heading": "Agent {name} ausführen",
+      "defaultTask": "Standard-Workflow dieses Agenten ausführen.",
+      "taskPlaceholder": "Beschreiben Sie die Aufgabe für diesen Agenten…",
+      "submit": "Agent ausführen",
+      "running": "Wird ausgeführt…",
+      "close": "Schließen",
+      "error": "Agent-Ausführung fehlgeschlagen.",
+      "pipelineHeading": "Agenten-Pipeline",
+      "phases": {
+        "receive": "Aufgabe empfangen",
+        "plan": "Schritte planen",
+        "search": "Daten suchen",
+        "approval": "Freigabe abwarten",
+        "execute": "Ausführen"
+      },
+      "waitingApproval": "Warte auf Freigabe",
+      "approved": "Freigegeben — ausgeführt",
+      "denied": "Abgelehnt — Aktion blockiert",
+      "proposedActions": "Agent möchte ausführen:",
+      "approve": "Freigeben",
+      "deny": "Ablehnen",
+      "executing": "Wird ausgeführt…"
+    }
+  },
+  "apiKeys": {
+    "title": "API-Schlüssel",
+    "subtitle": "Verwalten Sie Schlüssel für den programmatischen Zugriff auf Rofiant",
+    "upgrade": {
+      "heading": "Für den API-Zugriff ist ein kostenpflichtiger Plan erforderlich",
+      "description": "Upgraden Sie auf Pro oder Team, um API-Schlüssel zu erstellen und Rofiant in Ihre eigenen Anwendungen zu integrieren.",
+      "cta": "Pläne ansehen"
+    },
+    "createKey": "Schlüssel erstellen",
+    "newKeyForm": {
+      "heading": "Neuer API-Schlüssel",
+      "namePlaceholder": "Schlüsselname (z. B. Produktion)",
+      "creating": "Wird erstellt…",
+      "create": "Erstellen",
+      "cancel": "Abbrechen"
+    },
+    "createdKey": {
+      "message": "Schlüssel erstellt – kopieren Sie ihn jetzt. Er wird nicht erneut angezeigt.",
+      "copy": "Kopieren",
+      "copied": "Kopiert"
+    },
+    "table": {
+      "name": "Name",
+      "keyPrefix": "Schlüsselpräfix",
+      "created": "Erstellt",
+      "loading": "Wird geladen…",
+      "empty": "Noch keine API-Schlüssel vorhanden. Erstellen Sie oben einen.",
+      "noDate": "—"
+    },
+    "authentication": {
+      "heading": "Authentifizierung",
+      "description": "Fügen Sie Ihren API-Schlüssel im Authorization-Header ein:",
+      "viewApiReference": "API-Referenz ansehen"
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "subtitle": "Werden Sie benachrichtigt, wenn die Verarbeitung von Dokumenten, Agenten oder Sprachaufträgen abgeschlossen ist.",
+      "addWebhook": "Webhook hinzufügen",
+      "form": {
+        "urlPlaceholder": "https://beispiel.de/webhooks/rofiant",
+        "creating": "Wird erstellt…",
+        "create": "Erstellen",
+        "cancel": "Abbrechen",
+        "error": "Webhook konnte nicht erstellt werden"
+      },
+      "created": {
+        "message": "Webhook erstellt – kopieren Sie jetzt das Signaturgeheimnis. Es wird nicht erneut angezeigt.",
+        "copy": "Kopieren",
+        "copied": "Kopiert"
+      },
+      "table": {
+        "loading": "Wird geladen…",
+        "empty": "Noch keine Webhooks. Fügen Sie oben einen hinzu."
+      }
+    }
+  },
+  "chatAi": {
+    "title": "Chat AI",
+    "subtitle": "Konversations-KI, trainiert mit Ihren Dokumenten",
+    "newChat": "Neuer Chat",
+    "knowledgeBases": {
+      "heading": "Wissensdatenbanken",
+      "documentCount": "{count} Dokumente",
+      "defaultName": "Standard",
+      "statusActive": "Aktiv"
+    },
+    "conversation": {
+      "heading": "Neue Unterhaltung",
+      "startTitle": "Unterhaltung starten",
+      "startDescription": "Stellen Sie Fragen zu Ihren Dokumenten, Richtlinien und Daten. Antworten enthalten Quellenangaben.",
+      "sampleQuestions": [
+        "Wie lautet unsere Urlaubsrichtlinie?",
+        "Wie reiche ich eine Spesenabrechnung ein?",
+        "Fasse den Quartalsbericht zusammen"
+      ]
+    },
+    "uploadCta": {
+      "heading": "Keine Dokumente hochgeladen",
+      "description": "Laden Sie PDFs, Word-Dokumente oder Webseiten hoch, um Ihren Chat AI mit Ihren Inhalten zu trainieren.",
+      "cta": "Zu Dokumente"
+    }
+  },
+  "documents": {
+    "title": "Dokumente",
+    "subtitle": "Laden Sie Dokumente für KI-Suche und -Analyse hoch und verwalten Sie sie",
+    "upload": "Hochladen",
+    "uploading": "Wird hochgeladen…",
+    "errors": {
+      "unsupportedType": "Dateityp .{ext} wird nicht unterstützt. Akzeptiert: {types}",
+      "notAuthenticated": "Nicht authentifiziert.",
+      "storageError": "Speicherfehler: {message}",
+      "saveError": "Fehler beim Speichern: {message}",
+      "unknownError": "Unbekannter Fehler"
+    },
+    "dropzone": {
+      "heading": "Dokumente hochladen",
+      "description": "Dateien per Drag-and-Drop ablegen oder klicken, um sie auszuwählen. Dokumente werden für die Suche indexiert und von Chat AI für fundierte Antworten verwendet."
+    },
+    "allDocuments": {
+      "heading": "Alle Dokumente",
+      "loading": "Wird geladen…",
+      "empty": "Noch keine Dokumente hochgeladen. Laden Sie Dateien hoch, um mit Suche und Analyse zu beginnen."
+    },
+    "contradictionScan": {
+      "heading": "Querschnittsprüfung",
+      "description": "Faktische Widersprüche zwischen Ausschreibungen, Leistungsbeschreibungen, Nachträgen und Angeboten vor Vergabe oder Freigabe finden.",
+      "needMoreDocs": "Laden Sie mindestens 2 Dokumente hoch und indexieren Sie sie.",
+      "focusPlaceholder": "Optionaler Fokus — z. B. Preise, Liefertermine, CLINs",
+      "run": "{count} Docs prüfen",
+      "running": "Prüfung läuft…",
+      "riskLabel": "Risiko: {risk}",
+      "findingCount": "{count} Widersprüche",
+      "export": "JSON exportieren",
+      "provenanceExport": "Herkunftsnachweis",
+      "noContradictions": "Keine wesentlichen Widersprüche in den ausgewählten Dokumenten.",
+      "recommendation": "Empfehlung",
+      "alignedHeading": "Bestätigte Übereinstimmungen",
+      "errors": {
+        "failed": "Prüfung fehlgeschlagen. Erneut versuchen oder andere Dokumente wählen."
+      }
+    }
+  },
+  "voiceAi": {
+    "title": "Voice AI",
+    "subtitle": "Transkription und Zusammenfassung für Besprechungen und Anrufe",
+    "uploadAudio": "Audio hochladen",
+    "uploading": "Wird hochgeladen…",
+    "errors": {
+      "notAuthenticated": "Nicht authentifiziert.",
+      "storageError": "Speicherfehler: {message}",
+      "saveError": "Fehler beim Speichern: {message}",
+      "unknownError": "Unbekannter Fehler"
+    },
+    "dropzone": {
+      "heading": "Audio oder Video hochladen",
+      "description": "MP3-, WAV-, MP4- oder M4A-Dateien per Drag-and-Drop ablegen. Rofiant transkribiert sie und erstellt Zusammenfassungen mit Sprechererkennung.",
+      "sizeLimit": "Unterstützt Dateien bis zu 500 MB"
+    },
+    "recent": {
+      "heading": "Neueste Transkriptionen",
+      "loading": "Wird geladen…",
+      "empty": "Noch keine Transkriptionen vorhanden. Laden Sie Ihre erste Audiodatei hoch, um zu beginnen."
+    }
+  },
+  "knowledgeBases": {
+    "title": "Wissensdatenbanken",
+    "subtitle": "Benannte Dokumentsammlungen, die die KI als dauerhaften Kontext im Chat verwendet.",
+    "usedCount": "({used}/{limit} verwendet)",
+    "newKnowledgeBase": "Neue Wissensdatenbank",
+    "planLimitError": "Ihr Plan erlaubt bis zu {limit} Wissensdatenbank{plural}. Upgraden Sie, um mehr zu erstellen.",
+    "viewPlans": "Pläne ansehen →",
+    "createForm": {
+      "heading": "Neue Wissensdatenbank",
+      "nameLabel": "Name",
+      "namePlaceholder": "z. B. Richtliniendokumente GJ2026",
+      "descriptionLabel": "Beschreibung (optional)",
+      "descriptionPlaceholder": "Welche Dokumente gehören hierher?",
+      "create": "Erstellen",
+      "cancel": "Abbrechen"
+    },
+    "loading": "Wird geladen…",
+    "empty": {
+      "heading": "Noch keine Wissensdatenbanken vorhanden",
+      "description": "Erstellen Sie eine und fügen Sie Dokumente hinzu, um der KI dauerhaften Kontext über Chats hinweg zu geben.",
+      "upgradeCta": "Upgraden Sie Ihren Plan, um Wissensdatenbanken zu erstellen →",
+      "createCta": "Erstellen Sie Ihre erste Wissensdatenbank →"
+    },
+    "list": {
+      "docCount": "{count} Dokument{plural}",
+      "manage": "Verwalten"
+    },
+    "deleteConfirm": "Diese Wissensdatenbank löschen? Dies kann nicht rückgängig gemacht werden.",
+    "detail": {
+      "back": "Wissensdatenbanken",
+      "addDocument": "Dokument hinzufügen",
+      "loading": "Wird geladen…",
+      "notFound": "Wissensdatenbank nicht gefunden.",
+      "backLink": "← Zurück",
+      "addDocForm": {
+        "heading": "Dokument zur Wissensdatenbank hinzufügen",
+        "noDocsUploaded": "Noch keine Dokumente hochgeladen.",
+        "uploadLink": "Dokument hochladen →",
+        "allDocsAdded": "Alle Ihre Dokumente befinden sich bereits in dieser Wissensdatenbank.",
+        "adding": "Wird hinzugefügt…",
+        "add": "Hinzufügen"
+      },
+      "empty": {
+        "heading": "Noch keine Dokumente vorhanden",
+        "description": "Fügen Sie Dokumente aus Ihrer Bibliothek hinzu, um sie als KI-Kontext einzubeziehen.",
+        "cta": "Fügen Sie Ihr erstes Dokument hinzu →"
+      },
+      "addedOn": "Hinzugefügt am {date}",
+      "footerSummary": "{count} Dokument{plural} · Zuletzt aktualisiert am {date}",
+      "removeConfirm": "Dieses Dokument aus der Wissensdatenbank entfernen?",
+      "failedToAdd": "Hinzufügen fehlgeschlagen"
+    }
+  }
+}

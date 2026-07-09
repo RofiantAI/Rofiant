@@ -1,11 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { getDashboardLocale } from "@/i18n/dashboard-locale";
+import { routing } from "@/i18n/routing";
 import { AgencySettingsClient } from "./settings-client";
+import { DashboardPage, DashboardHeader } from "@/components/dashboard/ui/page-shell";
 
 export default async function AgencySettingsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login");
+  if (!user) redirect(`/${routing.defaultLocale}/auth/login`);
 
   const planRaw: string = user.user_metadata?.plan ?? "free";
   const plan = planRaw.toLowerCase();
@@ -40,10 +44,13 @@ export default async function AgencySettingsPage() {
 
   if (!agency) redirect("/dashboard/agency");
 
-  const isSSOPlan = ["pilot", "agency", "enterprise"].includes(plan);
+  const locale = await getDashboardLocale();
+  const t = await getTranslations({ locale, namespace: "dashboard.agency.settings" });
 
   return (
-    <AgencySettingsClient
+    <DashboardPage>
+      <DashboardHeader title={t("title")} description={t("subtitle")} />
+      <AgencySettingsClient
       agencyId={agency.id}
       agencyName={agency.name}
       agencyDescription={agency.description ?? ""}
@@ -56,11 +63,9 @@ export default async function AgencySettingsPage() {
       notifyMemberLeft={agency.notify_member_left ?? true}
       ownerEmail={user.email ?? ""}
       plan={plan}
-      isSSOPlan={isSSOPlan}
-      ssoEnabled={agency.sso_enabled ?? false}
-      ssoProvider={agency.sso_provider ?? "saml"}
-      ssoConfig={agency.sso_config ?? {}}
-      scimToken={agency.scim_token ?? ""}
+      scimConfigured={!!agency.scim_token}
+      ssoDomain={agency.sso_domain ?? ""}
     />
+    </DashboardPage>
   );
 }

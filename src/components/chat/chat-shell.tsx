@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { PanelLeftOpen } from "lucide-react";
 import { ChatSidebar } from "./sidebar";
+import { ChatShellContext } from "@/contexts/chat-shell-context";
 import type { User } from "@supabase/supabase-js";
 
-type Conversation = { id: string; title: string; updated_at: string; pinned?: boolean };
+type Conversation = {
+  id: string;
+  title: string;
+  updated_at: string;
+  pinned?: boolean;
+};
 
 export function ChatShell({
   conversations,
@@ -19,41 +24,28 @@ export function ChatShell({
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar wrapper — animates width */}
-      <div
-        className="shrink-0 overflow-hidden"
-        style={{
-          width: open ? 256 : 0,
-          transition: "width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        <ChatSidebar
-          conversations={conversations}
-          user={user}
-          onToggle={() => setOpen(false)}
-        />
-      </div>
-
-      {/* Main content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        {/* Reopen button — fades in when sidebar is closed */}
-        <button
-          onClick={() => setOpen(true)}
-          className="absolute top-3 left-3 z-10 flex items-center justify-center w-7 h-7 text-foreground-muted hover:text-foreground hover:bg-background-tertiary transition-colors"
-          title="Open sidebar"
+    <ChatShellContext.Provider
+      value={{
+        sidebarOpen: open,
+        openSidebar: () => setOpen(true),
+        closeSidebar: () => setOpen(false),
+      }}
+    >
+      <div className="flex h-screen overflow-hidden bg-background">
+        <div
+          className="shrink-0 overflow-hidden"
           style={{
-            opacity: open ? 0 : 1,
-            pointerEvents: open ? "none" : "auto",
-            transition: "opacity 180ms ease",
-            transitionDelay: open ? "0ms" : "120ms",
+            width: open ? 256 : 0,
+            transition: "width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
-          <PanelLeftOpen className="w-4 h-4" />
-        </button>
+          <ChatSidebar conversations={conversations} user={user} />
+        </div>
 
-        {children}
-      </main>
-    </div>
+        <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          {children}
+        </main>
+      </div>
+    </ChatShellContext.Provider>
   );
 }

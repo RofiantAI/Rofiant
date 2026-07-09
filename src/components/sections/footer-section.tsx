@@ -1,96 +1,112 @@
+import { getLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+
 const footerColumns = [
   {
-    title: "Platform",
+    key: "platform",
     links: [
-      { label: "Pricing", href: "/pricing" },
-      { label: "Chat AI", href: "/platform/chat-ai" },
-      { label: "Voice AI", href: "/platform/voice-ai" },
-      {
-        label: "Document Intelligence",
-        href: "/platform/document-intelligence",
-      },
-      { label: "Agents", href: "/platform/agents" },
-      { label: "API", href: "/platform/api" },
+      { key: "pricing", href: "/pricing" },
+      { key: "chatAi", href: "/platform/chat-ai" },
+      { key: "voiceAi", href: "/platform/voice-ai" },
+      { key: "documentIntelligence", href: "/platform/document-intelligence" },
+      { key: "agents", href: "/platform/agents" },
+      { key: "api", href: "/platform/api" },
     ],
   },
   {
-    title: "Solutions",
+    key: "solutions",
     links: [
-      { label: "Federal Agencies", href: "/solutions/federal-agencies" },
-      {
-        label: "Defense & Intelligence",
-        href: "/solutions/defense-intelligence",
-      },
-      { label: "Law Enforcement", href: "/solutions/law-enforcement" },
-      { label: "Enterprise", href: "/solutions/enterprise" },
+      { key: "services", href: "/services" },
+      { key: "federalAgencies", href: "/solutions/federal-agencies" },
+      { key: "defenseIntelligence", href: "/solutions/defense-intelligence" },
+      { key: "lawEnforcement", href: "/solutions/law-enforcement" },
+      { key: "enterprise", href: "/solutions/enterprise" },
     ],
   },
   {
-    title: "Resources",
+    key: "resources",
     links: [
-      { label: "Documentation", href: "/resources/documentation" },
-      { label: "API Reference", href: "/resources/api-reference" },
-      { label: "Compliance Guides", href: "/resources/compliance-guides" },
-      { label: "Changelog", href: "/resources/changelog" },
+      { key: "documentation", href: "/resources/documentation" },
+      { key: "apiReference", href: "/resources/api-reference" },
+      { key: "complianceGuides", href: "/resources/compliance-guides" },
+      { key: "changelog", href: "/resources/changelog" },
+      { key: "status", href: "/status" },
     ],
   },
   {
-    title: "Company",
+    key: "company",
     links: [
-      { label: "About", href: "/company/about" },
-      { label: "Careers", href: "/company/careers" },
-      { label: "Security", href: "/company/security" },
-      { label: "Contact", href: "/company/contact" },
+      { key: "about", href: "/company/about" },
+      { key: "careers", href: "/company/careers" },
+      { key: "security", href: "/company/security" },
+      { key: "contact", href: "/company/contact" },
     ],
   },
   {
-    title: "Legal",
+    key: "legal",
     links: [
-      { label: "Terms of Service", href: "/legal/terms-of-service" },
-      { label: "Privacy Policy", href: "/legal/privacy-policy" },
-      { label: "FedRAMP", href: "/legal/fedramp" },
-      { label: "ITAR Policy", href: "/legal/itar-policy" },
+      { key: "termsOfService", href: "/legal/terms-of-service" },
+      { key: "privacyPolicy", href: "/legal/privacy-policy" },
+      { key: "fedramp", href: "/legal/fedramp" },
+      { key: "soc2", href: "/legal/soc2" },
+      { key: "itarPolicy", href: "/legal/itar-policy" },
     ],
   },
-];
+] as const;
 
-export function FooterSection() {
+export async function FooterSection() {
+  const t = await getTranslations("footer");
+  const locale = await getLocale();
+  const logoSrc = locale === "de" ? "/logo-de-light.svg" : "/logo-light.svg";
+
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-6">
           <div className="col-span-2">
-            <a href="/" className="inline-flex items-center gap-2">
+            <Link href="/" className="inline-flex items-center gap-2">
               <span className="text-xl font-normal text-foreground">
-                <img src={"/logo-light.svg"} className="h-6 w-auto" />
+                <img src={logoSrc} alt="Rofiant" className="h-6 w-auto" />
               </span>
-            </a>
+            </Link>
+
             <p className="mt-4 text-sm text-foreground-secondary">
-              AI for missions that matter.
+              {t("tagline")}
             </p>
+
             <p className="mt-2 text-sm text-foreground-muted">
-              © 2026 Rofiant Inc. All rights reserved.
+              {t("copyright", { year: new Date().getFullYear() })}
             </p>
           </div>
+
           {footerColumns.map((column) => (
-            <div key={column.title}>
+            <div key={column.key}>
               <h3 className="text-sm font-semibold text-foreground">
-                {column.title}
+                {t(`columns.${column.key}.title`)}
               </h3>
+
               <ul className="mt-4 space-y-2">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-sm text-foreground-secondary transition-colors hover:text-foreground"
                     >
-                      {link.label}
-                    </a>
+                      {t(`columns.${column.key}.links.${link.key}`)}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+
+          <div className="col-span-2 flex items-end justify-end sm:col-span-5">
+            <img
+              src="/footer.svg"
+              alt=""
+              className="h-auto w-full max-w-3xl"
+            />
+          </div>
         </div>
       </div>
     </footer>

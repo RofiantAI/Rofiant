@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isOrgPlan } from "@/lib/agency-org";
 
 async function getOrCreateAgency(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, email: string) {
   const { data: existing } = await supabase
@@ -60,6 +61,7 @@ const ALLOWED_PATCH_FIELDS = [
   "allowed_domains",
   "notify_member_joined",
   "notify_member_left",
+  "sso_domain",
 ] as const;
 
 export async function PATCH(req: NextRequest) {
@@ -79,6 +81,18 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Name required" }, { status: 400 });
     }
     update.name = (update.name as string).trim();
+  }
+
+  const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
+  if ("sso_domain" in update) {
+    if (!isOrgPlan(plan)) {
+      return NextResponse.json({ error: "SSO domain requires Agency or Enterprise plan" }, { status: 403 });
+    }
+    const raw = (update.sso_domain as string | null)?.trim().toLowerCase() ?? "";
+    if (raw && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(raw)) {
+      return NextResponse.json({ error: "Invalid SSO domain" }, { status: 400 });
+    }
+    update.sso_domain = raw || null;
   }
 
   if (Object.keys(update).length === 0) {

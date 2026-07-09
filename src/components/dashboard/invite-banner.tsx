@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Building2, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 type PendingInvite = {
   id: string;
@@ -12,6 +13,7 @@ type PendingInvite = {
 
 export function InviteBanner({ invites }: { invites: PendingInvite[] }) {
   const router = useRouter();
+  const t = useTranslations("dashboard.inviteBanner");
   const [pending, setPending] = useState(invites);
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -38,8 +40,8 @@ export function InviteBanner({ invites }: { invites: PendingInvite[] }) {
         >
           <Building2 className="w-4 h-4 text-accent-primary shrink-0" />
           <p className="flex-1 text-sm text-foreground-secondary">
-            You&apos;ve been invited to join{" "}
-            <span className="text-foreground font-medium">{invite.agencyName}</span> as{" "}
+            {t("invitedTo")}{" "}
+            <span className="text-foreground font-medium">{invite.agencyName}</span> {t("asRole")}{" "}
             <span className="capitalize">{invite.role}</span>
           </p>
           <div className="flex items-center gap-2 shrink-0">
@@ -49,7 +51,7 @@ export function InviteBanner({ invites }: { invites: PendingInvite[] }) {
               className="inline-flex items-center gap-1.5 h-7 px-3 text-xs font-medium bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 transition-colors"
             >
               <Check className="w-3 h-3" />
-              Accept
+              {t("accept")}
             </button>
             <button
               onClick={() => respond(invite.id, "decline")}
@@ -57,7 +59,7 @@ export function InviteBanner({ invites }: { invites: PendingInvite[] }) {
               className="inline-flex items-center gap-1.5 h-7 px-3 text-xs font-medium border border-border text-foreground-muted hover:text-foreground hover:border-border-light disabled:opacity-50 transition-colors"
             >
               <X className="w-3 h-3" />
-              Decline
+              {t("decline")}
             </button>
           </div>
         </div>

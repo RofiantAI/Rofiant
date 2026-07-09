@@ -1,0 +1,267 @@
+{
+  "productStatus": {
+    "beta": "Beta",
+    "voiceAi": "La carga de archivos y la transcripción están disponibles. La integración de llamadas en tiempo real está en la hoja de ruta.",
+    "agents": "Crea y ejecuta agentes de flujo de trabajo con puntos de aprobación. Los pipelines avanzados de varios pasos están en desarrollo activo."
+  },
+  "agents": {
+    "title": "Agentes",
+    "subtitle": "Asistentes de flujo de trabajo con IA, con puntos de aprobación y registros de auditoría",
+    "newAgent": "Nuevo agente",
+    "customAgent": {
+      "heading": "Agente personalizado",
+      "namePlaceholder": "Nombre del agente",
+      "descriptionPlaceholder": "Descripción (opcional)",
+      "creating": "Creando…",
+      "create": "Crear",
+      "cancel": "Cancelar"
+    },
+    "templates": {
+      "heading": "Plantillas",
+      "creating": "Creando…",
+      "documentReviewer": {
+        "name": "Revisor de documentos",
+        "description": "Revisa documentos cargados y marca los puntos clave"
+      },
+      "meetingSummarizer": {
+        "name": "Resumen de reuniones",
+        "description": "Resume transcripciones y extrae elementos de acción"
+      },
+      "dataExtractor": {
+        "name": "Extractor de datos",
+        "description": "Extrae datos estructurados de texto no estructurado"
+      }
+    },
+    "yourAgents": {
+      "heading": "Tus agentes",
+      "loading": "Cargando…",
+      "empty": "Aún no has creado agentes. Elige una plantilla arriba o crea uno desde cero.",
+      "runCount": "{count} ejecuciones",
+      "pause": "Pausar",
+      "activate": "Activar",
+      "statusActive": "activo",
+      "statusPaused": "pausado"
+    },
+    "run": {
+      "heading": "Ejecutar {name}",
+      "defaultTask": "Ejecutar el flujo de trabajo predeterminado de este agente.",
+      "taskPlaceholder": "Describe la tarea para este agente…",
+      "submit": "Ejecutar agente",
+      "running": "Ejecutando…",
+      "close": "Cerrar",
+      "error": "Error al ejecutar el agente.",
+      "pipelineHeading": "Pipeline del agente",
+      "phases": {
+        "receive": "Recibir tarea",
+        "plan": "Planificar pasos",
+        "search": "Buscar datos",
+        "approval": "Esperar aprobación",
+        "execute": "Ejecutar"
+      },
+      "waitingApproval": "Esperando aprobación",
+      "approved": "Aprobado — ejecutado",
+      "denied": "Rechazado — acción bloqueada",
+      "proposedActions": "El agente quiere ejecutar:",
+      "approve": "Aprobar",
+      "deny": "Rechazar",
+      "executing": "Ejecutando…"
+    }
+  },
+  "apiKeys": {
+    "title": "Claves de API",
+    "subtitle": "Administra claves para el acceso programático a Rofiant",
+    "upgrade": {
+      "heading": "El acceso a la API requiere un plan de pago",
+      "description": "Actualiza a Pro o Team para crear claves de API e integrar Rofiant en tus propias aplicaciones.",
+      "cta": "Ver planes"
+    },
+    "createKey": "Crear clave",
+    "newKeyForm": {
+      "heading": "Nueva clave de API",
+      "namePlaceholder": "Nombre de la clave (p. ej., Producción)",
+      "creating": "Creando…",
+      "create": "Crear",
+      "cancel": "Cancelar"
+    },
+    "createdKey": {
+      "message": "Clave creada; cópiala ahora. No volverá a mostrarse.",
+      "copy": "Copiar",
+      "copied": "Copiado"
+    },
+    "table": {
+      "name": "Nombre",
+      "keyPrefix": "Prefijo de clave",
+      "created": "Creada",
+      "loading": "Cargando…",
+      "empty": "Aún no tienes claves de API. Crea una arriba.",
+      "noDate": "—"
+    },
+    "authentication": {
+      "heading": "Autenticación",
+      "description": "Incluye tu clave de API en el encabezado Authorization:",
+      "viewApiReference": "Ver referencia de la API"
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "subtitle": "Recibe notificaciones cuando finalice el procesamiento de documentos, agentes o trabajos de voz.",
+      "addWebhook": "Añadir webhook",
+      "form": {
+        "urlPlaceholder": "https://ejemplo.com/webhooks/rofiant",
+        "creating": "Creando…",
+        "create": "Crear",
+        "cancel": "Cancelar",
+        "error": "No se pudo crear el webhook"
+      },
+      "created": {
+        "message": "Webhook creado: copia el secreto de firma ahora. No se volverá a mostrar.",
+        "copy": "Copiar",
+        "copied": "Copiado"
+      },
+      "table": {
+        "loading": "Cargando…",
+        "empty": "Aún no hay webhooks. Añade uno arriba."
+      }
+    }
+  },
+  "chatAi": {
+    "title": "Chat AI",
+    "subtitle": "IA conversacional entrenada con tus documentos",
+    "newChat": "Nuevo chat",
+    "knowledgeBases": {
+      "heading": "Bases de conocimiento",
+      "documentCount": "{count} documentos",
+      "defaultName": "Predeterminada",
+      "statusActive": "Activa"
+    },
+    "conversation": {
+      "heading": "Nueva conversación",
+      "startTitle": "Inicia una conversación",
+      "startDescription": "Haz preguntas sobre tus documentos, políticas y datos. Las respuestas incluyen citas de fuentes.",
+      "sampleQuestions": [
+        "¿Cuál es nuestra política de vacaciones?",
+        "¿Cómo envío un informe de gastos?",
+        "Resume el informe trimestral"
+      ]
+    },
+    "uploadCta": {
+      "heading": "No se han subido documentos",
+      "description": "Sube PDFs, documentos de Word o páginas web para entrenar tu Chat AI con tu contenido.",
+      "cta": "Ir a Documentos"
+    }
+  },
+  "documents": {
+    "title": "Documentos",
+    "subtitle": "Sube y administra documentos para búsqueda y análisis con IA",
+    "upload": "Subir",
+    "uploading": "Subiendo…",
+    "errors": {
+      "unsupportedType": "Tipo de archivo .{ext} no compatible. Aceptados: {types}",
+      "notAuthenticated": "No autenticado.",
+      "storageError": "Error de almacenamiento: {message}",
+      "saveError": "Error al guardar: {message}",
+      "unknownError": "Error desconocido"
+    },
+    "dropzone": {
+      "heading": "Subir documentos",
+      "description": "Arrastra y suelta archivos o haz clic para explorar. Los documentos se indexan para búsqueda y Chat AI los usa para respuestas fundamentadas."
+    },
+    "allDocuments": {
+      "heading": "Todos los documentos",
+      "loading": "Cargando…",
+      "empty": "Aún no se han subido documentos. Sube archivos para empezar a buscar y analizar."
+    },
+    "contradictionScan": {
+      "heading": "Verificación cruzada",
+      "description": "Encuentra contradicciones factuales entre RFPs, SOWs, modificaciones y propuestas antes de la adjudicación o firma.",
+      "needMoreDocs": "Sube e indexa al menos 2 documentos para ejecutar la verificación.",
+      "focusPlaceholder": "Enfoque opcional — p. ej. precios, fechas de entrega, CLINs",
+      "run": "Verificar {count} docs",
+      "running": "Analizando…",
+      "riskLabel": "Riesgo: {risk}",
+      "findingCount": "{count} contradicciones",
+      "export": "Exportar JSON",
+      "provenanceExport": "Recibo de procedencia",
+      "noContradictions": "No se encontraron contradicciones relevantes en los documentos seleccionados.",
+      "recommendation": "Recomendación",
+      "alignedHeading": "Coincidencias confirmadas",
+      "errors": {
+        "failed": "Error en el análisis. Inténtalo de nuevo o selecciona otros documentos."
+      }
+    }
+  },
+  "voiceAi": {
+    "title": "Voice AI",
+    "subtitle": "Transcripción y resúmenes para reuniones y llamadas",
+    "uploadAudio": "Subir audio",
+    "uploading": "Subiendo…",
+    "errors": {
+      "notAuthenticated": "No autenticado.",
+      "storageError": "Error de almacenamiento: {message}",
+      "saveError": "Error al guardar: {message}",
+      "unknownError": "Error desconocido"
+    },
+    "dropzone": {
+      "heading": "Sube audio o video",
+      "description": "Arrastra y suelta archivos MP3, WAV, MP4 o M4A. Rofiant los transcribirá y generará resúmenes con identificación de hablantes.",
+      "sizeLimit": "Admite archivos de hasta 500 MB"
+    },
+    "recent": {
+      "heading": "Transcripciones recientes",
+      "loading": "Cargando…",
+      "empty": "Aún no hay transcripciones. Sube tu primer archivo de audio para empezar."
+    }
+  },
+  "knowledgeBases": {
+    "title": "Bases de conocimiento",
+    "subtitle": "Colecciones con nombre de documentos que la IA usa como contexto persistente en el chat.",
+    "usedCount": "({used}/{limit} usadas)",
+    "newKnowledgeBase": "Nueva base de conocimiento",
+    "planLimitError": "Tu plan permite hasta {limit} base{plural} de conocimiento. Actualiza tu plan para crear más.",
+    "viewPlans": "Ver planes →",
+    "createForm": {
+      "heading": "Nueva base de conocimiento",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "p. ej., Documentos de políticas FY2026",
+      "descriptionLabel": "Descripción (opcional)",
+      "descriptionPlaceholder": "¿Qué documentos pertenecen aquí?",
+      "create": "Crear",
+      "cancel": "Cancelar"
+    },
+    "loading": "Cargando…",
+    "empty": {
+      "heading": "Aún no hay bases de conocimiento",
+      "description": "Crea una y añade documentos para darle a la IA contexto persistente entre chats.",
+      "upgradeCta": "Actualiza tu plan para crear bases de conocimiento →",
+      "createCta": "Crea tu primera base de conocimiento →"
+    },
+    "list": {
+      "docCount": "{count} documento{plural}",
+      "manage": "Administrar"
+    },
+    "deleteConfirm": "¿Eliminar esta base de conocimiento? Esta acción no se puede deshacer.",
+    "detail": {
+      "back": "Bases de conocimiento",
+      "addDocument": "Añadir documento",
+      "loading": "Cargando…",
+      "notFound": "Base de conocimiento no encontrada.",
+      "backLink": "← Volver",
+      "addDocForm": {
+        "heading": "Añadir documento a la base de conocimiento",
+        "noDocsUploaded": "Aún no se han subido documentos.",
+        "uploadLink": "Sube un documento →",
+        "allDocsAdded": "Todos tus documentos ya están en esta base de conocimiento.",
+        "adding": "Añadiendo…",
+        "add": "Añadir"
+      },
+      "empty": {
+        "heading": "Aún no hay documentos",
+        "description": "Añade documentos de tu biblioteca para incluirlos como contexto de la IA.",
+        "cta": "Añade tu primer documento →"
+      },
+      "addedOn": "Añadido el {date}",
+      "footerSummary": "{count} documento{plural} · Última actualización {date}",
+      "removeConfirm": "¿Quitar este documento de la base de conocimiento?",
+      "failedToAdd": "Error al añadir"
+    }
+  }
+}

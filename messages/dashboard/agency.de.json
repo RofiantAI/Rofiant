@@ -1,0 +1,518 @@
+{
+  "agency": {
+    "overview": {
+      "title": "Agentur",
+      "subtitle": "Verwalten Sie Ihre Agentur, Teammitglieder und Abrechnung",
+      "upsell": {
+        "title": "Für das Agentur-Dashboard ist ein kostenpflichtiger Plan erforderlich",
+        "description": "Upgraden Sie auf Pro oder Team, um auf Agenturverwaltung, Mitgliedersteuerung und Abrechnung zuzugreifen.",
+        "cta": "Pläne ansehen"
+      },
+      "headerSubtitle": "Mitglieder, Nutzung und Einstellungen verwalten",
+      "inviteMember": "Mitglied einladen",
+      "stats": {
+        "teamMembers": "Teammitglieder",
+        "pendingInvite": "{count} ausstehende Einladung",
+        "active": "aktiv",
+        "conversations": "Unterhaltungen",
+        "yourWorkspace": "Ihr Arbeitsbereich",
+        "documents": "Dokumente",
+        "indexed": "indexiert",
+        "agents": "Agenten",
+        "deployed": "bereitgestellt"
+      },
+      "teamMembersPanel": {
+        "title": "Teammitglieder",
+        "manage": "Verwalten →",
+        "empty": "Noch keine Teammitglieder",
+        "inviteFirst": "Laden Sie Ihr erstes Mitglied ein →"
+      },
+      "controls": {
+        "title": "Agentursteuerung",
+        "members": "Mitglieder",
+        "billing": "Abrechnung",
+        "settings": "Einstellungen"
+      },
+      "planDetails": {
+        "title": "Plandetails",
+        "teamFeatures": [
+          "Gemeinsamer Team-Arbeitsbereich",
+          "Zentralisierte Abrechnung",
+          "Admin-Dashboard",
+          "Nutzungsanalyse pro Benutzer",
+          "Mindestens 5 Plätze"
+        ],
+        "proFeatures": [
+          "Hohe Nutzungslimits*",
+          "Dokumentenintelligenz",
+          "Sprach-KI",
+          "Priorisierte Antwortgeschwindigkeit"
+        ],
+        "upgradeToTeam": "Auf Team upgraden"
+      },
+      "createdOn": "Agentur erstellt am {date}"
+    },
+    "members": {
+      "title": "Teammitglieder",
+      "subtitle": "Laden Sie Personen ein und verwalten Sie den Zugriff auf den Arbeitsbereich Ihrer Agentur",
+      "invite": {
+        "title": "Mitglied einladen",
+        "emailPlaceholder": "kollege@beispiel.com",
+        "roleAdmin": "Administrator",
+        "roleMember": "Mitglied",
+        "sending": "Wird gesendet…",
+        "sendInvite": "Einladung senden",
+        "successMessage": "Einladung an {email} gesendet",
+        "errorFallback": "Einladung konnte nicht gesendet werden",
+        "adminDescription": "Voller Zugriff, kann Mitglieder einladen",
+        "memberDescription": "Kann Arbeitsbereich-Tools nutzen"
+      },
+      "upgradeBanner": {
+        "title": "Team-Einladungen erfordern den Team-Plan",
+        "subtitle": "Upgraden, um unbegrenzt Mitglieder einzuladen",
+        "cta": "Upgraden →"
+      },
+      "removeErrorFallback": "Mitglied konnte nicht entfernt werden",
+      "roleErrorFallback": "Rolle konnte nicht aktualisiert werden",
+      "table": {
+        "title": "Mitglieder",
+        "total": "{count} insgesamt",
+        "empty": "Noch keine Mitglieder",
+        "owner": "Inhaber",
+        "joined": "Beigetreten {time}",
+        "invited": "Eingeladen {time}",
+        "confirm": "Bestätigen",
+        "removing": "…",
+        "cancel": "Abbrechen",
+        "removeTooltip": "Mitglied entfernen"
+      },
+      "relativeTime": {
+        "justNow": "gerade eben",
+        "minutes": "vor {count} Min.",
+        "hours": "vor {count} Std.",
+        "days": "vor {count} Tg."
+      }
+    },
+    "billing": {
+      "title": "Abrechnung",
+      "subtitle": "Ihr Abonnement, Plandetails und Nutzung",
+      "plans": {
+        "pro": {
+          "label": "Pro",
+          "price": "15 $/Monat",
+          "features": [
+            "Hohe Nutzungslimits*",
+            "Alles aus Kostenlos",
+            "Datei- und Bild-Uploads",
+            "Dokumentenintelligenz",
+            "Sprach-KI (Transkription & Zusammenfassungen)",
+            "Priorisierte Antwortgeschwindigkeit",
+            "Unbegrenzter Gesprächsverlauf",
+            "Früher Zugang zu neuen Funktionen"
+          ]
+        },
+        "team": {
+          "label": "Team",
+          "price": "25 $/Monat/Nutzer",
+          "features": [
+            "Alles aus Pro",
+            "Gemeinsamer Team-Arbeitsbereich",
+            "Zentralisierte Abrechnung",
+            "Admin-Dashboard",
+            "Nutzungsanalyse pro Benutzer",
+            "Prioritäts-Support",
+            "Mindestens 5 Plätze"
+          ]
+        },
+        "pilot": {
+          "label": "Pilot",
+          "price": "Kontaktieren Sie uns",
+          "features": [
+            "Bis zu 25 Nutzer",
+            "Cloud-gehostet (US-Region)",
+            "3 Wissensdatenbanken",
+            "Chat AI + Dokumentenintelligenz",
+            "E-Mail-Support",
+            "Laufzeit von 30 oder 90 Tagen"
+          ]
+        },
+        "agency": {
+          "label": "Agency",
+          "price": "Kontaktieren Sie uns",
+          "features": [
+            "Unbegrenzte Nutzer",
+            "Cloud-Hosting für Behörden",
+            "Unbegrenzte Wissensdatenbanken",
+            "Vollständige Plattform: Chat AI, Voice AI, Agents, Dokumentenintelligenz, API",
+            "CAC / PIV + SCIM-Provisionierung",
+            "FedRAMP- und NIST-800-53-Dokumentation",
+            "Dedizierter Customer Success Manager",
+            "Individuelles SLA",
+            "Organisations-Broadcasts & benutzerdefinierte Seiten",
+            "Zugriffsüberprüfungen & Compliance-Exporte"
+          ]
+        },
+        "enterprise": {
+          "label": "Enterprise",
+          "price": "Kontaktieren Sie uns",
+          "features": [
+            "Alles aus Behörde",
+            "On-Premises- oder abgeschottetes Deployment",
+            "Vom Kunden verwaltete Verschlüsselungsschlüssel (BYOK)",
+            "Individueller Vertrag und Beschaffungsweg (GSA, SEWP)",
+            "Dedizierte Infrastruktur ohne gemeinsam genutzte Mandanten",
+            "24/7 dediziertes Support-Team",
+            "Individuelles SLA",
+            "White-Glove-Onboarding und Schulung"
+          ]
+        }
+      },
+      "currentPlan": {
+        "title": "Aktueller Plan",
+        "billedMonthly": "Monatliche Abrechnung · Aktives Abonnement",
+        "billedContract": "Individueller Vertrag · Aktives Abonnement",
+        "subscriptionActive": "Abonnement aktiv",
+        "subscriptionContract": "Vertrag aktiv",
+        "account": "Konto"
+      },
+      "orgSupport": {
+        "title": "Dedizierter Support",
+        "csmLabel": "Customer Success Manager",
+        "slaLabel": "Individuelles SLA",
+        "hostingLabel": "Cloud-Hosting auf Behördenniveau"
+      },
+      "complianceDocs": {
+        "title": "Compliance-Dokumentation",
+        "fedrampLink": "FedRAMP- und NIST-800-53-Dokumentation",
+        "guidesLink": "Compliance-Leitfäden",
+        "accessReviewLink": "Zugriffsüberprüfungen & Compliance-Exporte",
+        "ssoLink": "CAC / PIV + SCIM-Provisionierung"
+      },
+      "manageContract": {
+        "title": "Vertrag verwalten",
+        "description": "Abrechnungsänderungen, Beschaffung oder Plan-Updates über Ihr Account-Team",
+        "cta": "Account-Team kontaktieren"
+      },
+      "usage": {
+        "title": "Nutzung diesen Monat",
+        "conversations": "Unterhaltungen",
+        "messages": "Nachrichten",
+        "documents": "Dokumente",
+        "unlimited": "Unbegrenzt"
+      },
+      "upgrade": {
+        "title": "Auf Team upgraden",
+        "description": "Erhalten Sie unbegrenzte Teammitglieder, gemeinsame Arbeitsbereiche, rollenbasierten Zugriff und dedizierten Support.",
+        "cta": "Auf Team upgraden"
+      },
+      "manageSubscription": {
+        "title": "Abonnement verwalten",
+        "description": "Kündigen, Zahlungsmethode ändern oder Rechnungen herunterladen",
+        "cta": "Verwalten"
+      },
+      "compliance": {
+        "title": "Sicherheit & Compliance",
+        "items": [
+          "SOC 2 Typ II",
+          "FedRAMP Ready",
+          "ITAR-konform"
+        ]
+      },
+      "exportData": {
+        "title": "Daten exportieren",
+        "description": "Laden Sie alle Agenturdaten herunter, einschließlich Unterhaltungen, Dokumente und Mitglieder.",
+        "cta": "Export anfordern",
+        "alert": "Ein Datenexport wird vorbereitet und innerhalb von 24 Stunden an {email} gesendet.",
+        "loading": "Export wird vorbereitet…"
+      }
+    },
+    "intelligence": {
+      "title": "Intelligence-Feed",
+      "criticalUnresolved": "{count} kritische, ungelöste Ereignisse",
+      "highPriority": "{count} mit hoher Priorität",
+      "feed": {
+        "title": "Ereignisse — letzte {count}",
+        "emptyTitle": "Warten auf Daten aus Ihrem Programm…",
+        "emptyDescription": "Senden Sie einen POST an <code>{endpoint}</code>, um Ereignisse zu übermitteln"
+      },
+      "severity": {
+        "critical": "Kritisch",
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "event": {
+        "confidence": "{percent}% Konfidenz",
+        "imageAlt": "Intelligence-Bild"
+      },
+      "analytics": {
+        "eventsLast24h": "Ereignisse — letzte 24 Std.",
+        "bySeverity": "Nach Schweregrad",
+        "topSources": "Top-Quellen",
+        "tooltipEvents": "{count} Ereignisse"
+      }
+    },
+    "settings": {
+      "title": "Agentureinstellungen",
+      "subtitle": "Konfigurieren Sie den Arbeitsbereich Ihrer Agentur, Sicherheit und Benachrichtigungseinstellungen",
+      "nav": {
+        "profile": "Profil",
+        "members": "Mitglieder",
+        "security": "Sicherheit",
+        "notifications": "Benachrichtigungen",
+        "sso": "SSO & SCIM",
+        "danger": "Gefahrenzone"
+      },
+      "save": {
+        "saved": "Gespeichert",
+        "saving": "Wird gespeichert…",
+        "save": "Speichern"
+      },
+      "profile": {
+        "title": "Agenturprofil",
+        "nameLabel": "Name der Agentur",
+        "namePlaceholder": "Meine Agentur",
+        "descriptionLabel": "Beschreibung",
+        "descriptionPlaceholder": "Eine kurze Beschreibung Ihrer Agentur…",
+        "descriptionCount": "{count}/300",
+        "websiteLabel": "Website",
+        "websitePlaceholder": "https://beispiel.com",
+        "ownerLabel": "Inhaber",
+        "ownerBadge": "Inhaber",
+        "planLabel": "Plan",
+        "planSuffix": "Plan",
+        "planManage": "Verwalten →",
+        "planUpgrade": "Upgraden →",
+        "agencyIdLabel": "Agentur-ID"
+      },
+      "members": {
+        "title": "Mitgliederstandards",
+        "defaultRoleLabel": "Standardrolle für neue Mitglieder",
+        "roleMemberOption": "Mitglied — Standardzugriff",
+        "roleAdminOption": "Administrator — vollständiger Agenturzugriff",
+        "defaultRoleHint": "Wird bei Annahme von Einladungen angewendet. Kann pro Mitglied geändert werden.",
+        "canInviteTitle": "Mitglieder können andere einladen",
+        "canInviteDescription": "Erlauben Sie Mitgliedern (nicht nur Administratoren), Einladungen zu versenden"
+      },
+      "security": {
+        "title": "Sicherheit",
+        "require2faTitle": "Zwei-Faktor-Authentifizierung erforderlich",
+        "require2faDescription": "Mitglieder ohne aktivierte 2FA werden vom Zugriff auf Agenturressourcen ausgeschlossen",
+        "domainsLabel": "Einladungen auf E-Mail-Domains beschränken",
+        "domainsHint": "Leer lassen, um jede E-Mail-Adresse zuzulassen. Domains hinzufügen, um zu beschränken (z. B. <example>acme.com</example>).",
+        "domainPlaceholder": "beispiel.com",
+        "addDomain": "Hinzufügen",
+        "invalidDomain": "Ungültige Domain (z. B. beispiel.com)",
+        "domainAlreadyAdded": "Bereits hinzugefügt"
+      },
+      "notifications": {
+        "title": "Benachrichtigungen",
+        "memberJoinedTitle": "Mitglied beigetreten",
+        "memberJoinedDescription": "E-Mail, wenn jemand eine Einladung annimmt",
+        "memberLeftTitle": "Mitglied ausgetreten oder entfernt",
+        "memberLeftDescription": "E-Mail, wenn ein Mitglied die Agentur verlässt oder entfernt wird"
+      },
+      "scim": {
+        "title": "SSO & SCIM-Provisionierung",
+        "description": "Connect your identity provider for CAC / PIV certificate login (via SAML) and automatic member provisioning via SCIM 2.0.",
+        "cacPivNote": "Configure your IdP (Okta, Azure AD, etc.) with SAML for CAC/PIV smart-card authentication. Members sign in from the login page using their organization email domain.",
+        "ssoDomainLabel": "SSO email domain",
+        "ssoDomainPlaceholder": "agency.gov",
+        "ssoDomainHelp": "Members with this email domain can use organization SSO on the login page.",
+        "endpointLabel": "SCIM endpoint",
+        "tokenLabel": "Bearer-Token",
+        "tokenConfigured": "Token konfiguriert. Regenerieren zum Rotieren.",
+        "tokenNotConfigured": "Noch kein Token. Generieren Sie eines, um Ihren IdP zu verbinden.",
+        "generate": "Token generieren",
+        "regenerate": "Token regenerieren",
+        "generating": "Wird generiert…",
+        "tokenRevealTitle": "SCIM-Token jetzt kopieren",
+        "tokenRevealDescription": "Dieses Token wird nur einmal angezeigt. Speichern Sie es in Ihrem IdP als Bearer-Token.",
+        "copyToken": "Token kopieren",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "generateFailed": "Token konnte nicht generiert werden"
+      },
+      "danger": {
+        "title": "Gefahrenzone",
+        "cancelTitle": "Abonnement kündigen",
+        "cancelDescription": "Ihre Agentur wechselt am Ende des Abrechnungszeitraums zum kostenlosen Plan",
+        "cancelCta": "Abonnement kündigen"
+      },
+      "errors": {
+        "saveFailed": "Speichern fehlgeschlagen"
+      }
+    },
+    "solutions": {
+      "title": "Missionslösungen",
+      "subtitle": "Strukturierte Bundes-Workflows — Klauselprüfungen, FOIA-Triage, ATO-Kontrollchecks und mehr. Keine generischen Chat-Agenten.",
+      "openWorkflow": "Workflow öffnen",
+      "searchPlaceholder": "Nach Behörde, Mission oder Stichwort suchen…",
+      "workflowCount": "{count} von {total} Workflows",
+      "noResults": "Keine Workflows entsprechen Ihrer Suche.",
+      "documentsHint": "Workflows analysieren Dokumente, die Sie in Ihren Arbeitsbereich hochladen.",
+      "documentsCta": "Dokumente verwalten",
+      "howItWorks": {
+        "upload": {
+          "title": "1. Quelldokumente hinzufügen",
+          "desc": "Laden Sie Ausschreibungen, Richtlinien, SSPs oder Kommentardateien unter Dokumente hoch."
+        },
+        "run": {
+          "title": "2. Workflow ausführen",
+          "desc": "Mission wählen, Dokumente anhängen und strukturierte JSON-Ausgabe erhalten."
+        },
+        "review": {
+          "title": "3. Prüfen & handeln",
+          "desc": "Befunde, Checklisten und Entwürfe in Ihrem normalen Prozess verwenden."
+        }
+      },
+      "categories": {
+        "contracting": "Beschaffung & Finanzmanagement",
+        "benefits": "Leistungen & Bürgerdienste",
+        "policy": "Politik, Recht & Rechtsetzung",
+        "operations": "Sicherheit & Personal"
+      },
+      "upgrade": {
+        "title": "Missionslösungen erfordern einen Regierungsplan",
+        "description": "Upgrade auf Pilot, Agency oder Enterprise, um Beschaffungs-, FOIA-, ATO- und andere Missions-Workflows bereitzustellen.",
+        "cta": "Pläne ansehen"
+      },
+      "errors": {
+        "deployFailed": "Bereitstellung fehlgeschlagen"
+      },
+      "workflow": {
+        "back": "Alle Missionslösungen",
+        "run": "{workflow}-Analyse ausführen",
+        "running": "Analyse läuft…",
+        "inputs": {
+          "title": "Workflow-Eingaben",
+          "documents": "Quelldokumente",
+          "noDocuments": "Noch keine indizierten Dokumente.",
+          "noDocumentsInline": "Noch keine Dokumente — laden Sie PDF-, DOCX-, TXT-, CSV- oder MD-Dateien hoch.",
+          "uploadLink": "Dokumente hochladen"
+        },
+        "referencePack": {
+          "label": "Referenzpaket einbeziehen",
+          "desc": "Kuratierte FAR-, FOIA-, NIST- und Behördenleitfäden für diese Mission."
+        },
+        "upload": {
+          "addFiles": "Dateien hinzufügen",
+          "uploading": "Wird hochgeladen…",
+          "unsupported": "Nicht unterstützter Dateityp .{ext}. Erlaubt: {types}",
+          "authRequired": "Zum Hochladen anmelden",
+          "failed": "Upload fehlgeschlagen"
+        },
+        "history": {
+          "title": "Ausführungsverlauf",
+          "empty": "Keine früheren Ausführungen für diese Mission.",
+          "runFallback": "Frühere Ausführung"
+        },
+        "export": {
+          "receipt": "KI-Herkunftsnachweis",
+          "json": "JSON exportieren",
+          "markdown": "Markdown exportieren",
+          "pdf": "Drucken / PDF"
+        },
+        "results": {
+          "title": "Strukturierte Ergebnisse",
+          "empty": "Führen Sie den Workflow aus, um einen strukturierten Compliance-Bericht zu erhalten."
+        },
+        "upgrade": {
+          "title": "Regierungsplan erforderlich",
+          "description": "Missions-Workflows erfordern Pilot, Agency oder Enterprise.",
+          "cta": "Pläne ansehen"
+        },
+        "errors": {
+          "failed": "Workflow fehlgeschlagen",
+          "invalid": "Unbekannte Missionslösung"
+        }
+      }
+    },
+    "accessReview": {
+      "title": "Zugriffsüberprüfung",
+      "subtitle": "Bestätigen Sie, wer Zugriff auf Ihre Organisation hat — erforderlich für FedRAMP-, NIST-800-53- und SOC-2-Audits",
+      "stats": {
+        "total": "Mitglieder gesamt",
+        "active": "Aktiv",
+        "activeSub": "mit Zugriff",
+        "pending": "Ausstehend",
+        "pendingSub": "eingeladen",
+        "admins": "Admins"
+      },
+      "exports": {
+        "title": "Compliance-Exporte",
+        "description": "CSV-Dateien für Ihren Auditor oder Ihr ATO-Paket herunterladen.",
+        "roster": "Mitgliederliste exportieren",
+        "auditLog": "Audit-Protokoll exportieren",
+        "downloading": "Wird heruntergeladen…"
+      },
+      "lastReview": {
+        "title": "Letzte abgeschlossene Prüfung",
+        "completed": "Abgeschlossen am {date}",
+        "never": "Noch keine Prüfung dokumentiert"
+      },
+      "roster": {
+        "title": "Mitgliederliste",
+        "description": "Prüfen Sie, ob jede Person noch Zugriff benötigt. Entfernen Sie Mitglieder ohne Bedarf.",
+        "email": "E-Mail",
+        "role": "Rolle",
+        "status": "Status",
+        "joined": "Beigetreten / eingeladen"
+      },
+      "complete": {
+        "title": "Prüfung bestätigen",
+        "description": "Dokumentieren Sie, dass Sie Liste und Exporte für dieses Quartal geprüft haben.",
+        "notesPlaceholder": "Optionale Notizen (z. B. '2 Auftragnehmer entfernt, alle Admins bestätigt')",
+        "submit": "Zugriffsüberprüfung abschließen",
+        "submitting": "Wird gespeichert…",
+        "success": "Zugriffsüberprüfung dokumentiert"
+      },
+      "errors": {
+        "exportFailed": "Export fehlgeschlagen",
+        "completeFailed": "Prüfung konnte nicht dokumentiert werden"
+      }
+    },
+    "broadcast": {
+      "title": "Broadcast",
+      "subtitle": "Ankündigungen und benutzerdefinierte Seiten für Ihr Team veröffentlichen",
+      "tabs": {
+        "announcements": "Ankündigungen",
+        "screens": "Benutzerdefinierte Seiten"
+      },
+      "saving": "Speichern…",
+      "inactive": "inaktiv",
+      "draft": "Entwurf",
+      "delete": "Löschen",
+      "errors": {
+        "createFailed": "Erstellen fehlgeschlagen"
+      },
+      "announcements": {
+        "createTitle": "Neue Ankündigung",
+        "titlePlaceholder": "Titel der Ankündigung",
+        "bodyPlaceholder": "Nachricht für Ihr Team…",
+        "variantInfo": "Info",
+        "variantWarning": "Warnung",
+        "variantCritical": "Kritisch",
+        "publish": "Ankündigung veröffentlichen",
+        "listTitle": "Veröffentlichte Ankündigungen",
+        "empty": "Noch keine Ankündigungen",
+        "deactivate": "Ausblenden",
+        "activate": "Anzeigen"
+      },
+      "screens": {
+        "createTitle": "Neue benutzerdefinierte Seite",
+        "titlePlaceholder": "Seitentitel",
+        "slugPlaceholder": "url-slug (optional)",
+        "navLabelPlaceholder": "Sidebar-Label (optional)",
+        "contentPlaceholder": "Seiteninhalt…",
+        "publish": "Seite erstellen",
+        "listTitle": "Benutzerdefinierte Seiten",
+        "empty": "Noch keine benutzerdefinierten Seiten",
+        "navLabel": "Nav-Label",
+        "preview": "Vorschau",
+        "unpublish": "Veröffentlichung aufheben",
+        "publishAction": "Veröffentlichen"
+      }
+    }
+  }
+}

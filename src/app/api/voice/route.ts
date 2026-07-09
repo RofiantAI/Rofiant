@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { dispatchWebhook } from "@/lib/webhooks";
 
 export async function GET() {
   const supabase = await createClient();
@@ -25,10 +26,15 @@ export async function POST(req: Request) {
 
   const { data, error } = await supabase
     .from("voice_records")
-    .insert({ user_id: user.id, name, size, storage_path, status: "done" })
+    .insert({ user_id: user.id, name, size, storage_path, status: "processing" })
     .select()
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  dispatchWebhook(user.id, "voice.processed", { id: data.id, name: data.name, status: data.status }).catch(
+    (err) => console.error("[voice] webhook dispatch failed:", err),
+  );
+
   return NextResponse.json(data);
 }

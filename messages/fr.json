@@ -1,0 +1,2360 @@
+{
+  "common": {
+    "cta": {
+      "getStarted": "Commencer",
+      "contactSales": "Contacter les ventes"
+    }
+  },
+  "nav": {
+    "resources": "Ressources",
+    "platform": "Plateforme",
+    "company": "Entreprise",
+    "services": "Outils",
+    "solutions": "Solutions",
+    "pricing": "Tarifs",
+    "docs": "Documentation",
+    "dashboard": "Tableau de bord",
+    "login": "Connexion",
+    "signup": "S'inscrire"
+  },
+  "footer": {
+    "tagline": "L'IA pour les missions qui comptent.",
+    "copyright": "© {year} Rofiant Inc. Tous droits réservés.",
+    "columns": {
+      "platform": {
+        "title": "Plateforme",
+        "links": {
+          "pricing": "Tarifs",
+          "chatAi": "Chat IA",
+          "voiceAi": "Voix IA",
+          "documentIntelligence": "Intelligence Documentaire",
+          "agents": "Agents",
+          "api": "API"
+        }
+      },
+      "solutions": {
+        "title": "Solutions",
+        "links": {
+          "services": "Outils",
+          "federalAgencies": "Agences Fédérales",
+          "defenseIntelligence": "Défense et Renseignement",
+          "lawEnforcement": "Forces de l'Ordre",
+          "enterprise": "Entreprise"
+        }
+      },
+      "resources": {
+        "title": "Ressources",
+        "links": {
+          "documentation": "Documentation",
+          "apiReference": "Référence API",
+          "complianceGuides": "Guides de Conformité",
+          "changelog": "Journal des Modifications",
+          "status": "Statut"
+        }
+      },
+      "company": {
+        "title": "Entreprise",
+        "links": {
+          "about": "À propos",
+          "careers": "Carrières",
+          "security": "Sécurité",
+          "contact": "Contact"
+        }
+      },
+      "legal": {
+        "title": "Mentions Légales",
+        "links": {
+          "termsOfService": "Conditions d'Utilisation",
+          "privacyPolicy": "Politique de Confidentialité",
+          "fedramp": "FedRAMP",
+          "itarPolicy": "Politique ITAR",
+          "soc2": "SOC 2 Type II"
+        }
+      }
+    }
+  },
+  "home": {
+    "hero": {
+      "titleLine1": "L'IA pour les missions",
+      "titleLine2": "qui",
+      "titleHighlight": "comptent.",
+      "subtitle": "Rofiant fournit une IA sécurisée et conforme pour les agences gouvernementales et les entreprises, des agents conversationnels à l'analyse critique.",
+      "startFree": "Commencer gratuitement",
+      "talkToSales": "Parler aux ventes"
+    },
+    "services": {
+      "titlePrefix": "Outils IA",
+      "titleHighlight": "standard.",
+      "subtitle": "Chat, documents, agents, voix et workflows — des produits IA normaux au même endroit.",
+      "viewAll": "Tous les outils",
+      "openTool": "Ouvrir l'outil",
+      "goodFor": "Bon pour",
+      "categories": {
+        "documents": {
+          "name": "Documents",
+          "offerings": "Upload PDFs, search, summarize",
+          "clients": "Research, legal, admin"
+        },
+        "voice": {
+          "name": "Voice",
+          "offerings": "Transcribe audio, summarize meetings",
+          "clients": "Meetings, interviews, podcasts"
+        },
+        "agents": {
+          "name": "Agents",
+          "offerings": "Multi-step tasks, approvals, report drafts",
+          "clients": "Automation, ops, support"
+        },
+        "workflows": {
+          "name": "Workflows",
+          "offerings": "Ready-made AI workflow templates",
+          "clients": "Repeatable business tasks"
+        },
+        "security": {
+          "name": "Security",
+          "offerings": "Audit log, API keys, access controls",
+          "clients": "Admins, developers"
+        }
+      }
+    },
+    "publicAi": {
+      "titlePrefix": "L'IA pour",
+      "titleHighlight": "tout le monde.",
+      "subtitle": "Rofiant fonctionne aussi pour les particuliers, pas seulement les entreprises et les agences. Écrivez, recherchez, analysez et créez avec notre IA, gratuitement.",
+      "cta": "Essayer Rofiant gratuitement",
+      "features": {
+        "chat": {
+          "title": "Discutez avec l'IA",
+          "desc": "Posez des questions, obtenez des réponses, faites un brainstorming. Rofiant comprend le contexte et suit les conversations longues."
+        },
+        "write": {
+          "title": "Rédigez et modifiez",
+          "desc": "Rédigez des e-mails, essais, rapports et du code. Rofiant vous aide à écrire plus vite et à peaufiner votre travail."
+        },
+        "research": {
+          "title": "Recherchez",
+          "desc": "Résumez des articles, comparez des sources, explorez des sujets. Obtenez des réponses fiables avec citations."
+        },
+        "code": {
+          "title": "Codez",
+          "desc": "Écrivez, déboguez et expliquez du code dans n'importe quel langage. Des extraits aux projets complets."
+        },
+        "images": {
+          "title": "Analysez des images",
+          "desc": "Téléchargez des photos, captures d'écran ou diagrammes. Rofiant lit le texte, comprend les graphiques et décrit ce qu'il voit."
+        },
+        "multilingual": {
+          "title": "Multilingue",
+          "desc": "Discutez dans plusieurs langues. Traduisez, résumez et écrivez dans les langues prises en charge."
+        }
+      }
+    },
+    "unify": {
+      "titlePrefix": "Une plateforme pour",
+      "titleHighlight": "l'IA, la sécurité et la conformité.",
+      "subtitle": "Arrêtez d'assembler des outils d'IA, des scanners de sécurité et des plateformes de conformité séparés. Rofiant unifie chat, voix, agents et intelligence documentaire, avec une sécurité intégrée dès le départ.",
+      "cards": {
+        "agents": {
+          "label": "Agents IA",
+          "strong": "IA conversationnelle.",
+          "text": "Créez et déployez des agents intelligents pour les flux de chat, voix et documents."
+        },
+        "security": {
+          "label": "Sécurité et Conformité",
+          "strong": "Sécurisé par défaut.",
+          "text": "Chiffrement, contrôle d'accès basé sur les rôles et journalisation d'audit intégrés dans chaque fonctionnalité."
+        },
+        "control": {
+          "label": "Plan de Contrôle",
+          "strong": "Gestion unifiée.",
+          "text": "Modèles, agents, pipelines RAG et journaux d'audit dans une seule interface."
+        },
+        "usage": {
+          "label": "Utilisation 30 Jours",
+          "strong": "Observabilité complète.",
+          "text": "Les inférences, décisions et tokens sont enregistrés et restent auditables."
+        }
+      }
+    },
+    "deploy": {
+      "badge": "PLATEFORME IA",
+      "titleLine1": "Déployez l'IA en quelques minutes.",
+      "titleLine2": "Passez à l'échelle sur des millions de",
+      "titleLine3": "conversations.",
+      "subtitle": "Du prototype à la production en quelques minutes. Chat, voix, documents et assistants de flux de travail fonctionnent sur une seule plateforme.",
+      "tabs": {
+        "chat": "Chat",
+        "voice": "Voix",
+        "documents": "Documents",
+        "agents": "Agents",
+        "integrate": "Intégrer"
+      },
+      "content": {
+        "chat": {
+          "title": "Déployez une IA conversationnelle instantanément",
+          "subtitle": "Un chat qui comprend votre domaine",
+          "description": "Lancez un assistant conversationnel sécurisé personnalisé avec vos données, politiques et flux de travail. Les utilisateurs obtiennent des réponses instantanées depuis votre base de connaissances."
+        },
+        "voice": {
+          "title": "IA vocale pour réunions et appels",
+          "subtitle": "Transcription et résumé en temps réel",
+          "description": "Transcrivez réunions, appels et entretiens en temps réel. Générez des résumés avec actions et décisions clés.",
+          "languages": {
+            "english": "Anglais",
+            "spanish": "Espagnol",
+            "arabic": "Arabe",
+            "mandarin": "Mandarin"
+          }
+        },
+        "documents": {
+          "title": "Intelligence documentaire non structurée",
+          "subtitle": "Extrayez, classez et résumez à grande échelle",
+          "description": "Traitez rapports, dossiers et documents automatiquement. Recherche par RAG sur des millions de pages."
+        },
+        "agents": {
+          "title": "Assistants de flux de travail IA",
+          "subtitle": "Raisonnement multi-étapes, exécution gouvernée",
+          "description": "Déployez des agents qui planifient, raisonnent et exécutent des flux de travail complexes, avec garde-fous, approbations et pistes d'audit complètes."
+        },
+        "integrate": {
+          "title": "Intégrez vos systèmes existants",
+          "subtitle": "Des API qui se branchent sur votre stack",
+          "description": "Connectez Rofiant à vos outils existants (gestion de dossiers, CRM, tickets) via des API REST et des webhooks."
+        }
+      }
+    },
+    "protect": {
+      "badge": "SÉCURITÉ",
+      "titlePrefix": "Une sécurité de niveau entreprise,",
+      "titleHighlight": "intégrée à la plateforme.",
+      "subtitle": "Authentifiez-vous avec votre fournisseur d'identité existant et conservez une piste d'audit complète de chaque interaction.",
+      "features": {
+        "identity": {
+          "title": "Identité et contrôle d'accès",
+          "subtitle": "SSO OAuth et accès basé sur les rôles intégrés",
+          "description": "Intégrez votre fournisseur d'identité existant. OAuth Google et contrôle d'accès basé sur les rôles prêts à l'emploi."
+        },
+        "audit": {
+          "title": "Auditez tout",
+          "subtitle": "Actions enregistrées, décisions traçables",
+          "description": "Pistes d'audit complètes pour chaque interaction avec l'IA. Répondez aux exigences de conformité avec des journaux immuables et exportables."
+        }
+      }
+    },
+    "scale": {
+      "badge": "INFRASTRUCTURE",
+      "titlePrefix": "Commencez petit, passez à l'échelle du",
+      "titleHighlight": "trafic de production.",
+      "subtitle": "Que vous gériez un pilote de 10 personnes ou déployiez pour des milliers d'utilisateurs, Rofiant s'adapte automatiquement sans infrastructure à gérer.",
+      "readDocs": "Lire la documentation",
+      "features": {
+        "multiRegion": {
+          "title": "Multi-région",
+          "desc": "Déployez sur plusieurs régions pour une faible latence et une haute disponibilité."
+        },
+        "autoScaling": {
+          "title": "Mise à l'échelle automatique",
+          "desc": "La capacité suit la demande. Aucun réglage manuel à surveiller."
+        },
+        "pricing": {
+          "title": "Tarification prévisible",
+          "desc": "Commencez gratuitement, puis évoluez quand vous êtes prêt. Gardez une facturation prévisible en grandissant."
+        },
+        "sovereignty": {
+          "title": "Souveraineté des données",
+          "desc": "Contrôle total sur l'emplacement de vos données. Choisissez votre région cloud aux États-Unis ou en UE."
+        }
+      }
+    },
+    "monitor": {
+      "badge": "OBSERVABILITÉ",
+      "titlePrefix": "Surveillez l'inférence en temps réel.",
+      "titleMuted": "Visualisez coût, latence et usage en direct.",
+      "readDocs": "Lire la documentation",
+      "cards": {
+        "tokenTracking": {
+          "title": "Suivi automatique des tokens et des coûts.",
+          "desc": "Suivez l'usage des tokens, les coûts d'API et les performances d'inférence par département et cas d'usage, mis à jour en temps réel."
+        },
+        "alerting": {
+          "title": "Alertes et surveillance de l'usage.",
+          "desc": "Configurez des alertes pour les schémas d'usage inhabituels, les dépassements de limite et les seuils budgétaires. Anticipez les dépassements de coûts."
+        },
+        "compliance": {
+          "title": "Tableaux de bord de conformité.",
+          "desc": "Tableaux de bord prêts à l'emploi pour FedRAMP, SOC 2 et les référentiels de conformité propres à chaque agence. Rapports d'audit prêts à exporter."
+        },
+        "analytics": {
+          "title": "Analytique orientée API.",
+          "desc": "Interrogez vos données d'usage via API et intégrez-les à votre SIEM, SOC ou tableaux de bord existants."
+        }
+      }
+    },
+    "developer": {
+      "badge": "API DÉVELOPPEUR",
+      "titlePrefix": "Conçu pour les développeurs qui livrent vite.",
+      "titleMuted": "API simple. Résultats puissants.",
+      "features": {
+        "cloud": {
+          "title": "Cloud géré",
+          "desc": "Déployez sur notre infrastructure sécurisée hébergée aux États-Unis. Aucun serveur à gérer : obtenez une clé API et c'est parti."
+        },
+        "multiModel": {
+          "title": "Support multi-modèles",
+          "desc": "Utilisez Groq pour une inférence LLM rapide et YOLO pour la vision par ordinateur. Changez de backend sans modifier votre code."
+        },
+        "observability": {
+          "title": "Observabilité intégrée",
+          "desc": "Chaque appel API est enregistré avec latence, usage de tokens et coût. Exportable pour votre propre analytique."
+        }
+      }
+    },
+    "footerCta": {
+      "eyebrow": "Commencez dès aujourd'hui",
+      "title": "Déployez l'IA pour votre mission.",
+      "subtitle": "Commencez gratuitement. Déployez en quelques minutes. Passez à l'échelle de l'agence quand vous êtes prêt.",
+      "startFree": "Commencer gratuitement",
+      "talkToSales": "Parler aux ventes",
+      "fineprint": "Aucune carte de crédit requise · Niveau gratuit disponible"
+    }
+  },
+  "pricing": {
+    "title": "Tarifs",
+    "badge": "TARIFS",
+    "heroTitle": "Des tarifs simples et transparents",
+    "heroSubtitle": "Commencez gratuitement. Passez à un forfait supérieur quand vous êtes prêt. Aucun frais caché.",
+    "billing": {
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "save": "Économisez ~20 %"
+    },
+    "mostPopular": "Le plus populaire",
+    "free": "Gratuit",
+    "perMonth": "/ mois",
+    "perMonthPerUser": "/ mois / utilisateur",
+    "billedAnnually": "Facturé annuellement ({price} $/an)",
+    "billedAnnuallyPerUser": "Facturé annuellement ({price} $ / utilisateur/an)",
+    "consumerTiers": {
+      "free": {
+        "name": "Gratuit",
+        "tagline": "Commencez à utiliser l'IA dès aujourd'hui",
+        "description": "Tout ce dont vous avez besoin pour démarrer. Aucune carte de crédit requise.",
+        "cta": "Commencer gratuitement",
+        "features": [
+          "100 messages par jour",
+          "Chat AI",
+          "Sécurité (journal d'audit, lecture seule)",
+          "Vitesse de réponse standard"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Pour les utilisateurs avancés",
+        "description": "IA à limites d'usage élevées, avec téléversement de fichiers, voix et analyse de documents.",
+        "cta": "Passer à Pro",
+        "features": [
+          "Tout dans Gratuit",
+          "Documents (téléversement, recherche, résumé)",
+          "Voice AI (transcription et résumés)",
+          "Agents",
+          "Clés API",
+          "1 base de connaissances",
+          "Vitesse de réponse prioritaire"
+        ]
+      },
+      "team": {
+        "name": "Équipe",
+        "tagline": "Pour les petites équipes",
+        "description": "Espace de travail partagé, contrôles administrateur et statistiques d'utilisation pour toute votre équipe.",
+        "cta": "Démarrer l'essai Équipe",
+        "features": [
+          "Tout dans Pro",
+          "Admin d'équipe et analytique d'usage",
+          "3 bases de connaissances",
+          "Espace de travail partagé",
+          "Facturation centralisée",
+          "Minimum 5 sièges"
+        ]
+      }
+    },
+    "fairUseNote": "* Soumis à une politique d'utilisation équitable pour prévenir les abus. Contactez-nous si votre équipe a besoin de limites plus élevées.",
+    "included": {
+      "title": "Inclus dans tous les forfaits",
+      "items": [
+        "Aucune donnée utilisée pour entraîner les modèles",
+        "Chiffrement AES-256 au repos",
+        "TLS 1.3 en transit",
+        "Conforme au RGPD",
+        "Annulez à tout moment",
+        "Exportez vos données",
+        "Support par courriel",
+        "SSO Google sur tous les forfaits"
+      ]
+    },
+    "gov": {
+      "badge": "Gouvernement et agences",
+      "title": "Conçu pour les marchés publics",
+      "subtitle": "Architecture prête pour FedRAMP, hébergement cloud pour les administrations, authentification CAC/PIV et documentation de conformité. Tous les forfaits incluent une équipe d'intégration dédiée et une prise en charge des mécanismes d'approvisionnement standards.",
+      "mostCommon": "Le plus courant",
+      "custom": "Sur mesure",
+      "contactForPricing": "Contactez-nous pour un devis",
+      "tiers": {
+        "pilot": {
+          "name": "Pilote",
+          "tagline": "Évaluez Rofiant dans votre environnement",
+          "description": "Un déploiement limité dans le temps permettant aux agences de tester les capacités d'IA avant un approvisionnement complet.",
+          "cta": "Demander un pilote",
+          "features": [
+            "Jusqu'à 25 utilisateurs",
+            "Hébergement cloud (région US)",
+            "Chat AI",
+            "Documents",
+            "Workflows",
+            "3 bases de connaissances",
+            "Sécurité (journal d'audit)",
+            "Support par e-mail",
+            "Durée de 30 ou 90 jours"
+          ]
+        },
+        "agency": {
+          "name": "Agence",
+          "tagline": "Déploiement complet pour une seule agence",
+          "description": "Déploiement prêt pour la production avec hébergement cloud pour les administrations, documentation de conformité et une équipe d'intégration dédiée.",
+          "cta": "Parler à un conseiller",
+          "features": [
+            "Utilisateurs illimités",
+            "Hébergement cloud gouvernemental",
+            "Plateforme complète : Chat, Documents, Voice, Agents, Workflows, API",
+            "Bases de connaissances illimitées",
+            "Hub org. : membres, broadcast, revue d'accès",
+            "Fil d'intelligence",
+            "CAC / PIV + SCIM",
+            "Documentation FedRAMP et NIST 800-53",
+            "Customer success manager dédié",
+            "SLA personnalisé"
+          ]
+        },
+        "enterprise": {
+          "name": "Entreprise",
+          "tagline": "Déploiement multi-départements ou isolé (air-gapped)",
+          "description": "Pour les environnements classifiés, les programmes multi-agences ou les organisations exigeant la pleine propriété de leur infrastructure.",
+          "cta": "Contactez-nous",
+          "features": [
+            "Tout ce qui est inclus dans Agence",
+            "Déploiement sur site ou isolé (air-gapped)",
+            "Clés de chiffrement gérées par le client (BYOK)",
+            "Contrat et mécanisme d'approvisionnement personnalisés (GSA, SEWP)",
+            "Infrastructure dédiée, sans partage de locataires",
+            "Équipe de support dédiée 24 h/24, 7 j/7",
+            "SLA personnalisé",
+            "Intégration et formation haut de gamme"
+          ]
+        }
+      },
+      "compliance": {
+        "title": "Conformité et certifications",
+        "items": [
+          "FedRAMP Modéré (en cours)",
+          "NIST 800-53",
+          "Chiffrement FIPS 140-2",
+          "Capacité IL4 / IL5",
+          "Contrôles ITAR intégrés",
+          "SOC 2 Type II (en cours)",
+          "CAC / PIV / SCIM",
+          "Approvisionnement GSA / SEWP"
+        ]
+      }
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "items": [
+        {
+          "q": "Le forfait gratuit est-il vraiment gratuit ?",
+          "a": "Oui. Le forfait Gratuit ne nécessite aucune carte de crédit et n'a pas de période d'essai ; il reste gratuit tant que vous l'utilisez. Vous disposez de 100 messages par jour, ce qui couvre un usage quotidien."
+        },
+        {
+          "q": "Qu'est-ce qui compte comme un message ?",
+          "a": "Chaque fois que vous envoyez une requête et recevez une réponse, cela compte comme un message. Les téléversements de fichiers et les sessions vocales comptent aussi comme un message par utilisation."
+        },
+        {
+          "q": "Puis-je changer de forfait à tout moment ?",
+          "a": "Oui. Vous pouvez mettre à niveau, rétrograder ou annuler à tout moment depuis les paramètres de votre compte. Les rétrogradations prennent effet à la fin de votre période de facturation en cours."
+        },
+        {
+          "q": "Quelle est la différence entre la facturation mensuelle et annuelle ?",
+          "a": "La facturation annuelle vous fait économiser environ 20 % par rapport à la facturation mensuelle. Vous êtes facturé une fois par an, à l'avance."
+        },
+        {
+          "q": "Mes données servent-elles à entraîner vos modèles ?",
+          "a": "Non. Vos conversations ne sont jamais utilisées pour entraîner des modèles d'IA. Consultez notre politique de confidentialité pour tous les détails."
+        },
+        {
+          "q": "Comment fonctionne l'approvisionnement gouvernemental ?",
+          "a": "Nous prenons en charge le GSA Schedule, le SEWP V et l'approvisionnement direct. Contactez notre équipe commerciale pour discuter de votre mécanisme et de votre calendrier."
+        },
+        {
+          "q": "Offrez-vous des rabais pour les étudiants ou les organismes à but non lucratif ?",
+          "a": "Oui. Contactez-nous à pricing@rofiant.ca avec une preuve de statut et nous nous occuperons de vous."
+        }
+      ]
+    },
+    "success": {
+      "title": "Paiement réussi",
+      "welcomeTitle": "Bienvenue dans {plan}",
+      "subtitle": "Votre abonnement est actif. Rendez-vous dans le chat pour essayer vos nouveaux modèles.",
+      "openChat": "Ouvrir le chat",
+      "goToDashboard": "Accéder au tableau de bord",
+      "planPro": "Pro",
+      "planTeam": "Équipe"
+    }
+  },
+  "company": {
+    "about": {
+      "title": "À propos de Rofiant",
+      "badge": "ENTREPRISE",
+      "subtitle": "Nous concevons une IA qui fonctionne pour les équipes qui en ont le plus besoin.",
+      "intro1": "Rofiant conçoit une IA accessible, sécurisée et prête pour un usage réel : des systèmes de niveau production sur lesquels les équipes peuvent compter, pas des démos ni des prototypes.",
+      "intro2": "Nous travaillons pour des organisations qui prennent la sécurité au sérieux : agences gouvernementales, entreprises et équipes qui ont besoin d'une IA déployable dans leur propre environnement, avec un contrôle total sur leurs données.",
+      "intro3": "Rofiant unifie le chat, la voix, l'intelligence documentaire et les agents de workflow au sein d'un système unique et auditable, avec une seule API, un seul plan de contrôle et une seule stratégie de conformité.",
+      "values": {
+        "missionFirst": {
+          "title": "La mission d'abord",
+          "desc": "Nous construisons pour le travail qui compte. La sécurité et la fiabilité passent avant tout."
+        },
+        "developerFirst": {
+          "title": "Pensé pour les développeurs",
+          "desc": "Des API simples, une documentation claire, des SDK qui fonctionnent tout simplement."
+        },
+        "transparent": {
+          "title": "Transparent",
+          "desc": "Tarification ouverte, SLA clairs et communication honnête."
+        }
+      }
+    },
+    "careers": {
+      "title": "Carrières",
+      "badge": "ENTREPRISE",
+      "subtitle": "Aidez-nous à concevoir une IA qui fonctionne pour les équipes qui en ont le plus besoin.",
+      "intro": "Nous sommes une équipe entièrement à distance qui conçoit une IA sécurisée et conforme. Si l'expérience développeur, la sécurité et la création d'outils qui comptent vous tiennent à cœur, nous voulons vous entendre.",
+      "roles": {
+        "seniorBackend": {
+          "title": "Ingénieur·e backend senior",
+          "team": "Plateforme",
+          "location": "Télétravail",
+          "type": "Temps plein"
+        },
+        "mlEngineer": {
+          "title": "Ingénieur·e ML",
+          "team": "IA",
+          "location": "Télétravail",
+          "type": "Temps plein"
+        },
+        "frontendEngineer": {
+          "title": "Ingénieur·e frontend",
+          "team": "Produit",
+          "location": "Télétravail",
+          "type": "Temps plein"
+        },
+        "securityEngineer": {
+          "title": "Ingénieur·e sécurité",
+          "team": "Sécurité",
+          "location": "Télétravail",
+          "type": "Temps plein"
+        },
+        "solutionsEngineer": {
+          "title": "Ingénieur·e solutions",
+          "team": "Ventes",
+          "location": "Washington, DC",
+          "type": "Temps plein"
+        }
+      },
+      "comingSoon": {
+        "title": "Nous ne recrutons pas pour le moment",
+        "description": "Il n'y a aucun poste ouvert actuellement, mais nous grandissons vite. Laissez votre e-mail et nous vous contacterons dès qu'un poste s'ouvrira.",
+        "emailPlaceholder": "vous@exemple.com",
+        "submit": "Me prévenir",
+        "submitting": "Envoi...",
+        "success": "Merci ! Nous vous préviendrons dès qu'un poste s'ouvrira.",
+        "error": "Une erreur est survenue. Veuillez réessayer."
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "badge": "ENTREPRISE",
+      "subtitle": "Contactez notre équipe. Nous répondrons sous un jour ouvré.",
+      "contacts": {
+        "sales": {
+          "title": "Ventes",
+          "desc": "Intéressé par Rofiant pour votre organisation ? Échangez avec notre équipe commerciale sur les tarifs, les options de déploiement et les besoins spécifiques.",
+          "action": "Contacter les ventes"
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Déjà client ? Contactez notre équipe support pour de l'aide sur l'intégration, le dépannage ou les questions liées à votre compte.",
+          "action": "Contacter le support"
+        },
+        "partnerships": {
+          "title": "Partenariats",
+          "desc": "Intéressé par un partenariat avec Rofiant ? Nous collaborons avec des intégrateurs système, des revendeurs et des partenaires technologiques.",
+          "action": "Devenir partenaire"
+        }
+      },
+      "inquirySuffix": "demande",
+      "otherWays": "Autres moyens de nous contacter",
+      "form": {
+        "heading": "Envoyez-nous un message",
+        "name": "Nom",
+        "email": "E-mail",
+        "subject": "Sujet",
+        "message": "Message",
+        "sending": "Envoi en cours...",
+        "send": "Envoyer le message",
+        "sentMessage": "Message envoyé. Nous répondrons sous un jour ouvré."
+      }
+    },
+    "security": {
+      "title": "Sécurité",
+      "badge": "ENTREPRISE",
+      "subtitle": "Nous intégrons la sécurité à la plateforme dès sa conception.",
+      "areas": {
+        "encryption": {
+          "title": "Chiffrement",
+          "desc": "Toutes les données sont chiffrées au repos (AES-256) et en transit (TLS 1.3). Clés gérées par le client disponibles."
+        },
+        "accessControl": {
+          "title": "Contrôle d'accès",
+          "desc": "OAuth 2.0 et authentification par clé API. Contrôle d'accès granulaire basé sur les rôles."
+        },
+        "auditLogging": {
+          "title": "Journalisation d'audit",
+          "desc": "Rofiant enregistre de façon immuable les appels API, les actions des utilisateurs et les modifications administratives, exportables à tout moment."
+        },
+        "infrastructure": {
+          "title": "Infrastructure",
+          "desc": "Hébergé sur une infrastructure cloud auprès de fournisseurs conformes SOC 2. Tests d'intrusion et analyses de vulnérabilités réguliers."
+        },
+        "dataResidency": {
+          "title": "Résidence des données",
+          "desc": "Choisissez où vivent vos données. Régions cloud aux États-Unis ou dans l'UE, avec hébergement cloud pour les administrations."
+        },
+        "incidentResponse": {
+          "title": "Réponse aux incidents",
+          "desc": "Surveillance 24/7 avec des SLA définis pour la détection, la réponse et la notification aux clients."
+        }
+      },
+      "soc2Badge": {
+        "title": "Conforme SOC 2 Type II.",
+        "desc": "Consultez notre couverture des critères de confiance et demandez notre rapport d'audit."
+      }
+    }
+  },
+  "platform": {
+    "agents": {
+      "title": "Agents IA",
+      "badge": "PLATEFORME",
+      "subtitle": "Déployez des assistants de workflow IA capables de gérer des tâches à plusieurs étapes, avec portes d'approbation, journaux d'audit et observabilité complète.",
+      "flow": {
+        "steps": {
+          "receive": "Recevoir la tâche",
+          "plan": "Planifier les étapes",
+          "search": "Rechercher des données",
+          "approval": "Attendre l'approbation",
+          "execute": "Exécuter"
+        },
+        "waiting": "En attente d'approbation",
+        "approved": "Approuvé — exécuté",
+        "denied": "Refusé — action bloquée",
+        "wantsToExecute": "L'agent souhaite exécuter :",
+        "approve": "Approuver",
+        "deny": "Refuser",
+        "reset": "Réinitialiser"
+      },
+      "capabilities": {
+        "title": "Fonctionnalités",
+        "subtitle": "Créez des agents qui accomplissent réellement le travail."
+      },
+      "features": {
+        "reasoning": {
+          "title": "Raisonnement en plusieurs étapes",
+          "desc": "Les agents décomposent des tâches complexes en étapes, recherchent des informations et synthétisent les résultats.",
+          "details": [
+            "Raisonnement en chaîne avec étapes intermédiaires",
+            "Autocorrection lorsque l'approche initiale échoue",
+            "Exécution parallèle de sous-tâches indépendantes",
+            "Mémoire persistante sur des workflows de longue durée"
+          ]
+        },
+        "toolUse": {
+          "title": "Utilisation d'outils",
+          "desc": "Connectez des agents à des API, bases de données et outils internes. Ils peuvent agir, pas seulement répondre à des questions.",
+          "details": [
+            "Appelez des API REST, interrogez des bases SQL, recherchez dans Elasticsearch",
+            "Lisez et écrivez des fichiers, envoyez des e-mails, créez des tickets",
+            "Outils personnalisés via SDK Python ou TypeScript",
+            "Exécution des outils en bac à sable avec délai et nouvelles tentatives"
+          ]
+        },
+        "humanInLoop": {
+          "title": "Supervision humaine",
+          "desc": "Définissez des portes d'approbation pour les actions sensibles. Les agents se mettent en pause et demandent une confirmation avant de continuer.",
+          "details": [
+            "Définissez des règles d'approbation par outil ou type d'action",
+            "Acheminez les approbations vers des utilisateurs ou rôles spécifiques",
+            "Délai d'expiration et solution de repli pour les approbations sans réponse",
+            "Journal d'audit complet de chaque décision d'approbation"
+          ]
+        },
+        "observability": {
+          "title": "Observabilité complète",
+          "desc": "Visualisez chaque étape suivie par un agent. Rejouez, déboguez et auditez les workflows d'agents en temps réel.",
+          "details": [
+            "Trace d'exécution étape par étape avec horodatage",
+            "Suivi des coûts par workflow et par utilisateur",
+            "Gestion des erreurs avec nouvelle tentative et escalade automatiques",
+            "Exportation des journaux vers un SIEM ou des outils de conformité"
+          ]
+        }
+      },
+      "useCasesSection": {
+        "title": "Cas d'usage",
+        "subtitle": "Des agents qui accomplissent un vrai travail."
+      },
+      "useCases": {
+        "itOps": {
+          "title": "Opérations IT",
+          "desc": "Corrige automatiquement les alertes, redémarre les services et crée des tickets d'incident. Les changements en production nécessitent toujours une approbation."
+        },
+        "support": {
+          "title": "Support client",
+          "desc": "Classe automatiquement les tickets, rédige des réponses et escalade les problèmes complexes en s'appuyant sur les résolutions passées."
+        },
+        "finance": {
+          "title": "Finance",
+          "desc": "Rapproche les comptes, signale les anomalies et génère des rapports. Chaque calcul comporte un journal d'audit."
+        }
+      },
+      "cta": {
+        "title": "Prêt à déployer des assistants de workflow IA ?",
+        "subtitle": "Commencez gratuitement. Créez votre premier agent en moins d'une heure.",
+        "startTrial": "Démarrer l'essai gratuit",
+        "readDocs": "Consulter la documentation"
+      },
+      "roadmapNotice": "Disponible aujourd'hui : créer, nommer et gérer des agents. Le raisonnement multi-étapes, l'exécution d'outils, les workflows d'approbation et l'observabilité présentés ci-dessous sont sur notre feuille de route."
+    },
+    "api": {
+      "title": "API",
+      "badge": "PLATEFORME",
+      "subtitle": "Des API simples et puissantes pour le chat, la voix, les documents et les agents. SDK pour Python, TypeScript, Go et plus encore.",
+      "terminalLabel": "terminal",
+      "quickInstall": "Installation rapide",
+      "featuresTitle": "Fonctionnalités",
+      "features": {
+        "restApi": {
+          "title": "API REST",
+          "desc": "Points de terminaison REST propres et bien documentés. Méthodes HTTP standard et réponses JSON."
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "desc": "Recevez des notifications en temps réel pour les événements : traitement de documents et de voix, avec d'autres types d'événements à venir."
+        },
+        "rateLimiting": {
+          "title": "Limitation de débit",
+          "desc": "Limitation de débit et gestion des quotas intégrées. Contrôlez l'usage par utilisateur, équipe ou clé API."
+        },
+        "streaming": {
+          "title": "Streaming",
+          "desc": "Événements envoyés par le serveur pour le streaming de tokens en temps réel. Réponses à faible latence pour le chat et les agents."
+        }
+      },
+      "readDocs": "Consulter la documentation",
+      "fullReference": "Référence API complète disponible"
+    },
+    "chatAi": {
+      "title": "Chat IA",
+      "badge": "PLATEFORME",
+      "subtitle": "Déployez un assistant conversationnel sécurisé personnalisé selon vos données, vos politiques et vos workflows. Les utilisateurs obtiennent des réponses instantanées et sourcées directement issues de votre base de connaissances.",
+      "mockup": {
+        "header": "Chat Rofiant",
+        "connectedTo": "Connecté à : Wiki interne, Documents RH, Politiques",
+        "inputPlaceholder": "Posez n'importe quelle question sur votre organisation...",
+        "sourcePrefix": "Source :",
+        "q1": "Quelle est notre politique de télétravail ?",
+        "a1": "Selon le manuel de l'employé (section 4.2), les employés peuvent télétravailler jusqu'à 3 jours par semaine avec l'accord de leur manager. Le télétravail à temps plein nécessite l'accord d'un vice-président.",
+        "a1Source": "Manuel de l'employé v3.1",
+        "q2": "Cela s'applique-t-il aux prestataires ?",
+        "a2": "Non. Les prestataires suivent une politique distincte décrite dans l'accord de prestation (section 7). Les modalités de télétravail sont définies dans chaque bon de commande individuel.",
+        "a2Source": "Accord de prestation v2.4"
+      },
+      "stats": {
+        "avgResponse": {
+          "label": "Réponse moyenne",
+          "sub": "En charge"
+        },
+        "languages": {
+          "label": "Langues",
+          "sub": "Détection automatique"
+        },
+        "uptime": {
+          "label": "SLA de disponibilité",
+          "sub": "Surveillé"
+        },
+        "sources": {
+          "label": "Sources",
+          "sub": "Par base de connaissances"
+        }
+      },
+      "whatUsersAsk": "Ce que demandent les utilisateurs",
+      "sampleQuestions": {
+        "q1": "Quelle est notre politique de congés ?",
+        "q2": "Comment soumettre une note de frais ?",
+        "q3": "Qui est le responsable du projet Titan ?",
+        "q4": "Résume la présentation générale du T3"
+      },
+      "howItWorksSection": {
+        "title": "Comment ça marche",
+        "subtitle": "Des documents aux réponses en quelques minutes."
+      },
+      "howItWorks": {
+        "upload": {
+          "step": "01",
+          "title": "Importez vos documents",
+          "desc": "Glissez-déposez des fichiers à importer. Rofiant indexe tout de manière sécurisée."
+        },
+        "configure": {
+          "step": "02",
+          "title": "Configurez l'accès",
+          "desc": "Associez votre fournisseur d'identité et définissez les permissions sur les documents. Contrôlez qui peut demander quoi."
+        },
+        "chat": {
+          "step": "03",
+          "title": "Commencez à discuter",
+          "desc": "Les utilisateurs posent des questions en langage naturel. Rofiant recherche dans vos documents et renvoie des réponses sourcées."
+        },
+        "monitor": {
+          "step": "04",
+          "title": "Surveillez et améliorez",
+          "desc": "Observez ce que demandent les utilisateurs, identifiez les lacunes de connaissances et affinez les réponses au fil du temps."
+        }
+      },
+      "capabilitiesSection": {
+        "title": "Fonctionnalités",
+        "subtitle": "Tout ce qu'il vous faut pour un chat IA sûr et précis."
+      },
+      "features": {
+        "knowledgeBase": {
+          "title": "Base de connaissances personnalisée",
+          "desc": "Connectez vos documents, politiques et données. L'IA répond à partir de votre contenu, pas de l'internet ouvert.",
+          "details": [
+            "Importez des PDF, documents Word et pages web",
+            "La synchronisation automatique garde les réponses à jour à mesure que les documents évoluent",
+            "Citations de sources avec références de page et de paragraphe",
+            "Prise en charge des formats de documents courants"
+          ]
+        },
+        "roleBasedAccess": {
+          "title": "Accès basé sur les rôles",
+          "desc": "Contrôlez qui voit quoi. Différents utilisateurs obtiennent différentes réponses selon leurs autorisations.",
+          "details": [
+            "Synchronisation avec votre fournisseur d'identité (OAuth)",
+            "Permissions au niveau du document, par utilisateur ou groupe",
+            "Les réponses sensibles nécessitent une approbation avant affichage",
+            "Journal d'audit de chaque accès et réponse"
+          ]
+        },
+        "multiLanguage": {
+          "title": "Multilingue",
+          "desc": "Servez vos utilisateurs en anglais, espagnol, arabe, mandarin et plus encore. Rofiant détecte automatiquement la langue.",
+          "details": [
+            "Détection automatique de la langue de l'utilisateur à partir du message",
+            "Plusieurs langues prises en charge nativement",
+            "Traduit les réponses tout en préservant les termes techniques",
+            "Prise en charge des langues de droite à gauche (arabe, hébreu)"
+          ]
+        },
+        "auditTrail": {
+          "title": "Journal d'audit complet",
+          "desc": "Chaque conversation est enregistrée avec l'utilisateur, l'horodatage et un hachage de réponse à des fins de conformité.",
+          "details": [
+            "Journaux de conversation immuables avec détection de falsification",
+            "Exportation des journaux vers un SIEM ou des outils de conformité",
+            "Recherche par utilisateur, date, sujet ou document",
+            "Politiques de rétention avec purge automatique"
+          ]
+        }
+      },
+      "securitySection": {
+        "title": "Sécurité",
+        "subtitle": "Niveau entreprise dès le départ."
+      },
+      "securityItems": {
+        "i1": "SOC 2 Type II en cours",
+        "i2": "Chiffrement de bout en bout (AES-256 + TLS 1.3)",
+        "i3": "Clés de chiffrement gérées par le client",
+        "i4": "Journaux d'audit immuables pour chaque conversation",
+        "i6": "Contrôle d'accès basé sur les rôles au niveau du document",
+        "i7": "Résidence des données : États-Unis et UE",
+        "i8": "Page de statut publique"
+      },
+      "useCasesSection": {
+        "title": "Cas d'usage",
+        "subtitle": "Ce que les équipes font avec Rofiant Chat."
+      },
+      "useCases": {
+        "hr": {
+          "title": "RH et personnel",
+          "desc": "Répond aux questions de politique, intègre les nouvelles recrues et traite automatiquement les demandes liées aux avantages sociaux."
+        },
+        "it": {
+          "title": "Support IT",
+          "desc": "Résolvez les problèmes courants, orientez les tickets et recherchez dans les runbooks."
+        },
+        "legal": {
+          "title": "Juridique et conformité",
+          "desc": "Recherchez dans les contrats, politiques et réglementations avec des citations de sources pour chaque réponse."
+        }
+      },
+      "cta": {
+        "title": "Prêt à déployer un chat IA pour votre équipe ?",
+        "subtitle": "Commencez gratuitement avec jusqu'à 10 utilisateurs. Aucune carte de crédit requise.",
+        "startTrial": "Démarrer l'essai gratuit",
+        "talkToSales": "Contacter les ventes"
+      }
+    },
+    "documentIntelligence": {
+      "title": "Intelligence documentaire",
+      "badge": "PLATEFORME",
+      "subtitle": "Traitez automatiquement rapports, dossiers et documents. Recherche par RAG sur des millions de pages.",
+      "visual": {
+        "extractionComplete": "Extraction terminée"
+      },
+      "capabilitiesTitle": "Fonctionnalités",
+      "features": {
+        "extraction": {
+          "title": "Extraction automatisée",
+          "desc": "Extrayez des données structurées à partir de documents non structurés : PDF, scans, e-mails et plus encore."
+        },
+        "classification": {
+          "title": "Classification",
+          "desc": "Catégorisez et acheminez automatiquement les documents selon le contenu, le type et l'urgence."
+        },
+        "search": {
+          "title": "Recherche par RAG",
+          "desc": "Recherchez dans l'ensemble de votre corpus documentaire en langage naturel et obtenez des réponses directes plutôt qu'une liste de correspondances de mots-clés."
+        },
+        "summarization": {
+          "title": "Synthèse",
+          "desc": "Générez des résumés concis de rapports, contrats et dossiers volumineux en quelques secondes."
+        }
+      },
+      "getStarted": "Commencer",
+      "roadmapNotice": "Disponible aujourd'hui : extraction de texte depuis PDF et DOCX. L'extraction d'entités, la classification, la recherche RAG et le résumé présentés ci-dessous sont sur notre feuille de route."
+    },
+    "voiceAi": {
+      "title": "Voix IA",
+      "badge": "PLATEFORME",
+      "subtitle": "Transcription et synthèse vocale en temps réel pour réunions, appels et entretiens. Prend en charge l'anglais, l'espagnol, l'arabe et le mandarin avec identification des locuteurs et export des comptes rendus de réunion.",
+      "waveform": {
+        "liveTranscription": "Transcription en direct",
+        "realtimeTranscript": "Transcription en temps réel",
+        "speakerAlice": "Peut-on revoir les chiffres du T3 avant la semaine prochaine ? Je pense qu'on a manqué les dépenses marketing dans l'analyse.",
+        "speakerBob": "Bien vu. Je vais préparer la répartition mise à jour et l'envoyer vendredi.",
+        "aiSummaryLabel": "[Résumé IA]",
+        "aiSummaryText": "Action à mener : Bob enverra les chiffres du T3 mis à jour avec les dépenses marketing d'ici vendredi."
+      },
+      "capabilitiesSection": {
+        "title": "Fonctionnalités",
+        "subtitle": "Tout ce qu'il vous faut pour des opérations pilotées par la voix."
+      },
+      "features": {
+        "transcription": {
+          "title": "Transcription en temps réel",
+          "desc": "Conversion parole-texte très précise, même en environnement bruyant. Prend en charge les principales langues.",
+          "details": [
+            "Taux d'erreur de mots < 5 % en audio clair",
+            "Diarisation des locuteurs : identifiez qui a dit quoi",
+            "Fonctionne avec un audio bruyant, des accents et du jargon",
+            "Vocabulaire personnalisé pour les termes sectoriels"
+          ]
+        },
+        "summarization": {
+          "title": "Synthèse en direct",
+          "desc": "Obtenez des résumés instantanés des appels et réunions au fur et à mesure, sans prendre de notes à la main.",
+          "details": [
+            "Génère automatiquement des comptes rendus de réunion avec actions à mener",
+            "Extrait les décisions et engagements clés",
+            "Identifie les questions non résolues et les suivis",
+            "Exporte vers l'e-mail, le CRM ou un gestionnaire de tâches"
+          ]
+        },
+        "meetingSummaries": {
+          "title": "Résumés de réunion",
+          "desc": "Générez des résumés structurés avec actions à mener, décisions et sujets clés après chaque appel ou réunion.",
+          "details": [
+            "Génère automatiquement des comptes rendus de réunion avec actions à mener",
+            "Extrait les décisions et engagements clés",
+            "Identifie les questions non résolues et les suivis",
+            "Exporte vers l'e-mail, le CRM ou un gestionnaire de tâches"
+          ]
+        },
+        "telephony": {
+          "title": "Intégration téléphonique",
+          "desc": "Connectez-vous aux systèmes téléphoniques existants et aux plateformes VoIP via SIP ou WebRTC.",
+          "details": [
+            "Prise en charge des trunks SIP pour les systèmes PBX",
+            "WebRTC pour les appels depuis le navigateur",
+            "Importation de fichiers audio préenregistrés",
+            "Exportation des transcriptions dans plusieurs formats"
+          ]
+        }
+      },
+      "languagesSection": {
+        "title": "Langues",
+        "subtitle": "Transcription et traduction en temps réel."
+      },
+      "languages": {
+        "english": "Anglais",
+        "spanish": "Espagnol",
+        "mandarin": "Mandarin",
+        "arabic": "Arabe"
+      },
+      "useCasesSection": {
+        "title": "Cas d'usage",
+        "subtitle": "La voix IA pour des opérations critiques."
+      },
+      "useCases": {
+        "sales": {
+          "title": "Appels commerciaux",
+          "desc": "Transcrivez les appels commerciaux, extrayez les actions à mener et synchronisez automatiquement les notes avec votre CRM."
+        },
+        "meetings": {
+          "title": "Réunions d'équipe",
+          "desc": "Transcription en temps réel avec étiquettes de locuteurs et comptes rendus de réunion générés automatiquement."
+        },
+        "interviews": {
+          "title": "Entretiens",
+          "desc": "Transcrivez les entretiens de candidats ou de témoins avec une identification précise des locuteurs et des horodatages."
+        }
+      },
+      "cta": {
+        "title": "Prêt à transcrire vos réunions et appels ?",
+        "subtitle": "Commencez avec un programme pilote. Passez à l'échelle de toute votre organisation.",
+        "startTrial": "Démarrer l'essai gratuit",
+        "talkToSales": "Contacter les ventes"
+      },
+      "roadmapNotice": "Disponible aujourd'hui : téléverser et stocker des fichiers audio. La transcription en temps réel, l'identification des intervenants, le résumé en direct et l'intégration téléphonique présentés ci-dessous sont sur notre feuille de route."
+    }
+  },
+  "services": {
+    "badge": "OUTILS",
+    "title": "Outils IA",
+    "subtitle": "Cinq produits intégrés. Connectez-vous — fichiers, agents, audio, workflows.",
+    "openTool": "Ouvrir l'outil",
+    "columns": {
+      "category": "Outil",
+      "offerings": "Fonction",
+      "clients": "Bon pour",
+      "action": "Lancer"
+    },
+    "categories": {
+      "documents": {
+        "name": "Documents",
+        "offerings": "Upload PDFs, search, summarize",
+        "clients": "Research, legal, admin"
+      },
+      "voice": {
+        "name": "Voice",
+        "offerings": "Transcribe audio, summarize meetings",
+        "clients": "Meetings, interviews, podcasts"
+      },
+      "agents": {
+        "name": "Agents",
+        "offerings": "Multi-step tasks, approvals, report drafts",
+        "clients": "Automation, ops, support"
+      },
+      "workflows": {
+        "name": "Workflows",
+        "offerings": "Ready-made AI workflow templates",
+        "clients": "Repeatable business tasks"
+      },
+      "security": {
+        "name": "Security",
+        "offerings": "Audit log, API keys, access controls",
+        "clients": "Admins, developers"
+      }
+    },
+    "cta": {
+      "title": "Besoin de plus ?",
+      "subtitle": "Gratuit pour commencer. Upgrade pour limites, équipes et API.",
+      "talkToSales": "Contacter les ventes",
+      "viewPlans": "Voir les tarifs"
+    },
+    "toolGate": {
+      "description": "Connectez-vous pour utiliser l'outil — les mêmes produits IA que le tableau de bord.",
+      "clientsLabel": "Bon pour",
+      "signup": "Compte gratuit",
+      "login": "Connexion",
+      "back": "Tous les outils"
+    },
+    "tools": {
+      "defenceIntelligence": {
+        "title": "Voix et documents",
+        "subtitle": "Fichiers et audio. Chercher, résumer, transcrire — IA normale.",
+        "tabs": {
+          "documents": "Documents",
+          "voice": "Voix"
+        }
+      },
+      "sovereignAi": {
+        "title": "Sécurité",
+        "subtitle": "Ce qui s'est passé sur votre compte — clés API, agents, exports, connexions.",
+        "adminTools": "Paramètres",
+        "recentActivity": "Activité récente",
+        "viewAll": "Journal complet",
+        "empty": "Rien enregistré pour l'instant.",
+        "compliance": {
+          "fedramp": {
+            "title": "Docs FedRAMP",
+            "desc": "Documentation conformité."
+          },
+          "soc2": {
+            "title": "SOC 2",
+            "desc": "Détails sécurité."
+          },
+          "itar": {
+            "title": "Politique ITAR",
+            "desc": "Politique export."
+          }
+        },
+        "admin": {
+          "auditLog": "Journal d'audit",
+          "accessReview": "Accès équipe",
+          "apiKeys": "Clés API"
+        }
+      }
+    }
+  },
+  "solutions": {
+    "title": "Des forfaits pour chaque agence",
+    "badge": "TARIFS",
+    "subtitle": "Tous les forfaits incluent une résidence des données exclusivement aux États-Unis, des pistes d'audit complètes et une sécurité de niveau gouvernemental. Le tarif est sur mesure ; contactez-nous pour un devis.",
+    "mostCommon": "Le plus courant",
+    "customPricing": "Tarification personnalisée",
+    "tiers": {
+      "pilot": {
+        "name": "Pilote",
+        "tagline": "Évaluez Rofiant dans votre environnement",
+        "description": "Un déploiement limité dans le temps permettant aux agences d'évaluer les capacités d'IA avant un approvisionnement complet.",
+        "cta": "Demander un pilote",
+        "features": [
+          "Jusqu'à 25 utilisateurs",
+          "Hébergé dans le cloud (région É.-U.)",
+          "3 bases de connaissances",
+          "Chat AI + Intelligence documentaire",
+          "Support par courriel",
+          "Durée de 30 ou 90 jours"
+        ]
+      },
+      "agency": {
+        "name": "Agence",
+        "tagline": "Déploiement complet pour une seule agence",
+        "description": "Déploiement prêt pour la production avec hébergement cloud pour les administrations, documentation de conformité et une équipe d'intégration dédiée.",
+        "cta": "Parler à un conseiller",
+        "features": [
+          "Utilisateurs illimités",
+          "Hébergement cloud pour les administrations",
+          "Bases de connaissances illimitées",
+          "Plateforme complète : Chat AI, Voice AI, Agents, Intelligence documentaire, API",
+          "Approvisionnement CAC / PIV + SCIM",
+          "Documentation FedRAMP et NIST 800-53",
+          "Gestionnaire de succès client dédié",
+          "SLA personnalisé",
+          "Diffusion organisationnelle et pages personnalisées",
+          "Revues d'accès et exports de conformité"
+        ]
+      },
+      "enterprise": {
+        "name": "Entreprise",
+        "tagline": "Déploiement multi-départements ou isolé (air-gapped)",
+        "description": "Pour les environnements classifiés, les programmes multi-agences ou les organisations exigeant la pleine propriété de leur infrastructure.",
+        "cta": "Contactez-nous",
+        "features": [
+          "Tout ce qui est inclus dans Agence",
+          "Déploiement sur site ou isolé (air-gapped)",
+          "Clés de chiffrement gérées par le client (BYOK)",
+          "Contrat et mécanisme d'approvisionnement personnalisés (GSA, SEWP)",
+          "Infrastructure dédiée, sans partage de locataires",
+          "Équipe de support dédiée 24 h/24, 7 j/7",
+          "SLA personnalisé",
+          "Intégration et formation haut de gamme"
+        ]
+      }
+    },
+    "included": {
+      "title": "Inclus dans tous les forfaits",
+      "items": [
+        "Résidence des données exclusivement aux États-Unis",
+        "Chiffrement AES-256 au repos",
+        "TLS 1.3 en transit",
+        "Journaux d'audit inaltérables",
+        "Contrôle d'accès basé sur les rôles",
+        "SOC 2 Type II (en cours)",
+        "Revues de sécurité trimestrielles",
+        "Aucune donnée utilisée pour entraîner les modèles"
+      ]
+    },
+    "faqs": [
+      {
+        "q": "Rofiant est-il autorisé FedRAMP ?",
+        "a": "L'autorisation FedRAMP Moderate est en cours. Les correspondances de contrôles NIST 800-53 et un dossier FedRAMP sont disponibles sous accord de confidentialité pour les agences menant leur propre processus d'ATO."
+      },
+      {
+        "q": "Quels mécanismes d'approvisionnement sont disponibles ?",
+        "a": "Rofiant est disponible via le GSA Schedule (en cours), le SEWP et un contrat direct. Un soutien à la justification de source unique est disponible pour les agences ayant des délais serrés."
+      },
+      {
+        "q": "Comment fonctionne la résidence des données ?",
+        "a": "Toutes les données restent à l'intérieur des frontières américaines. Les niveaux Agence et Entreprise fonctionnent dans des régions cloud pour les administrations. Aucune donnée n'est jamais traitée à l'étranger."
+      },
+      {
+        "q": "Comment le prix de Rofiant est-il fixé ?",
+        "a": "La tarification est personnalisée selon le type de déploiement, le nombre d'utilisateurs et la durée du contrat. Nous nous adaptons au cycle budgétaire de votre agence et pouvons structurer des ententes annuelles ou pluriannuelles."
+      }
+    ],
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "subtitle": "Notre équipe gouvernementale vous guidera à travers les options de déploiement, la documentation de conformité et l'approvisionnement.",
+      "talkToSales": "Parler à un conseiller",
+      "readDocs": "Consulter la documentation"
+    },
+    "federalAgencies": {
+      "title": "IA pour les agences fédérales",
+      "badge": "SOLUTIONS",
+      "subtitle": "Une IA sécurisée et conforme, conçue pour les besoins uniques du gouvernement fédéral. Déployez-la sur votre infrastructure ou la nôtre, avec des pistes d'audit complètes et des contrôles de sécurité de niveau gouvernemental.",
+      "stats": [
+        {
+          "value": "Cloud",
+          "label": "Déploiement",
+          "sub": "Prêt pour le gouvernement"
+        },
+        {
+          "value": "SOC 2",
+          "label": "Conformité",
+          "sub": "Type II en cours"
+        },
+        {
+          "value": "É.-U. uniquement",
+          "label": "Résidence des données",
+          "sub": "Aucune délocalisation"
+        },
+        {
+          "value": "24 h/24, 7 j/7",
+          "label": "Support",
+          "sub": "Équipe dédiée"
+        }
+      ],
+      "mission": {
+        "title": "Conçu pour la mission",
+        "p1": "Les agences fédérales font face à des exigences de conformité strictes, des environnements classifiés, des systèmes hérités et des données qui doivent rester sous le contrôle de l'agence. Rofiant est conçu pour fonctionner à l'intérieur de ces contraintes, et non malgré elles.",
+        "p2": "Que ce soit pour la recherche de politiques, les opérations sur le terrain, l'approvisionnement ou la cybersécurité, Rofiant se déploie en toute sécurité dans votre environnement avec des pistes d'audit complètes, une intégration de l'identité de l'agence et une documentation de conformité prête pour votre processus d'ATO."
+      },
+      "useCasesSection": {
+        "title": "Solutions par mission",
+        "subtitle": "Flux de travail que les agences fédérales exécutent au quotidien — pas des démos IA génériques."
+      },
+      "useCases": {
+        "acquisitionContracts": {
+          "dept": "Approvisionnement fédéral",
+          "agencies": "GSA, DoD, bureaux de passation de marchés civils",
+          "items": [
+            "Vérifier les appels d'offres et attributions par rapport aux bibliothèques de clauses FAR/DFARS et suppléments d'agence",
+            "Rédiger des CCTP, IGCE et études de marché à partir des exigences dans SAM.gov et FPDS",
+            "Comparer les propositions des fournisseurs aux critères d'évaluation et aux antécédents",
+            "Suivre les jalons de modifications, livrables CDRL et rapprochement des factures avec les postes contractuels"
+          ]
+        },
+        "benefitsClaims": {
+          "dept": "Prestations et instruction des demandes",
+          "agencies": "VA, SSA, DOL, CMS",
+          "items": [
+            "Résumer les dossiers de demandes et signaler les preuves manquantes selon les exigences du programme",
+            "Recouper les décisions avec le CFR, les manuels de politique et les précédents",
+            "Rédiger lettres de décision, avis de réexamen et synthèses d'appel pour validation",
+            "Rechercher dans les dossiers médicaux, emploi et prestations avec piste d'audit complète"
+          ]
+        },
+        "regulatoryRulemaking": {
+          "dept": "Réglementation et rulemaking",
+          "agencies": "EPA, FDA, SEC, Treasury, CFPB",
+          "items": [
+            "Analyser les périodes de commentaires publics à grande échelle et regrouper les thèmes pour examen du docket",
+            "Évaluer les impacts du Federal Register sur les réglementations existantes et la politique d'agence",
+            "Rédiger le texte réglementaire et le préambule avec citations USC/CFR",
+            "Préparer les briefings pour le Congrès et l'OMB à partir de documents de coordination interagences"
+          ]
+        },
+        "citizenServices": {
+          "dept": "Services aux citoyens et centres d'appels",
+          "agencies": "IRS, USCIS, SSA, centres d'appels CMS",
+          "items": [
+            "Assistance agent en temps réel : consultation des politiques, aide aux formulaires et contexte du dossier",
+            "Expliquer avis et formulaires en langage clair conforme aux guides de style de l'agence",
+            "Transcrire et résumer les appels avec rédaction sensible au PII pour contrôle QA",
+            "Support multilingue pour les populations LEP sur les canaux voix et chat"
+          ]
+        },
+        "legalFoia": {
+          "dept": "Affaires juridiques et FOIA",
+          "agencies": "Conseils d'agence, composantes DOJ, bureaux FOIA",
+          "items": [
+            "Trier les demandes FOIA et Privacy Act ; rechercher les documents pertinents dans les dépôts",
+            "Aider à la revue des privilèges et à la rédaction PII/CII avec validation humaine",
+            "Rédiger avis de conservation de preuves, réponses à la discovery et synthèses d'accords",
+            "Suivre les échéances des rapports législatifs et IG avec préparation de briefing sourcée"
+          ]
+        },
+        "cyberAto": {
+          "dept": "Cybersécurité et ATO",
+          "agencies": "Bureaux CIO, partenaires CISA, ISSO",
+          "items": [
+            "Rédiger entrées SSP, SAR et POA&M mappées aux contrôles NIST 800-53 Rev. 5",
+            "Rechercher dans les politiques TI, schémas réseau et documentation des périmètres système",
+            "Résumer les tickets d'incident et associer les étapes de réponse aux playbooks NIST 800-61",
+            "Générer des dossiers de preuves de surveillance continue pour examen assessor et AO"
+          ]
+        },
+        "grantsFinancial": {
+          "dept": "Subventions et gestion financière",
+          "agencies": "HHS, NSF, USAID, Treasury, USDA",
+          "items": [
+            "Examiner les demandes de subvention par rapport aux exigences NOFO et à la conformité 2 CFR 200",
+            "Rédiger justifications budgétaires, annexes SF-424 et réponses d'audit unique",
+            "Signaler les schémas de paiement anormaux et le risque de double attribution dans les données financières",
+            "Rechercher l'historique des attributions par programmes, bénéficiaires et références d'obligation similaires"
+          ]
+        },
+        "humanCapital": {
+          "dept": "Capital humain et effectifs",
+          "agencies": "OPM, RH d'agence, bureaux de formation",
+          "items": [
+            "Consulter en quelques secondes les standards de classification, qualifications et politiques OPM",
+            "Rédiger annonces USAJOBS, items d'évaluation et guides d'entretien structuré",
+            "Résumer les dossiers de relations employeur-employé et calendriers de plaintes EEO",
+            "Générer des formations par rôle à partir des politiques, manuels et SOP de l'agence"
+          ]
+        }
+      },
+      "capabilitiesSection": {
+        "title": "Capacités de la plateforme",
+        "subtitle": "Conçu pour ce que les agences utilisent réellement au quotidien."
+      },
+      "features": {
+        "compliance": {
+          "title": "Prêt pour la conformité",
+          "desc": "Conçu pour prendre en charge SOC 2, FedRAMP et d'autres référentiels de conformité. Documentation et dossiers de preuves disponibles.",
+          "details": [
+            "Autorisation FedRAMP en cours",
+            "Correspondances de contrôles NIST 800-53 disponibles",
+            "Documentation et preuves prêtes pour FISMA",
+            "Surveillance et rapports de conformité continus"
+          ]
+        },
+        "identity": {
+          "title": "Intégration de l'identité",
+          "desc": "Connectez-vous à votre fournisseur d'identité existant. OAuth et contrôle d'accès basé sur les rôles.",
+          "details": [
+            "Prise en charge de OAuth 2.0 et des cartes CAC/PIV",
+            "Accès granulaire basé sur les rôles au niveau du document et de la fonctionnalité",
+            "Approvisionnement automatique via SCIM",
+            "Gestion des sessions selon les politiques d'expiration de l'agence"
+          ]
+        },
+        "procurement": {
+          "title": "Approvisionnement",
+          "desc": "Disponible via les mécanismes standards d'approvisionnement gouvernemental. Licences flexibles pour les agences de toute taille.",
+          "details": [
+            "GSA Schedule (en cours)",
+            "Admissible aux mécanismes SEWP et NETCENTS",
+            "Licences flexibles : par utilisateur, par transaction ou illimitées",
+            "Soutien à la justification de source unique"
+          ]
+        }
+      },
+      "complianceSection": {
+        "title": "Référentiels de conformité",
+        "subtitle": "Aligné sur les normes fédérales."
+      },
+      "complianceFrameworks": [
+        "FedRAMP (en cours)",
+        "NIST 800-53",
+        "FISMA",
+        "FIPS 140-2",
+        "Politique de sécurité CJIS",
+        "ITAR / EAR",
+        "Accessibilité Section 508"
+      ],
+      "securitySection": {
+        "title": "Sécurité et souveraineté des données",
+        "subtitle": "Vos données restent sous votre contrôle, selon vos conditions."
+      },
+      "security": [
+        "Toutes les données restent à l'intérieur des frontières américaines",
+        "Chiffrement AES-256 au repos, TLS 1.3 en transit",
+        "Clés de chiffrement gérées par le client (BYOK)",
+        "Journaux d'audit inaltérables avec détection de falsification",
+        "Accès basé sur les rôles avec prise en charge CAC/PIV",
+        "Déploiement isolé (air-gapped) sans internet requis",
+        "Autorisation FedRAMP Moderate (en cours)",
+        "Analyse continue des vulnérabilités et tests d'intrusion"
+      ],
+      "deploymentSection": {
+        "title": "Options de déploiement",
+        "subtitle": "Fonctionnez là où votre mission l'exige."
+      },
+      "deployment": {
+        "cloud": {
+          "name": "Cloud (Gouvernement)",
+          "desc": "Hébergement cloud pour les administrations. Nous gérons l'infrastructure, vous gérez les données."
+        },
+        "cloudGcp": {
+          "name": "Cloud (Google Cloud)",
+          "desc": "Google Cloud avec Assured Workloads pour appuyer les contrôles FedRAMP et IL."
+        },
+        "onPremises": {
+          "name": "Sur site",
+          "desc": "Fonctionnez dans votre centre de données ou installation classifiée. Contrôle total, isolation totale."
+        },
+        "airGapped": {
+          "name": "Isolé (air-gapped)",
+          "desc": "Aucune connexion internet requise. Déploiement autonome avec possibilité de mise à jour manuelle."
+        }
+      },
+      "cta": {
+        "title": "Prêt à apporter l'IA à votre agence ?",
+        "subtitle": "Notre équipe gouvernementale vous guidera à travers les options de sécurité, de conformité et de déploiement.",
+        "talkToTeam": "Parlez à notre équipe gouvernementale",
+        "requestDocs": "Demander les documents de conformité",
+        "fineprint": "Le dossier FedRAMP et les correspondances NIST sont disponibles sous accord de confidentialité."
+      }
+    },
+    "defenseIntelligence": {
+      "title": "Défense et renseignement",
+      "badge": "SOLUTIONS",
+      "subtitle": "Des capacités d'IA pour les missions de défense et de renseignement. Déployées dans des environnements classifiés et restreints.",
+      "deploymentEnvironmentsTitle": "Environnements de déploiement",
+      "deployments": {
+        "cloudAws": {
+          "env": "Cloud (Gouvernement)",
+          "status": "Disponible"
+        },
+        "cloudAzure": {
+          "env": "Cloud (Commercial)",
+          "status": "Disponible"
+        },
+        "cloudGcp": {
+          "env": "Cloud (Google Cloud)",
+          "status": "Bientôt disponible"
+        },
+        "onPremises": {
+          "env": "Sur site",
+          "status": "Disponible"
+        },
+        "airGapped": {
+          "env": "Isolé (air-gapped)",
+          "status": "Disponible"
+        },
+        "classified": {
+          "env": "Classifié (SIPR/NIPR)",
+          "status": "Contactez-nous"
+        }
+      },
+      "capabilitiesTitle": "Capacités de mission",
+      "features": {
+        "airGapped": {
+          "title": "Déploiements isolés (air-gapped)",
+          "desc": "Fonctionnalité complète sur des réseaux classifiés sans connectivité internet."
+        },
+        "documentIntelligence": {
+          "title": "Intelligence documentaire",
+          "desc": "Traitez à grande échelle des rapports de renseignement, des exposés et des documents en source ouverte grâce à la recherche propulsée par RAG."
+        },
+        "voiceTranscription": {
+          "title": "Transcription vocale",
+          "desc": "Transcription et résumé en temps réel pour les exposés, réunions et enregistrements sur le terrain."
+        },
+        "auditCompliance": {
+          "title": "Audit et conformité",
+          "desc": "Pistes d'audit complètes pour chaque interaction avec l'IA. Journaux exportables pour la conformité et la supervision."
+        }
+      },
+      "talkToSales": "Parler à un conseiller",
+      "customDeployment": "Déploiement personnalisé disponible"
+    },
+    "lawEnforcement": {
+      "title": "Application de la loi",
+      "badge": "SOLUTIONS",
+      "subtitle": "Des outils d'IA pour les organismes d'application de la loi. Gestion des dossiers, analyse de documents et génération de rapports, le tout avec des pistes d'audit complètes.",
+      "metrics": {
+        "faster": {
+          "metric": "Plus rapide",
+          "label": "Rédaction de rapports"
+        },
+        "search": {
+          "metric": "< 2 s",
+          "label": "Recherche de documents"
+        },
+        "audit": {
+          "metric": "Complète",
+          "label": "Couverture des pistes d'audit"
+        }
+      },
+      "capabilitiesTitle": "Capacités",
+      "features": {
+        "caseFile": {
+          "title": "Analyse de dossiers",
+          "desc": "Recherchez et résumez des dossiers, rapports d'incident et documents de preuve en quelques secondes."
+        },
+        "transcript": {
+          "title": "Analyse de transcriptions",
+          "desc": "Analysez les enregistrements d'entrevues, les communications radio et les déclarations de témoins. Extrayez les détails clés et les horodatages."
+        },
+        "reportGeneration": {
+          "title": "Génération de rapports",
+          "desc": "Générez automatiquement des rapports à partir de notes, de transcriptions et de données structurées. Réduisez la paperasse, augmentez le temps sur le terrain."
+        },
+        "chainOfCustody": {
+          "title": "Chaîne de possession",
+          "desc": "Chaque interaction avec l'IA est enregistrée avec l'utilisateur, l'horodatage et un raisonnement complet, opposable devant un tribunal."
+        }
+      },
+      "talkToSales": "Parler à un conseiller",
+      "customDeployment": "Déploiement personnalisé disponible"
+    },
+    "enterprise": {
+      "title": "IA pour l'entreprise",
+      "badge": "SOLUTIONS",
+      "subtitle": "Déployez une IA sécurisée et conforme dans toute votre organisation. Une seule plateforme pour la recherche de connaissances, l'automatisation des flux de travail et la collaboration d'équipe, avec les contrôles de sécurité que les entreprises exigent.",
+      "stats": [
+        {
+          "label": "Disponibilité",
+          "value": "24/7",
+          "sub": "Surveillé"
+        },
+        {
+          "label": "Temps de configuration",
+          "value": "< 1 jour",
+          "sub": "Jusqu'au premier déploiement"
+        },
+        {
+          "label": "Déploiement",
+          "value": "Cloud géré",
+          "sub": "Régions É.-U. et UE"
+        },
+        {
+          "label": "Support",
+          "value": "24 h/24, 7 j/7",
+          "sub": "Forfaits Entreprise"
+        }
+      ],
+      "howItWorksSection": {
+        "title": "Comment ça fonctionne",
+        "subtitle": "De l'inscription à la production en moins de 24 heures."
+      },
+      "howItWorks": {
+        "connect": {
+          "step": "01",
+          "title": "Connectez vos données",
+          "desc": "Téléversez vos fichiers directement. Rofiant indexe le tout de manière sécurisée."
+        },
+        "configure": {
+          "step": "02",
+          "title": "Configurez l'accès",
+          "desc": "Faites correspondre votre fournisseur d'identité existant. Définissez des autorisations basées sur les rôles pour que les équipes ne voient que ce qu'elles sont autorisées à voir. Piste d'audit complète dès le premier jour."
+        },
+        "deploy": {
+          "step": "03",
+          "title": "Déployez auprès des équipes",
+          "desc": "Lancez via une application Web. Les utilisateurs commencent immédiatement à poser des questions et à automatiser des flux de travail."
+        },
+        "scale": {
+          "step": "04",
+          "title": "Faites évoluer et optimisez",
+          "desc": "Surveillez l'utilisation, affinez les réponses et créez des flux de travail personnalisés. Ajoutez de nouvelles sources de données et équipes à mesure que vous croissez."
+        }
+      },
+      "byTeamSection": {
+        "title": "Par équipe",
+        "subtitle": "Les équipes tirent de la valeur dès le premier jour."
+      },
+      "useCases": {
+        "engineering": {
+          "team": "Ingénierie",
+          "items": [
+            "Recherchez dans toute la documentation interne, les procédures et les dépôts de code",
+            "Générez automatiquement des post-mortems d'incidents à partir des journaux et des notes",
+            "Révisez les demandes de tirage avec des améliorations suggérées par l'IA et des vérifications de sécurité",
+            "Intégrez les nouveaux ingénieurs avec des questions-réponses interactives sur le code et les pratiques"
+          ]
+        },
+        "legal": {
+          "team": "Juridique",
+          "items": [
+            "Analysez les contrats par rapport à votre bibliothèque de clauses et signalez les risques",
+            "Recherchez dans les ententes signées par partie, terme ou obligation",
+            "Générez automatiquement des NDA et des ententes standards à partir de modèles",
+            "Suivez automatiquement les échéances de conformité et les dates de renouvellement"
+          ]
+        },
+        "sales": {
+          "team": "Ventes",
+          "items": [
+            "Générez des propositions personnalisées à partir des données CRM et de la documentation produit",
+            "Obtenez des fiches de combat concurrentielles tirées de renseignements internes et de données gagnant/perdant",
+            "Rédigez des courriels de suivi avec le contexte de chaque appel et réunion",
+            "Prévoyez la santé du pipeline grâce à l'analyse par IA des signaux de transaction"
+          ]
+        },
+        "support": {
+          "team": "Support",
+          "items": [
+            "Réponses instantanées à partir de la base de connaissances, réduisant le volume de tickets répétitifs",
+            "Suggestion automatique de macros et de réponses selon l'historique des tickets",
+            "Acheminez les problèmes complexes à la bonne équipe grâce à la classification par IA",
+            "Résumez les longs fils de tickets pour des transferts plus rapides"
+          ]
+        }
+      },
+      "capabilitiesSection": {
+        "title": "Capacités de la plateforme",
+        "subtitle": "Conçu pour l'échelle et la sécurité de l'entreprise."
+      },
+      "features": {
+        "knowledgeAssistant": {
+          "title": "Assistant de connaissances",
+          "desc": "Déployez un assistant IA entraîné sur vos documents internes, wikis et politiques. Les réponses s'appuient sur vos données, pas sur l'internet ouvert.",
+          "details": [
+            "Téléversez des documents directement, y compris des PDF et des fichiers Word",
+            "Les réponses incluent des citations de sources avec références de page",
+            "Prend en charge les principales langues pour les équipes mondiales",
+            "Les politiques de rétention gardent les réponses à jour à mesure que les documents changent"
+          ]
+        },
+        "workflowAutomation": {
+          "title": "Automatisation des flux de travail",
+          "desc": "Créez des agents IA qui gèrent les tâches répétitives : acheminement des demandes, résumé de rapports, mise à jour des dossiers.",
+          "details": [
+            "Constructeur de flux de travail visuel, sans code requis",
+            "Déclenchement par courriel, webhooks ou horaire",
+            "Portes d'approbation intégrées pour les actions sensibles",
+            "Piste d'audit pour chaque décision automatisée"
+          ]
+        },
+        "teamCollaboration": {
+          "title": "Collaboration d'équipe",
+          "desc": "Espaces de travail partagés, historique des conversations et sessions d'IA collaboratives pour les équipes.",
+          "details": [
+            "Fils partagés avec mentions et commentaires",
+            "Modèles pour les flux de travail courants par équipe",
+            "Historique des conversations consultable dans toute l'organisation",
+            "Édition collaborative en temps réel avec suggestions de l'IA"
+          ]
+        },
+        "ssoRbac": {
+          "title": "SSO et RBAC",
+          "desc": "Intégrez votre fournisseur d'identité existant. Contrôlez l'accès par équipe, rôle et département.",
+          "details": [
+            "Prise en charge de OAuth 2.0",
+            "Autorisations granulaires au niveau du document et de la fonctionnalité",
+            "Journaux d'audit pour chaque accès et action",
+            "Approvisionnement et retrait automatiques des utilisateurs via SCIM"
+          ]
+        }
+      },
+      "deploymentSection": {
+        "title": "Options de déploiement",
+        "subtitle": "Faites fonctionner Rofiant là où vivent vos données."
+      },
+      "deploymentOptions": {
+        "awsCloud": {
+          "name": "Cloud géré",
+          "desc": "Entièrement géré, avec un niveau gouvernemental disponible"
+        },
+        "azureCloud": {
+          "name": "Cloud gouvernemental",
+          "desc": "Entièrement géré pour les environnements réglementés et gouvernementaux"
+        },
+        "gcpCloud": {
+          "name": "Google Cloud",
+          "desc": "Entièrement géré avec des options de déploiement régional"
+        },
+        "sovereignCloud": {
+          "name": "Cloud souverain",
+          "desc": "Résidence des données dans les régions US ou UE pour répondre aux exigences de souveraineté"
+        },
+        "vpc": {
+          "name": "VPC",
+          "desc": "Infrastructure isolée au sein de votre propre compte cloud"
+        },
+        "onPremises": {
+          "name": "Sur site",
+          "desc": "Fonctionnez dans votre propre centre de données"
+        }
+      },
+      "securitySection": {
+        "title": "Sécurité et conformité",
+        "subtitle": "Niveau entreprise dès le premier jour."
+      },
+      "security": [
+        "SOC 2 Type II en cours",
+        "Conforme au RGPD et à la CCPA",
+        "Données chiffrées au repos (AES-256) et en transit (TLS 1.3)",
+        "Clés de chiffrement gérées par le client disponibles",
+        "Journaux d'audit granulaires, exportables et inaltérables",
+        "Contrôle d'accès basé sur les rôles au niveau du document",
+        "Page d'état publique"
+      ],
+      "cta": {
+        "title": "Prêt à déployer l'IA dans toute votre organisation ?",
+        "subtitle": "Commencez avec une équipe pilote. Passez à toute l'entreprise quand vous êtes prêt.",
+        "startFreeTrial": "Démarrer l'essai gratuit",
+        "talkToSales": "Parler à un conseiller",
+        "fineprint": "Aucune carte de crédit requise. Gratuit jusqu'à 10 utilisateurs."
+      }
+    },
+    "faqTitle": "Questions fréquentes"
+  },
+  "legal": {
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "subtitle": "Last updated July 5, 2026",
+      "sections": {
+        "s1": {
+          "title": "Introduction",
+          "para1": "This Privacy Policy describes how Rofiant (\"Rofiant,\" \"we,\" \"us,\" or \"our\") collects, uses, stores, shares, and protects personal information when you visit rofiant.ca, use our web application, APIs, dashboards, or related services (collectively, the \"Services\").",
+          "para2": "We wrote this policy to match what our platform actually does. If you do not agree with this policy, do not use the Services.",
+          "para3": "This policy applies to visitors, registered users, agency administrators, billing contacts, and anyone who submits information through our contact or careers forms."
+        },
+        "s2": {
+          "title": "Who Controls Your Data",
+          "body": "Rofiant is the data controller for personal information processed through the Services, except where we process data solely on behalf of a customer organization under a separate data processing agreement. In those cases, the customer organization is the controller and Rofiant acts as a processor."
+        },
+        "s3": {
+          "title": "Information We Collect",
+          "intro": "We collect the categories of information below depending on how you use the Services:",
+          "items": {
+            "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
+            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, knowledge base entries, and metadata associated with those records (timestamps, model identifiers, token counts).",
+            "documents": "Uploaded files: documents, PDFs, and other files you upload for search, summarization, or document intelligence features, including extracted text and indexing metadata.",
+            "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
+            "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
+            "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
+            "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
+            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters, and audit log entries for administrative actions."
+          },
+          "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
+        },
+        "s4": {
+          "title": "How We Collect Information",
+          "intro": "We collect information in three ways:",
+          "items": {
+            "direct": "Directly from you when you register, configure an account, submit content, upload files, complete forms, or contact us.",
+            "automatic": "Automatically when you use the Services, including through cookies, server logs, application telemetry, and error monitoring tools.",
+            "thirdParty": "From third parties when you authenticate through OAuth or SSO providers, when your organization provisions access through SCIM, or when our payment processor sends billing event webhooks."
+          }
+        },
+        "s5": {
+          "title": "How We Use Information",
+          "intro": "We use personal information only for legitimate business purposes connected to the Services, including to:",
+          "items": {
+            "provide": "Create and manage accounts, authenticate users, deliver chat, voice, document, agent, and workflow features, and respond to API requests.",
+            "secure": "Detect abuse, enforce rate limits, verify form submissions, investigate security incidents, and protect the integrity of the platform.",
+            "support": "Provide customer support, troubleshoot errors, and respond to your requests.",
+            "billing": "Process subscriptions, send billing notices, and manage payment-related records.",
+            "improve": "Monitor reliability, analyze aggregated usage patterns, and improve product performance. We do not use customer content to train generalized AI models unless you explicitly opt in under a separate written agreement.",
+            "comply": "Meet legal obligations, respond to lawful requests, and enforce our Terms of Service.",
+            "communicate": "Send service announcements, security alerts, product updates, and administrative messages."
+          },
+          "outro": "We do not sell personal information. We do not share personal information with third parties for their independent marketing purposes."
+        },
+        "s6": {
+          "title": "Legal Bases for Processing",
+          "intro": "If you are located in the European Economic Area, the United Kingdom, or another jurisdiction that requires a legal basis for processing, we rely on the following bases:",
+          "items": {
+            "contract": "Performance of a contract when processing is necessary to provide the Services you requested.",
+            "legitimate": "Legitimate interests when we secure the platform, prevent fraud, improve reliability, and communicate about the Services, balanced against your rights.",
+            "consent": "Consent when you accept analytics cookies, subscribe to optional communications, or otherwise opt in to a specific processing activity.",
+            "legal": "Compliance with legal obligations when we must retain, disclose, or process information under applicable law."
+          }
+        },
+        "s7": {
+          "title": "AI Processing",
+          "para1": "Several Rofiant features send user content to third-party AI inference providers to generate responses, summaries, transcriptions, or workflow outputs. Today we use Groq for model inference. When you submit a prompt, document, or audio file, the relevant content and necessary metadata are transmitted to that provider for processing.",
+          "para2": "AI providers process data under their own terms and privacy policies. We configure our integrations to support our contractual commitments, but you should assume that content sent for inference leaves our direct execution environment for the duration of processing.",
+          "para3": "AI outputs may be inaccurate, incomplete, or inappropriate. Do not submit export-controlled, classified, attorney-client privileged, or other regulated data to the Services unless your organization has approved that use under its own compliance review."
+        },
+        "s8": {
+          "title": "Service Providers",
+          "intro": "We use the following categories of subprocessors and infrastructure providers to operate the Services:",
+          "providers": {
+            "supabase": {
+              "name": "Supabase",
+              "role": "Authentication, PostgreSQL database, file storage, and row-level security for application data."
+            },
+            "groq": {
+              "name": "Groq",
+              "role": "AI inference for chat, voice, document, and workflow features."
+            },
+            "posthog": {
+              "name": "PostHog",
+              "role": "Product analytics when you accept analytics cookies. Page views and usage events are not captured for analytics before consent."
+            },
+            "sentry": {
+              "name": "Sentry",
+              "role": "Error monitoring, performance tracing, and limited session replay for debugging production issues."
+            },
+            "creem": {
+              "name": "Creem",
+              "role": "Subscription billing, checkout, and payment event processing."
+            },
+            "resend": {
+              "name": "Resend",
+              "role": "Transactional email delivery for account, billing, and notification messages."
+            },
+            "upstash": {
+              "name": "Upstash",
+              "role": "Redis-backed rate limiting and abuse prevention."
+            },
+            "cloudflare": {
+              "name": "Cloudflare",
+              "role": "Turnstile bot verification on public forms such as contact and signup flows."
+            },
+            "vercel": {
+              "name": "Vercel",
+              "role": "Application hosting and edge delivery for the Rofiant web platform."
+            }
+          },
+          "outro": "Each provider processes data under its own privacy policy and, where applicable, a data processing agreement. We limit the information we share to what is reasonably necessary for each provider to perform its function."
+        },
+        "s9": {
+          "title": "When We Disclose Information",
+          "intro": "We may disclose personal information in the following circumstances:",
+          "items": {
+            "processors": "To service providers listed in this policy who process data on our behalf under contractual confidentiality and security obligations.",
+            "legal": "To comply with applicable law, regulation, legal process, or enforceable governmental request.",
+            "protection": "To protect the rights, property, or safety of Rofiant, our users, or the public, including to investigate suspected fraud, abuse, or security incidents.",
+            "consent": "With your direction or consent, including when you connect third-party integrations approved by your organization.",
+            "business": "In connection with a merger, acquisition, financing, reorganization, or sale of assets, subject to confidentiality obligations and notice where required by law."
+          },
+          "outro": "We do not disclose customer content to third parties for advertising or unrelated commercial purposes."
+        },
+        "s10": {
+          "title": "International Data Transfers",
+          "para1": "Rofiant operates from Canada and uses service providers that may process data in Canada, the United States, and other countries where they maintain facilities.",
+          "para2": "When we transfer personal information across borders, we rely on appropriate safeguards where required, including contractual clauses, provider security commitments, and organizational access controls. If you need information about transfer mechanisms for your jurisdiction, contact us at privacy@rofiant.ca."
+        },
+        "s11": {
+          "title": "Data Retention",
+          "intro": "We retain personal information only as long as necessary for the purposes described in this policy:",
+          "items": {
+            "account": "Account and profile data remain while your account is active.",
+            "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
+            "logs": "Security, audit, and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
+            "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
+            "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
+          },
+          "outro": "When you delete your account or submit a verified deletion request, we delete or de-identify personal information within 30 days except where retention is legally required or where encrypted backups expire on their normal cycle."
+        },
+        "s12": {
+          "title": "Security",
+          "intro": "We apply administrative, technical, and organizational measures designed to protect personal information, including:",
+          "items": {
+            "encryption": "Encryption in transit using TLS and encryption at rest through our infrastructure providers.",
+            "access": "Role-based access controls, least-privilege policies for production systems, and multi-factor authentication for administrative access.",
+            "monitoring": "Logging, alerting, and error monitoring to detect anomalous activity.",
+            "infrastructure": "Managed cloud infrastructure with vendor security programs and independent audits performed by those vendors.",
+            "incident": "An incident response process to investigate and notify affected parties when required by law."
+          },
+          "outro": "No online service can guarantee absolute security. You are responsible for maintaining the confidentiality of your credentials and for configuring organization-level controls appropriate to your data classification requirements."
+        },
+        "s13": {
+          "title": "Your Privacy Rights",
+          "intro": "Depending on your location, you may have some or all of the following rights:",
+          "items": {
+            "access": "Request access to the personal information we hold about you.",
+            "correct": "Request correction of inaccurate or incomplete information.",
+            "delete": "Request deletion of personal information, subject to legal exceptions.",
+            "export": "Request a portable copy of certain information associated with your account.",
+            "restrict": "Request restriction of processing in specific circumstances under applicable law.",
+            "withdraw": "Withdraw consent where processing is based on consent, without affecting prior lawful processing.",
+            "complaint": "Lodge a complaint with a supervisory authority. Canadian residents may contact the Office of the Privacy Commissioner of Canada. Quebec residents may also contact the Commission d'accès à l'information du Québec."
+          },
+          "outro": "To exercise these rights, email <link>privacy@rofiant.ca</link> with enough detail for us to verify your identity and locate your account. We respond within 30 days unless applicable law permits an extension."
+        },
+        "s14": {
+          "title": "Cookies and Similar Technologies",
+          "intro": "We use cookies and similar storage technologies for the following purposes:",
+          "items": {
+            "essential": "Essential cookies and local storage entries required for authentication, session continuity, security, and remembering your cookie preference.",
+            "consent": "A consent record stored in local storage and a cookie so we can honor your analytics preference across sessions.",
+            "analytics": "Analytics cookies and event capture through PostHog only after you click Accept on our cookie banner. If you decline, analytics capture remains disabled by default."
+          },
+          "outro": "You can change your browser settings to block cookies, but some features may not function without essential cookies. Our cookie banner lets you accept or decline analytics cookies at any time on first visit."
+        },
+        "s15": {
+          "title": "Children",
+          "body": "The Services are not directed to individuals under 18, and we do not knowingly collect personal information from children. If you believe a child has provided us personal information, contact privacy@rofiant.ca and we will delete it."
+        },
+        "s16": {
+          "title": "Automated Processing",
+          "body": "Our AI features generate outputs using automated processing. We do not use automated decision-making that produces legal or similarly significant effects about you without human review unless your organization explicitly configures such a workflow outside our default product behavior."
+        },
+        "s17": {
+          "title": "Changes to This Policy",
+          "body": "We may update this Privacy Policy to reflect product changes, legal requirements, or provider updates. We will revise the date at the top of this page when we make material changes. Continued use of the Services after an update means you accept the revised policy."
+        },
+        "s18": {
+          "title": "Contact",
+          "body": "Privacy questions, rights requests, or complaints: <link>privacy@rofiant.ca</link>. Security incidents: security@rofiant.ca."
+        }
+      }
+    },
+    "termsOfService": {
+      "title": "Terms of Service",
+      "subtitle": "Last updated July 5, 2026",
+      "sections": {
+        "s1": {
+          "title": "Agreement",
+          "para1": "These Terms of Service (\"Terms\") govern access to and use of the Rofiant website, application, APIs, dashboards, and related services (collectively, the \"Services\") operated by Rofiant (\"Rofiant,\" \"we,\" \"us,\" or \"our\").",
+          "para2": "By creating an account, accessing the Services, or clicking to accept these Terms, you agree to be bound by them and by our Privacy Policy. If you do not agree, do not use the Services."
+        },
+        "s2": {
+          "title": "Eligibility and Registration",
+          "intro": "You may use the Services only if you meet the requirements below:",
+          "items": {
+            "age": "You are at least 18 years old and have legal capacity to enter a binding contract.",
+            "authority": "If you register on behalf of an organization, agency, or other entity, you represent that you have authority to bind that entity to these Terms.",
+            "accuracy": "You provide accurate registration information and keep it current.",
+            "security": "You maintain the confidentiality of your credentials and notify us promptly at security@rofiant.ca if you suspect unauthorized access."
+          }
+        },
+        "s3": {
+          "title": "The Services",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, knowledge bases, API access, agency administration, audit logging, and related enterprise controls.",
+          "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
+        },
+        "s4": {
+          "title": "Account Security and Organization Controls",
+          "intro": "You are responsible for activity under your account and for how members of your organization use the Services. This includes:",
+          "items": {
+            "credentials": "Protecting passwords, API keys, webhooks, and session tokens.",
+            "mfa": "Enabling multi-factor authentication where available, especially for administrative roles.",
+            "activity": "Monitoring use of your workspace, agency, or organization account.",
+            "agency": "Configuring role-based access, export controls, and data handling rules required by your organization."
+          }
+        },
+        "s5": {
+          "title": "Acceptable Use",
+          "intro": "You will not use the Services, or assist anyone else to use the Services, to:",
+          "items": {
+            "unlawful": "Violate any applicable law, regulation, court order, or contractual obligation.",
+            "harmful": "Generate, store, or transmit content that is illegal, exploitative, threatening, harassing, defamatory, hateful, or that promotes violence.",
+            "infringe": "Infringe intellectual property, privacy, publicity, or other rights of any person or entity.",
+            "malware": "Upload malware, attempt unauthorized access, probe or scan systems without authorization, or interfere with service operation.",
+            "access": "Access another user's account or data without permission.",
+            "scrape": "Scrape, crawl, harvest, or collect data from the Services through automated means except through documented APIs and within published rate limits.",
+            "reverse": "Reverse engineer, decompile, or attempt to derive source code or underlying models except where applicable law expressly permits it.",
+            "overload": "Overload, disrupt, or impair the Services or connected networks, including through denial-of-service activity or excessive automated requests.",
+            "impersonate": "Impersonate Rofiant, another user, or misrepresent your affiliation.",
+            "spam": "Send unsolicited communications or use the Services primarily as a messaging relay.",
+            "export": "Upload, process, or export ITAR-controlled, classified, or other regulated data without authorization from your organization and compliance with applicable export and security laws.",
+            "circumvent": "Circumvent usage limits, billing restrictions, access controls, or security measures."
+          },
+          "outro": "We may investigate violations, remove content, suspend accounts, and report activity to law enforcement when we believe it is necessary."
+        },
+        "s6": {
+          "title": "AI Output Disclaimer",
+          "para1": "The Services use machine learning models that generate probabilistic outputs. AI responses, summaries, transcriptions, classifications, and workflow results may be wrong, incomplete, biased, or outdated.",
+          "para2": "You must review outputs before relying on them for legal, medical, financial, safety-critical, operational, or compliance decisions. Rofiant does not provide professional advice of any kind through the Services.",
+          "para3": "You remain solely responsible for how you use AI outputs and for verifying accuracy, suitability, and legality before acting on them or distributing them inside or outside your organization."
+        },
+        "s7": {
+          "title": "Your Content",
+          "para1": "You retain ownership of content, files, prompts, and data you submit to the Services (\"Customer Content\"). You grant Rofiant a worldwide, non-exclusive license to host, store, reproduce, process, transmit, and display Customer Content only as necessary to provide, secure, and support the Services and as otherwise permitted by these Terms or a signed order form.",
+          "para2": "You represent that you have all rights necessary to submit Customer Content and that your submission and our processing under these Terms do not violate law or third-party rights.",
+          "para3": "We may remove Customer Content that violates these Terms, creates risk for Rofiant or other users, or when required by law."
+        },
+        "s8": {
+          "title": "Rofiant Intellectual Property",
+          "body": "Rofiant and its licensors own the Services, software, documentation, branding, and all related intellectual property. Except for the limited rights expressly granted in these Terms, no rights are transferred to you. You may not use Rofiant trademarks without prior written consent."
+        },
+        "s9": {
+          "title": "Third-Party Services",
+          "body": "The Services integrate with third-party providers such as AI inference, payment, email, analytics, and infrastructure vendors. Your use of those providers may be subject to separate terms. Rofiant is not responsible for third-party services we do not control."
+        },
+        "s10": {
+          "title": "Subscriptions, Billing, and Payment",
+          "intro": "Paid plans are billed through our payment processor, Creem, unless otherwise stated in a signed order form:",
+          "items": {
+            "plans": "Fees depend on the plan you select and any usage-based charges disclosed at purchase.",
+            "payment": "You authorize us and our payment processor to charge your selected payment method on a recurring basis until you cancel.",
+            "renewal": "Subscriptions renew automatically at the end of each billing period unless canceled before renewal.",
+            "taxes": "Fees exclude applicable taxes, duties, and levies unless stated otherwise. You are responsible for taxes associated with your purchase except for taxes based on Rofiant's net income.",
+            "refunds": "Except where required by law or expressly stated in a signed agreement, fees are non-refundable.",
+            "changes": "We may change pricing for renewal terms with reasonable advance notice. Price changes apply to subsequent billing periods."
+          },
+          "outro": "Failure to pay may result in suspension or termination of paid features."
+        },
+        "s11": {
+          "title": "Service Availability and Changes",
+          "para1": "We strive to keep the Services available, but downtime, maintenance, model outages, and third-party failures can occur. We do not guarantee uninterrupted or error-free operation.",
+          "para2": "We may change, deprecate, or replace features, API endpoints, and model providers. Where a change materially reduces core functionality for paid customers, we will use commercially reasonable efforts to provide advance notice."
+        },
+        "s12": {
+          "title": "Privacy and Data Processing",
+          "body": "Our Privacy Policy explains how we collect and process personal information. If you require a data processing agreement, business associate agreement, or other compliance addendum, contact legal@rofiant.ca. In the event of conflict between these Terms and a signed enterprise agreement, the signed agreement controls for that customer."
+        },
+        "s13": {
+          "title": "Export Controls and Sanctions",
+          "para1": "You may not use or export the Services in violation of Canadian export laws, U.S. export control laws, sanctions regulations, or other applicable trade restrictions.",
+          "para2": "You represent that you are not located in, organized under the laws of, or ordinarily resident in a jurisdiction subject to comprehensive sanctions, and that you are not a prohibited party under applicable sanctions lists."
+        },
+        "s14": {
+          "title": "Government and Regulated Use",
+          "para1": "If you are a government agency or regulated entity, you are responsible for determining whether the Services meet your authorization, accreditation, data residency, and records-management requirements before production use.",
+          "para2": "References on our website to FedRAMP, ITAR, SOC 2, or similar frameworks describe our compliance roadmap and available controls unless explicitly identified as a completed certification in a signed agreement."
+        },
+        "s15": {
+          "title": "Disclaimer of Warranties",
+          "para1": "THE SERVICES ARE PROVIDED \"AS IS\" AND \"AS AVAILABLE.\" TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.",
+          "para2": "ROFIANT DOES NOT WARRANT THAT AI OUTPUTS WILL BE ACCURATE, COMPLETE, CURRENT, OR SUITABLE FOR ANY PURPOSE, OR THAT THE SERVICES WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE."
+        },
+        "s16": {
+          "title": "Limitation of Liability",
+          "para1": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT AND ITS OFFICERS, DIRECTORS, EMPLOYEES, CONTRACTORS, AND SUPPLIERS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, GOODWILL, BUSINESS INTERRUPTION, OR PROCUREMENT OF SUBSTITUTE SERVICES, EVEN IF ROFIANT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.",
+          "para2": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT'S TOTAL LIABILITY FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THE SERVICES OR THESE TERMS WILL NOT EXCEED THE GREATER OF (A) THE AMOUNTS YOU PAID TO ROFIANT FOR THE SERVICES IN THE TWELVE MONTHS BEFORE THE EVENT GIVING RISE TO LIABILITY, OR (B) ONE HUNDRED CANADIAN DOLLARS (CAD $100).",
+          "para3": "Some jurisdictions do not allow certain limitations. In those jurisdictions, Rofiant's liability is limited to the fullest extent permitted by law."
+        },
+        "s17": {
+          "title": "Indemnification",
+          "para1": "You will defend, indemnify, and hold harmless Rofiant and its officers, directors, employees, contractors, and agents from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising out of or related to your Customer Content, your use of the Services, your violation of these Terms, or your violation of applicable law or third-party rights.",
+          "para2": "Rofiant will notify you of a claim subject to indemnification and give you reasonable control of the defense, provided that Rofiant may participate with its own counsel at its expense."
+        },
+        "s18": {
+          "title": "Suspension and Termination",
+          "intro": "Either party may end the relationship as follows:",
+          "items": {
+            "byYou": "You may stop using the Services and cancel your subscription at any time through account settings or by contacting support.",
+            "byUs": "We may suspend or terminate access immediately if you violate these Terms, create security or legal risk, fail to pay fees, or if we discontinue the Services.",
+            "effect": "Upon termination, your right to access the Services ends. Provisions that by their nature should survive will survive, including ownership provisions, warranty disclaimers, indemnities, limitations of liability, and dispute terms."
+          },
+          "outro": "We may retain and use information as described in our Privacy Policy after termination."
+        },
+        "s19": {
+          "title": "Governing Law and Disputes",
+          "para1": "These Terms are governed by the laws of the Province of Ontario and the federal laws of Canada applicable therein, without regard to conflict-of-law rules.",
+          "para2": "Before filing a claim, you agree to contact legal@rofiant.ca and attempt to resolve the dispute informally for at least 30 days.",
+          "para3": "Except where prohibited by applicable law, you agree that the courts located in Ontario, Canada have exclusive jurisdiction over disputes arising out of or relating to these Terms or the Services, and you consent to personal jurisdiction in those courts."
+        },
+        "s20": {
+          "title": "General Terms",
+          "intro": "The following general terms apply to these Terms:",
+          "items": {
+            "assignment": "You may not assign these Terms without Rofiant's prior written consent. Rofiant may assign these Terms in connection with a merger, acquisition, or sale of assets.",
+            "severability": "If any provision is unenforceable, the remaining provisions remain in effect.",
+            "waiver": "Failure to enforce a provision is not a waiver of future enforcement.",
+            "entire": "These Terms and the Privacy Policy constitute the entire agreement between you and Rofiant regarding the Services unless superseded by a signed enterprise agreement.",
+            "updates": "We may update these Terms by posting a revised version and updating the date above. Material changes take effect no sooner than 30 days after notice unless required sooner by law or for security reasons. Continued use after the effective date constitutes acceptance."
+          }
+        },
+        "s21": {
+          "title": "Enterprise Orders",
+          "body": "If you enter a signed order form, statement of work, or master services agreement with Rofiant, that document controls for the subject matter it covers. In case of conflict, the signed enterprise document prevails over these Terms."
+        },
+        "s22": {
+          "title": "Contact",
+          "body": "Legal notices and questions about these Terms: <link>legal@rofiant.ca</link>."
+        }
+      }
+    },
+    "fedramp": {
+      "title": "FedRAMP",
+      "subtitle": "L'approche de Rofiant pour la conformité FedRAMP dans les déploiements cloud fédéraux.",
+      "intro": "Rofiant prend en charge les exigences de conformité FedRAMP. Nous construisons les contrôles de sécurité requis par les déploiements cloud fédéraux et travaillons directement avec les agences tout au long de leurs processus d'autorisation.",
+      "controlFamiliesHeading": "Familles de Contrôles de Sécurité",
+      "controls": {
+        "accessControl": "Contrôle d'Accès",
+        "auditAndAccountability": "Audit et Responsabilité",
+        "configurationManagement": "Gestion de la Configuration",
+        "identificationAndAuthentication": "Identification et Authentification",
+        "systemAndCommunicationsProtection": "Protection des Systèmes et Communications",
+        "systemAndInformationIntegrity": "Intégrité des Systèmes et de l'Information"
+      },
+      "status": {
+        "inProgress": "En Cours"
+      },
+      "controlsCount": "{count} contrôles",
+      "deploymentOptionsHeading": "Options de Déploiement",
+      "deploymentOptionsBody": "Rofiant peut être déployé dans des environnements cloud autorisés FedRAMP ou sur site dans l'infrastructure propre de l'agence. Nous fournissons la documentation et les dossiers de preuves nécessaires pour appuyer votre processus d'ATO.",
+      "contactHeading": "Contact",
+      "contactBody": "Pour toute demande relative à FedRAMP, contactez notre équipe conformité à compliance@rofiant.ca."
+    },
+    "itarPolicy": {
+      "title": "Politique ITAR",
+      "subtitle": "L'approche de Rofiant en matière de conformité à la réglementation ITAR (International Traffic in Arms Regulations).",
+      "overviewHeading": "Aperçu",
+      "overviewBody": "Les organisations qui traitent des données techniques liées à la défense doivent se conformer à ITAR. Rofiant intègre des contrôles à la plateforme pour prendre en charge les flux de travail réglementés par ITAR.",
+      "dataControlsHeading": "Contrôles des Données",
+      "dataControlsBody": "Rofiant prend en charge la résidence des données aux États-Unis. Toutes les données clients peuvent être restreintes à une infrastructure basée aux États-Unis. Les contrôles d'accès peuvent être configurés pour limiter l'accès au système aux seules personnes américaines.",
+      "accessRestrictionsHeading": "Restrictions d'Accès",
+      "accessRestrictionsBody": "Rofiant restreint l'accès aux données selon la citoyenneté, l'habilitation de sécurité et le rôle organisationnel. Chaque tentative d'accès est enregistrée de manière immuable à des fins d'audit.",
+      "contactHeading": "Contact",
+      "contactBody": "Pour toute question relative à ITAR, contactez notre équipe conformité à compliance@rofiant.ca."
+    },
+    "soc2": {
+      "title": "SOC 2 Type II",
+      "subtitle": "État de conformité SOC 2 Type II de Rofiant et couverture des critères de confiance.",
+      "intro": "Rofiant fait l'objet d'un audit SOC 2 Type II annuel réalisé par un auditeur tiers indépendant, qui examine l'efficacité opérationnelle de nos contrôles sur une période d'examen plutôt qu'à un instant donné.",
+      "criteriaHeading": "Critères de services de confiance",
+      "criteria": {
+        "security": "Sécurité",
+        "availability": "Disponibilité",
+        "processingIntegrity": "Intégrité du traitement",
+        "confidentiality": "Confidentialité",
+        "privacy": "Confidentialité des données"
+      },
+      "status": {
+        "covered": "Couvert"
+      },
+      "controlsCount": "{count} contrôles",
+      "reportAccessHeading": "Accès au rapport",
+      "reportAccessBody": "Notre rapport SOC 2 Type II est disponible pour les clients et prospects sous accord de confidentialité. Demandez une copie auprès de votre équipe de compte ou à compliance@rofiant.ca.",
+      "contactHeading": "Contact",
+      "contactBody": "Pour toute question relative à SOC 2, contactez notre équipe conformité à compliance@rofiant.ca."
+    }
+  },
+  "resources": {
+    "documentation": {
+      "title": "Documentation",
+      "subtitle": "Tout ce dont vous avez besoin pour développer avec Rofiant. Guides, tutoriels et documentation de référence.",
+      "sections": {
+        "gettingStarted": {
+          "title": "Premiers Pas",
+          "desc": "Guides de démarrage rapide, authentification et votre premier appel API."
+        },
+        "chatAi": {
+          "title": "Chat IA",
+          "desc": "Créez des expériences d'IA conversationnelle avec Rofiant Chat."
+        },
+        "voiceAi": {
+          "title": "IA Vocale",
+          "desc": "Transcription en temps réel, résumés et flux de travail pilotés par la voix."
+        },
+        "documentIntelligence": {
+          "title": "Intelligence Documentaire",
+          "desc": "Extrayez, classifiez et recherchez dans les documents avec RAG."
+        },
+        "agents": {
+          "title": "Agents",
+          "desc": "Déployez des assistants de flux de travail avec raisonnement multi-étapes et connecteurs API."
+        },
+        "integrations": {
+          "title": "Intégrations",
+          "desc": "Connectez Rofiant à vos systèmes personnalisés via l'API."
+        },
+        "security": {
+          "title": "Sécurité",
+          "desc": "Authentification, RBAC, chiffrement et journalisation d'audit."
+        }
+      }
+    },
+    "apiReference": {
+      "title": "Référence API",
+      "subtitle": "Référence complète de tous les points de terminaison, paramètres et réponses de l'API Rofiant.",
+      "endpoints": {
+        "chatCompletions": "Créer une complétion de chat",
+        "models": "Lister les modèles disponibles",
+        "usage": "Obtenir les statistiques d'utilisation",
+        "auditLogs": "Interroger les journaux d'audit"
+      }
+    },
+    "changelog": {
+      "title": "Journal des Modifications",
+      "subtitle": "Dernières mises à jour, fonctionnalités et améliorations de Rofiant.",
+      "types": {
+        "feature": "fonctionnalité",
+        "improvement": "amélioration",
+        "fix": "correctif"
+      },
+      "entries": {
+        "v250": {
+          "date": "3 juillet 2026",
+          "changes": [
+            "Workflows de mission fédérale — analyse structurée acquisition, FOIA, ATO et prestations avec export et historique",
+            "Téléversement de documents dans le flux avec packs de référence",
+            "Entrées d'audit pour les exécutions de workflows fédéraux et suivi d'usage pour les plans gouvernementaux"
+          ]
+        },
+        "v240": {
+          "date": "15 janvier 2026",
+          "changes": [
+            "IA Vocale — transcription et résumés en temps réel",
+            "Pipelines d'agents — raisonnement multi-étapes avec portes d'approbation",
+            "Améliorations de la latence du chat"
+          ]
+        },
+        "v230": {
+          "date": "20 décembre 2025",
+          "changes": [
+            "Intelligence documentaire avec recherche propulsée par RAG",
+            "Prise en charge des webhooks pour les notifications d'événements en temps réel",
+            "Correction du comptage de jetons pour les écritures non latines"
+          ]
+        },
+        "v220": {
+          "date": "30 novembre 2025",
+          "changes": [
+            "Sortie du SDK Go",
+            "Amélioration des performances des requêtes de journaux d'audit",
+            "Correction de la gestion du délai d'expiration de session SSO"
+          ]
+        }
+      }
+    },
+    "complianceGuides": {
+      "title": "Guides de Conformité",
+      "subtitle": "Guides détaillés sur la manière dont Rofiant répond aux exigences de sécurité et de conformité.",
+      "guides": {
+        "soc2": {
+          "title": "SOC 2 Type II (en cours)",
+          "desc": "Comment Rofiant progresse vers la conformité SOC 2. Contrôles actuels et calendrier d'audit."
+        },
+        "dataPrivacy": {
+          "title": "Confidentialité des Données",
+          "desc": "Traitement, conservation, suppression des données et conformité RGPD/CCPA."
+        },
+        "encryption": {
+          "title": "Chiffrement",
+          "desc": "Chiffrement au repos et en transit. Gestion et rotation des clés."
+        },
+        "accessControl": {
+          "title": "Contrôle d'Accès",
+          "desc": "Accès basé sur les rôles, intégration SSO et meilleures pratiques d'authentification."
+        },
+        "auditLogging": {
+          "title": "Journalisation d'Audit",
+          "desc": "Ce que nous enregistrons, la durée de conservation et comment l'exporter pour vos besoins de conformité."
+        },
+        "incidentResponse": {
+          "title": "Réponse aux Incidents",
+          "desc": "Notre processus de réponse aux incidents, nos SLA et nos protocoles de communication."
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "quote": "Une IA sécurisée et conforme pour les administrations publiques et les entreprises.",
+      "teamName": "Équipe Rofiant",
+      "teamRole": "Ingénierie",
+      "logoText": "Rofiant"
+    },
+    "signup": {
+      "title": "S'inscrire",
+      "quote": "Rejoignez les administrations et entreprises qui utilisent Rofiant pour déployer une IA sécurisée dans des missions critiques.",
+      "logoText": "Rofiant",
+      "stepEmailTitle": "Quelle est votre adresse e-mail ?",
+      "stepEmailSubtitle": "Entrez votre e-mail professionnel ou personnel pour commencer.",
+      "stepDetailsTitle": "Finaliser l'inscription",
+      "stepDetailsSubtitle": "Création d'un compte pour {email}",
+      "email": "E-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "name": "Nom complet",
+      "namePlaceholder": "Jean Dupont",
+      "age": "Âge",
+      "agePlaceholder": "18",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "continue": "Continuer",
+      "back": "Retour",
+      "createAccount": "Créer un compte",
+      "creatingAccount": "Création du compte...",
+      "checkEmailTitle": "Vérifiez votre e-mail",
+      "checkEmailBody": "Nous avons envoyé un lien de confirmation à {email}.",
+      "alreadyHaveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "or": "ou",
+      "google": "Continuer avec Google",
+      "googleLoading": "Redirection...",
+      "agreement": "En vous inscrivant, vous acceptez nos <terms>Conditions d'utilisation</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+      "errors": {
+        "passwordMismatch": "Les mots de passe ne correspondent pas",
+        "invalidAge": "Entrez un âge valide entre 1 et 120",
+        "nameRequired": "Le nom complet est requis pour les comptes de 18 ans et plus",
+        "createFailed": "Impossible de créer le compte"
+      },
+      "minorNotice": "Les comptes de moins de 18 ans utilisent un mode limité. Nous ne collectons ni ne stockons votre nom, âge, chats, fichiers ou données d'utilisation."
+    },
+    "mfa": {
+      "quote": "Une IA sécurisée et conforme pour les administrations publiques et les entreprises.",
+      "logoText": "Rofiant"
+    }
+  },
+  "error": {
+    "notFound": {
+      "title": "Page introuvable",
+      "subtitle": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "cta": "Retour à l'accueil"
+    },
+    "boundary": {
+      "title": "Une erreur est survenue",
+      "subtitle": "Une erreur inattendue s'est produite. Vous pouvez réessayer ou revenir à l'accueil.",
+      "retry": "Réessayer",
+      "home": "Retour à l'accueil"
+    }
+  },
+  "status": {
+    "badge": "STATUT",
+    "title": "État du système",
+    "subtitle": "État en direct des services Rofiant.",
+    "allOperational": "Tous les systèmes sont opérationnels",
+    "someIssues": "Certains systèmes rencontrent des problèmes",
+    "operational": "Opérationnel",
+    "degraded": "Dégradé",
+    "lastChecked": "Dernière vérification {time}",
+    "services": {
+      "chatAi": "Chat AI",
+      "voiceAi": "Voice AI",
+      "documentIntelligence": "Document Intelligence",
+      "publicApi": "API publique",
+      "dashboard": "Tableau de bord"
+    },
+    "noHistory": "Collecte de l'historique de disponibilité — revenez bientôt.",
+    "checkedEvery": "Les vérifications s'exécutent automatiquement toutes les 5 minutes.",
+    "uptime": {
+      "day": "Disponibilité 24h",
+      "week": "Disponibilité 7 jours",
+      "quarter": "Disponibilité 90 jours"
+    },
+    "history": {
+      "title": "Historique de 90 jours",
+      "noData": "Aucune donnée",
+      "tooltip": "{date} : {pct} % de disponibilité"
+    },
+    "analytics": {
+      "title": "Temps de réponse",
+      "subtitle": "Latence par service, dernières 24 heures",
+      "tooltipLatency": "{value} ms",
+      "noData": "Pas encore assez de données pour tracer le temps de réponse."
+    },
+    "incidents": {
+      "title": "Historique des incidents",
+      "subtitle": "90 derniers jours",
+      "empty": "Aucun incident au cours des 90 derniers jours.",
+      "ongoing": "En cours",
+      "startedAt": "Débuté {time}",
+      "resolvedAt": "Résolu {time}",
+      "durationMinutes": "{count}m",
+      "durationHours": "{count}h {minutes}m"
+    }
+  }
+}

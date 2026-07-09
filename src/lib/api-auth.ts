@@ -9,7 +9,7 @@ export type ApiKeyUser = {
 export async function validateApiKey(authHeader: string | null): Promise<ApiKeyUser | null> {
   if (!authHeader?.startsWith("Bearer ")) return null;
   const token = authHeader.slice(7).trim();
-  if (!token.startsWith("rofiant_sk_")) return null;
+  if (!token.startsWith("sk_")) return null;
 
   const admin = createAdminClient();
 

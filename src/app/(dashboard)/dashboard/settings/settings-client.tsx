@@ -1,11 +1,30 @@
 "use client";
 
+import Link from "next/link";
 import {
   Shield, Bell, Globe, Check, User, Trash2, Palette,
-  LogOut, AlertTriangle, Download, Key, Monitor
+  LogOut, AlertTriangle, Download, Key, Monitor, ShieldCheck,
+  Sun, Moon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
+import { routing } from "@/i18n/routing";
+import {
+  DashboardCard,
+  DashboardPrimaryButton,
+} from "@/components/dashboard/ui/page-shell";
+import { ProfileAvatarUpload } from "@/components/dashboard/profile-avatar-upload";
+import { PasswordInput } from "@/components/ui/password-input";
+
+const LOCALE_LABELS: Record<string, string> = {
+  en: "English",
+  es: "Spanish",
+  fr: "French",
+  de: "German",
+};
 
 type Tab = "account" | "security" | "notifications" | "preferences" | "appearance" | "danger";
 
@@ -19,13 +38,13 @@ const NOTIF_KEYS = [
 ] as const;
 type NotifKey = (typeof NOTIF_KEYS)[number];
 
-const NOTIF_LABELS: Record<NotifKey, { label: string; desc: string }> = {
-  usage_alerts:    { label: "Usage alerts",    desc: "Notify when approaching plan limits" },
-  security_alerts: { label: "Security alerts", desc: "New login detected or API key created" },
-  product_updates: { label: "Product updates", desc: "New features and improvements" },
-  weekly_digest:   { label: "Weekly digest",   desc: "Summary of your usage each week" },
-  api_failures:    { label: "API failures",    desc: "Alert when API requests fail repeatedly" },
-  billing_alerts:  { label: "Billing alerts",  desc: "Upcoming renewals and payment issues" },
+const NOTIF_MSG_KEY: Record<NotifKey, string> = {
+  usage_alerts: "usageAlerts",
+  security_alerts: "securityAlerts",
+  product_updates: "productUpdates",
+  weekly_digest: "weeklyDigest",
+  api_failures: "apiFailures",
+  billing_alerts: "billingAlerts",
 };
 
 const DEFAULT_NOTIFS: Record<NotifKey, boolean> = {
@@ -50,17 +69,23 @@ function loadNotifs(): Record<NotifKey, boolean> {
 type AccentColor = "yellow" | "blue" | "green" | "purple";
 type Density = "compact" | "comfortable" | "spacious";
 
-const ACCENT_COLORS: { id: AccentColor; label: string; value: string }[] = [
-  { id: "yellow",  label: "Amber",   value: "#eab308" },
-  { id: "blue",    label: "Blue",    value: "#3b82f6" },
-  { id: "green",   label: "Green",   value: "#22c55e" },
-  { id: "purple",  label: "Purple",  value: "#a855f7" },
+const ACCENT_COLORS: { id: AccentColor; value: string }[] = [
+  { id: "yellow",  value: "#eab308" },
+  { id: "blue",    value: "#2563eb" },
+  { id: "green",   value: "#22c55e" },
+  { id: "purple",  value: "#a855f7" },
 ];
 
-const DENSITIES: { id: Density; label: string; desc: string }[] = [
-  { id: "compact",     label: "Compact",     desc: "Tighter spacing, more on screen" },
-  { id: "comfortable", label: "Comfortable", desc: "Balanced — the default" },
-  { id: "spacious",    label: "Spacious",    desc: "More breathing room between elements" },
+const DENSITIES: { id: Density }[] = [
+  { id: "compact" },
+  { id: "comfortable" },
+  { id: "spacious" },
+];
+
+const THEMES: { id: "light" | "dark" | "system"; icon: React.ElementType }[] = [
+  { id: "light", icon: Sun },
+  { id: "dark", icon: Moon },
+  { id: "system", icon: Monitor },
 ];
 
 function applyAccent(value: string) {
@@ -75,13 +100,13 @@ function loadAppearance(): { accent: AccentColor; density: Density } {
   };
 }
 
-const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
-  { id: "account",     label: "Account",       icon: User },
-  { id: "security",    label: "Security",       icon: Shield },
-  { id: "notifications", label: "Notifications", icon: Bell },
-  { id: "preferences", label: "Preferences",    icon: Globe },
-  { id: "appearance",  label: "Appearance",     icon: Palette },
-  { id: "danger",      label: "Danger zone",    icon: AlertTriangle },
+const TABS: { id: Tab; icon: React.ElementType }[] = [
+  { id: "account",       icon: User },
+  { id: "security",      icon: Shield },
+  { id: "notifications", icon: Bell },
+  { id: "preferences",   icon: Globe },
+  { id: "appearance",    icon: Palette },
+  { id: "danger",        icon: AlertTriangle },
 ];
 
 const TIMEZONES = [
@@ -131,12 +156,18 @@ export function SettingsClient({
   userId,
   displayName: initialDisplayName,
   bio: initialBio,
+  avatarUrl,
+  hasCustomAvatar,
 }: {
   email: string;
   userId: string;
   displayName: string;
   bio: string;
+  avatarUrl: string | null;
+  hasCustomAvatar: boolean;
 }) {
+  const router = useRouter();
+  const t = useTranslations("dashboard.settings");
   const [tab, setTab] = useState<Tab>("account");
 
   // Account
@@ -164,6 +195,29 @@ export function SettingsClient({
   const [mfaCode, setMfaCode] = useState("");
   const [mfaError, setMfaError] = useState("");
 
+  // Export
+  const [exportLoading, setExportLoading] = useState(false);
+
+  const handleExport = async () => {
+    setExportLoading(true);
+    try {
+      const res = await fetch("/api/export");
+      if (!res.ok) throw new Error("Export failed");
+      const blob = await res.blob();
+      const disposition = res.headers.get("Content-Disposition");
+      const match = disposition?.match(/filename="(.+)"/);
+      const filename = match?.[1] ?? "rofiant-export.json";
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   // Sessions
   const [signingOutOthers, setSigningOutOthers] = useState(false);
   const [signedOutOthers, setSignedOutOthers] = useState(false);
@@ -173,9 +227,11 @@ export function SettingsClient({
   const [notifs, setNotifs] = useState<Record<NotifKey, boolean>>(loadNotifs);
 
   // Preferences
-  const [language, setLanguage] = useState(() =>
-    typeof window !== "undefined" ? (localStorage.getItem("pref_language") ?? "en") : "en"
-  );
+  const [language, setLanguage] = useState(() => {
+    if (typeof window === "undefined") return "en";
+    const cookieMatch = document.cookie.match(/(?:^|; )NEXT_LOCALE=([^;]+)/);
+    return cookieMatch?.[1] ?? localStorage.getItem("pref_language") ?? "en";
+  });
   const [timezone, setTimezone] = useState(() =>
     typeof window !== "undefined"
       ? (localStorage.getItem("pref_timezone") ?? Intl.DateTimeFormat().resolvedOptions().timeZone)
@@ -194,6 +250,7 @@ export function SettingsClient({
   const [prefSaved, setPrefSaved] = useState(false);
 
   // Appearance
+  const { theme, setTheme } = useTheme();
   const [accent, setAccent] = useState<AccentColor>("yellow");
   const [density, setDensity] = useState<Density>("comfortable");
   const [appearanceSaved, setAppearanceSaved] = useState(false);
@@ -215,6 +272,20 @@ export function SettingsClient({
     supabase.auth.getSession().then(({ data }) => {
       setSessionInfo({ signedInAt: data.session?.user.last_sign_in_at ?? null });
     });
+  }, []);
+
+  // Load notification prefs from Supabase (falls back to localStorage/defaults)
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from("user_settings")
+      .select("notification_prefs")
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.notification_prefs) {
+          setNotifs((prev) => ({ ...prev, ...data.notification_prefs }));
+        }
+      });
   }, []);
 
   // Load appearance from localStorage on mount and apply
@@ -248,8 +319,8 @@ export function SettingsClient({
 
   async function handlePasswordChange(e: React.FormEvent) {
     e.preventDefault();
-    if (pw.length < 8) { setPwError("At least 8 characters required."); return; }
-    if (pw !== pwConfirm) { setPwError("Passwords do not match."); return; }
+    if (pw.length < 8) { setPwError(t("account.passwordTooShort")); return; }
+    if (pw !== pwConfirm) { setPwError(t("account.passwordMismatch")); return; }
     setPwStatus("saving");
     setPwError("");
     const supabase = createClient();
@@ -322,10 +393,17 @@ export function SettingsClient({
     setMfaEnrollId(null);
   }
 
-  function toggleNotif(key: NotifKey) {
+  async function toggleNotif(key: NotifKey) {
     const next = { ...notifs, [key]: !notifs[key] };
     setNotifs(next);
     localStorage.setItem("notif_settings", JSON.stringify(next));
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    await supabase
+      .from("user_settings")
+      .upsert({ user_id: user.id, notification_prefs: next, updated_at: new Date().toISOString() });
   }
 
   function savePreferences() {
@@ -335,6 +413,8 @@ export function SettingsClient({
     localStorage.setItem("pref_date_format", dateFormat);
     localStorage.setItem("pref_time_format", timeFormat);
     document.documentElement.lang = language;
+    document.cookie = `NEXT_LOCALE=${language}; path=/; max-age=31536000`;
+    router.refresh();
     setPrefSaved(true);
     setTimeout(() => setPrefSaved(false), 2000);
   }
@@ -361,13 +441,9 @@ export function SettingsClient({
   async function deleteAccount() {
     if (deleteConfirm !== email) return;
     setDeleting(true);
-    alert(`Account deletion requires admin verification. A deletion request has been sent to support for ${email}.`);
+    alert(t("danger.deleteAlert", { email }));
     setDeleting(false);
   }
-
-  const initials = displayName
-    ? displayName.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2)
-    : email[0]?.toUpperCase() ?? "?";
 
   const previewTime = new Date().toLocaleTimeString(language, {
     hour: "2-digit",
@@ -378,21 +454,21 @@ export function SettingsClient({
   });
 
   return (
-    <div className="flex gap-8">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
       {/* Tab sidebar */}
-      <nav className="w-40 flex-shrink-0 space-y-0.5">
-        {TABS.map(({ id, label, icon: Icon }) => (
+      <nav className="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible shrink-0 md:w-44 pb-1 md:pb-0">
+        {TABS.map(({ id, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors text-left ${
+            className={`shrink-0 md:w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-md transition-colors text-left ${
               tab === id
-                ? "bg-background-tertiary text-foreground"
-                : "text-foreground-secondary hover:text-foreground hover:bg-background-secondary"
+                ? "bg-background-tertiary text-foreground font-medium"
+                : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary/60"
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${id === "danger" && tab !== "danger" ? "text-red-400/60" : ""}`} />
-            <span className={id === "danger" ? "text-red-400/80" : ""}>{label}</span>
+            <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${id === "danger" && tab !== "danger" ? "text-red-400/60" : tab === id ? "text-accent-primary" : "text-foreground-muted"}`} />
+            <span className={id === "danger" ? "text-red-400/80" : ""}>{t(`tabs.${id}`)}</span>
           </button>
         ))}
       </nav>
@@ -402,31 +478,29 @@ export function SettingsClient({
 
         {/* ── ACCOUNT ── */}
         {tab === "account" && (
-          <div className="bg-card border border-border p-6 space-y-6">
-            <h2 className="text-sm font-medium text-foreground">Account</h2>
+          <DashboardCard className="space-y-6">
+            <h2 className="text-sm font-medium text-foreground">{t("account.heading")}</h2>
 
             {/* Avatar */}
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center">
-                <span className="text-lg font-medium text-accent-primary">{initials}</span>
-              </div>
-              <div>
-                <p className="text-sm text-foreground">{displayName || email}</p>
-                <p className="text-xs text-foreground-muted mt-0.5">{email}</p>
-              </div>
-            </div>
+            <ProfileAvatarUpload
+              userId={userId}
+              avatarUrl={avatarUrl}
+              hasCustomAvatar={hasCustomAvatar}
+              displayName={displayName}
+              email={email}
+            />
 
             {/* Display name */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Display name
+                {t("account.displayName")}
               </label>
               <div className="flex gap-2">
                 <input
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && saveDisplayName()}
-                  placeholder="Your name"
+                  placeholder={t("account.displayNamePlaceholder")}
                   className="flex-1 h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                 />
                 <button
@@ -434,7 +508,7 @@ export function SettingsClient({
                   disabled={displayNameSaving || !displayName.trim()}
                   className="h-9 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
-                  {displayNameSaved ? <><Check className="w-3.5 h-3.5" /> Saved</> : displayNameSaving ? "Saving…" : "Save"}
+                  {displayNameSaved ? <><Check className="w-3.5 h-3.5" /> {t("account.saved")}</> : displayNameSaving ? t("account.saving") : t("account.save")}
                 </button>
               </div>
             </div>
@@ -442,24 +516,24 @@ export function SettingsClient({
             {/* Bio */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Bio
+                {t("account.bio")}
               </label>
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                placeholder="A short description about yourself"
+                placeholder={t("account.bioPlaceholder")}
                 maxLength={200}
                 rows={3}
                 className="w-full px-3 py-2 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary resize-none"
               />
               <div className="flex items-center justify-between mt-1.5">
-                <span className="text-xs text-foreground-muted">{bio.length}/200</span>
+                <span className="text-xs text-foreground-muted">{t("account.bioCount", { count: bio.length })}</span>
                 <button
                   onClick={saveBio}
                   disabled={bioSaving}
                   className="h-7 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1"
                 >
-                  {bioSaved ? <><Check className="w-3 h-3" /> Saved</> : bioSaving ? "Saving…" : "Save bio"}
+                  {bioSaved ? <><Check className="w-3 h-3" /> {t("account.saved")}</> : bioSaving ? t("account.saving") : t("account.saveBio")}
                 </button>
               </div>
             </div>
@@ -467,16 +541,16 @@ export function SettingsClient({
             {/* Email */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Email
+                {t("account.email")}
               </label>
               <p className="text-sm text-foreground">{email}</p>
-              <p className="text-xs text-foreground-muted mt-1">Contact support to change your email address.</p>
+              <p className="text-xs text-foreground-muted mt-1">{t("account.emailHint")}</p>
             </div>
 
             {/* User ID */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                User ID
+                {t("account.userId")}
               </label>
               <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary px-2 py-1 break-all">
                 {userId}
@@ -487,39 +561,39 @@ export function SettingsClient({
             <div className="pt-4 border-t border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground">Password</p>
-                  <p className="text-xs text-foreground-muted">Change your account password</p>
+                  <p className="text-sm text-foreground">{t("account.password")}</p>
+                  <p className="text-xs text-foreground-muted">{t("account.passwordHint")}</p>
                 </div>
                 {!showPwForm && (
                   <button
                     onClick={() => setShowPwForm(true)}
                     className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
                   >
-                    Change
+                    {t("account.change")}
                   </button>
                 )}
               </div>
               {showPwForm && (
                 <form onSubmit={handlePasswordChange} className="space-y-3 mt-4 pt-4 border-t border-border">
-                  <input
+                  <PasswordInput
                     autoFocus
-                    type="password"
                     value={pw}
                     onChange={(e) => setPw(e.target.value)}
-                    placeholder="New password"
+                    placeholder={t("account.newPassword")}
+                    autoComplete="new-password"
                     className="w-full h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                   />
-                  <input
-                    type="password"
+                  <PasswordInput
                     value={pwConfirm}
                     onChange={(e) => setPwConfirm(e.target.value)}
-                    placeholder="Confirm new password"
+                    placeholder={t("account.confirmPassword")}
+                    autoComplete="new-password"
                     className="w-full h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                   />
                   {pwError && <p className="text-xs text-red-400">{pwError}</p>}
                   {pwStatus === "done" && (
                     <p className="text-xs text-accent-success flex items-center gap-1">
-                      <Check className="w-3 h-3" /> Password updated.
+                      <Check className="w-3 h-3" /> {t("account.passwordUpdated")}
                     </p>
                   )}
                   <div className="flex gap-2">
@@ -528,7 +602,7 @@ export function SettingsClient({
                       disabled={pwStatus === "saving"}
                       className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                     >
-                      {pwStatus === "saving" ? "Saving…" : "Save"}
+                      {pwStatus === "saving" ? t("account.saving") : t("account.save")}
                     </button>
                     <button
                       type="button"
@@ -538,26 +612,26 @@ export function SettingsClient({
                       }}
                       className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                     >
-                      Cancel
+                      {t("account.cancel")}
                     </button>
                   </div>
                 </form>
               )}
             </div>
-          </div>
+          </DashboardCard>
         )}
 
         {/* ── SECURITY ── */}
         {tab === "security" && (
           <div className="space-y-4">
             {/* 2FA */}
-            <div className="bg-card border border-border p-6">
+            <DashboardCard>
               <div className="flex items-center gap-3 mb-5">
                 <Key className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">Two-factor authentication</h2>
+                <h2 className="text-sm font-medium text-foreground">{t("security.twoFactor")}</h2>
                 {mfaEnrolled && (
                   <span className="ml-auto text-xs text-accent-success flex items-center gap-1">
-                    <Check className="w-3 h-3" /> Active
+                    <Check className="w-3 h-3" /> {t("security.active")}
                   </span>
                 )}
               </div>
@@ -565,19 +639,19 @@ export function SettingsClient({
               {mfaEnrolled ? (
                 <div className="space-y-4">
                   <p className="text-sm text-foreground-secondary">
-                    Your account is protected with an authenticator app (TOTP).
+                    {t("security.totpProtected")}
                   </p>
                   <button
                     onClick={disableMfa}
                     className="h-8 px-3 text-xs font-medium border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
                   >
-                    Disable 2FA
+                    {t("security.disable2fa")}
                   </button>
                 </div>
               ) : mfaStep === "verifying" ? (
                 <div className="space-y-4">
                   <p className="text-xs text-foreground-muted">
-                    Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.)
+                    {t("security.scanQr")}
                   </p>
                   {mfaQR && (
                     <div className="w-40 h-40 bg-white p-2 inline-block">
@@ -586,7 +660,7 @@ export function SettingsClient({
                   )}
                   {mfaSecret && (
                     <div>
-                      <p className="text-xs text-foreground-muted mb-1">Or enter the key manually:</p>
+                      <p className="text-xs text-foreground-muted mb-1">{t("security.manualKey")}</p>
                       <code className="text-xs font-mono bg-background-tertiary px-2 py-1 text-foreground-secondary break-all block">
                         {mfaSecret}
                       </code>
@@ -594,7 +668,7 @@ export function SettingsClient({
                   )}
                   <form onSubmit={verifyMfa} className="space-y-3">
                     <div>
-                      <label className="block text-xs text-foreground-muted mb-1">Enter the 6-digit code from your app</label>
+                      <label className="block text-xs text-foreground-muted mb-1">{t("security.enterCode")}</label>
                       <input
                         autoFocus
                         value={mfaCode}
@@ -611,26 +685,26 @@ export function SettingsClient({
                         disabled={mfaCode.length !== 6}
                         className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                       >
-                        Verify &amp; enable
+                        {t("security.verifyAndEnable")}
                       </button>
                       <button
                         type="button"
                         onClick={cancelMfaEnroll}
                         className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                       >
-                        Cancel
+                        {t("security.cancel")}
                       </button>
                     </div>
                   </form>
                 </div>
               ) : mfaStep === "done" ? (
                 <p className="text-sm text-accent-success flex items-center gap-1.5">
-                  <Check className="w-4 h-4" /> 2FA enabled successfully.
+                  <Check className="w-4 h-4" /> {t("security.twoFaEnabled")}
                 </p>
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-foreground-secondary">
-                    Add an extra layer of security using a TOTP authenticator app. Available on all plans.
+                    {t("security.twoFaDesc")}
                   </p>
                   {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
                   <button
@@ -638,32 +712,32 @@ export function SettingsClient({
                     disabled={mfaStep === "starting"}
                     className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
                   >
-                    {mfaStep === "starting" ? "Loading…" : "Set up 2FA"}
+                    {mfaStep === "starting" ? t("security.loading") : t("security.setup2fa")}
                   </button>
                 </div>
               )}
-            </div>
+            </DashboardCard>
 
             {/* Sessions */}
-            <div className="bg-card border border-border p-6">
+            <DashboardCard>
               <div className="flex items-center gap-3 mb-5">
                 <LogOut className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">Sessions</h2>
+                <h2 className="text-sm font-medium text-foreground">{t("security.sessions")}</h2>
               </div>
 
               {/* Current session info */}
               <div className="mb-5 p-4 bg-background-secondary border border-border">
                 <div className="flex items-center gap-2 mb-3">
                   <Monitor className="w-3.5 h-3.5 text-foreground-muted" />
-                  <span className="text-xs font-medium text-foreground">Current session</span>
+                  <span className="text-xs font-medium text-foreground">{t("security.currentSession")}</span>
                   <span className="ml-auto text-xs text-accent-success flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-success inline-block" />
-                    Active
+                    {t("security.active")}
                   </span>
                 </div>
                 <div className="space-y-1 text-xs text-foreground-muted">
                   <div className="flex justify-between">
-                    <span>Signed in</span>
+                    <span>{t("security.signedIn")}</span>
                     <span className="text-foreground-secondary">
                       {sessionInfo.signedInAt
                         ? new Date(sessionInfo.signedInAt).toLocaleString()
@@ -671,18 +745,18 @@ export function SettingsClient({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Account</span>
+                    <span>{t("security.account")}</span>
                     <span className="text-foreground-secondary">{email}</span>
                   </div>
                 </div>
               </div>
 
               <p className="text-sm text-foreground-secondary mb-4">
-                Sign out all other active sessions across your other devices.
+                {t("security.signOutOthersDesc")}
               </p>
               {signedOutOthers && (
                 <p className="text-xs text-accent-success flex items-center gap-1 mb-3">
-                  <Check className="w-3 h-3" /> All other sessions signed out.
+                  <Check className="w-3 h-3" /> {t("security.allOthersSignedOut")}
                 </p>
               )}
               <button
@@ -690,73 +764,86 @@ export function SettingsClient({
                 disabled={signingOutOthers}
                 className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
               >
-                {signingOutOthers ? "Signing out…" : "Sign out other sessions"}
+                {signingOutOthers ? t("security.signingOut") : t("security.signOutOthers")}
               </button>
-            </div>
+            </DashboardCard>
+
+            {/* Audit log */}
+            <DashboardCard>
+              <div className="flex items-center gap-3 mb-4">
+                <ShieldCheck className="w-4 h-4 text-foreground-muted" />
+                <h2 className="text-sm font-medium text-foreground">{t("security.auditLog.title")}</h2>
+              </div>
+              <p className="text-sm text-foreground-secondary mb-4">
+                {t("security.auditLog.desc")}
+              </p>
+              <Link
+                href="/dashboard/audit-log"
+                className="inline-flex h-8 items-center px-3 text-xs font-medium border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
+              >
+                {t("security.auditLog.view")}
+              </Link>
+            </DashboardCard>
           </div>
         )}
 
         {/* ── NOTIFICATIONS ── */}
         {tab === "notifications" && (
-          <div className="bg-card border border-border p-6">
+          <DashboardCard>
             <div className="flex items-center gap-3 mb-6">
               <Bell className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">Notifications</h2>
+              <h2 className="text-sm font-medium text-foreground">{t("notifications.heading")}</h2>
             </div>
             <div className="space-y-0">
               {NOTIF_KEYS.map((key) => {
-                const { label, desc } = NOTIF_LABELS[key];
+                const msgKey = NOTIF_MSG_KEY[key];
                 return (
                   <div
                     key={key}
                     className="flex items-center justify-between py-3.5 border-b border-border last:border-0"
                   >
                     <div>
-                      <p className="text-sm text-foreground">{label}</p>
-                      <p className="text-xs text-foreground-muted">{desc}</p>
+                      <p className="text-sm text-foreground">{t(`notifications.${msgKey}.label`)}</p>
+                      <p className="text-xs text-foreground-muted">{t(`notifications.${msgKey}.desc`)}</p>
                     </div>
                     <Toggle on={notifs[key]} onClick={() => toggleNotif(key)} />
                   </div>
                 );
               })}
             </div>
-          </div>
+          </DashboardCard>
         )}
 
         {/* ── PREFERENCES ── */}
         {tab === "preferences" && (
-          <div className="bg-card border border-border p-6 space-y-6">
+          <DashboardCard className="space-y-6">
             <div className="flex items-center gap-3">
               <Globe className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">Preferences</h2>
+              <h2 className="text-sm font-medium text-foreground">{t("preferences.heading")}</h2>
             </div>
 
             {/* Language */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Language
+                {t("preferences.language")}
               </label>
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
               >
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="ja">Japanese</option>
-                <option value="zh">Chinese (Simplified)</option>
-                <option value="pt">Portuguese</option>
-                <option value="ar">Arabic</option>
-                <option value="ko">Korean</option>
+                {routing.locales.map((l) => (
+                  <option key={l} value={l}>
+                    {LOCALE_LABELS[l]}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Timezone */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Timezone
+                {t("preferences.timezone")}
               </label>
               <select
                 value={timezone}
@@ -768,7 +855,7 @@ export function SettingsClient({
                 ))}
               </select>
               <p className="text-xs text-foreground-muted mt-2">
-                Current time:{" "}
+                {t("preferences.currentTime")}{" "}
                 <span className="text-foreground font-mono">{previewTime}</span>
               </p>
             </div>
@@ -776,7 +863,7 @@ export function SettingsClient({
             {/* Date format */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Date format
+                {t("preferences.dateFormat")}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {DATE_FORMATS.map((fmt) => (
@@ -799,7 +886,7 @@ export function SettingsClient({
             {/* Time format */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Time format
+                {t("preferences.timeFormat")}
               </label>
               <div className="flex gap-2">
                 {(["12h", "24h"] as const).map((fmt) => (
@@ -812,7 +899,7 @@ export function SettingsClient({
                         : "border-border text-foreground-secondary hover:text-foreground hover:border-border-light"
                     }`}
                   >
-                    {fmt === "12h" ? "12-hour (2:30 PM)" : "24-hour (14:30)"}
+                    {fmt === "12h" ? t("preferences.time12h") : t("preferences.time24h")}
                   </button>
                 ))}
               </div>
@@ -821,57 +908,80 @@ export function SettingsClient({
             {/* Data region */}
             <div className="pt-4 border-t border-border">
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                Data region
+                {t("preferences.dataRegion")}
               </label>
               <div className="flex items-center gap-2 mb-1">
                 <Globe className="w-3.5 h-3.5 text-foreground-muted" />
-                <span className="text-xs text-foreground-muted">Controls where your data is stored and processed.</span>
+                <span className="text-xs text-foreground-muted">{t("preferences.dataRegionDesc")}</span>
               </div>
               <select
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary mt-2"
               >
-                <option>US East</option>
-                <option>US West</option>
-                <option>EU West</option>
-                <option>EU Central</option>
-                <option>Asia Pacific</option>
+                <option value="US East">{t("preferences.regions.usEast")}</option>
+                <option value="US West">{t("preferences.regions.usWest")}</option>
+                <option value="EU West">{t("preferences.regions.euWest")}</option>
+                <option value="EU Central">{t("preferences.regions.euCentral")}</option>
+                <option value="Asia Pacific">{t("preferences.regions.asiaPacific")}</option>
               </select>
             </div>
 
             <div className="pt-2">
-              <button
-                onClick={savePreferences}
-                className="h-8 px-4 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors flex items-center gap-1.5"
-              >
-                {prefSaved ? <><Check className="w-3.5 h-3.5" /> Saved</> : "Save preferences"}
-              </button>
+              <DashboardPrimaryButton onClick={savePreferences}>
+                {prefSaved ? <><Check className="w-3.5 h-3.5" /> {t("preferences.saved")}</> : t("preferences.savePreferences")}
+              </DashboardPrimaryButton>
             </div>
-          </div>
+          </DashboardCard>
         )}
 
         {/* ── APPEARANCE ── */}
         {tab === "appearance" && (
-          <div className="bg-card border border-border p-6 space-y-6">
+          <DashboardCard className="space-y-6">
             <div className="flex items-center gap-3">
               <Palette className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">Appearance</h2>
+              <h2 className="text-sm font-medium text-foreground">{t("appearance.heading")}</h2>
+            </div>
+
+            {/* Theme */}
+            <div>
+              <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
+                {t("appearance.theme")}
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {THEMES.map(({ id, icon: Icon }) => (
+                  <button
+                    key={id}
+                    onClick={() => setTheme(id)}
+                    className={`flex flex-col items-center gap-2 px-4 py-3 border text-center transition-colors ${
+                      theme === id
+                        ? "border-accent-primary/40 bg-accent-primary/5"
+                        : "border-border hover:border-border-light"
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${theme === id ? "text-accent-primary" : "text-foreground-muted"}`} />
+                    <div>
+                      <p className="text-sm text-foreground">{t(`appearance.themes.${id}.label`)}</p>
+                      <p className="text-xs text-foreground-muted">{t(`appearance.themes.${id}.desc`)}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Accent color */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
-                Accent color
+                {t("appearance.accentColor")}
               </label>
               <div className="flex gap-3">
                 {ACCENT_COLORS.map((c) => (
                   <button
                     key={c.id}
                     onClick={() => setAccent(c.id)}
-                    title={c.label}
-                    className={`w-9 h-9 border-2 transition-all flex items-center justify-center ${
-                      accent === c.id ? "border-foreground scale-110" : "border-transparent hover:border-border-light"
+                    title={t(`appearance.accentNames.${c.id}`)}
+                    className={`w-9 h-9 rounded-md border-2 transition-colors flex items-center justify-center ${
+                      accent === c.id ? "border-foreground" : "border-transparent hover:border-border-light"
                     }`}
                     style={{ backgroundColor: `${c.value}22`, borderColor: accent === c.id ? c.value : undefined }}
                   >
@@ -883,14 +993,14 @@ export function SettingsClient({
                 ))}
               </div>
               <p className="text-xs text-foreground-muted mt-2">
-                Selected: <span className="text-foreground">{ACCENT_COLORS.find((c) => c.id === accent)?.label}</span>
+                {t("appearance.selected")} <span className="text-foreground">{t(`appearance.accentNames.${accent}`)}</span>
               </p>
             </div>
 
             {/* UI Density */}
             <div>
               <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
-                UI density
+                {t("appearance.uiDensity")}
               </label>
               <div className="space-y-2">
                 {DENSITIES.map((d) => (
@@ -904,8 +1014,8 @@ export function SettingsClient({
                     }`}
                   >
                     <div>
-                      <p className="text-sm text-foreground">{d.label}</p>
-                      <p className="text-xs text-foreground-muted">{d.desc}</p>
+                      <p className="text-sm text-foreground">{t(`appearance.densities.${d.id}.label`)}</p>
+                      <p className="text-xs text-foreground-muted">{t(`appearance.densities.${d.id}.desc`)}</p>
                     </div>
                     {density === d.id && <Check className="w-3.5 h-3.5 text-accent-primary" />}
                   </button>
@@ -914,51 +1024,47 @@ export function SettingsClient({
             </div>
 
             <div className="pt-2">
-              <button
-                onClick={saveAppearance}
-                className="h-8 px-4 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors flex items-center gap-1.5"
-              >
-                {appearanceSaved ? <><Check className="w-3.5 h-3.5" /> Applied</> : "Apply"}
-              </button>
+              <DashboardPrimaryButton onClick={saveAppearance}>
+                {appearanceSaved ? <><Check className="w-3.5 h-3.5" /> {t("appearance.applied")}</> : t("appearance.apply")}
+              </DashboardPrimaryButton>
             </div>
-          </div>
+          </DashboardCard>
         )}
 
         {/* ── DANGER ZONE ── */}
         {tab === "danger" && (
           <div className="space-y-4">
             {/* Export */}
-            <div className="bg-card border border-border p-6">
+            <DashboardCard>
               <div className="flex items-center gap-3 mb-4">
                 <Download className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">Export data</h2>
+                <h2 className="text-sm font-medium text-foreground">{t("danger.exportData")}</h2>
               </div>
               <p className="text-sm text-foreground-secondary mb-4">
-                Download all your data including conversations, documents, agents, and account settings.
+                {t("danger.exportDesc")}
               </p>
               <button
-                onClick={() =>
-                  alert(`A data export will be prepared and emailed to ${email} within 24 hours.`)
-                }
-                className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
+                onClick={handleExport}
+                disabled={exportLoading}
+                className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors disabled:opacity-50 disabled:pointer-events-none"
               >
-                Request export
+                {exportLoading ? t("danger.exporting") : t("danger.requestExport")}
               </button>
-            </div>
+            </DashboardCard>
 
             {/* Delete */}
-            <div className="bg-card border border-red-500/20 p-6">
+            <DashboardCard className="border-red-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <Trash2 className="w-4 h-4 text-red-400" />
-                <h2 className="text-sm font-medium text-red-400">Delete account</h2>
+                <h2 className="text-sm font-medium text-red-400">{t("danger.deleteAccount")}</h2>
               </div>
               <p className="text-sm text-foreground-secondary mb-5">
-                Permanently delete your account and all associated data. This action cannot be undone.
+                {t("danger.deleteDesc")}
               </p>
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs text-foreground-muted mb-1.5">
-                    Type <span className="text-foreground font-medium">{email}</span> to confirm
+                    {t("danger.typeToConfirm", { email })}
                   </label>
                   <input
                     value={deleteConfirm}
@@ -972,10 +1078,10 @@ export function SettingsClient({
                   disabled={deleteConfirm !== email || deleting}
                   className="h-8 px-3 text-xs font-medium bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
-                  {deleting ? "Deleting…" : "Delete my account"}
+                  {deleting ? t("danger.deleting") : t("danger.deleteMyAccount")}
                 </button>
               </div>
-            </div>
+            </DashboardCard>
           </div>
         )}
       </div>

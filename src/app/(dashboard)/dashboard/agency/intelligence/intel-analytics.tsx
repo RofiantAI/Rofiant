@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { DashboardCard } from "@/components/dashboard/ui/page-shell";
 import {
   BarChart,
   Bar,
@@ -65,16 +67,18 @@ function buildTopSources(events: IntelEvent[]) {
 }
 
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
+  const t = useTranslations("dashboard.agency.intelligence.analytics");
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-background border border-border px-3 py-2 text-xs text-foreground">
-      <p className="text-foreground-muted mb-0.5">{label}</p>
-      <p className="font-medium">{payload[0].value} events</p>
+    <div className="rounded-lg bg-zinc-900 border border-zinc-700/60 px-3 py-2 text-xs text-zinc-100 shadow-lg shadow-black/30">
+      <p className="text-zinc-400 mb-0.5">{label}</p>
+      <p className="font-medium text-blue-400">{t("tooltipEvents", { count: payload[0].value })}</p>
     </div>
   );
 };
 
 export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
+  const t = useTranslations("dashboard.agency.intelligence.analytics");
   const timeSeries = buildTimeSeries(events);
   const severityData = buildSeverityBreakdown(events);
   const sourceData = buildTopSources(events);
@@ -82,12 +86,9 @@ export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
   if (events.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-3 gap-4 mb-6">
-      {/* Events over 24h */}
-      <div className="col-span-2 border border-border bg-card p-4">
-        <p className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted mb-4">
-          Events — last 24h
-        </p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <DashboardCard className="lg:col-span-2">
+        <p className="text-sm font-medium text-foreground mb-4">{t("eventsLast24h")}</p>
         <ResponsiveContainer width="100%" height={120}>
           <LineChart data={timeSeries} margin={{ top: 2, right: 4, left: -28, bottom: 0 }}>
             <XAxis
@@ -114,20 +115,17 @@ export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
             />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </DashboardCard>
 
-      {/* Right column: severity + sources */}
       <div className="flex flex-col gap-4">
-        {/* Severity breakdown */}
-        <div className="border border-border bg-card p-4 flex-1">
-          <p className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted mb-3">
-            By severity
-          </p>
+        <DashboardCard className="flex-1">
+          <p className="text-sm font-medium text-foreground mb-3">{t("bySeverity")}</p>
           <ResponsiveContainer width="100%" height={80}>
             <BarChart data={severityData} margin={{ top: 2, right: 4, left: -28, bottom: 0 }}>
               <XAxis
                 dataKey="severity"
-                tick={{ fontSize: 9, fill: "#6b7280", textTransform: "capitalize" }}
+                tick={{ fontSize: 9, fill: "#6b7280" }}
+                tickFormatter={(value: string) => value.charAt(0).toUpperCase() + value.slice(1)}
                 tickLine={false}
                 axisLine={false}
               />
@@ -137,7 +135,7 @@ export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
                 axisLine={false}
                 allowDecimals={false}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.06)" }} />
               <Bar dataKey="count" radius={[2, 2, 0, 0]}>
                 {severityData.map((entry) => (
                   <Cell key={entry.severity} fill={SEVERITY_COLORS[entry.severity]} />
@@ -145,14 +143,11 @@ export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </DashboardCard>
 
-        {/* Top sources */}
         {sourceData.length > 0 && (
-          <div className="border border-border bg-card p-4 flex-1">
-            <p className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted mb-3">
-              Top sources
-            </p>
+          <DashboardCard className="flex-1">
+            <p className="text-sm font-medium text-foreground mb-3">{t("topSources")}</p>
             <div className="space-y-2">
               {sourceData.map(({ source, count }) => {
                 const max = sourceData[0].count;
@@ -173,7 +168,7 @@ export function IntelAnalytics({ events }: { events: IntelEvent[] }) {
                 );
               })}
             </div>
-          </div>
+          </DashboardCard>
         )}
       </div>
     </div>

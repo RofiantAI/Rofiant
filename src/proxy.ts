@@ -1,5 +1,35 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
+
+const intlMiddleware = createIntlMiddleware(routing);
+
+// Top-level segments that live under (app)/[locale] — used to decide whether
+// a given pathname should go through locale routing.
+const PUBLIC_APP_SEGMENTS = [
+  "",
+  "auth",
+  "company",
+  "legal",
+  "platform",
+  "pricing",
+  "resources",
+  "solutions",
+  "services",
+  "_preview",
+];
+
+function stripLocalePrefix(pathname: string) {
+  const localePattern = routing.locales.join("|");
+  return pathname.replace(new RegExp(`^/(${localePattern})(?=/|$)`), "") || "/";
+}
+
+function isPublicAppPath(pathname: string) {
+  const stripped = stripLocalePrefix(pathname);
+  const seg = stripped.split("/").filter(Boolean)[0] ?? "";
+  return PUBLIC_APP_SEGMENTS.includes(seg);
+}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -43,6 +73,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
+  // Locale routing for public marketing/legal pages only. /dashboard, /chat,
+  // and /api never match isPublicAppPath, so they fall through unaffected.
+  if (isPublicAppPath(pathname) && !pathname.startsWith("/api")) {
+    const intlResponse = intlMiddleware(request);
+    if (intlResponse) return intlResponse;
+  }
+
   const response = NextResponse.next({ request: { headers: request.headers } });
 
   const supabase = createServerClient(
@@ -70,7 +107,9 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/dashboard") || pathname.startsWith("/chat");
 
   if (!user && isProtected) {
-    const loginUrl = new URL("/auth/login", request.url);
+    // /auth/login now lives under (app)/[locale]/auth/login; (dashboard)/(chat)
+    // carry no locale context, so default to routing.defaultLocale.
+    const loginUrl = new URL(`/${routing.defaultLocale}/auth/login`, request.url);
     loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }

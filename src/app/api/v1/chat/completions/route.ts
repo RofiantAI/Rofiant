@@ -1,7 +1,10 @@
 import { createGroq } from "@ai-sdk/groq";
 import { generateText, streamText } from "ai";
 import { validateApiKey, apiError } from "@/lib/api-auth";
+import { apiRatelimit, enforceRatelimit } from "@/lib/ratelimit";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { randomUUID } from "crypto";
+import { canAccessTool } from "@/lib/service-plan-access";
 
 const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -24,8 +27,12 @@ export async function POST(req: Request) {
   const apiKeyUser = await validateApiKey(req.headers.get("authorization"));
   if (!apiKeyUser) return apiError("Invalid or missing API key", 401);
 
-  const isPaid = apiKeyUser.plan === "pro" || apiKeyUser.plan === "team";
-  if (!isPaid) return apiError("API access requires a Pro or Team plan", 403);
+  if (!canAccessTool(apiKeyUser.plan, "apiKeys")) {
+    return apiError("API access requires a Pro, Team, Agency, or Enterprise plan", 403);
+  }
+
+  const limited = await enforceRatelimit(apiRatelimit, apiKeyUser.keyId);
+  if (limited) return limited;
 
   let body: {
     model?: string;
@@ -68,7 +75,6 @@ export async function POST(req: Request) {
       system: systemPrompt,
       messages: chatMessages,
       temperature,
-      maxTokens: max_tokens,
     });
 
     const encoder = new TextEncoder();
@@ -95,6 +101,15 @@ export async function POST(req: Request) {
           });
           controller.enqueue(encoder.encode(`data: ${done}\n\n`));
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+
+          const usage = await result.usage;
+          await createAdminClient().from("usage_events").insert({
+            user_id: apiKeyUser.userId,
+            source: "api",
+            model: resolvedModel,
+            input_tokens: usage?.inputTokens ?? 0,
+            output_tokens: usage?.outputTokens ?? 0,
+          });
         } finally {
           controller.close();
         }
@@ -117,7 +132,14 @@ export async function POST(req: Request) {
     system: systemPrompt,
     messages: chatMessages,
     temperature,
-    maxTokens: max_tokens,
+  });
+
+  await createAdminClient().from("usage_events").insert({
+    user_id: apiKeyUser.userId,
+    source: "api",
+    model: resolvedModel,
+    input_tokens: usage?.inputTokens ?? 0,
+    output_tokens: usage?.outputTokens ?? 0,
   });
 
   return Response.json({

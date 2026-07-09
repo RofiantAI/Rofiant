@@ -1,10 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { X, Cpu, MessageSquare, Layout, Bell, Check, Lock, Database, Download, Trash2, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import {
+  X,
+  Cpu,
+  MessageSquare,
+  Layout,
+  Bell,
+  Check,
+  Lock,
+  Database,
+  Download,
+  Trash2,
+  AlertTriangle,
+  ChevronDown,
+  Sparkles,
+} from "lucide-react";
 import { useChatSettings } from "@/contexts/chat-settings-context";
 import { FREE_MODELS, PRO_MODELS } from "@/lib/chat-settings";
 import type { ChatSettings } from "@/lib/chat-settings";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const CONTEXT_OPTIONS = [
   { value: 5, label: "5 messages" },
@@ -22,21 +38,27 @@ const SECTIONS = [
   { id: "notifications", label: "Notifications", icon: Bell },
 ];
 
-function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className={`relative w-10 h-5 border transition-colors shrink-0 ${
+      className={`relative w-10 h-5 rounded-full border transition-colors shrink-0 ${
         checked
           ? "bg-accent-primary/20 border-accent-primary/40"
           : "bg-background-tertiary border-border"
       }`}
     >
       <span
-        className={`absolute top-0.5 w-3.5 h-3.5 transition-all ${
+        className={`absolute top-0.5 w-3.5 h-3.5 rounded-full transition-all ${
           checked ? "left-5 bg-accent-primary" : "left-0.5 bg-foreground-muted"
         }`}
       />
@@ -44,15 +66,130 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
   );
 }
 
-function Row({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
+function Row({
+  label,
+  desc,
+  children,
+}: {
+  label: string;
+  desc?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex items-center justify-between gap-6 py-4 border-b border-border last:border-0">
+    <div className="flex items-center justify-between gap-6 px-4 py-3.5">
       <div className="min-w-0">
         <p className="text-sm text-foreground">{label}</p>
-        {desc && <p className="text-xs text-foreground-muted mt-0.5">{desc}</p>}
+        {desc && (
+          <p className="text-xs text-foreground-muted mt-0.5 leading-relaxed">
+            {desc}
+          </p>
+        )}
       </div>
       <div className="shrink-0">{children}</div>
     </div>
+  );
+}
+
+function SettingsList({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-lg border border-border bg-card/50 divide-y divide-border overflow-hidden">
+      {children}
+    </div>
+  );
+}
+
+function SegmentedControl<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="inline-flex rounded-lg border border-border bg-background-tertiary p-0.5">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={`px-3 h-7 text-xs rounded-md transition-colors ${
+            value === o.value
+              ? "bg-background text-foreground shadow-sm"
+              : "text-foreground-secondary hover:text-foreground"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SelectField({
+  value,
+  onChange,
+  children,
+  className = "",
+}: {
+  value: string | number;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative ${className}`}>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-8 pl-3 pr-8 rounded-md bg-background-tertiary border border-border text-sm text-foreground focus:outline-none focus:border-border-light appearance-none cursor-pointer"
+      >
+        {children}
+      </select>
+      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground-muted pointer-events-none" />
+    </div>
+  );
+}
+
+function ModelCard({
+  model,
+  selected,
+  locked,
+  onSelect,
+}: {
+  model: { id: string; name: string; desc: string };
+  selected: boolean;
+  locked: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      disabled={locked}
+      className={`flex items-center justify-between w-full px-4 py-3 rounded-lg border text-left transition-all ${
+        locked
+          ? "border-border opacity-50 cursor-not-allowed"
+          : selected
+            ? "border-accent-primary/40 bg-accent-primary/5 shadow-sm"
+            : "border-border hover:border-border-light hover:bg-background-tertiary/50"
+      }`}
+    >
+      <div className="min-w-0">
+        <p className="text-sm text-foreground font-medium">{model.name}</p>
+        <p className="text-xs text-foreground-muted mt-0.5 leading-snug">
+          {model.desc}
+        </p>
+      </div>
+      {locked ? (
+        <Lock className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+      ) : selected ? (
+        <div className="w-5 h-5 rounded-full bg-accent-primary/20 flex items-center justify-center shrink-0">
+          <Check className="w-3 h-3 text-accent-primary" />
+        </div>
+      ) : null}
+    </button>
   );
 }
 
@@ -61,8 +198,42 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
   const [draft, setDraft] = useState<ChatSettings>({ ...settings });
   const [active, setActive] = useState("model");
   const [saved, setSaved] = useState(false);
-  const [deleteStatus, setDeleteStatus] = useState<"idle" | "confirming" | "deleting" | "done">("idle");
-  const [exportStatus, setExportStatus] = useState<"idle" | "exporting" | "done">("idle");
+  const [deleteStatus, setDeleteStatus] = useState<
+    "idle" | "confirming" | "deleting" | "done"
+  >("idle");
+  const [exportStatus, setExportStatus] = useState<
+    "idle" | "exporting" | "done"
+  >("idle");
+  const [knowledgeBases, setKnowledgeBases] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    fetch("/api/knowledge-bases")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setKnowledgeBases(
+            data.map((kb: { id: string; name: string }) => ({
+              id: kb.id,
+              name: kb.name,
+            })),
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onCloseRef.current();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   function patch(p: Partial<ChatSettings>) {
     setDraft((prev) => ({ ...prev, ...p }));
@@ -83,281 +254,366 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
   }
 
   async function handleDeleteAll() {
-    if (deleteStatus !== "confirming") { setDeleteStatus("confirming"); return; }
+    if (deleteStatus !== "confirming") {
+      setDeleteStatus("confirming");
+      return;
+    }
     setDeleteStatus("deleting");
     await fetch("/api/conversations", { method: "DELETE" });
     setDeleteStatus("done");
-    setTimeout(() => { setDeleteStatus("idle"); onClose(); window.location.href = "/chat"; }, 1500);
+    setTimeout(() => {
+      setDeleteStatus("idle");
+      onClose();
+      window.location.href = "/chat";
+    }, 1500);
   }
 
   function handleSave() {
     save(draft);
     setSaved(true);
-    setTimeout(() => { setSaved(false); onClose(); }, 600);
+    setTimeout(() => {
+      setSaved(false);
+      onClose();
+    }, 600);
   }
 
+  const activeSection = SECTIONS.find((s) => s.id === active);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
-      <div className="relative bg-background border border-border w-full max-w-2xl shadow-2xl flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
-          <h2 className="text-sm font-medium text-foreground">Settings</h2>
-          <button onClick={onClose} className="flex items-center justify-center w-7 h-7 hover:bg-background-tertiary transition-colors">
-            <X className="w-4 h-4 text-foreground-muted" />
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="chat-settings-title"
+    >
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={() => onCloseRef.current()}
+      />
+      <div className="relative bg-background border border-border w-full max-w-2xl shadow-2xl flex flex-col rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-background-secondary/30">
+          <div>
+            <h2
+              id="chat-settings-title"
+              className="text-sm font-semibold text-foreground"
+            >
+              Chat settings
+            </h2>
+            <p className="text-xs text-foreground-muted mt-0.5">
+              Model, behavior, and data preferences
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onCloseRef.current()}
+            aria-label="Close settings"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-foreground-muted hover:text-foreground hover:bg-background-tertiary transition-colors"
+          >
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex h-80">
-          {/* Sidebar nav */}
-          <nav className="w-44 shrink-0 border-r border-border py-3">
+        <div className="flex h-[28rem] shrink-0 overflow-hidden">
+          <nav className="w-44 shrink-0 border-r border-border py-3 px-2 space-y-0.5 bg-background-secondary/20 overflow-y-auto">
             {SECTIONS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
+                type="button"
                 onClick={() => setActive(id)}
-                className={`flex items-center gap-3 w-full px-4 py-2.5 text-sm transition-colors ${
+                className={`flex items-center gap-2.5 w-full px-3 py-2.5 text-sm rounded-lg transition-colors ${
                   active === id
-                    ? "text-foreground bg-background-tertiary"
-                    : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary"
+                    ? "text-foreground bg-background-tertiary font-medium shadow-sm"
+                    : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary/60"
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon
+                  className={`w-4 h-4 shrink-0 ${active === id ? "text-accent-primary" : ""}`}
+                />
                 {label}
               </button>
             ))}
           </nav>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto px-6 py-4">
-
-            {/* MODEL */}
-            {active === "model" && (
-              <div>
-                <p className="text-xs text-foreground-muted uppercase tracking-wider mb-4">Model</p>
-                <div className="space-y-2">
-                  {FREE_MODELS.map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => patch({ model: m.id })}
-                      className={`flex items-center justify-between w-full px-4 py-3 border text-left transition-colors ${
-                        draft.model === m.id
-                          ? "border-foreground bg-background-tertiary"
-                          : "border-border hover:border-border-light"
-                      }`}
-                    >
-                      <div>
-                        <p className="text-sm text-foreground">{m.name}</p>
-                        <p className="text-xs text-foreground-muted mt-0.5">{m.desc}</p>
-                      </div>
-                      {draft.model === m.id && <Check className="w-4 h-4 text-foreground shrink-0" />}
-                    </button>
-                  ))}
-
-                  <p className="text-xs text-foreground-muted uppercase tracking-wider pt-3 pb-1">Pro models</p>
-                  {PRO_MODELS.map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => isPro && patch({ model: m.id })}
-                      disabled={!isPro}
-                      className={`flex items-center justify-between w-full px-4 py-3 border text-left transition-colors ${
-                        !isPro
-                          ? "border-border opacity-50 cursor-not-allowed"
-                          : draft.model === m.id
-                          ? "border-foreground bg-background-tertiary"
-                          : "border-border hover:border-border-light"
-                      }`}
-                    >
-                      <div>
-                        <p className="text-sm text-foreground">{m.name}</p>
-                        <p className="text-xs text-foreground-muted mt-0.5">{m.desc}</p>
-                      </div>
-                      {!isPro
-                        ? <Lock className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
-                        : draft.model === m.id
-                        ? <Check className="w-4 h-4 text-foreground shrink-0" />
-                        : null}
-                    </button>
-                  ))}
-
-                  {!isPro && (
-                    <a
-                      href="/pricing"
-                      className="block mt-3 text-center text-xs text-accent-primary hover:underline"
-                    >
-                      Upgrade to Pro to unlock more models →
-                    </a>
-                  )}
-                </div>
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 py-5">
+            {activeSection && (
+              <div className="flex items-center gap-2 mb-4">
+                <activeSection.icon className="w-4 h-4 text-accent-primary" />
+                <p className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
+                  {activeSection.label}
+                </p>
               </div>
             )}
 
-            {/* BEHAVIOR */}
-            {active === "behavior" && (
-              <div>
-                <p className="text-xs text-foreground-muted uppercase tracking-wider mb-4">Behavior</p>
+            {active === "model" && (
+              <div className="space-y-3">
+                {FREE_MODELS.map((m) => (
+                  <ModelCard
+                    key={m.id}
+                    model={m}
+                    selected={draft.model === m.id}
+                    locked={false}
+                    onSelect={() => patch({ model: m.id })}
+                  />
+                ))}
 
-                <div className="mb-5">
-                  <label className="block text-sm text-foreground mb-2">Custom instructions</label>
-                  <p className="text-xs text-foreground-muted mb-2">
-                    Added to every conversation as a system prompt. Use this to set your role, preferred formats, or standing context.
+                <div className="flex items-center gap-2 pt-2">
+                  <p className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
+                    Pro models
+                  </p>
+                  {!isPro && (
+                    <Badge variant="warning" className="rounded-md">
+                      Pro
+                    </Badge>
+                  )}
+                </div>
+                {PRO_MODELS.map((m) => (
+                  <ModelCard
+                    key={m.id}
+                    model={m}
+                    selected={draft.model === m.id}
+                    locked={!isPro}
+                    onSelect={() => isPro && patch({ model: m.id })}
+                  />
+                ))}
+
+                {!isPro && (
+                  <a
+                    href="/pricing"
+                    className="flex items-center justify-center gap-2 mt-2 px-4 py-2.5 rounded-lg border border-accent-primary/30 bg-accent-primary/5 text-xs text-accent-primary hover:bg-accent-primary/10 transition-colors"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Upgrade to unlock Pro models
+                  </a>
+                )}
+              </div>
+            )}
+
+            {active === "behavior" && (
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">
+                    Custom instructions
+                  </label>
+                  <p className="text-xs text-foreground-muted mb-2 leading-relaxed">
+                    Tone, format, or context the AI should always keep in mind.
                   </p>
                   <textarea
                     value={draft.customInstructions}
-                    onChange={(e) => patch({ customInstructions: e.target.value })}
-                    placeholder="e.g. You are assisting a contracting officer at a federal agency. Always cite sources. Use plain language."
+                    onChange={(e) =>
+                      patch({ customInstructions: e.target.value })
+                    }
+                    placeholder="e.g. Keep answers short. Use bullet points. I'm learning to code."
                     rows={5}
-                    className="w-full px-3 py-2 bg-background-tertiary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light transition-colors resize-none"
+                    className="w-full px-3 py-2.5 rounded-lg bg-background-tertiary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light transition-colors resize-none"
                   />
-                  <p className="text-xs text-foreground-muted mt-1 text-right">{draft.customInstructions.length} / 2000</p>
+                  <p className="text-xs text-foreground-muted mt-1.5 text-right tabular-nums">
+                    {draft.customInstructions.length} / 2000
+                  </p>
                 </div>
 
-                <Row label="Context limit" desc="Number of previous messages sent with each request">
-                  <select
-                    value={draft.contextLimit}
-                    onChange={(e) => patch({ contextLimit: Number(e.target.value) })}
-                    className="h-8 px-2 bg-background-tertiary border border-border text-sm text-foreground focus:outline-none appearance-none cursor-pointer"
+                <SettingsList>
+                  <Row
+                    label="Knowledge base"
+                    desc="Include saved notes and docs in responses"
                   >
-                    {CONTEXT_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                </Row>
+                    <SelectField
+                      value={draft.knowledgeBaseId}
+                      onChange={(v) => patch({ knowledgeBaseId: v })}
+                      className="max-w-[180px]"
+                    >
+                      <option value="">None</option>
+                      {knowledgeBases.map((kb) => (
+                        <option key={kb.id} value={kb.id}>
+                          {kb.name}
+                        </option>
+                      ))}
+                    </SelectField>
+                  </Row>
 
-                <Row label="Enter to send" desc="Press Enter to send. Shift+Enter for a new line.">
-                  <Toggle checked={draft.enterToSend} onChange={(v) => patch({ enterToSend: v })} />
-                </Row>
+                  <Row
+                    label="Context limit"
+                    desc="Previous messages sent with each request"
+                  >
+                    <SelectField
+                      value={draft.contextLimit}
+                      onChange={(v) => patch({ contextLimit: Number(v) })}
+                    >
+                      {CONTEXT_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </SelectField>
+                  </Row>
 
-                <Row label="Auto-generate titles" desc="Name conversations automatically from the first message">
-                  <Toggle checked={draft.autoTitle} onChange={(v) => patch({ autoTitle: v })} />
-                </Row>
+                  <Row
+                    label="Enter to send"
+                    desc="Shift+Enter adds a new line"
+                  >
+                    <Toggle
+                      checked={draft.enterToSend}
+                      onChange={(v) => patch({ enterToSend: v })}
+                    />
+                  </Row>
+
+                  <Row
+                    label="Auto-generate titles"
+                    desc="Name chats from the first message"
+                  >
+                    <Toggle
+                      checked={draft.autoTitle}
+                      onChange={(v) => patch({ autoTitle: v })}
+                    />
+                  </Row>
+                </SettingsList>
               </div>
             )}
 
-            {/* INTERFACE */}
             {active === "interface" && (
-              <div>
-                <p className="text-xs text-foreground-muted uppercase tracking-wider mb-4">Interface</p>
-
-                <Row label="Font size" desc="Size of text in the message thread">
-                  <div className="flex gap-1">
-                    {(["sm", "md", "lg"] as const).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => patch({ fontSize: s })}
-                        className={`w-9 h-8 text-xs border transition-colors ${
-                          draft.fontSize === s
-                            ? "border-foreground text-foreground bg-background-tertiary"
-                            : "border-border text-foreground-secondary hover:border-border-light"
-                        }`}
-                      >
-                        {s === "sm" ? "S" : s === "md" ? "M" : "L"}
-                      </button>
-                    ))}
-                  </div>
+              <SettingsList>
+                <Row label="Font size" desc="Text size in the message thread">
+                  <SegmentedControl
+                    value={draft.fontSize}
+                    options={[
+                      { value: "sm", label: "S" },
+                      { value: "md", label: "M" },
+                      { value: "lg", label: "L" },
+                    ]}
+                    onChange={(v) => patch({ fontSize: v })}
+                  />
                 </Row>
 
                 <Row label="Message density" desc="Spacing between messages">
-                  <div className="flex gap-1">
-                    {(["compact", "comfortable"] as const).map((d) => (
-                      <button
-                        key={d}
-                        onClick={() => patch({ density: d })}
-                        className={`px-3 h-8 text-xs border transition-colors ${
-                          draft.density === d
-                            ? "border-foreground text-foreground bg-background-tertiary"
-                            : "border-border text-foreground-secondary hover:border-border-light"
-                        }`}
-                      >
-                        {d.charAt(0).toUpperCase() + d.slice(1)}
-                      </button>
-                    ))}
-                  </div>
+                  <SegmentedControl
+                    value={draft.density}
+                    options={[
+                      { value: "compact", label: "Compact" },
+                      { value: "comfortable", label: "Comfortable" },
+                    ]}
+                    onChange={(v) => patch({ density: v })}
+                  />
                 </Row>
 
-                <Row label="Show timestamps" desc="Display time below each message">
-                  <Toggle checked={draft.showTimestamps} onChange={(v) => patch({ showTimestamps: v })} />
+                <Row
+                  label="Show timestamps"
+                  desc="Display time below each message"
+                >
+                  <Toggle
+                    checked={draft.showTimestamps}
+                    onChange={(v) => patch({ showTimestamps: v })}
+                  />
                 </Row>
-              </div>
+              </SettingsList>
             )}
 
-            {/* NOTIFICATIONS */}
             {active === "notifications" && (
-              <div>
-                <p className="text-xs text-foreground-muted uppercase tracking-wider mb-4">Notifications</p>
-                <Row label="Response sound" desc="Play a tone when a response finishes streaming">
-                  <Toggle checked={draft.responseSound} onChange={(v) => patch({ responseSound: v })} />
+              <SettingsList>
+                <Row
+                  label="Response sound"
+                  desc="Play a tone when a response finishes"
+                >
+                  <Toggle
+                    checked={draft.responseSound}
+                    onChange={(v) => patch({ responseSound: v })}
+                  />
                 </Row>
-              </div>
+              </SettingsList>
             )}
 
-            {/* DATA CONTROLS */}
             {active === "data" && (
-              <div className="space-y-5">
-                <p className="text-xs text-foreground-muted uppercase tracking-wider">Data controls</p>
-
-                {/* Export */}
-                <div className="border border-border p-4 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Download className="w-4 h-4 text-foreground-muted" />
-                    <p className="text-sm text-foreground font-medium">Export chats</p>
+              <div className="space-y-4">
+                <div className="rounded-lg border border-border bg-card/50 p-4 space-y-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-background-tertiary flex items-center justify-center">
+                      <Download className="w-4 h-4 text-foreground-muted" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">
+                        Export chats
+                      </p>
+                      <p className="text-xs text-foreground-muted mt-0.5">
+                        Download all conversations as JSON
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-xs text-foreground-muted">Download all your conversations as a JSON file.</p>
-                  <button
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={handleExport}
                     disabled={exportStatus === "exporting"}
-                    className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors flex items-center gap-1.5"
                   >
                     {exportStatus === "done" ? (
-                      <><Check className="w-3.5 h-3.5 text-accent-success" /> Downloaded</>
+                      <>
+                        <Check className="w-3.5 h-3.5 text-accent-success" />
+                        Downloaded
+                      </>
                     ) : exportStatus === "exporting" ? (
                       "Exporting…"
                     ) : (
-                      <><Download className="w-3.5 h-3.5" /> Export chats</>
+                      <>
+                        <Download className="w-3.5 h-3.5" />
+                        Export chats
+                      </>
                     )}
-                  </button>
+                  </Button>
                 </div>
 
-                {/* Delete all */}
-                <div className="border border-red-500/20 p-4 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Trash2 className="w-4 h-4 text-red-400" />
-                    <p className="text-sm text-red-400 font-medium">Delete all chats</p>
+                <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4 space-y-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                      <Trash2 className="w-4 h-4 text-red-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-red-400">
+                        Delete all chats
+                      </p>
+                      <p className="text-xs text-foreground-muted mt-0.5">
+                        Permanent — cannot be undone
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-xs text-foreground-muted">Permanently delete every conversation. This cannot be undone.</p>
                   {deleteStatus === "done" ? (
-                    <p className="text-xs text-accent-success flex items-center gap-1">
-                      <Check className="w-3 h-3" /> All chats deleted.
+                    <p className="text-xs text-accent-success flex items-center gap-1.5">
+                      <Check className="w-3.5 h-3.5" /> All chats deleted
                     </p>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {deleteStatus === "confirming" && (
-                        <div className="flex items-center gap-1.5 text-xs text-red-400">
-                          <AlertTriangle className="w-3.5 h-3.5" />
-                          Are you sure? Click again to confirm.
-                        </div>
+                        <p className="flex items-center gap-1.5 text-xs text-red-400 w-full">
+                          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                          Click again to confirm deletion
+                        </p>
                       )}
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={handleDeleteAll}
                         disabled={deleteStatus === "deleting"}
-                        className={`h-8 px-3 text-xs font-medium border transition-colors disabled:opacity-50 flex items-center gap-1.5 ${
+                        className={
                           deleteStatus === "confirming"
                             ? "border-red-500/60 bg-red-500/20 text-red-400 hover:bg-red-500/30"
                             : "border-red-500/30 text-red-400 hover:bg-red-500/10"
-                        }`}
+                        }
                       >
                         {deleteStatus === "deleting" ? (
                           "Deleting…"
                         ) : (
-                          <><Trash2 className="w-3.5 h-3.5" /> {deleteStatus === "confirming" ? "Yes, delete all" : "Delete all chats"}</>
+                          <>
+                            <Trash2 className="w-3.5 h-3.5" />
+                            {deleteStatus === "confirming"
+                              ? "Yes, delete all"
+                              : "Delete all chats"}
+                          </>
                         )}
-                      </button>
+                      </Button>
                       {deleteStatus === "confirming" && (
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => setDeleteStatus("idle")}
-                          className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                         >
                           Cancel
-                        </button>
+                        </Button>
                       )}
                     </div>
                   )}
@@ -367,20 +623,20 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-border shrink-0">
-          <button onClick={onClose} className="h-8 px-4 text-sm text-foreground-secondary border border-border hover:bg-background-tertiary transition-colors">
+        <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-border shrink-0 bg-background-secondary/30">
+          <Button variant="outline" size="sm" onClick={() => onCloseRef.current()}>
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
+            size="sm"
             onClick={handleSave}
-            className={`h-8 px-4 text-sm transition-colors flex items-center gap-2 ${
-              saved ? "bg-accent-success text-background" : "bg-foreground text-background hover:bg-foreground/90"
-            }`}
+            className={
+              saved ? "bg-accent-success hover:bg-accent-success/90" : ""
+            }
           >
             {saved && <Check className="w-3.5 h-3.5" />}
             {saved ? "Saved" : "Save changes"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

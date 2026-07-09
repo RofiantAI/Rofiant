@@ -1,6 +1,6 @@
 export function StatsSection() {
   const stats = [
-    { value: "99.9%", label: "Uptime SLA" },
+    { value: "24/7", label: "Uptime monitoring" },
     { value: "SOC 2", label: "In progress" },
     { value: "24/7", label: "Enterprise support" },
     { value: "AES-256", label: "Encryption standard" },
@@ -10,7 +10,7 @@ export function StatsSection() {
     <section className="py-12 relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">

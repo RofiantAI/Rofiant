@@ -1,0 +1,283 @@
+{
+  "productStatus": {
+    "beta": "Beta",
+    "voiceAi": "File upload and transcription are available. Real-time call integration is on the roadmap.",
+    "agents": "Workflow agents follow a 5-step pipeline: receive, plan, search, approval, and execute."
+  },
+  "agents": {
+    "title": "Agents",
+    "subtitle": "AI workflow assistants with approval gates and audit trails",
+    "newAgent": "New agent",
+    "customAgent": {
+      "heading": "Custom agent",
+      "namePlaceholder": "Agent name",
+      "descriptionPlaceholder": "Description (optional)",
+      "creating": "Creating…",
+      "create": "Create",
+      "cancel": "Cancel"
+    },
+    "templates": {
+      "heading": "Templates",
+      "federalHeading": "Federal mission agents",
+      "creating": "Creating…",
+      "documentReviewer": {
+        "name": "Document reviewer",
+        "description": "Review uploaded documents for compliance issues and key findings. Search documents, read content, and produce a structured report with citations."
+      },
+      "meetingSummarizer": {
+        "name": "Meeting summarizer",
+        "description": "Summarize meeting transcripts or notes. Search and read source documents, then extract decisions, action items, and owners."
+      },
+      "dataExtractor": {
+        "name": "Data extractor",
+        "description": "Pull structured fields from unstructured documents. Search relevant files, read content, and return labeled JSON-ready output."
+      }
+    },
+    "yourAgents": {
+      "heading": "Your agents",
+      "loading": "Loading…",
+      "empty": "No agents created yet. Choose a template above or build from scratch.",
+      "runCount": "{count} runs",
+      "pause": "Pause",
+      "activate": "Activate",
+      "statusActive": "active",
+      "statusPaused": "paused"
+    },
+    "run": {
+      "heading": "Run {name}",
+      "defaultTask": "Run this agent on its default workflow.",
+      "taskPlaceholder": "Describe the task for this agent…",
+      "submit": "Run agent",
+      "running": "Running…",
+      "close": "Close",
+      "error": "Agent run failed.",
+      "pipelineHeading": "Agent pipeline",
+      "phases": {
+        "receive": "Receive task",
+        "plan": "Plan steps",
+        "search": "Search data",
+        "approval": "Await approval",
+        "execute": "Execute"
+      },
+      "waitingApproval": "Waiting for approval",
+      "approved": "Approved — executed",
+      "denied": "Denied — action blocked",
+      "proposedActions": "Agent wants to execute:",
+      "approve": "Approve",
+      "deny": "Deny",
+      "executing": "Executing…"
+    }
+  },
+  "apiKeys": {
+    "title": "API Keys",
+    "subtitle": "Manage keys for programmatic access to Rofiant",
+    "upgrade": {
+      "heading": "API access requires a paid plan",
+      "description": "Upgrade to Pro or Team to create API keys and integrate Rofiant into your own applications.",
+      "cta": "View plans"
+    },
+    "createKey": "Create key",
+    "newKeyForm": {
+      "heading": "New API key",
+      "namePlaceholder": "Key name (e.g. Production)",
+      "creating": "Creating…",
+      "create": "Create",
+      "cancel": "Cancel"
+    },
+    "createdKey": {
+      "message": "Key created — copy it now. It won't be shown again.",
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "table": {
+      "name": "Name",
+      "keyPrefix": "Key prefix",
+      "created": "Created",
+      "loading": "Loading…",
+      "empty": "No API keys yet. Create one above.",
+      "noDate": "—"
+    },
+    "authentication": {
+      "heading": "Authentication",
+      "description": "Include your API key in the Authorization header:",
+      "viewApiReference": "View API reference"
+    },
+    "webhooks": {
+      "title": "Webhooks",
+      "subtitle": "Get notified when documents, agents, or voice jobs finish processing.",
+      "addWebhook": "Add webhook",
+      "form": {
+        "urlPlaceholder": "https://example.com/webhooks/rofiant",
+        "creating": "Creating…",
+        "create": "Create",
+        "cancel": "Cancel",
+        "error": "Failed to create webhook"
+      },
+      "created": {
+        "message": "Webhook created — copy the signing secret now. It won't be shown again.",
+        "copy": "Copy",
+        "copied": "Copied"
+      },
+      "table": {
+        "loading": "Loading…",
+        "empty": "No webhooks yet. Add one above."
+      }
+    }
+  },
+  "chatAi": {
+    "title": "Chat AI",
+    "subtitle": "Conversational AI trained on your documents",
+    "newChat": "New chat",
+    "knowledgeBases": {
+      "heading": "Knowledge bases",
+      "documentCount": "{count} documents",
+      "defaultName": "Default",
+      "statusActive": "Active"
+    },
+    "conversation": {
+      "heading": "New conversation",
+      "startTitle": "Start a conversation",
+      "startDescription": "Ask questions about your documents, policies, and data. Responses include source citations.",
+      "sampleQuestions": [
+        "What is our vacation policy?",
+        "How do I submit an expense report?",
+        "Summarize the quarterly report"
+      ]
+    },
+    "uploadCta": {
+      "heading": "No documents uploaded",
+      "description": "Upload PDFs, Word docs, or web pages to train your chat AI on your content.",
+      "cta": "Go to Documents"
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Upload and manage documents for AI search and analysis",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "errors": {
+      "unsupportedType": "Unsupported file type .{ext}. Accepted: {types}",
+      "notAuthenticated": "Not authenticated.",
+      "storageError": "Storage error: {message}",
+      "saveError": "Save error: {message}",
+      "unknownError": "Unknown error"
+    },
+    "dropzone": {
+      "heading": "Upload documents",
+      "description": "Drag and drop files or click to browse. Documents are indexed for search and used by Chat AI for grounded responses."
+    },
+    "allDocuments": {
+      "heading": "All documents",
+      "loading": "Loading…",
+      "empty": "No documents uploaded yet. Upload files to start searching and analyzing."
+    },
+    "search": {
+      "placeholder": "Search your documents…",
+      "button": "Search",
+      "searching": "Searching…",
+      "resultsHeading": "{count} matching documents"
+    },
+    "contradictionScan": {
+      "heading": "Cross-document check",
+      "description": "Find factual contradictions between RFPs, SOWs, mods, and proposals before award or sign-off. Each finding includes verbatim excerpts from both documents.",
+      "needMoreDocs": "Upload and index at least 2 documents to run a cross-check.",
+      "focusPlaceholder": "Optional focus — e.g. pricing, delivery dates, CLINs",
+      "run": "Check {count} docs",
+      "running": "Scanning…",
+      "riskLabel": "Risk: {risk}",
+      "findingCount": "{count} contradictions",
+      "export": "Export JSON",
+      "provenanceExport": "Provenance receipt",
+      "noContradictions": "No material contradictions found in the selected documents.",
+      "recommendation": "Recommendation",
+      "alignedHeading": "Confirmed alignments",
+      "errors": {
+        "failed": "Scan failed. Try again or select different documents."
+      }
+    }
+  },
+  "voiceAi": {
+    "title": "Voice AI",
+    "subtitle": "Transcription and summarization for meetings and calls",
+    "uploadAudio": "Upload audio",
+    "uploading": "Uploading…",
+    "errors": {
+      "notAuthenticated": "Not authenticated.",
+      "storageError": "Storage error: {message}",
+      "saveError": "Save error: {message}",
+      "unknownError": "Unknown error",
+      "processError": "Transcription failed."
+    },
+    "dropzone": {
+      "heading": "Upload audio or video",
+      "description": "Drag and drop MP3, WAV, MP4, or M4A files. Rofiant transcribes audio and generates summaries with action items.",
+      "sizeLimit": "Supports files up to 500MB"
+    },
+    "status": {
+      "processing": "Transcribing…",
+      "done": "Complete",
+      "failed": "Failed"
+    },
+    "retry": "Retry",
+    "summaryLabel": "Summary",
+    "transcriptLabel": "Transcript",
+    "recent": {
+      "heading": "Recent transcriptions",
+      "loading": "Loading…",
+      "empty": "No transcriptions yet. Upload your first audio file to get started."
+    }
+  },
+  "knowledgeBases": {
+    "title": "Knowledge Bases",
+    "subtitle": "Named collections of documents the AI uses as persistent context in chat.",
+    "usedCount": "({used}/{limit} used)",
+    "newKnowledgeBase": "New knowledge base",
+    "planLimitError": "Your plan allows up to {limit} knowledge base{plural}. Upgrade to create more.",
+    "viewPlans": "View plans →",
+    "createForm": {
+      "heading": "New knowledge base",
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g. FY2026 Policy Documents",
+      "descriptionLabel": "Description (optional)",
+      "descriptionPlaceholder": "What documents belong here?",
+      "create": "Create",
+      "cancel": "Cancel"
+    },
+    "loading": "Loading…",
+    "empty": {
+      "heading": "No knowledge bases yet",
+      "description": "Create one and add documents to give the AI persistent context across chats.",
+      "upgradeCta": "Upgrade your plan to create knowledge bases →",
+      "createCta": "Create your first knowledge base →"
+    },
+    "list": {
+      "docCount": "{count} doc{plural}",
+      "manage": "Manage"
+    },
+    "deleteConfirm": "Delete this knowledge base? This cannot be undone.",
+    "detail": {
+      "back": "Knowledge Bases",
+      "addDocument": "Add document",
+      "loading": "Loading…",
+      "notFound": "Knowledge base not found.",
+      "backLink": "← Back",
+      "addDocForm": {
+        "heading": "Add document to knowledge base",
+        "noDocsUploaded": "No documents uploaded yet.",
+        "uploadLink": "Upload a document →",
+        "allDocsAdded": "All your documents are already in this knowledge base.",
+        "adding": "Adding…",
+        "add": "Add"
+      },
+      "empty": {
+        "heading": "No documents yet",
+        "description": "Add documents from your library to include them as AI context.",
+        "cta": "Add your first document →"
+      },
+      "addedOn": "Added {date}",
+      "footerSummary": "{count} document{plural} · Last updated {date}",
+      "removeConfirm": "Remove this document from the knowledge base?",
+      "failedToAdd": "Failed to add"
+    }
+  }
+}

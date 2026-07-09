@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { getTranslations } from "next-intl/server";
 
 const codeLines = [
   {
@@ -35,25 +36,23 @@ const codeLines = [
   { indent: 1, text: "}'", color: "text-green-400" },
 ];
 
-export function DeveloperSection() {
+export async function DeveloperSection() {
+  const t = await getTranslations("home.developer");
   const tableHeaders = ["model", "latency", "tokens", "cost"];
   const tableRows = [
     ["groq-llama-3.3-70b", "120ms", "2,847", "$0.003"],
     ["groq-llama-3.1-8b", "45ms", "1,205", "$0.001"],
-    ["yolo-v8", "210ms", "4,100", "$0.005"],
   ];
 
   return (
     <section className="py-24 bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <Badge variant="info" dot className="mb-6">
-          DEVELOPER API
+          {t("badge")}
         </Badge>
         <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl leading-tight max-w-3xl">
-          Built for developers who ship fast.{" "}
-          <span className="text-foreground-muted">
-            Simple API. Powerful results.
-          </span>
+          {t("titlePrefix")}{" "}
+          <span className="text-foreground-muted">{t("titleMuted")}</span>
         </h2>
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -129,28 +128,27 @@ export function DeveloperSection() {
 
         <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h3 className="font-semibold text-foreground">Managed cloud</h3>
+            <h3 className="font-semibold text-foreground">
+              {t("features.cloud.title")}
+            </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Deploy on our secure, US-hosted infrastructure. No servers to
-              manage — just an API key and you're live.
+              {t("features.cloud.desc")}
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-foreground">
-              Multi-model support
+              {t("features.multiModel.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Use Groq for fast LLM inference and YOLO for computer vision.
-              Switch backends without changing your code.
+              {t("features.multiModel.desc")}
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-foreground">
-              Built-in observability
+              {t("features.observability.title")}
             </h3>
             <p className="mt-2 text-sm text-foreground-secondary">
-              Every API call is logged with latency, token usage, and cost.
-              Exportable for your own analytics.
+              {t("features.observability.desc")}
             </p>
           </div>
         </div>

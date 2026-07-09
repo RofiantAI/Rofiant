@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { creem, PLAN_PRODUCT_IDS } from "@/lib/creem";
+import { routing } from "@/i18n/routing";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
@@ -13,7 +14,7 @@ export async function GET(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.redirect(new URL(`/auth/login?next=/pricing`, req.url));
+    return NextResponse.redirect(new URL(`/${routing.defaultLocale}/auth/login?next=/pricing`, req.url));
   }
 
   const productId = PLAN_PRODUCT_IDS[plan];

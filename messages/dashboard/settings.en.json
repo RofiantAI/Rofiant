@@ -1,0 +1,236 @@
+{
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account, security, and preferences",
+    "tabs": {
+      "account": "Account",
+      "security": "Security",
+      "notifications": "Notifications",
+      "preferences": "Preferences",
+      "appearance": "Appearance",
+      "danger": "Danger zone"
+    },
+    "account": {
+      "heading": "Account",
+      "displayName": "Display name",
+      "displayNamePlaceholder": "Your name",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "bio": "Bio",
+      "bioPlaceholder": "A short description about yourself",
+      "bioCount": "{count}/200",
+      "saveBio": "Save bio",
+      "email": "Email",
+      "emailHint": "Contact support to change your email address.",
+      "userId": "User ID",
+      "password": "Password",
+      "passwordHint": "Change your account password",
+      "change": "Change",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "passwordUpdated": "Password updated.",
+      "passwordTooShort": "At least 8 characters required.",
+      "passwordMismatch": "Passwords do not match.",
+      "cancel": "Cancel",
+      "photoUpload": "Upload photo",
+      "photoRemove": "Remove photo",
+      "photoUploading": "Uploading…",
+      "photoHint": "JPG, PNG, WebP, or GIF. Max 5 MB.",
+      "photoInvalidType": "Use JPG, PNG, WebP, or GIF.",
+      "photoTooLarge": "Image must be 5 MB or smaller.",
+      "photoUploadError": "Upload failed: {message}"
+    },
+    "security": {
+      "twoFactor": "Two-factor authentication",
+      "active": "Active",
+      "totpProtected": "Your account is protected with an authenticator app (TOTP).",
+      "disable2fa": "Disable 2FA",
+      "scanQr": "Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.)",
+      "manualKey": "Or enter the key manually:",
+      "enterCode": "Enter the 6-digit code from your app",
+      "verifyAndEnable": "Verify & enable",
+      "cancel": "Cancel",
+      "twoFaEnabled": "2FA enabled successfully.",
+      "twoFaDesc": "Add an extra layer of security using a TOTP authenticator app. Available on all plans.",
+      "loading": "Loading…",
+      "setup2fa": "Set up 2FA",
+      "sessions": "Sessions",
+      "currentSession": "Current session",
+      "signedIn": "Signed in",
+      "account": "Account",
+      "signOutOthersDesc": "Sign out all other active sessions across your other devices.",
+      "allOthersSignedOut": "All other sessions signed out.",
+      "signingOut": "Signing out…",
+      "signOutOthers": "Sign out other sessions",
+      "auditLog": {
+        "title": "Audit log",
+        "desc": "Review security-relevant actions such as API key changes, webhooks, and data exports.",
+        "view": "View audit log"
+      }
+    },
+    "notifications": {
+      "heading": "Notifications",
+      "usageAlerts": {
+        "label": "Usage alerts",
+        "desc": "Notify when approaching plan limits"
+      },
+      "securityAlerts": {
+        "label": "Security alerts",
+        "desc": "New login detected or API key created"
+      },
+      "productUpdates": {
+        "label": "Product updates",
+        "desc": "New features and improvements"
+      },
+      "weeklyDigest": {
+        "label": "Weekly digest",
+        "desc": "Summary of your usage each week"
+      },
+      "apiFailures": {
+        "label": "API failures",
+        "desc": "Alert when API requests fail repeatedly"
+      },
+      "billingAlerts": {
+        "label": "Billing alerts",
+        "desc": "Upcoming renewals and payment issues"
+      }
+    },
+    "preferences": {
+      "heading": "Preferences",
+      "language": "Language",
+      "timezone": "Timezone",
+      "currentTime": "Current time:",
+      "dateFormat": "Date format",
+      "timeFormat": "Time format",
+      "time12h": "12-hour (2:30 PM)",
+      "time24h": "24-hour (14:30)",
+      "dataRegion": "Data region",
+      "dataRegionDesc": "Controls where your data is stored and processed.",
+      "regions": {
+        "usEast": "US East",
+        "usWest": "US West",
+        "euWest": "EU West",
+        "euCentral": "EU Central",
+        "asiaPacific": "Asia Pacific"
+      },
+      "savePreferences": "Save preferences",
+      "saved": "Saved"
+    },
+    "appearance": {
+      "heading": "Appearance",
+      "theme": "Theme",
+      "themes": {
+        "light": {
+          "label": "Light",
+          "desc": "Bright background, dark text"
+        },
+        "dark": {
+          "label": "Dark",
+          "desc": "Dark background, light text"
+        },
+        "system": {
+          "label": "System",
+          "desc": "Match your device setting"
+        }
+      },
+      "accentColor": "Accent color",
+      "selected": "Selected:",
+      "uiDensity": "UI density",
+      "densities": {
+        "compact": {
+          "label": "Compact",
+          "desc": "Tighter spacing, more on screen"
+        },
+        "comfortable": {
+          "label": "Comfortable",
+          "desc": "Balanced — the default"
+        },
+        "spacious": {
+          "label": "Spacious",
+          "desc": "More breathing room between elements"
+        }
+      },
+      "accentNames": {
+        "yellow": "Amber",
+        "blue": "Blue",
+        "green": "Green",
+        "purple": "Purple"
+      },
+      "apply": "Apply",
+      "applied": "Applied"
+    },
+    "danger": {
+      "exportData": "Export data",
+      "exportDesc": "Download all your data including conversations, documents, agents, and account settings.",
+      "requestExport": "Request export",
+      "exportAlert": "A data export will be prepared and emailed to {email} within 24 hours.",
+      "deleteAccount": "Delete account",
+      "deleteDesc": "Permanently delete your account and all associated data. This action cannot be undone.",
+      "typeToConfirm": "Type {email} to confirm",
+      "deleting": "Deleting…",
+      "deleteMyAccount": "Delete my account",
+      "deleteAlert": "Account deletion requires admin verification. A deletion request has been sent to support for {email}.",
+      "exporting": "Exporting…"
+    }
+  },
+  "sidebar": {
+    "product": "Product",
+    "agency": "Organization",
+    "developer": "Security & Usage",
+    "nav": {
+      "overview": "Overview",
+      "chatAi": "Chat AI",
+      "voiceAi": "Voice AI",
+      "documents": "Documents",
+      "agents": "Agents",
+      "apiKeys": "API Keys",
+      "usage": "Usage",
+      "agencyOverview": "Overview",
+      "missionSolutions": "Workflows",
+      "toolsHub": "Tools",
+      "intelligence": "Intelligence",
+      "members": "Members",
+      "billing": "Billing",
+      "agencySettings": "Settings",
+      "broadcast": "Broadcast",
+      "accessReview": "Access review",
+      "knowledgeBases": "Knowledge Bases",
+      "auditLog": "Audit log",
+      "siteBroadcast": "Site broadcast"
+    },
+    "siteAdmin": "Site admin",
+    "sitePages": "Site pages",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "accountMenu": "Account menu",
+    "accountSettings": "Settings",
+    "planSuffix": "plan",
+    "signOut": "Sign out",
+    "upgrade": "Upgrade",
+    "plans": {
+      "enterprise": "Enterprise",
+      "agency": "Agency",
+      "pilot": "Pilot",
+      "team": "Team",
+      "pro": "Pro",
+      "free": "Free"
+    }
+  },
+  "announcementBanner": {
+    "dismiss": "Dismiss announcement"
+  },
+  "inviteBanner": {
+    "invitedTo": "You've been invited to join",
+    "asRole": "as",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "chatRedirect": {
+    "title": "Leaving this tab",
+    "desc": "Chat AI opens in a new tab. Your current session will stay open here.",
+    "dontShowAgain": "Don't show this again",
+    "back": "Back",
+    "continue": "Continue"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Users,
   Trash2,
@@ -10,6 +11,13 @@ import {
   Check,
   AlertCircle,
 } from "lucide-react";
+import {
+  DashboardPage,
+  DashboardHeader,
+  DashboardCard,
+  DashboardList,
+  DashboardPrimaryButton,
+} from "@/components/dashboard/ui/page-shell";
 
 type Member = {
   id: string;
@@ -22,17 +30,6 @@ type Member = {
 
 const ROLES = ["admin", "member"] as const;
 
-function relativeTime(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  const hrs = Math.floor(mins / 60);
-  const days = Math.floor(hrs / 24);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${days}d ago`;
-}
-
 export function MembersClient({
   initialMembers,
   ownerEmail,
@@ -42,6 +39,19 @@ export function MembersClient({
   ownerEmail: string;
   isTeamPlan: boolean;
 }) {
+  const t = useTranslations("dashboard.agency.members");
+
+  function relativeTime(iso: string) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hrs = Math.floor(mins / 60);
+    const days = Math.floor(hrs / 24);
+    if (mins < 1) return t("relativeTime.justNow");
+    if (mins < 60) return t("relativeTime.minutes", { count: mins });
+    if (hrs < 24) return t("relativeTime.hours", { count: hrs });
+    return t("relativeTime.days", { count: days });
+  }
+
   const [members, setMembers] = useState<Member[]>(initialMembers);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<"admin" | "member">("member");
@@ -49,7 +59,9 @@ export function MembersClient({
   const [inviteError, setInviteError] = useState("");
   const [inviteSuccess, setInviteSuccess] = useState("");
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const [changingRoleId, setChangingRoleId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState("");
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,25 +80,31 @@ export function MembersClient({
       const member = await res.json();
       setMembers((prev) => [member, ...prev]);
       setInviteEmail("");
-      setInviteSuccess(`Invite sent to ${member.email}`);
+      setInviteSuccess(t("invite.successMessage", { email: member.email }));
       setTimeout(() => setInviteSuccess(""), 4000);
     } else {
       const err = await res.json();
-      setInviteError(err.error ?? "Failed to send invite");
+      setInviteError(err.error ?? t("invite.errorFallback"));
     }
     setInviting(false);
   };
 
   const handleRemove = async (id: string) => {
+    setActionError("");
+    setConfirmRemoveId(null);
     setRemovingId(id);
     const res = await fetch(`/api/agency/members/${id}`, { method: "DELETE" });
     if (res.ok) {
       setMembers((prev) => prev.filter((m) => m.id !== id));
+    } else {
+      const err = await res.json().catch(() => ({}));
+      setActionError(err.error ?? t("removeErrorFallback"));
     }
     setRemovingId(null);
   };
 
   const handleRoleChange = async (id: string, role: string) => {
+    setActionError("");
     setChangingRoleId(id);
     const res = await fetch(`/api/agency/members/${id}`, {
       method: "PATCH",
@@ -98,28 +116,20 @@ export function MembersClient({
       setMembers((prev) =>
         prev.map((m) => (m.id === id ? { ...m, role: updated.role } : m)),
       );
+    } else {
+      const err = await res.json().catch(() => ({}));
+      setActionError(err.error ?? t("roleErrorFallback"));
     }
     setChangingRoleId(null);
   };
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-normal text-foreground">Team members</h1>
-        <p className="mt-1 text-sm text-foreground-secondary">
-          Invite and manage who has access to your agency workspace
-        </p>
-      </div>
+    <DashboardPage>
+      <DashboardHeader title={t("title")} description={t("subtitle")} />
 
-      {/* Invite form */}
       {isTeamPlan ? (
-        <div className="border border-border bg-card p-5 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <UserPlus className="w-3.5 h-3.5 text-foreground-muted" />
-            <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-              Invite member
-            </span>
-          </div>
+        <DashboardCard>
+          <h2 className="text-sm font-medium text-foreground mb-4">{t("invite.title")}</h2>
           <form onSubmit={handleInvite} className="flex gap-3">
             <div className="flex-1 relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground-muted" />
@@ -127,7 +137,7 @@ export function MembersClient({
                 type="email"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="colleague@example.com"
+                placeholder={t("invite.emailPlaceholder")}
                 className="w-full h-9 pl-9 pr-3 text-sm bg-background border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light transition-colors"
                 required
               />
@@ -140,8 +150,8 @@ export function MembersClient({
                 }
                 className="h-9 px-3 pr-8 text-sm bg-background border border-border text-foreground appearance-none focus:outline-none focus:border-border-light transition-colors cursor-pointer"
               >
-                <option value="admin">Admin</option>
-                <option value="member">Member</option>
+                <option value="admin">{t("invite.roleAdmin")}</option>
+                <option value="member">{t("invite.roleMember")}</option>
               </select>
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground-muted pointer-events-none" />
             </div>
@@ -150,7 +160,7 @@ export function MembersClient({
               disabled={inviting}
               className="h-9 px-5 text-xs font-medium bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 transition-colors"
             >
-              {inviting ? "Sending…" : "Send invite"}
+              {inviting ? t("invite.sending") : t("invite.sendInvite")}
             </button>
           </form>
 
@@ -166,32 +176,17 @@ export function MembersClient({
               {inviteSuccess}
             </div>
           )}
-
-          <div className="mt-4 pt-4 border-t border-border grid grid-cols-3 gap-4 text-xs text-foreground-muted">
-            <div>
-              <span className="font-medium text-foreground-secondary">
-                Admin
-              </span>
-              <p className="mt-0.5">Full access, can invite members</p>
-            </div>
-            <div>
-              <span className="font-medium text-foreground-secondary">
-                Member
-              </span>
-              <p className="mt-0.5">Can use workspace tools</p>
-            </div>
-          </div>
-        </div>
+        </DashboardCard>
       ) : (
-        <div className="border border-border bg-card p-5 mb-6 flex items-center justify-between">
+        <DashboardCard className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Users className="w-4 h-4 text-foreground-muted" />
             <div>
               <p className="text-sm text-foreground">
-                Team invitations require the Team plan
+                {t("upgradeBanner.title")}
               </p>
               <p className="text-xs text-foreground-muted mt-0.5">
-                Upgrade to invite unlimited members
+                {t("upgradeBanner.subtitle")}
               </p>
             </div>
           </div>
@@ -199,29 +194,30 @@ export function MembersClient({
             href="/pricing"
             className="shrink-0 h-8 px-4 text-xs font-medium border border-border text-foreground-secondary hover:border-border-light hover:text-foreground transition-colors inline-flex items-center"
           >
-            Upgrade →
+            {t("upgradeBanner.cta")}
           </a>
+        </DashboardCard>
+      )}
+
+      {actionError && (
+        <div className="flex items-center gap-2 text-xs text-red-400">
+          <AlertCircle className="w-3.5 h-3.5" />
+          {actionError}
         </div>
       )}
 
-      {/* Members table */}
-      <div className="border border-border bg-card">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <div className="flex items-center gap-2">
-            <Users className="w-3.5 h-3.5 text-foreground-muted" />
-            <span className="text-xs font-medium uppercase tracking-widest text-foreground-muted">
-              Members
-            </span>
-          </div>
-          <span className="text-xs text-foreground-muted font-mono">
-            {members.length} total
+      <DashboardList>
+        <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+          <span className="text-sm font-medium text-foreground">{t("table.title")}</span>
+          <span className="text-xs text-foreground-muted tabular-nums">
+            {t("table.total", { count: members.length })}
           </span>
         </div>
 
         {members.length === 0 ? (
           <div className="px-5 py-12 text-center">
             <Users className="w-6 h-6 text-foreground-muted mx-auto mb-3" />
-            <p className="text-sm text-foreground-secondary">No members yet</p>
+            <p className="text-sm text-foreground-secondary">{t("table.empty")}</p>
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -245,14 +241,14 @@ export function MembersClient({
                       </p>
                       {isOwner && (
                         <span className="text-[10px] font-medium text-accent-primary shrink-0">
-                          owner
+                          {t("table.owner")}
                         </span>
                       )}
                     </div>
                     <p className="text-[10px] text-foreground-muted mt-0.5">
                       {m.status === "active" && m.joined_at
-                        ? `Joined ${relativeTime(m.joined_at)}`
-                        : `Invited ${relativeTime(m.invited_at)}`}
+                        ? t("table.joined", { time: relativeTime(m.joined_at) })
+                        : t("table.invited", { time: relativeTime(m.invited_at) })}
                     </p>
                   </div>
 
@@ -292,25 +288,38 @@ export function MembersClient({
 
                   {/* Remove */}
                   {!isOwner && isTeamPlan && (
-                    <button
-                      onClick={() => handleRemove(m.id)}
-                      disabled={isRemoving}
-                      className="shrink-0 w-7 h-7 flex items-center justify-center text-foreground-muted hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-50"
-                      title="Remove member"
-                    >
-                      {isRemoving ? (
-                        <span className="text-[10px]">…</span>
-                      ) : (
+                    confirmRemoveId === m.id ? (
+                      <div className="shrink-0 flex items-center gap-1.5">
+                        <button
+                          onClick={() => handleRemove(m.id)}
+                          disabled={isRemoving}
+                          className="h-7 px-2 text-[10px] font-medium bg-red-400/10 text-red-400 border border-red-400/30 hover:bg-red-400/20 transition-colors disabled:opacity-50"
+                        >
+                          {isRemoving ? t("table.removing") : t("table.confirm")}
+                        </button>
+                        <button
+                          onClick={() => setConfirmRemoveId(null)}
+                          className="h-7 px-2 text-[10px] text-foreground-muted hover:text-foreground border border-border transition-colors"
+                        >
+                          {t("table.cancel")}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmRemoveId(m.id)}
+                        className="shrink-0 w-7 h-7 flex items-center justify-center text-foreground-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                        title={t("table.removeTooltip")}
+                      >
                         <Trash2 className="w-3.5 h-3.5" />
-                      )}
-                    </button>
+                      </button>
+                    )
                   )}
                 </div>
               );
             })}
           </div>
         )}
-      </div>
-    </div>
+      </DashboardList>
+    </DashboardPage>
   );
 }

@@ -2,28 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Shield, Key, FileText, ChevronRight, Lock, Eye } from "lucide-react";
+import { Key, FileText, ChevronRight, Lock, Eye } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const features = [
-  {
-    id: "identity",
-    icon: Key,
-    title: "Identity & access control",
-    subtitle: "SSO and role-based access built in",
-    description:
-      "Integrate with your existing identity provider. SAML SSO, OAuth, and granular role-based access control out of the box.",
-    panel: <IdentityPanel />,
-  },
-  {
-    id: "audit",
-    icon: FileText,
-    title: "Audit everything",
-    subtitle: "Every action logged, every decision traceable",
-    description:
-      "Complete audit trails for every AI interaction. Meet compliance requirements with immutable, exportable logs.",
-    panel: <AuditPanel />,
-  },
+  { id: "identity", icon: Key, panel: <IdentityPanel /> },
+  { id: "audit", icon: FileText, panel: <AuditPanel /> },
 ] as const;
 
 function IdentityPanel() {
@@ -37,8 +22,6 @@ function IdentityPanel() {
       </div>
       <div className="divide-y divide-border">
         {[
-          { method: "SAML 2.0 SSO", status: "Active", icon: Key },
-          { method: "OAuth 2.0 / OIDC", status: "Active", icon: Shield },
           { method: "API Key", status: "Available", icon: FileText },
           { method: "Session Token", status: "Available", icon: Eye },
         ].map((item) => {
@@ -67,8 +50,6 @@ function IdentityPanel() {
 }
 
 function AuditPanel() {
-  const [hoveredLog, setHoveredLog] = useState<number | null>(null);
-  
   const logs = [
     { time: "14:32:01", user: "jane.doe", action: "Query: Q3 revenue summary" },
     {
@@ -87,18 +68,11 @@ function AuditPanel() {
           <Eye className="w-4 h-4 text-foreground-muted" />
           Audit Trail
         </h4>
-        <Badge variant="default" className="animate-pulse">Live</Badge>
+        <Badge variant="default">Live</Badge>
       </div>
       <div className="divide-y divide-border">
-        {logs.map((log, index) => (
-          <div 
-            key={log.time} 
-            className={`p-3 transition-colors cursor-pointer ${
-              hoveredLog === index ? "bg-background-tertiary/50" : ""
-            }`}
-            onMouseEnter={() => setHoveredLog(index)}
-            onMouseLeave={() => setHoveredLog(null)}
-          >
+        {logs.map((log) => (
+          <div key={log.time} className="p-3">
             <div className="flex items-center gap-2 text-xs text-foreground-muted mb-1">
               <span className="font-mono">{log.time}</span>
               <span>·</span>
@@ -113,23 +87,24 @@ function AuditPanel() {
 }
 
 export function ProtectSection() {
+  const t = useTranslations("home.protect");
   const [activeFeature, setActiveFeature] = useState(0);
 
   return (
     <section className="py-24 border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <Badge variant="success" dot className="mb-4">
-            SECURITY
+            {t("badge")}
           </Badge>
           <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl">
-            Enterprise-grade security.{" "}
+            {t("titlePrefix")}{" "}
             <span className="text-foreground-secondary">
-              Built in, not bolted on.
+              {t("titleHighlight")}
             </span>
           </h2>
           <p className="mt-6 text-lg leading-8 text-foreground-secondary">
-            Authenticate with your existing identity provider. Maintain complete audit trails for every interaction.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -144,10 +119,10 @@ export function ProtectSection() {
                 <button
                   key={f.id}
                   onClick={() => setActiveFeature(index)}
-                  className={`w-full text-left p-4  transition-all duration-200 ${
+                  className={`w-full text-left p-4 border ${
                     isActive
-                      ? "bg-card border border-border-light shadow-lg"
-                      : "hover:bg-card/50"
+                      ? "bg-card border-border"
+                      : "border-transparent bg-transparent"
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -160,10 +135,10 @@ export function ProtectSection() {
                       <h3 className={`font-semibold transition-colors ${
                         isActive ? "text-foreground" : "text-foreground-secondary"
                       }`}>
-                        {f.title}
+                        {t(`features.${f.id}.title`)}
                       </h3>
                       <p className="text-sm text-foreground-muted mt-0.5">
-                        {f.subtitle}
+                        {t(`features.${f.id}.subtitle`)}
                       </p>
                     </div>
                     <ChevronRight className={`w-4 h-4 ml-auto shrink-0 transition-all ${
@@ -172,7 +147,7 @@ export function ProtectSection() {
                   </div>
                   {isActive && (
                     <p className="mt-3 text-sm text-foreground-secondary leading-relaxed">
-                      {f.description}
+                      {t(`features.${f.id}.description`)}
                     </p>
                   )}
                 </button>
@@ -181,7 +156,7 @@ export function ProtectSection() {
           </div>
 
           {/* Feature panel */}
-          <div className="transition-all duration-300">
+          <div>
             {features[activeFeature].panel}
           </div>
         </div>

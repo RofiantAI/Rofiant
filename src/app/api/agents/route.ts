@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { planToolDeniedResponse } from "@/lib/plan-guard";
 
 export async function GET() {
   const supabase = await createClient();
@@ -20,6 +21,14 @@ export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
+
+  const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
+  const denied = planToolDeniedResponse(
+    plan,
+    "agents",
+    "Agents require a Pro, Team, Agency, or Enterprise plan.",
+  );
+  if (denied) return denied;
 
   const { name, description } = await req.json();
   if (!name?.trim()) return NextResponse.json({ error: "Name required" }, { status: 400 });
