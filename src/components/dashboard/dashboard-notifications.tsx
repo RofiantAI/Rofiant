@@ -18,7 +18,7 @@ function timeAgo(iso: string, t: ReturnType<typeof useTranslations<"dashboard.no
   return t("daysAgo", { count: days });
 }
 
-export function DashboardNotifications() {
+export function DashboardNotifications({ align = "right" }: { align?: "left" | "right" }) {
   const router = useRouter();
   const t = useTranslations("dashboard.notifications");
   const [open, setOpen] = useState(false);
@@ -110,18 +110,22 @@ export function DashboardNotifications() {
         onClick={() => setOpen((v) => !v)}
         aria-label={t("ariaLabel")}
         aria-expanded={open}
-        className="relative flex items-center justify-center w-11 h-11 rounded-lg border border-border bg-background hover:bg-background-tertiary transition-colors"
+        className="relative flex items-center justify-center w-9 h-9 shrink-0 rounded-xl border border-border bg-background hover:bg-background-tertiary transition-colors"
       >
-        <Bell className="w-5 h-5 text-foreground-secondary" />
+        <Bell className="w-4 h-4 text-foreground-secondary" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent-primary text-[10px] font-semibold text-background flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-accent-primary text-[9px] font-semibold text-background flex items-center justify-center">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-[min(360px,calc(100vw-2rem))] rounded-lg border border-border bg-background-secondary shadow-xl overflow-hidden">
+        <div
+          className={`absolute top-[calc(100%+8px)] z-50 w-[min(360px,calc(100vw-2rem))] rounded-lg border border-border bg-background-secondary shadow-xl overflow-hidden ${
+            align === "left" ? "left-0" : "right-0"
+          }`}
+        >
           <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border">
             <p className="text-sm font-medium text-foreground">{t("title")}</p>
             {notifications.length > 0 && (

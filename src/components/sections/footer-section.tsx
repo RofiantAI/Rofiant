@@ -7,20 +7,8 @@ const footerColumns = [
     links: [
       { key: "pricing", href: "/pricing" },
       { key: "chatAi", href: "/platform/chat-ai" },
-      { key: "voiceAi", href: "/platform/voice-ai" },
-      { key: "documentIntelligence", href: "/platform/document-intelligence" },
       { key: "agents", href: "/platform/agents" },
       { key: "api", href: "/platform/api" },
-    ],
-  },
-  {
-    key: "solutions",
-    links: [
-      { key: "services", href: "/services" },
-      { key: "federalAgencies", href: "/solutions/federal-agencies" },
-      { key: "defenseIntelligence", href: "/solutions/defense-intelligence" },
-      { key: "lawEnforcement", href: "/solutions/law-enforcement" },
-      { key: "enterprise", href: "/solutions/enterprise" },
     ],
   },
   {
@@ -28,7 +16,6 @@ const footerColumns = [
     links: [
       { key: "documentation", href: "/resources/documentation" },
       { key: "apiReference", href: "/resources/api-reference" },
-      { key: "complianceGuides", href: "/resources/compliance-guides" },
       { key: "changelog", href: "/resources/changelog" },
       { key: "status", href: "/status" },
     ],
@@ -47,9 +34,6 @@ const footerColumns = [
     links: [
       { key: "termsOfService", href: "/legal/terms-of-service" },
       { key: "privacyPolicy", href: "/legal/privacy-policy" },
-      { key: "fedramp", href: "/legal/fedramp" },
-      { key: "soc2", href: "/legal/soc2" },
-      { key: "itarPolicy", href: "/legal/itar-policy" },
     ],
   },
 ] as const;

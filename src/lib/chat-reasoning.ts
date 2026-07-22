@@ -1,6 +1,7 @@
 const NATIVE_REASONING_MODELS = new Set([
   "openai/gpt-oss-120b",
   "qwen/qwen3-32b",
+  "qwen/qwen3.6-27b",
   "qwen-qwq-32b",
   "deepseek-r1-distill-llama-70b",
 ]);
@@ -12,8 +13,16 @@ export function supportsNativeReasoning(model: string) {
   return NATIVE_REASONING_MODELS.has(model);
 }
 
+// Groq only accepts graded reasoning_effort ("low"/"medium"/"high") on select
+// models; others (e.g. qwen3.6-27b) reject anything but "none"/"default".
+const GRADED_REASONING_EFFORT_MODELS = new Set(["openai/gpt-oss-120b"]);
+
+export function reasoningEffortFor(model: string): "medium" | "default" {
+  return GRADED_REASONING_EFFORT_MODELS.has(model) ? "medium" : "default";
+}
+
 export function stripThinkingTags(text: string) {
-  return text.replace(/<thinking>[\s\S]*?<\/thinking>\s*/gi, "").trim();
+  return text.replace(/<think(?:ing)?>[\s\S]*?<\/think(?:ing)?>\s*/gi, "").trim();
 }
 
 export function splitThinkingFromText(raw: string): {
@@ -21,13 +30,15 @@ export function splitThinkingFromText(raw: string): {
   answer: string;
   isThinking: boolean;
 } {
-  const start = raw.indexOf("<thinking>");
-  if (start === -1) {
+  const openTag = raw.match(/<think(?:ing)?>/i)?.[0];
+  if (!openTag) {
     return { thinking: "", answer: raw, isThinking: false };
   }
+  const closeTag = `</${openTag.slice(1, -1)}>`;
 
-  const contentStart = start + "<thinking>".length;
-  const end = raw.indexOf("</thinking>", contentStart);
+  const start = raw.indexOf(openTag);
+  const contentStart = start + openTag.length;
+  const end = raw.indexOf(closeTag, contentStart);
 
   if (end === -1) {
     return {
@@ -39,7 +50,7 @@ export function splitThinkingFromText(raw: string): {
 
   return {
     thinking: raw.slice(contentStart, end).trim(),
-    answer: raw.slice(end + "</thinking>".length).trim(),
+    answer: raw.slice(end + closeTag.length).trim(),
     isThinking: false,
   };
 }

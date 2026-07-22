@@ -5,6 +5,6 @@ export const creem = new Creem({
 });
 
 export const PLAN_PRODUCT_IDS: Record<string, string> = {
-  pro:  process.env.CREEM_PRODUCT_ID_PRO  ?? "",
-  team: process.env.CREEM_PRODUCT_ID_TEAM ?? "",
+  pro:   process.env.CREEM_PRODUCT_ID_PRO   ?? "",
+  ultra: process.env.CREEM_PRODUCT_ID_ULTRA ?? "",
 };

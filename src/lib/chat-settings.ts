@@ -1,3 +1,5 @@
+import type { ChatMode } from "./chat-agents";
+
 export type ChatSettings = {
   model: string;
   customInstructions: string;
@@ -9,15 +11,17 @@ export type ChatSettings = {
   density: "compact" | "comfortable";
   showTimestamps: boolean;
   responseSound: boolean;
+  chatMode: ChatMode;
+  activeAgentId: string | null;
 };
 
 export const FREE_MODELS = [
-  { id: "llama-3.1-8b-instant",   name: "Llama 3.1 8B",   desc: "Fast — great for quick back-and-forth" },
-  { id: "gemma2-9b-it",            name: "Gemma 2 9B",     desc: "Balanced speed and quality" },
+  { id: "openai/gpt-oss-20b",                          name: "GPT OSS 20B",      desc: "Fast: great for quick back-and-forth" },
+  { id: "llama-3.1-8b-instant",                        name: "Llama 3.1 8B Instant", desc: "Lightest, fastest, best for avoiding rate limits" },
+  { id: "qwen/qwen3.6-27b",                            name: "Qwen3.6 27B",     desc: "Supports image uploads for vision tasks" },
 ] as const;
 
 export const PRO_MODELS = [
-  { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B",   desc: "Strong all-rounder for harder questions" },
   { id: "openai/gpt-oss-120b",     name: "GPT OSS 120B",    desc: "Best for deep thinking and tough problems" },
 ] as const;
 
@@ -26,8 +30,14 @@ export const ALL_MODELS = [...FREE_MODELS, ...PRO_MODELS];
 const FREE_MODEL_IDS: Set<string>  = new Set(FREE_MODELS.map((m) => m.id));
 const ALL_MODEL_IDS:  Set<string>  = new Set(ALL_MODELS.map((m) => m.id));
 
-export const DEFAULT_FREE_MODEL = "llama-3.1-8b-instant";
-export const DEFAULT_PRO_MODEL  = "llama-3.3-70b-versatile";
+export const DEFAULT_FREE_MODEL = "openai/gpt-oss-20b";
+export const DEFAULT_PRO_MODEL  = "openai/gpt-oss-120b";
+
+export const VISION_MODEL_ID = "qwen/qwen3.6-27b";
+
+export function isVisionModel(id: string): boolean {
+  return id === VISION_MODEL_ID;
+}
 
 export const DEFAULT_SETTINGS: ChatSettings = {
   model: DEFAULT_FREE_MODEL,
@@ -40,6 +50,8 @@ export const DEFAULT_SETTINGS: ChatSettings = {
   density: "comfortable",
   showTimestamps: false,
   responseSound: false,
+  chatMode: "ask",
+  activeAgentId: null,
 };
 
 const KEY = "chat_settings";

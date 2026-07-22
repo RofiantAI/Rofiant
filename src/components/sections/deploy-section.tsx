@@ -7,9 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Check } from "lucide-react";
 
-const tabs = ["chat", "voice", "documents", "agents"] as const;
-
-const voiceLanguages = ["english", "spanish", "arabic", "mandarin"] as const;
+const tabs = ["chat", "documents", "agents"] as const;
 
 type TabKey = (typeof tabs)[number];
 
@@ -67,24 +65,10 @@ export function DeploySection() {
               <p className="text-foreground-muted leading-relaxed">
                 {t(`content.${activeTab}.description`)}
               </p>
-
-              {activeTab === "voice" && (
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 pt-6 border-t border-border">
-                  {voiceLanguages.map((lang) => (
-                    <span
-                      key={lang}
-                      className="text-foreground-muted text-sm font-medium"
-                    >
-                      {t(`content.voice.languages.${lang}`)}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
 
             <div className="relative bg-background-secondary border-l border-border p-6 flex items-center justify-center">
               {activeTab === "chat" && <ChatMockup />}
-              {activeTab === "voice" && <VoiceMockup />}
               {activeTab === "documents" && <DocsMockup />}
               {activeTab === "agents" && <AgentsMockup />}
             </div>
@@ -121,31 +105,6 @@ function ChatMockup() {
           <div className="w-6 h-6  bg-accent-secondary flex items-center justify-center text-xs text-white shrink-0">
             R
           </div>
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-function VoiceMockup() {
-  return (
-    <Card variant="bordered" className="w-full max-w-md">
-      <div className="p-4 border-b border-border">
-        <h4 className="font-semibold">Voice Session</h4>
-        <p className="text-xs text-foreground-muted mt-1">Active call</p>
-      </div>
-      <div className="p-6 flex flex-col items-center gap-4">
-        <div className="w-20 h-20  bg-accent-secondary/20 flex items-center justify-center">
-        <div className="w-3 h-3 bg-accent-secondary" />
-        </div>
-        <div className="text-center">
-          <p className="text-sm font-medium">Listening...</p>
-          <p className="text-xs text-foreground-muted mt-1">
-            Transcribing uploaded audio
-          </p>
-        </div>
-        <div className="w-full bg-background-tertiary  p-3 text-xs text-foreground-secondary font-mono">
-          &quot;...can you pull up the latest sales report...&quot;
         </div>
       </div>
     </Card>

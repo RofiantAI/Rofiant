@@ -27,6 +27,7 @@ export type UsageDayPoint = {
   outputTokens: number;
   chatRequests: number;
   apiRequests: number;
+  desktopRequests: number;
 };
 
 export type SourceBreakdown = {
@@ -49,6 +50,7 @@ const SOURCE_COLORS: Record<string, string> = {
   chat: "#3b82f6",
   api: "#8b5cf6",
   agents: "#22c55e",
+  desktop: "#eab308",
 };
 
 const CHART_H = 220;
@@ -137,7 +139,9 @@ export function UsageAnalytics({
 }) {
   const t = useTranslations("dashboard.usage");
   const hasTokenData = chartData.some((d) => d.tokens > 0);
-  const hasRequestData = chartData.some((d) => d.chatRequests + d.apiRequests > 0);
+  const hasRequestData = chartData.some(
+    (d) => d.chatRequests + d.apiRequests + d.desktopRequests > 0,
+  );
   const totalTokens = chartData.reduce((sum, d) => sum + d.tokens, 0);
 
   const sourceChartData = sourceBreakdown.map((row) => ({
@@ -213,8 +217,14 @@ export function UsageAnalytics({
                   dataKey="apiRequests"
                   stackId="req"
                   fill={SOURCE_COLORS.api}
-                  radius={[2, 2, 0, 0]}
                   name={t("charts.tooltipApiRequests")}
+                />
+                <Bar
+                  dataKey="desktopRequests"
+                  stackId="req"
+                  fill={SOURCE_COLORS.desktop}
+                  radius={[2, 2, 0, 0]}
+                  name={t("charts.tooltipDesktopRequests")}
                 />
               </BarChart>
             </ResponsiveContainer>

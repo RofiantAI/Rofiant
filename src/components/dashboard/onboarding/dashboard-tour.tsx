@@ -6,9 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   BarChart3,
-  Brain,
-  FileText,
-  Key,
   LayoutDashboard,
   MessageSquare,
   Sparkles,
@@ -18,6 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const PAD = 10;
@@ -39,10 +37,7 @@ const BASE_STEPS: TourStepDef[] = [
   { id: "welcome", target: '[data-tour="sidebar"]', placement: "right", icon: Sparkles },
   { id: "overview", target: '[data-tour="nav-overview"]', placement: "right", icon: LayoutDashboard },
   { id: "chat", target: '[data-tour="nav-chat"]', placement: "right", icon: MessageSquare },
-  { id: "documents", target: '[data-tour="nav-documents"]', placement: "right", icon: FileText },
-  { id: "agents", target: '[data-tour="nav-agents"]', placement: "right", icon: Brain },
   { id: "usage", target: '[data-tour="nav-usage"]', placement: "right", icon: BarChart3 },
-  { id: "apiKeys", target: '[data-tour="nav-api-keys"]', placement: "right", icon: Key, paidOnly: true },
   { id: "account", target: '[data-tour="user-menu"]', placement: "top", icon: User },
   {
     id: "workspace",
@@ -53,24 +48,9 @@ const BASE_STEPS: TourStepDef[] = [
   },
 ];
 
-function storageKey(userId: string) {
-  return `rofiant_dashboard_tour_${userId}`;
-}
-
-function hasSeenTour(userId: string): boolean {
-  if (typeof window === "undefined") return true;
+async function markTourSeen() {
   try {
-    if (localStorage.getItem(storageKey(userId)) === "1") return true;
-    // legacy welcome modal key
-    return localStorage.getItem(`rofiant_onboarding_welcome_${userId}`) === "1";
-  } catch {
-    return true;
-  }
-}
-
-function markTourSeen(userId: string) {
-  try {
-    localStorage.setItem(storageKey(userId), "1");
+    await createClient().auth.updateUser({ data: { dashboard_tour_seen: true } });
   } catch {
     /* ignore */
   }
@@ -172,13 +152,13 @@ function SpotlightPanels({ rect, vw, vh }: { rect: Rect; vw: number; vh: number 
 }
 
 export function DashboardTour({
-  userId,
   displayName,
   isPaid = false,
+  tourSeen = false,
 }: {
-  userId: string;
   displayName: string;
   isPaid?: boolean;
+  tourSeen?: boolean;
 }) {
   const t = useTranslations("dashboard.overview.onboarding.tour");
   const router = useRouter();
@@ -210,17 +190,17 @@ export function DashboardTour({
   }, [step]);
 
   const close = useCallback(() => {
-    markTourSeen(userId);
+    void markTourSeen();
     setActive(false);
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
-    if (!hasSeenTour(userId)) {
+    if (!tourSeen) {
       const timer = window.setTimeout(() => setActive(true), 400);
       return () => window.clearTimeout(timer);
     }
-  }, [userId]);
+  }, [tourSeen]);
 
   useEffect(() => {
     if (!active || !step) return;

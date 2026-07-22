@@ -2,11 +2,10 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import {
-  SquarePen,
+  Plus,
+  Home,
   MessageSquare,
-  ChevronUp,
   Settings,
-  LayoutDashboard,
   Zap,
   LogOut,
   MoreHorizontal,
@@ -14,17 +13,17 @@ import {
   PinOff,
   Pencil,
   Trash2,
-  PanelLeftClose,
+  BookOpen,
+  MessageCircle,
   Search,
   X,
+  PanelLeftClose,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { appUrl } from "@/lib/app-url";
-import { ChatSettingsModal } from "./settings-modal";
 import { routing } from "@/i18n/routing";
-import { BrandLogo } from "@/components/brand-logo";
 import { UserAvatar } from "@/components/dashboard/user-avatar-button";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
 import { useChatShell } from "@/contexts/chat-shell-context";
@@ -71,14 +70,12 @@ function ConversationItem({
   onRename,
   onPin,
   onDelete,
-  snippet,
 }: {
   c: Conversation;
   active: boolean;
   onRename: (id: string, newTitle: string) => void;
   onPin: (id: string, pinned: boolean) => void;
   onDelete: (id: string) => void;
-  snippet?: string;
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [renaming, setRenaming] = useState(false);
@@ -111,73 +108,85 @@ function ConversationItem({
   }
 
   return (
-    <div className="relative group/item mx-2">
-      {renaming ? (
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-tertiary border border-border">
-          <MessageSquare className="w-3.5 h-3.5 shrink-0 text-foreground-muted" />
-          <input
-            ref={inputRef}
-            value={renameValue}
-            onChange={(e) => setRenameValue(e.target.value)}
-            onBlur={submitRename}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") submitRename();
-              if (e.key === "Escape") {
-                setRenaming(false);
-                setRenameValue(c.title);
-              }
-            }}
-            className="flex-1 min-w-0 text-sm bg-background text-foreground px-2 py-1 outline-none border border-border rounded-md focus:border-border-light"
-          />
-        </div>
-      ) : (
+    <div className="px-2 relative">
+      <div
+        className={`flex w-full items-center gap-2 h-8 px-2 rounded-md text-[13px] transition-colors ${
+          active
+            ? "bg-background-tertiary text-foreground"
+            : "text-foreground-secondary hover:bg-background-tertiary/60 hover:text-foreground"
+        }`}
+      >
         <a
-          href={`/chat/${c.id}`}
-          className={`relative flex items-start gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-colors ${
-            active
-              ? "bg-background-tertiary text-foreground shadow-sm"
-              : "text-foreground-secondary hover:bg-background-tertiary/70 hover:text-foreground"
-          }`}
+          href={renaming ? undefined : `/chat/${c.id}`}
+          onClick={(e) => renaming && e.preventDefault()}
+          className="flex flex-1 min-w-0 items-center gap-2 text-left"
         >
-          {active && (
-            <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-accent-primary" />
+          <MessageSquare className="w-3.5 h-3.5 shrink-0 text-foreground-muted" />
+          {renaming ? (
+            <input
+              ref={inputRef}
+              autoFocus
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.target.select()}
+              onBlur={submitRename}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  submitRename();
+                } else if (e.key === "Escape") {
+                  e.preventDefault();
+                  setRenaming(false);
+                  setRenameValue(c.title);
+                }
+              }}
+              className="flex-1 min-w-0 bg-transparent text-foreground outline-none border-b border-foreground-muted/40"
+            />
+          ) : (
+            <span className="flex-1 min-w-0 truncate">{c.title}</span>
           )}
-          <MessageSquare
-            className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${active ? "text-accent-primary" : "text-foreground-muted"}`}
-          />
-          <span className="min-w-0 flex-1">
-            <span className="block truncate font-medium">{c.title}</span>
-            {snippet && (
-              <span className="block truncate text-xs text-foreground-muted mt-0.5 leading-snug">
-                {snippet}
-              </span>
-            )}
-          </span>
+        </a>
+        {!renaming && (
           <button
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setDropdownOpen((v) => !v);
             }}
-            className="opacity-0 group-hover/item:opacity-100 shrink-0 p-1 hover:bg-background-secondary rounded-md transition-opacity"
-            aria-label="Chat options"
+            aria-label="Conversation options"
+            className="flex items-center justify-center w-5 h-5 rounded shrink-0 text-foreground-muted hover:text-foreground hover:bg-background-tertiary transition-colors"
           >
-            <MoreHorizontal className="w-3.5 h-3.5 text-foreground-muted" />
+            <MoreHorizontal className="w-3.5 h-3.5" />
           </button>
-        </a>
-      )}
+        )}
+      </div>
 
       {dropdownOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-2 top-full z-50 mt-1 w-44 rounded-lg bg-card border border-border shadow-xl py-1 overflow-hidden"
+          className="absolute right-2 top-8 z-10 w-36 rounded-lg bg-card border border-border shadow-lg py-1 overflow-hidden"
         >
           <button
+            type="button"
             onClick={() => {
-              onPin(c.id, !c.pinned);
               setDropdownOpen(false);
+              setRenaming(true);
+              setRenameValue(c.title);
             }}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
+            className="flex items-center gap-2.5 w-full px-3 py-1.5 text-[13px] text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            Rename
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setDropdownOpen(false);
+              onPin(c.id, !c.pinned);
+            }}
+            className="flex items-center gap-2.5 w-full px-3 py-1.5 text-[13px] text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
           >
             {c.pinned ? (
               <PinOff className="w-3.5 h-3.5" />
@@ -187,22 +196,12 @@ function ConversationItem({
             {c.pinned ? "Unpin" : "Pin"}
           </button>
           <button
+            type="button"
             onClick={() => {
-              setRenaming(true);
-              setRenameValue(c.title);
               setDropdownOpen(false);
-            }}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
-          >
-            <Pencil className="w-3.5 h-3.5" />
-            Rename
-          </button>
-          <button
-            onClick={() => {
               onDelete(c.id);
-              setDropdownOpen(false);
             }}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-400 hover:bg-background-tertiary transition-colors"
+            className="flex items-center gap-2.5 w-full px-3 py-1.5 text-[13px] text-red-400 hover:bg-background-tertiary transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
             Delete
@@ -293,7 +292,6 @@ export function ChatSidebar({
     ? { Results: displayedConversations }
     : groupByDate(conversations);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -364,181 +362,188 @@ export function ChatSidebar({
     [pathname, router],
   );
 
-  return (
-    <>
-      <aside className="w-64 shrink-0 flex flex-col border-r border-border bg-background-secondary/80 h-full">
-        <div className="flex items-center justify-between px-4 py-3.5 border-b border-border">
-          <a href="/chat" className="flex items-center gap-2">
-            <BrandLogo className="w-10 h-auto" />
-          </a>
-          <div className="flex items-center gap-0.5">
-            <a
-              href="/chat"
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-background-tertiary transition-colors"
-              title="New chat"
-            >
-              <SquarePen className="w-4 h-4 text-foreground-muted" />
-            </a>
-            <button
-              type="button"
-              onClick={closeSidebar}
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-background-tertiary transition-colors"
-              title="Close sidebar"
-            >
-              <PanelLeftClose className="w-4 h-4 text-foreground-muted" />
-            </button>
-          </div>
-        </div>
+  const [searching, setSearching] = useState(false);
+  const emailName = user.email?.split("@")[0] ?? displayName;
 
-        <div className="px-3 py-2.5 border-b border-border space-y-2">
-          <a
-            href="/chat"
-            className="flex items-center justify-center gap-2 w-full h-9 rounded-lg border border-border bg-card/60 text-sm text-foreground-secondary hover:text-foreground hover:bg-background-tertiary hover:border-border-light transition-colors"
-          >
-            <SquarePen className="w-3.5 h-3.5" />
-            New chat
-          </a>
-          <div className="relative">
+  return (
+    <aside className="w-[272px] shrink-0 flex flex-col border-r border-border bg-background-secondary h-full">
+      <div className="flex items-center gap-1.5 h-11 px-3 shrink-0">
+        <button
+          type="button"
+          onClick={closeSidebar}
+          title="Close sidebar"
+          className="flex items-center justify-center w-5 h-5 rounded-md text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors shrink-0"
+        >
+          <PanelLeftClose className="w-3.5 h-3.5" />
+        </button>
+        {searching ? (
+          <div className="relative flex-1">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-foreground-muted pointer-events-none" />
             <input
               ref={searchInputRef}
+              autoFocus
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onBlur={() => !searchQuery && setSearching(false)}
               placeholder="Search chats"
-              className="w-full h-8 pl-8 pr-8 rounded-lg bg-background-tertiary/80 border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light focus:ring-1 focus:ring-accent-primary/20 transition-shadow"
+              className="w-full h-7 pl-8 pr-7 rounded-md bg-background-tertiary text-sm text-foreground placeholder:text-foreground-muted outline-none"
             />
-            {searchQuery ? (
+            {searchQuery && (
               <button
                 type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-foreground-muted hover:text-foreground transition-colors"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSearching(false);
+                }}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 text-foreground-muted hover:text-foreground transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
-            ) : (
-              <kbd className="absolute right-2 top-1/2 -translate-y-1/2 hidden sm:inline text-[10px] text-foreground-muted border border-border rounded-md px-1.5 py-0.5 bg-background/50">
-                ⌘K
-              </kbd>
             )}
           </div>
-        </div>
-
-        <nav className="flex-1 overflow-y-auto py-2">
-          {isSearching &&
-            searchLoading &&
-            displayedConversations.length === 0 && (
-              <p className="px-4 py-3 text-xs text-foreground-muted">
-                Searching…
-              </p>
-            )}
-          {Object.entries(groups).map(([label, items]) => {
-            if (!items.length) return null;
-            return (
-              <div key={label} className="mb-1">
-                <div className="px-5 py-1.5 text-[11px] text-foreground-muted font-medium uppercase tracking-wider">
-                  {label}
-                </div>
-                {items.map((c) => (
-                  <ConversationItem
-                    key={c.id}
-                    c={c}
-                    active={pathname === `/chat/${c.id}`}
-                    onRename={handleRename}
-                    onPin={handlePin}
-                    onDelete={handleDelete}
-                    snippet={c.snippet}
-                  />
-                ))}
-              </div>
-            );
-          })}
-          {isSearching &&
-            !searchLoading &&
-            displayedConversations.length === 0 && (
-              <p className="px-4 py-3 text-xs text-foreground-muted">
-                No chats match &ldquo;{trimmedQuery}&rdquo;
-              </p>
-            )}
-          {!isSearching && conversations.length === 0 && (
-            <div className="px-5 py-8 text-center">
-              <MessageSquare className="w-8 h-8 text-foreground-muted/40 mx-auto mb-2" />
-              <p className="text-xs text-foreground-muted">No conversations yet</p>
-              <a
-                href="/chat"
-                className="inline-block mt-3 text-xs text-accent-primary hover:underline"
-              >
-                Start a chat
-              </a>
-            </div>
-          )}
-        </nav>
-
-        {/* Footer */}
-        <div
-          className="border-t border-border px-3 py-3 relative"
-          ref={menuRef}
-        >
-          {menuOpen && (
-            <div className="absolute bottom-full rounded-lg left-3 right-3 mb-1.5 bg-card border border-border shadow-xl py-1 overflow-hidden">
-              <button
-                onClick={() => {
-                  setSettingsOpen(true);
-                  setMenuOpen(false);
-                }}
-                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
-              >
-                <Settings className="w-4 h-4" />
-                Settings
-              </button>
-              <a
-                href={appUrl("/dashboard")}
-                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                Dashboard
-              </a>
-              {!isPro && (
-                <a
-                  href="/pricing"
-                  className="flex items-center gap-3 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
-                >
-                  <Zap className="w-4 h-4" />
-                  Upgrade
-                </a>
-              )}
-              <div className="my-1 border-t border-border" />
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign out
-              </button>
-            </div>
-          )}
-
+        ) : (
           <button
             type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="My account"
-            className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-background-tertiary transition-colors"
+            onClick={() => setSearching(true)}
+            title="Search"
+            className="flex items-center gap-2 w-full h-7 px-2.5 rounded-md bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
           >
-            <UserAvatar avatarUrl={avatarUrl} className="w-8 h-8 shrink-0 border border-border" />
-            <span className="flex-1 min-w-0 text-left text-sm text-foreground truncate">
-              {displayName}
-            </span>
-            <ChevronUp
-              className={`w-3.5 h-3.5 shrink-0 text-foreground-muted transition-transform ${menuOpen ? "rotate-180" : ""}`}
-            />
+            <Search className="w-3.5 h-3.5 shrink-0" />
+            <span className="text-sm">Search chats</span>
           </button>
-        </div>
-      </aside>
+        )}
+      </div>
 
-      {settingsOpen && (
-        <ChatSettingsModal onClose={() => setSettingsOpen(false)} />
-      )}
-    </>
+      <div className="px-2 pb-1">
+        <a
+          href="/dashboard"
+          className="flex items-center gap-2.5 w-full h-8 px-2 rounded-md text-sm text-foreground hover:bg-background-tertiary transition-colors"
+        >
+          <Home className="w-4 h-4 text-foreground-muted" />
+          <span className="flex-1 text-left">Home</span>
+        </a>
+        <a
+          href="/chat"
+          className="flex items-center gap-2.5 w-full h-8 px-2 rounded-md text-sm text-foreground hover:bg-background-tertiary transition-colors"
+        >
+          <Plus className="w-4 h-4 text-foreground-muted" />
+          <span className="flex-1 text-left">New Chat</span>
+        </a>
+      </div>
+
+      <nav className="flex-1 overflow-y-auto pb-2">
+        {isSearching &&
+          searchLoading &&
+          displayedConversations.length === 0 && (
+            <p className="px-4 py-3 text-xs text-foreground-muted">
+              Searching…
+            </p>
+          )}
+        {Object.entries(groups).map(([label, items]) => {
+          if (!items.length) return null;
+          return (
+            <div key={label} className="mb-0.5">
+              <div className="px-4 pt-3 pb-1 text-[11px] text-foreground-muted">
+                {label}
+              </div>
+              {items.map((c) => (
+                <ConversationItem
+                  key={c.id}
+                  c={c}
+                  active={pathname === `/chat/${c.id}`}
+                  onRename={handleRename}
+                  onPin={handlePin}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          );
+        })}
+        {isSearching &&
+          !searchLoading &&
+          displayedConversations.length === 0 && (
+            <p className="px-4 py-3 text-xs text-foreground-muted">
+              No chats match &ldquo;{trimmedQuery}&rdquo;
+            </p>
+          )}
+        {!isSearching && conversations.length === 0 && (
+          <div className="px-5 py-8 text-center">
+            <MessageSquare className="w-8 h-8 text-foreground-muted/30 mx-auto mb-2" />
+            <p className="text-xs text-foreground-muted">No chats yet</p>
+          </div>
+        )}
+      </nav>
+
+      {/* Footer */}
+      <div
+        className="border-t border-border px-3 py-2.5 flex items-center gap-2 relative"
+        ref={menuRef}
+      >
+        <button
+          type="button"
+          onClick={() => setMenuOpen((v) => !v)}
+          className="flex items-center gap-2 flex-1 min-w-0 rounded-md hover:bg-background-tertiary transition-colors -mx-1 px-1 py-0.5"
+        >
+          <UserAvatar
+            avatarUrl={avatarUrl}
+            className="w-7 h-7 shrink-0 border border-border"
+          />
+          <div className="flex-1 min-w-0 text-left">
+            <div className="text-[13px] text-foreground truncate leading-tight">
+              {emailName}
+            </div>
+            <div className="text-[11px] text-foreground-muted truncate leading-tight capitalize">
+              {plan}
+            </div>
+          </div>
+        </button>
+        {menuOpen && (
+          <div className="absolute bottom-full left-3 right-3 mb-1.5 rounded-lg bg-card border border-border shadow-lg py-1 px-0.5 overflow-hidden">
+            <a
+              href="https://rofiant.ca/resources/documentation"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              Docs
+            </a>
+            <a
+              href="/company/contact"
+              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              Contact Us
+            </a>
+            {!isPro && (
+              <a
+                href="/pricing"
+                className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                Upgrade
+              </a>
+            )}
+            <div className="h-px bg-border my-1" />
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              Sign out
+            </button>
+          </div>
+        )}
+        <a
+          href={appUrl("/chat/settings")}
+          title="Settings"
+          className="flex items-center justify-center w-6 h-6 rounded-md text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors shrink-0"
+        >
+          <Settings className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </aside>
   );
 }

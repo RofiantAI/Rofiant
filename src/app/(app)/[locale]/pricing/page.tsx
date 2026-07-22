@@ -2,14 +2,14 @@
 
 import { PageLayout } from "@/components/page-layout";
 import { Badge } from "@/components/ui/badge";
-import { Check, Zap, Users, Building2 } from "lucide-react";
+import { Check, Zap, Crown, Building2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 const consumerTierMeta = [
-  { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false, perUser: false },
-  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true, perUser: false },
-  { key: "team", icon: Users, price: { monthly: 25, annual: 20 }, href: "/api/checkout?plan=team", highlighted: false, perUser: true },
+  { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false },
+  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true },
+  { key: "ultra", icon: Crown, price: { monthly: 60, annual: 50 }, href: "/api/checkout?plan=ultra", highlighted: false },
 ] as const;
 
 export default function PricingPage() {
@@ -85,16 +85,12 @@ export default function PricingPage() {
                 ) : (
                   <div className="flex items-end gap-1">
                     <span className="text-4xl font-normal text-foreground">${price}</span>
-                    <span className="text-sm text-foreground-muted mb-1.5">
-                      {tier.perUser ? t("perMonthPerUser") : t("perMonth")}
-                    </span>
+                    <span className="text-sm text-foreground-muted mb-1.5">{t("perMonth")}</span>
                   </div>
                 )}
                 {annual && price > 0 && (
                   <p className="text-xs text-foreground-muted mt-1">
-                    {tier.perUser
-                      ? t("billedAnnuallyPerUser", { price: price * 12 })
-                      : t("billedAnnually", { price: price * 12 })}
+                    {t("billedAnnually", { price: price * 12 })}
                   </p>
                 )}
               </div>

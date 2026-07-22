@@ -8,7 +8,7 @@ export default async function PricingSuccessPage({
 }) {
   const t = await getTranslations("pricing.success");
   const plan = searchParams.plan ?? "pro";
-  const label = plan === "team" ? t("planTeam") : t("planPro");
+  const label = plan === "ultra" ? t("planUltra") : t("planPro");
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
@@ -33,7 +33,7 @@ export default async function PricingSuccessPage({
             <ArrowRight className="w-4 h-4" />
           </a>
           <a
-            href="/dashboard"
+            href="/chat/settings"
             className="inline-flex items-center justify-center h-10 px-6 text-sm font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
           >
             {t("goToDashboard")}

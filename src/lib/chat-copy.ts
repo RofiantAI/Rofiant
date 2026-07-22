@@ -6,7 +6,7 @@ export const CHAT_SYSTEM_PROMPT =
 export const CHAT_INPUT_PLACEHOLDER = "Ask anything…";
 
 export const CHAT_DISCLAIMER =
-  "AI can make mistakes. Double-check important stuff.";
+  "AI can make mistakes. Double-check important responses.";
 
 export const CHAT_EMPTY = {
   title: "What can I help with?",

@@ -3,13 +3,13 @@
 import { DashboardTour } from "./dashboard-tour";
 
 export function DashboardOnboarding({
-  userId,
   displayName,
   isPaid = false,
+  tourSeen = false,
 }: {
-  userId: string;
   displayName: string;
   isPaid?: boolean;
+  tourSeen?: boolean;
 }) {
-  return <DashboardTour userId={userId} displayName={displayName} isPaid={isPaid} />;
+  return <DashboardTour displayName={displayName} isPaid={isPaid} tourSeen={tourSeen} />;
 }

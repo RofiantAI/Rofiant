@@ -1,12 +1,14 @@
 import { createGroq } from "@ai-sdk/groq";
 import { streamText, convertToModelMessages } from "ai";
 import { createClient } from "@/lib/supabase/server";
-import { ALL_MODELS, DEFAULT_FREE_MODEL } from "@/lib/chat-settings";
+import { ALL_MODELS, DEFAULT_FREE_MODEL, isVisionModel } from "@/lib/chat-settings";
+import { PLAN_MODE_INSTRUCTION } from "@/lib/chat-agents";
 import { isMinorUser } from "@/lib/minor-account";
 import { chatRatelimit, enforceRatelimit } from "@/lib/ratelimit";
 import { getKnowledgeBaseContext } from "@/lib/knowledge-base-context";
 import {
   supportsNativeReasoning,
+  reasoningEffortFor,
   cleanAnswerText,
 } from "@/lib/chat-reasoning";
 import { CHAT_SYSTEM_PROMPT } from "@/lib/chat-copy";
@@ -70,15 +72,46 @@ export async function POST(req: Request) {
     }
   }
 
-  const { messages, conversationId, model, customInstructions, contextLimit, documentContents, knowledgeBaseId } =
-    await req.json();
+  const {
+    messages,
+    conversationId,
+    model,
+    customInstructions,
+    contextLimit,
+    documentContents,
+    knowledgeBaseId,
+    image,
+    mode,
+    agentSystemPrompt,
+    rulesPrompt,
+  } = await req.json();
 
   const safeModel = ALLOWED_MODELS.has(model) ? model : DEFAULT_FREE_MODEL;
   const limit = typeof contextLimit === "number" && contextLimit > 0 ? contextLimit : 20;
   const trimmedMessages = messages.slice(-limit);
 
+  if (typeof image === "string" && image && isVisionModel(safeModel)) {
+    for (let i = trimmedMessages.length - 1; i >= 0; i--) {
+      if (trimmedMessages[i].role === "user") {
+        const mediaType = image.slice(5, image.indexOf(";")) || "image/png";
+        trimmedMessages[i] = {
+          ...trimmedMessages[i],
+          parts: [...(trimmedMessages[i].parts ?? []), { type: "file", mediaType, url: image }],
+        };
+        break;
+      }
+    }
+  }
+
   const systemParts = [CHAT_SYSTEM_PROMPT];
   if (customInstructions?.trim()) systemParts.push(customInstructions.trim());
+  if (mode === "plan") systemParts.push(PLAN_MODE_INSTRUCTION);
+  if (typeof agentSystemPrompt === "string" && agentSystemPrompt.trim()) {
+    systemParts.push(agentSystemPrompt.trim());
+  }
+  if (typeof rulesPrompt === "string" && rulesPrompt.trim()) {
+    systemParts.push(rulesPrompt.trim());
+  }
 
   if (typeof knowledgeBaseId === "string" && knowledgeBaseId) {
     const query = lastUserText(trimmedMessages);
@@ -111,7 +144,7 @@ export async function POST(req: Request) {
     system: systemParts.join("\n\n"),
     messages: await convertToModelMessages(trimmedMessages),
     ...(useNativeReasoning && {
-      reasoning: "medium" as const,
+      reasoning: reasoningEffortFor(safeModel),
       providerOptions: {
         groq: {
           reasoningFormat: "parsed",

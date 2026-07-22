@@ -1,120 +1,65 @@
 import { Card } from "@/components/ui/card";
 import { getTranslations } from "next-intl/server";
 
-function AgentVisualization() {
+function AskVisualization() {
   return (
     <div className="relative h-32 w-full">
       <svg viewBox="0 0 200 120" className="h-full w-full" fill="none">
-        <rect x="70" y="45" width="60" height="30" rx="4" fill="#3b82f6" />
-        <text
-          x="100"
-          y="63"
-          textAnchor="middle"
-          fill="#ffffff"
-          fontSize="7"
-          fontWeight="bold"
-        >
-          Rofiant AI
-        </text>
         <rect
           x="10"
           y="15"
-          width="35"
-          height="18"
-          rx="3"
+          width="130"
+          height="22"
+          rx="4"
           fill="#18181b"
           stroke="#3f3f46"
           strokeWidth="1"
         />
-        <text x="27" y="27" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Chat
+        <text x="20" y="30" fill="#a1a1aa" fontSize="7">
+          &quot;clean up my downloads&quot;
         </text>
-        <line
-          x1="27"
-          y1="33"
-          x2="80"
-          y2="45"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="10"
-          y="85"
-          width="35"
-          height="18"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="27" y="97" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Voice
+        <line x1="75" y1="37" x2="75" y2="48" stroke="#3f3f46" strokeWidth="1" />
+        <rect x="55" y="49" width="40" height="22" rx="4" fill="#3b82f6" />
+        <text x="75" y="63" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="bold">
+          Rofiant
         </text>
-        <line
-          x1="27"
-          y1="85"
-          x2="80"
-          y2="75"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="155"
-          y="15"
-          width="35"
-          height="18"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="172" y="27" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Docs
-        </text>
-        <line
-          x1="172"
-          y1="33"
-          x2="120"
-          y2="45"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="155"
-          y="85"
-          width="35"
-          height="18"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="172" y="97" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          API
-        </text>
-        <line
-          x1="172"
-          y1="85"
-          x2="120"
-          y2="75"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
+        <line x1="75" y1="71" x2="75" y2="83" stroke="#3f3f46" strokeWidth="1" />
+        {[0, 1, 2].map((i) => (
+          <g key={i}>
+            <rect
+              x={20 + i * 45}
+              y="84"
+              width="35"
+              height="20"
+              rx="3"
+              fill="#18181b"
+              stroke="#3f3f46"
+              strokeWidth="1"
+            />
+            <text x={37 + i * 45} y="97" textAnchor="middle" fill="#a1a1aa" fontSize="6">
+              {["Screenshots", "Invoices", "Old files"][i]}
+            </text>
+            <path
+              d={`M${37 + i * 45} 84 l-3 -6 l6 0 z`}
+              fill="#22c55e"
+            />
+          </g>
+        ))}
       </svg>
     </div>
   );
 }
 
-function SecurityPanel() {
+function LocalOnlyPanel() {
   const checks = [
-    { label: "SOC 2 Type II", status: "In progress" },
-    { label: "Data encryption", status: "At rest & in transit" },
-    { label: "Role-based access", status: "Built-in" },
-    { label: "Audit logging", status: "Automatic" },
+    { label: "Runs on your machine", status: "Always" },
+    { label: "Files uploaded to the cloud", status: "Never" },
+    { label: "Risky actions", status: "Ask first" },
+    { label: "Every action", status: "Logged" },
   ];
 
   return (
-    <div className="h-32 w-full overflow-hidden  border border-border bg-background-tertiary">
+    <div className="h-32 w-full overflow-hidden border border-border bg-background-tertiary">
       <div className="flex flex-col">
         {checks.map((row) => (
           <div
@@ -132,203 +77,69 @@ function SecurityPanel() {
   );
 }
 
-function ControlPlane() {
+function MemoryVisualization() {
+  const inputs = ["Naming", "Folders", "Habits"];
   return (
     <div className="relative h-32 w-full">
       <svg viewBox="0 0 200 120" className="h-full w-full" fill="none">
-        <rect x="80" y="45" width="40" height="30" rx="4" fill="#3b82f6" />
-        <text
-          x="100"
-          y="63"
-          textAnchor="middle"
-          fill="#ffffff"
-          fontSize="7"
-          fontWeight="bold"
-        >
-          Core
+        {inputs.map((label, i) => (
+          <g key={label}>
+            <rect
+              x={20 + i * 55}
+              y="15"
+              width="40"
+              height="20"
+              rx="3"
+              fill="#18181b"
+              stroke="#3f3f46"
+              strokeWidth="1"
+            />
+            <text x={40 + i * 55} y="28" textAnchor="middle" fill="#a1a1aa" fontSize="6">
+              {label}
+            </text>
+            <line
+              x1={40 + i * 55}
+              y1="35"
+              x2="100"
+              y2="48"
+              stroke="#3f3f46"
+              strokeWidth="1"
+            />
+          </g>
+        ))}
+        <rect x="70" y="49" width="60" height="26" rx="4" fill="#3b82f6" />
+        <text x="100" y="65" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="bold">
+          Memory
         </text>
-        <rect
-          x="30"
-          y="10"
-          width="35"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="47" y="23" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Models
+        <line x1="100" y1="75" x2="100" y2="90" stroke="#3f3f46" strokeWidth="1" strokeDasharray="2,2" />
+        <text x="100" y="102" textAnchor="middle" fill="#71717a" fontSize="6">
+          gets better over time
         </text>
-        <line
-          x1="47"
-          y1="30"
-          x2="85"
-          y2="45"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="85"
-          y="10"
-          width="30"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="100" y="23" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Agents
-        </text>
-        <line
-          x1="100"
-          y1="30"
-          x2="100"
-          y2="45"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="135"
-          y="10"
-          width="35"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="152" y="23" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          RAG
-        </text>
-        <line
-          x1="145"
-          y1="30"
-          x2="115"
-          y2="45"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="40"
-          y="90"
-          width="35"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="57" y="103" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Audit
-        </text>
-        <line
-          x1="57"
-          y1="90"
-          x2="85"
-          y2="75"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="85"
-          y="90"
-          width="30"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="100" y="103" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Logs
-        </text>
-        <line
-          x1="100"
-          y1="90"
-          x2="100"
-          y2="75"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <rect
-          x="125"
-          y="90"
-          width="35"
-          height="20"
-          rx="3"
-          fill="#18181b"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
-        <text x="142" y="103" textAnchor="middle" fill="#a1a1aa" fontSize="6">
-          Alerts
-        </text>
-        <line
-          x1="142"
-          y1="90"
-          x2="115"
-          y2="75"
-          stroke="#3f3f46"
-          strokeWidth="1"
-        />
       </svg>
     </div>
   );
 }
 
-function UsageChart() {
-  const bars = [40, 55, 35, 70, 45, 60, 50, 80, 42, 65, 55, 75];
-  const labels = ["1w", "2w", "3w", "4w", "5w"];
-
+function ActivityLogVisualization() {
+  const rows = [
+    { time: "10:32", text: "Renamed 12 files in Downloads" },
+    { time: "10:31", text: "Found “Q3 report.pdf”" },
+    { time: "10:28", text: "Sorted screenshots by date" },
+    { time: "10:20", text: "Archived 3 old folders" },
+  ];
   return (
-    <div className="relative h-32 w-full">
-      <svg viewBox="0 0 200 120" className="h-full w-full" fill="none">
-        {[0, 1, 2, 3].map((i) => (
-          <line
-            key={i}
-            x1="10"
-            y1={20 + i * 25}
-            x2="170"
-            y2={20 + i * 25}
-            stroke="#27272a"
-            strokeWidth="0.5"
-          />
-        ))}
-        {bars.map((height, i) => (
-          <rect
-            key={i}
-            x={18 + i * 13}
-            y={100 - height}
-            width="8"
-            height={height}
-            rx="1"
-            fill={i === 7 ? "#3b82f6" : "#27272a"}
-          />
-        ))}
-        {labels.map((label, i) => (
-          <text
-            key={label}
-            x={22 + i * 32}
-            y="115"
-            textAnchor="middle"
-            fill="#71717a"
-            fontSize="7"
+    <div className="h-32 w-full overflow-hidden border border-border bg-background-tertiary">
+      <div className="flex flex-col">
+        {rows.map((row) => (
+          <div
+            key={row.time}
+            className="flex items-center gap-2 px-3 py-1.5 text-xs border-l-2 border-accent-primary"
           >
-            {label}
-          </text>
+            <span className="text-foreground-muted tabular-nums shrink-0">{row.time}</span>
+            <span className="text-foreground-secondary truncate">{row.text}</span>
+          </div>
         ))}
-        <polyline
-          points="22,80 54,65 86,85 118,45 150,70"
-          stroke="#3b82f6"
-          strokeWidth="1.5"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="118" cy="45" r="3" fill="#3b82f6" />
-      </svg>
+      </div>
     </div>
   );
 }
@@ -356,7 +167,7 @@ export async function UnifySection() {
             <h3 className="text-sm font-medium text-foreground-secondary">
               {t("cards.agents.label")}
             </h3>
-            <AgentVisualization />
+            <AskVisualization />
             <p className="mt-4 text-sm text-foreground-secondary">
               <strong className="text-foreground">{t("cards.agents.strong")}</strong>{" "}
               {t("cards.agents.text")}
@@ -367,7 +178,7 @@ export async function UnifySection() {
             <h3 className="text-sm font-medium text-foreground-secondary">
               {t("cards.security.label")}
             </h3>
-            <SecurityPanel />
+            <LocalOnlyPanel />
             <p className="mt-4 text-sm text-foreground-secondary">
               <strong className="text-foreground">{t("cards.security.strong")}</strong>{" "}
               {t("cards.security.text")}
@@ -378,7 +189,7 @@ export async function UnifySection() {
             <h3 className="text-sm font-medium text-foreground-secondary">
               {t("cards.control.label")}
             </h3>
-            <ControlPlane />
+            <MemoryVisualization />
             <p className="mt-4 text-sm text-foreground-secondary">
               <strong className="text-foreground">{t("cards.control.strong")}</strong>{" "}
               {t("cards.control.text")}
@@ -389,7 +200,7 @@ export async function UnifySection() {
             <h3 className="text-sm font-medium text-foreground-secondary">
               {t("cards.usage.label")}
             </h3>
-            <UsageChart />
+            <ActivityLogVisualization />
             <p className="mt-4 text-sm text-foreground-secondary">
               <strong className="text-foreground">{t("cards.usage.strong")}</strong>{" "}
               {t("cards.usage.text")}

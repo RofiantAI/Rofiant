@@ -30,25 +30,23 @@ function ChatMockup() {
   ];
 
   return (
-    <div className=" border border-border bg-card overflow-hidden">
+    <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
       <div className="border-b border-border px-4 py-3 flex items-center gap-2">
-        <div className="w-2 h-2 bg-accent-success" />
+        <div className="w-2 h-2 rounded-full bg-accent-success" />
         <span className="text-sm font-medium text-foreground">{t("header")}</span>
         <span className="ml-auto text-xs text-foreground-muted">{t("connectedTo")}</span>
       </div>
       <div className="p-4 space-y-4 max-h-80 overflow-hidden">
-        {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className="max-w-[85%]">
-              <div
-                className={` px-4 py-2.5 text-sm ${
-                  m.role === "user"
-                    ? "bg-accent-secondary/20 text-foreground"
-                    : "bg-background-tertiary text-foreground-secondary"
-                }`}
-              >
+        {messages.map((m, i) =>
+          m.role === "user" ? (
+            <div key={i} className="max-w-[85%]">
+              <div className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
                 {m.text}
               </div>
+            </div>
+          ) : (
+            <div key={i} className="max-w-[85%]">
+              <div className="text-sm text-foreground leading-relaxed">{m.text}</div>
               {m.source && (
                 <div className="mt-1 text-xs text-foreground-muted flex items-center gap-1">
                   <FileText className="w-3 h-3" />
@@ -56,13 +54,15 @@ function ChatMockup() {
                 </div>
               )}
             </div>
-          </div>
-        ))}
+          ),
+        )}
       </div>
       <div className="border-t border-border p-3">
-        <div className="flex items-center gap-2 bg-background-tertiary  px-3 py-2">
+        <div className="flex items-center gap-2 rounded-full bg-background-tertiary px-3 py-2">
           <span className="text-sm text-foreground-muted flex-1">{t("inputPlaceholder")}</span>
-          <Send className="w-4 h-4 text-foreground-muted" />
+          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-foreground text-background shrink-0">
+            <Send className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
     </div>

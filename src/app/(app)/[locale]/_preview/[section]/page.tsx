@@ -8,8 +8,6 @@ import { LogoCloudSection } from "@/components/sections/logo-cloud-section";
 import { UnifySection } from "@/components/sections/unify-section";
 import { DeploySection } from "@/components/sections/deploy-section";
 import { ProtectSection } from "@/components/sections/protect-section";
-import { ScaleSection } from "@/components/sections/scale-section";
-import { MonitorSection } from "@/components/sections/monitor-section";
 import { DeveloperSection } from "@/components/sections/developer-section";
 import { FooterCtaSection } from "@/components/sections/footer-cta-section";
 import { FooterSection } from "@/components/sections/footer-section";
@@ -22,8 +20,6 @@ const sections: Record<string, React.ComponentType> = {
   unify: UnifySection,
   deploy: DeploySection,
   protect: ProtectSection,
-  scale: ScaleSection,
-  monitor: MonitorSection,
   developer: DeveloperSection,
   "footer-cta": FooterCtaSection,
   footer: FooterSection,

@@ -17,6 +17,7 @@ export function MessageBubble({
   fontSize = "text-sm",
   showTimestamp = false,
   attachments,
+  image,
   onEdit,
 }: {
   role: "user" | "assistant" | string;
@@ -25,6 +26,7 @@ export function MessageBubble({
   fontSize?: string;
   showTimestamp?: boolean;
   attachments?: MessageAttachment[];
+  image?: string;
   onEdit?: (newContent: string) => void;
 }) {
   const isUser = role === "user";
@@ -105,11 +107,20 @@ export function MessageBubble({
 
     return (
       <div className="flex flex-col items-end gap-1 group/msg">
-        <div
-          className={`max-w-[85%] px-4 py-3 bg-background-tertiary/80 border border-border/60 text-foreground ${fontSize} leading-relaxed whitespace-pre-wrap rounded-2xl rounded-br-md`}
-        >
-          {content}
-        </div>
+        {image && (
+          <img
+            src={image}
+            alt="Attached"
+            className="max-w-[280px] max-h-[280px] w-auto h-auto rounded-xl border border-border object-cover"
+          />
+        )}
+        {content && (
+          <div
+            className={`max-w-[85%] px-4 py-3 bg-card border border-border text-foreground ${fontSize} leading-relaxed whitespace-pre-wrap rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04)]`}
+          >
+            {content}
+          </div>
+        )}
         {attachments && attachments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 justify-end max-w-[80%]">
             {attachments.map((a, i) => (
@@ -150,7 +161,7 @@ export function MessageBubble({
         {/*Do not change icon*/}
         <img src="/icon.svg" alt="" className="w-[26px] h-auto" />
       </div>
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 group/assistant-body">
         <div
           className={`text-foreground ${fontSize} leading-relaxed pt-0.5 prose prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0 prose-pre:border-0 prose-code:bg-background-tertiary prose-code:px-1 prose-code:rounded [&_pre_code]:bg-transparent [&_pre_code]:p-0`}
         >
@@ -162,10 +173,13 @@ export function MessageBubble({
             </ReactMarkdown>
           ) : null}
         </div>
-        {time && !loading && (
-          <span className="text-xs text-foreground-muted mt-1 block">
-            {time}
-          </span>
+        {!loading && content && (
+          <div className="flex items-center gap-2 mt-1 opacity-0 group-hover/assistant-body:opacity-100 focus-within:opacity-100 transition-opacity">
+            {time && (
+              <span className="text-xs text-foreground-muted">{time}</span>
+            )}
+            <CopyButton text={content} />
+          </div>
         )}
       </div>
     </div>

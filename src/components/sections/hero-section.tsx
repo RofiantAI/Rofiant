@@ -8,7 +8,7 @@ export async function HeroSection() {
 
   return (
     <section className="relative overflow-hidden min-h-[85vh] flex items-end">
-      <div className="absolute inset-0">
+      <div className="absolute -inset-8 scale-105 rotate-2">
         <Image
           src="/hero.png"
           alt="Hero background"

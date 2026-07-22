@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export type DashboardSearchResult = {
-  type: "conversation" | "document" | "agent" | "knowledge_base";
+  type: "conversation";
   id: string;
   title: string;
   subtitle?: string;
@@ -26,41 +26,13 @@ export async function GET(req: Request) {
   const pattern = `%${escapeIlike(q)}%`;
   const results: DashboardSearchResult[] = [];
 
-  const [
-    { data: conversations },
-    { data: documents },
-    { data: agents },
-    { data: knowledgeBases },
-  ] = await Promise.all([
-    supabase
-      .from("conversations")
-      .select("id, title, updated_at")
-      .eq("user_id", user.id)
-      .ilike("title", pattern)
-      .order("updated_at", { ascending: false })
-      .limit(8),
-    supabase
-      .from("documents")
-      .select("id, name, category, summary")
-      .eq("user_id", user.id)
-      .ilike("name", pattern)
-      .order("created_at", { ascending: false })
-      .limit(8),
-    supabase
-      .from("agents")
-      .select("id, name, description, status")
-      .eq("user_id", user.id)
-      .ilike("name", pattern)
-      .order("created_at", { ascending: false })
-      .limit(8),
-    supabase
-      .from("knowledge_bases")
-      .select("id, name, description")
-      .eq("owner_id", user.id)
-      .ilike("name", pattern)
-      .order("updated_at", { ascending: false })
-      .limit(8),
-  ]);
+  const { data: conversations } = await supabase
+    .from("conversations")
+    .select("id, title, updated_at")
+    .eq("user_id", user.id)
+    .ilike("title", pattern)
+    .order("updated_at", { ascending: false })
+    .limit(8);
 
   for (const c of conversations ?? []) {
     results.push({
@@ -68,36 +40,6 @@ export async function GET(req: Request) {
       id: c.id,
       title: c.title,
       href: `/chat/${c.id}`,
-    });
-  }
-
-  for (const d of documents ?? []) {
-    results.push({
-      type: "document",
-      id: d.id,
-      title: d.name,
-      subtitle: d.category ?? d.summary ?? undefined,
-      href: "/dashboard/documents",
-    });
-  }
-
-  for (const a of agents ?? []) {
-    results.push({
-      type: "agent",
-      id: a.id,
-      title: a.name,
-      subtitle: a.description || a.status,
-      href: "/dashboard/agents",
-    });
-  }
-
-  for (const kb of knowledgeBases ?? []) {
-    results.push({
-      type: "knowledge_base",
-      id: kb.id,
-      title: kb.name,
-      subtitle: kb.description || undefined,
-      href: `/dashboard/knowledge-bases/${kb.id}`,
     });
   }
 

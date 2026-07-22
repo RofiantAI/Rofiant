@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
+import { isOrgPlan } from "@/lib/agency-org";
 
 export async function POST() {
   const supabase = await createClient();
@@ -9,8 +10,8 @@ export async function POST() {
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
   const plan = (user.user_metadata?.plan ?? "free").toLowerCase();
-  if (!["agency", "enterprise"].includes(plan)) {
-    return NextResponse.json({ error: "SCIM requires Agency or Enterprise plan" }, { status: 403 });
+  if (!isOrgPlan(plan)) {
+    return NextResponse.json({ error: "SCIM requires the Ultra plan" }, { status: 403 });
   }
 
   const admin = createAdminClient();

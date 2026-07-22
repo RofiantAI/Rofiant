@@ -7,7 +7,6 @@ import {
   Webhook,
   Download,
   Bot,
-  Landmark,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -35,7 +34,6 @@ const ACTION_ICONS: Record<string, LucideIcon> = {
   webhook: Webhook,
   data: Download,
   agent: Bot,
-  federal_workflow: Landmark,
 };
 
 function actionIcon(action: string): LucideIcon {

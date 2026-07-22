@@ -1,12 +1,17 @@
+import { NextIntlClientProvider } from "next-intl";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ChatSettingsProvider } from "@/contexts/chat-settings-context";
 import { ChatShell } from "@/components/chat/chat-shell";
 import { AnnouncementBanner } from "@/components/dashboard/announcement-banner";
 import { routing } from "@/i18n/routing";
+import { getDashboardLocale, getDashboardMessages } from "@/i18n/dashboard-locale";
 import { getActiveSiteAnnouncements } from "@/lib/site-broadcast";
 
 export default async function ChatLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getDashboardLocale();
+  const messages = await getDashboardMessages(locale);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect(`/${routing.defaultLocale}/auth/login`);
@@ -31,18 +36,20 @@ export default async function ChatLayout({ children }: { children: React.ReactNo
   ]);
 
   return (
-    <ChatSettingsProvider isPro={isPro}>
-      <ChatShell conversations={conversations ?? []} user={user}>
-        <AnnouncementBanner
-          announcements={announcements.map((a) => ({
-            id: a.id,
-            title: a.title,
-            body: a.body,
-            variant: a.variant,
-          }))}
-        />
-        {children}
-      </ChatShell>
-    </ChatSettingsProvider>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ChatSettingsProvider isPro={isPro}>
+        <ChatShell conversations={conversations ?? []} user={user}>
+          <AnnouncementBanner
+            announcements={announcements.map((a) => ({
+              id: a.id,
+              title: a.title,
+              body: a.body,
+              variant: a.variant,
+            }))}
+          />
+          {children}
+        </ChatShell>
+      </ChatSettingsProvider>
+    </NextIntlClientProvider>
   );
 }

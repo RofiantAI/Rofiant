@@ -15,10 +15,15 @@ import {
   AlertTriangle,
   ChevronDown,
   Sparkles,
+  ListChecks,
+  Users,
+  Plus,
 } from "lucide-react";
 import { useChatSettings } from "@/contexts/chat-settings-context";
 import { FREE_MODELS, PRO_MODELS } from "@/lib/chat-settings";
 import type { ChatSettings } from "@/lib/chat-settings";
+import { loadRules, saveRules, type Rule } from "@/lib/chat-rules";
+import { loadAgents, saveAgents, type Agent } from "@/lib/chat-agents";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -33,6 +38,8 @@ const CONTEXT_OPTIONS = [
 const SECTIONS = [
   { id: "model", label: "Model", icon: Cpu },
   { id: "behavior", label: "Behavior", icon: MessageSquare },
+  { id: "rules", label: "Rules", icon: ListChecks },
+  { id: "agents", label: "Agents", icon: Users },
   { id: "interface", label: "Interface", icon: Layout },
   { id: "data", label: "Data controls", icon: Database },
   { id: "notifications", label: "Notifications", icon: Bell },
@@ -207,9 +214,55 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
   const [knowledgeBases, setKnowledgeBases] = useState<
     { id: string; name: string }[]
   >([]);
+  const [rules, setRules] = useState<Rule[]>([]);
+  const [newRuleText, setNewRuleText] = useState("");
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [addAgentOpen, setAddAgentOpen] = useState(false);
+  const [newAgent, setNewAgent] = useState({ name: "", systemPrompt: "" });
 
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
+
+  useEffect(() => {
+    setRules(loadRules());
+    setAgents(loadAgents());
+  }, []);
+
+  function addRule() {
+    const text = newRuleText.trim();
+    if (!text) return;
+    const rule: Rule = { id: crypto.randomUUID(), text, createdAt: Date.now() };
+    const next = [...rules, rule];
+    setRules(next);
+    saveRules(next);
+    setNewRuleText("");
+  }
+
+  function removeRule(id: string) {
+    const next = rules.filter((r) => r.id !== id);
+    setRules(next);
+    saveRules(next);
+  }
+
+  function addAgent() {
+    const name = newAgent.name.trim();
+    const systemPrompt = newAgent.systemPrompt.trim();
+    if (!name || !systemPrompt) return;
+    const agent: Agent = { id: crypto.randomUUID(), name, systemPrompt };
+    const next = [...agents, agent];
+    setAgents(next);
+    saveAgents(next);
+    patch({ activeAgentId: agent.id });
+    setNewAgent({ name: "", systemPrompt: "" });
+    setAddAgentOpen(false);
+  }
+
+  function removeAgent(id: string) {
+    const next = agents.filter((a) => a.id !== id);
+    setAgents(next);
+    saveAgents(next);
+    if (draft.activeAgentId === id) patch({ activeAgentId: null });
+  }
 
   useEffect(() => {
     fetch("/api/knowledge-bases")
@@ -466,6 +519,140 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
                     />
                   </Row>
                 </SettingsList>
+              </div>
+            )}
+
+            {active === "rules" && (
+              <div className="space-y-4">
+                <p className="text-xs text-foreground-muted leading-relaxed">
+                  Rules are always followed by the AI, in every chat. You can also manage these with
+                  <code className="mx-1 px-1 py-0.5 rounded bg-background-tertiary text-foreground">/rule</code>
+                  commands in the composer.
+                </p>
+                <div className="flex items-center gap-2">
+                  <input
+                    value={newRuleText}
+                    onChange={(e) => setNewRuleText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") addRule();
+                    }}
+                    placeholder="e.g. Always answer in metric units"
+                    className="flex-1 h-9 px-3 rounded-lg bg-background-tertiary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light"
+                  />
+                  <Button size="sm" onClick={addRule} disabled={!newRuleText.trim()}>
+                    <Plus className="w-3.5 h-3.5" />
+                    Add
+                  </Button>
+                </div>
+                {rules.length === 0 ? (
+                  <p className="text-xs text-foreground-muted text-center py-6">No rules yet</p>
+                ) : (
+                  <SettingsList>
+                    {rules.map((r) => (
+                      <Row key={r.id} label={r.text}>
+                        <button
+                          type="button"
+                          onClick={() => removeRule(r.id)}
+                          title="Remove rule"
+                          className="flex items-center justify-center w-7 h-7 rounded-md text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </Row>
+                    ))}
+                  </SettingsList>
+                )}
+              </div>
+            )}
+
+            {active === "agents" && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-foreground-muted leading-relaxed max-w-[280px]">
+                    Save custom system prompts as agents and switch between them from the composer.
+                  </p>
+                  <Button size="sm" variant="outline" onClick={() => setAddAgentOpen(true)}>
+                    <Plus className="w-3.5 h-3.5" />
+                    Add agent
+                  </Button>
+                </div>
+
+                {agents.length === 0 ? (
+                  <p className="text-xs text-foreground-muted text-center py-6">No agents yet</p>
+                ) : (
+                  <SettingsList>
+                    {agents.map((a) => {
+                      const isActive = draft.activeAgentId === a.id;
+                      return (
+                        <Row key={a.id} label={a.name} desc={a.systemPrompt}>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                patch({ activeAgentId: isActive ? null : a.id, chatMode: "ask" })
+                              }
+                              className={`h-7 px-2.5 rounded-md text-xs transition-colors ${
+                                isActive
+                                  ? "bg-accent-primary/20 text-accent-primary"
+                                  : "bg-background-tertiary text-foreground-secondary hover:text-foreground"
+                              }`}
+                            >
+                              {isActive ? "Active" : "Use"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeAgent(a.id)}
+                              title="Remove agent"
+                              className="flex items-center justify-center w-7 h-7 rounded-md text-foreground-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </Row>
+                      );
+                    })}
+                  </SettingsList>
+                )}
+
+                {addAgentOpen && (
+                  <div className="rounded-lg border border-border bg-card/50 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-foreground">Add agent</p>
+                      <button
+                        type="button"
+                        onClick={() => setAddAgentOpen(false)}
+                        className="text-foreground-muted hover:text-foreground"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <input
+                      value={newAgent.name}
+                      onChange={(e) => setNewAgent((s) => ({ ...s, name: e.target.value }))}
+                      placeholder="Name"
+                      className="w-full h-9 px-3 rounded-lg bg-background-tertiary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light"
+                    />
+                    <textarea
+                      value={newAgent.systemPrompt}
+                      onChange={(e) => setNewAgent((s) => ({ ...s, systemPrompt: e.target.value }))}
+                      placeholder="System prompt"
+                      rows={4}
+                      className="w-full px-3 py-2.5 rounded-lg bg-background-tertiary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-border-light resize-none"
+                    />
+                    <div className="flex items-center justify-end gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => setAddAgentOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={addAgent}
+                        disabled={!newAgent.name.trim() || !newAgent.systemPrompt.trim()}
+                      >
+                        Add agent
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

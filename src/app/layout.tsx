@@ -4,6 +4,7 @@ import { getLocale } from "next-intl/server";
 import "./(app)/globals.css";
 import { CookieBanner } from "@/components/ui/cookie-banner";
 import { OfflineToast } from "@/components/ui/offline-toast";
+import { UpdateToast } from "@/components/ui/update-toast";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { MinorDataGuard } from "@/components/minor-data-guard";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -101,6 +102,7 @@ export default async function RootLayout({
           </PostHogProvider>
           <CookieBanner />
           <OfflineToast />
+          <UpdateToast />
         </ThemeProvider>
       </body>
     </html>

@@ -349,7 +349,7 @@ export async function sendApiFailureAlertEmail({
     heading: "Your API requests are failing repeatedly",
     body: detail,
     ctaLabel: "View API keys",
-    ctaHref: `${APP_URL}/dashboard/api-keys`,
+    ctaHref: `${APP_URL}/dashboard/settings?tab=api`,
   });
 }
 

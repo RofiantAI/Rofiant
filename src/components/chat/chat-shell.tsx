@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ChatSidebar } from "./sidebar";
+import { ChatTabs } from "./chat-tabs";
 import { ChatShellContext } from "@/contexts/chat-shell-context";
+import { ChatTabsContext } from "@/contexts/chat-tabs-context";
 import type { User } from "@supabase/supabase-js";
 
 type Conversation = {
@@ -22,6 +25,10 @@ export function ChatShell({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(true);
+  const [draftVersion, setDraftVersion] = useState(0);
+  const bumpDraft = useCallback(() => setDraftVersion((v) => v + 1), []);
+  const pathname = usePathname();
+  const isSettings = pathname?.startsWith("/chat/settings");
 
   return (
     <ChatShellContext.Provider
@@ -31,21 +38,26 @@ export function ChatShell({
         closeSidebar: () => setOpen(false),
       }}
     >
-      <div className="flex h-screen overflow-hidden bg-background">
-        <div
-          className="shrink-0 overflow-hidden"
-          style={{
-            width: open ? 256 : 0,
-            transition: "width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        >
-          <ChatSidebar conversations={conversations} user={user} />
-        </div>
+      <ChatTabsContext.Provider value={{ draftVersion, bumpDraft }}>
+        <div className="flex h-screen overflow-hidden bg-background">
+          {!isSettings && (
+            <div
+              className="shrink-0 overflow-hidden"
+              style={{
+                width: open ? 272 : 0,
+                transition: "width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              <ChatSidebar conversations={conversations} user={user} />
+            </div>
+          )}
 
-        <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          {children}
-        </main>
-      </div>
+          <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            {!isSettings && <ChatTabs conversations={conversations} />}
+            {children}
+          </main>
+        </div>
+      </ChatTabsContext.Provider>
     </ChatShellContext.Provider>
   );
 }

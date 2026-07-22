@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
-import { PasswordInput } from "@/components/ui/password-input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Spinner } from "@/components/ui/spinner";
 import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
@@ -44,7 +44,7 @@ export function LoginForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
       },
     });
     if (error) {
@@ -61,7 +61,7 @@ export function LoginForm() {
     const { data, error } = await supabase.auth.signInWithSSO({
       domain: ssoDomain,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
       },
     });
     if (error) {
@@ -95,7 +95,7 @@ export function LoginForm() {
       return;
     }
 
-    window.location.href = appUrl("/dashboard");
+    window.location.href = appUrl("/chat");
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -155,23 +155,14 @@ export function LoginForm() {
         </p>
 
         <form onSubmit={handleResetPassword} className="space-y-5">
-          <div>
-            <label
-              htmlFor="reset-email"
-              className="block text-sm font-medium text-foreground-secondary mb-2"
-            >
-              Email
-            </label>
-            <input
-              id="reset-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-            />
-          </div>
+          <FloatingLabelInput
+            id="reset-email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
           <TurnstileWidget onVerify={setTurnstileToken} />
 
@@ -215,41 +206,24 @@ export function LoginForm() {
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-foreground-secondary mb-2"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            required
-            className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-          />
-        </div>
+        <FloatingLabelInput
+          id="email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-foreground-secondary mb-2"
-          >
-            Password
-          </label>
-          <PasswordInput
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            required
-            autoComplete="current-password"
-            className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-          />
-        </div>
+        <FloatingLabelInput
+          id="password"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+        />
 
         <div className="flex justify-end">
           <button

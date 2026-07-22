@@ -5,22 +5,17 @@ import { DefaultChatTransport, isTextUIPart } from "ai";
 import { parseAssistantOutput } from "@/lib/chat-reasoning";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  ArrowUp,
-  Square,
-  Paperclip,
-  FileText,
-  X,
-  ChevronDown,
-  PanelLeftOpen,
-} from "lucide-react";
+import { PanelLeftOpen } from "lucide-react";
 import { MessageBubble, type MessageAttachment } from "./message-bubble";
 import { ChatEmptyState } from "./chat-empty-state";
-import { ModelSwitcher } from "./model-switcher";
+import { Composer } from "./composer";
 import { useChatSettings } from "@/contexts/chat-settings-context";
 import { useChatShell } from "@/contexts/chat-shell-context";
 import { playDoneSound } from "@/lib/chat-settings";
-import { CHAT_DISCLAIMER, CHAT_INPUT_PLACEHOLDER } from "@/lib/chat-copy";
+import { parseSlashCommand } from "@/lib/chat-commands";
+import { loadRules, saveRules, rulesToPrompt, type Rule } from "@/lib/chat-rules";
+import { loadAgents } from "@/lib/chat-agents";
+import { CHAT_DISCLAIMER } from "@/lib/chat-copy";
 import type { UIMessage } from "ai";
 
 type DocMeta = { id: string; name: string; type: string };
@@ -48,6 +43,11 @@ const PENDING_ATTACHMENTS_KEY = (id: string) =>
   `rofiant-pending-attachments-${id}`;
 const PENDING_DOC_CONTENTS_KEY = (id: string) =>
   `rofiant-pending-doc-contents-${id}`;
+const PENDING_IMAGE_KEY = (id: string) => `rofiant-pending-image-${id}`;
+
+function makeId() {
+  return Math.random().toString(36).slice(2, 10);
+}
 
 export function ChatWindow({
   conversationId,
@@ -66,22 +66,22 @@ export function ChatWindow({
   const didAutoSend = useRef(false);
 
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
+  const pendingImageRef = useRef<string | undefined>(undefined);
 
   const bottomRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Document attachment state
   const [allDocs, setAllDocs] = useState<DocMeta[]>([]);
   const [selectedDocIds, setSelectedDocIds] = useState<Set<string>>(new Set());
-  const [docPickerOpen, setDocPickerOpen] = useState(false);
   const [docLoadError, setDocLoadError] = useState("");
-  const docPickerRef = useRef<HTMLDivElement>(null);
   // Pre-fetched content passed into body at send time
   const pendingDocContentsRef = useRef<{ name: string; text: string }[]>([]);
   // Maps user-message index (0-based) → attachments shown in that bubble
   const [msgAttachments, setMsgAttachments] = useState<
     Map<number, MessageAttachment[]>
   >(new Map());
+  // Maps user-message index (0-based) → attached image shown in that bubble
+  const [msgImages, setMsgImages] = useState<Map<number, string>>(new Map());
   const userMsgCountRef = useRef(0);
 
   useEffect(() => {
@@ -92,19 +92,6 @@ export function ChatWindow({
       })
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    function onClickOutside(e: MouseEvent) {
-      if (
-        docPickerRef.current &&
-        !docPickerRef.current.contains(e.target as Node)
-      ) {
-        setDocPickerOpen(false);
-      }
-    }
-    if (docPickerOpen) document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
-  }, [docPickerOpen]);
 
   function toggleDoc(id: string) {
     setSelectedDocIds((prev) => {
@@ -124,14 +111,23 @@ export function ChatWindow({
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
-        body: () => ({
-          conversationId: activeId,
-          model: settings.model,
-          customInstructions: settings.customInstructions,
-          contextLimit: settings.contextLimit,
-          knowledgeBaseId: settings.knowledgeBaseId || undefined,
-          documentContents: pendingDocContentsRef.current,
-        }),
+        body: () => {
+          const agents = loadAgents();
+          const agent = settings.activeAgentId
+            ? agents.find((a) => a.id === settings.activeAgentId)
+            : undefined;
+          return {
+            conversationId: activeId,
+            model: settings.model,
+            customInstructions: settings.customInstructions,
+            contextLimit: settings.contextLimit,
+            knowledgeBaseId: settings.knowledgeBaseId || undefined,
+            documentContents: pendingDocContentsRef.current,
+            mode: settings.chatMode,
+            agentSystemPrompt: agent?.systemPrompt,
+            rulesPrompt: rulesToPrompt(loadRules()),
+          };
+        },
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -140,6 +136,8 @@ export function ChatWindow({
       settings.customInstructions,
       settings.contextLimit,
       settings.knowledgeBaseId,
+      settings.chatMode,
+      settings.activeAgentId,
     ],
   );
 
@@ -193,6 +191,13 @@ export function ChatWindow({
       sessionStorage.removeItem(docKey);
       pendingDocContentsRef.current = JSON.parse(docVal);
     }
+    const imgKey = PENDING_IMAGE_KEY(conversationId);
+    const imgVal = sessionStorage.getItem(imgKey);
+    if (imgVal) {
+      sessionStorage.removeItem(imgKey);
+      pendingImageRef.current = imgVal;
+      setMsgImages((prev) => new Map(prev).set(0, imgVal));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -202,7 +207,7 @@ export function ChatWindow({
     didAutoSend.current = true;
     router.refresh();
     supabaseInsertUserMessage(activeId, pendingMessage).then(() => {
-      sendMessage({ text: pendingMessage });
+      sendMessage({ text: pendingMessage }, { body: { image: pendingImageRef.current } });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingMessage]);
@@ -225,11 +230,78 @@ export function ChatWindow({
     return results;
   }
 
-  async function submit(textOverride?: string) {
+  function pushLocalExchange(userText: string, replyText: string) {
+    setMessages((prev) => [
+      ...prev,
+      { id: makeId(), role: "user", parts: [{ type: "text", text: userText }] },
+      { id: makeId(), role: "assistant", parts: [{ type: "text", text: replyText }] },
+    ]);
+  }
+
+  function handleSlashCommand(raw: string) {
+    const command = parseSlashCommand(raw);
+    if (!command) return false;
+
+    switch (command.type) {
+      case "clear": {
+        setMessages([]);
+        setMsgAttachments(new Map());
+        setMsgImages(new Map());
+        userMsgCountRef.current = 0;
+        break;
+      }
+      case "rule-create": {
+        if (!command.text) {
+          pushLocalExchange(raw, "Usage: /rule create <rule text>");
+          break;
+        }
+        const rule: Rule = { id: makeId(), text: command.text, createdAt: Date.now() };
+        const next = [...loadRules(), rule];
+        saveRules(next);
+        pushLocalExchange(raw, `Added rule: "${command.text}"`);
+        break;
+      }
+      case "rule-list": {
+        const rules = loadRules();
+        const listText = rules.length
+          ? rules.map((r, i) => `${i + 1}. ${r.text}`).join("\n")
+          : "No rules yet. Use /rule create <text> to add one.";
+        pushLocalExchange(raw, listText);
+        break;
+      }
+      case "rule-remove": {
+        const rules = loadRules();
+        const idx = Number(command.target) - 1;
+        const target = rules[idx] ?? rules.find((r) => r.id === command.target);
+        if (!target) {
+          pushLocalExchange(raw, `No rule found for "${command.target}". Use /rule list to see rules.`);
+          break;
+        }
+        saveRules(rules.filter((r) => r.id !== target.id));
+        pushLocalExchange(raw, `Removed rule: "${target.text}"`);
+        break;
+      }
+      case "unknown": {
+        pushLocalExchange(raw, `Unknown command: ${command.raw}`);
+        break;
+      }
+    }
+    return true;
+  }
+
+  async function submit(textOverride?: string, image?: string) {
     const text = (textOverride ?? inputValue).trim();
-    if (!text || isLoading) return;
+    if ((!text && !image) || isLoading) return;
     setDocLoadError("");
     clearError();
+
+    if (handleSlashCommand(text)) {
+      setInputValue("");
+      return;
+    }
+
+    // Index of the user message this send will create
+    const idx = userMsgCountRef.current;
 
     // Pre-fetch doc contents before sending
     let attachmentMeta: MessageAttachment[] = [];
@@ -240,7 +312,6 @@ export function ChatWindow({
       if (contents.length !== selectedDocIds.size) return; // error shown
       pendingDocContentsRef.current = contents;
       // Record which attachments go on this user message
-      const idx = userMsgCountRef.current;
       attachmentMeta = Array.from(selectedDocIds).map((id) => {
         const d = allDocs.find((x) => x.id === id);
         return { name: d?.name ?? id, type: d?.type ?? "" };
@@ -249,11 +320,11 @@ export function ChatWindow({
     } else {
       pendingDocContentsRef.current = [];
     }
+    if (image) setMsgImages((prev) => new Map(prev).set(idx, image));
     userMsgCountRef.current += 1;
     setSelectedDocIds(new Set());
 
     setInputValue("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
 
     if (!activeId) {
       const res = await fetch("/api/conversations", {
@@ -279,10 +350,11 @@ export function ChatWindow({
           JSON.stringify(pendingDocContentsRef.current),
         );
       }
+      if (image) sessionStorage.setItem(PENDING_IMAGE_KEY(conv.id), image);
       router.push(`/chat/${conv.id}`);
     } else {
       await supabaseInsertUserMessage(activeId, text);
-      await sendMessage({ text });
+      await sendMessage({ text }, { body: { image } });
     }
   }
 
@@ -292,6 +364,13 @@ export function ChatWindow({
     setMessages(truncated);
     setMsgAttachments((prev) => {
       const next = new Map<number, MessageAttachment[]>();
+      prev.forEach((v, k) => {
+        if (k < newUserCount) next.set(k, v);
+      });
+      return next;
+    });
+    setMsgImages((prev) => {
+      const next = new Map<number, string>();
       prev.forEach((v, k) => {
         if (k < newUserCount) next.set(k, v);
       });
@@ -311,19 +390,6 @@ export function ChatWindow({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ conversationId: convId, content }),
     });
-  }
-
-  function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey && settings.enterToSend) {
-      e.preventDefault();
-      submit();
-    }
-  }
-
-  function onTextareaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setInputValue(e.target.value);
-    e.target.style.height = "auto";
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 200)}px`;
   }
 
   const isEmpty = messages.length === 0 && !pendingMessage;
@@ -362,154 +428,20 @@ export function ChatWindow({
 
   function renderComposer(maxWidth = "max-w-3xl") {
     return (
-      <>
-        {docLoadError && (
-          <div
-            className={`${maxWidth} mx-auto mb-2 px-3 py-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400`}
-          >
-            {docLoadError}
-          </div>
-        )}
-        <div
-          className={`${maxWidth} mx-auto border border-border bg-card/80 backdrop-blur-sm focus-within:border-border-light focus-within:ring-1 focus-within:ring-accent-primary/15 transition-all rounded-2xl shadow-sm`}
-        >
-          {selectedDocIds.size > 0 && (
-            <div className="flex flex-wrap gap-1.5 px-4 pt-3">
-              {Array.from(selectedDocIds).map((id) => {
-                const doc = allDocs.find((d) => d.id === id);
-                if (!doc) return null;
-                return (
-                  <span
-                    key={id}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-background-tertiary border border-border text-xs text-foreground-secondary rounded-lg"
-                  >
-                    <FileText className="w-3 h-3 text-foreground-muted" />
-                    <span className="max-w-[160px] truncate">{doc.name}</span>
-                    <button
-                      onClick={() => toggleDoc(id)}
-                      className="text-foreground-muted hover:text-foreground"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                );
-              })}
-            </div>
-          )}
-
-          <textarea
-            ref={textareaRef}
-            value={inputValue}
-            onChange={onTextareaChange}
-            onKeyDown={onKeyDown}
-            placeholder={CHAT_INPUT_PLACEHOLDER}
-            rows={1}
-            className="w-full px-4 pt-4 pb-2 bg-transparent text-foreground placeholder:text-foreground-muted text-sm resize-none focus:outline-none"
-            style={{ height: "auto" }}
-          />
-          <div className="flex items-center justify-between px-3 pb-3">
-            <div className="flex items-center gap-1 min-w-0">
-              <ModelSwitcher disabled={isLoading} />
-              <div className="relative" ref={docPickerRef}>
-                <button
-                  type="button"
-                  onClick={() => setDocPickerOpen((v) => !v)}
-                  className={`flex items-center gap-1 h-8 px-2 text-xs transition-colors rounded-md ${
-                    selectedDocIds.size > 0
-                      ? "text-accent-primary"
-                      : "text-foreground-muted hover:text-foreground hover:bg-background-tertiary"
-                  }`}
-                  title="Attach a file"
-                >
-                  <Paperclip className="w-4 h-4" />
-                  {selectedDocIds.size > 0 && (
-                    <span className="font-medium">{selectedDocIds.size}</span>
-                  )}
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-
-                {docPickerOpen && (
-                  <div className="absolute bottom-full left-0 mb-2 w-64 bg-card border border-border rounded-xl shadow-xl z-50 overflow-auto">
-                    <div className="px-3 py-2 border-b border-border">
-                      <span className="text-[10px] font-medium uppercase tracking-widest text-foreground-muted">
-                        Your files
-                      </span>
-                    </div>
-                    {allDocs.length === 0 ? (
-                      <div className="px-3 py-4 text-xs text-foreground-muted text-center">
-                        No files yet.{" "}
-                        <a
-                          href="/dashboard/documents"
-                          className="text-accent-primary hover:underline"
-                        >
-                          Add some →
-                        </a>
-                      </div>
-                    ) : (
-                      <div className="max-h-52 overflow-y-auto">
-                        {allDocs.map((doc) => {
-                          const checked = selectedDocIds.has(doc.id);
-                          return (
-                            <button
-                              key={doc.id}
-                              onClick={() => toggleDoc(doc.id)}
-                              className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-left text-sm transition-colors hover:bg-background-tertiary ${
-                                checked
-                                  ? "text-foreground"
-                                  : "text-foreground-secondary"
-                              }`}
-                            >
-                              <div
-                                className={`w-3.5 h-3.5 border shrink-0 flex items-center justify-center rounded-sm ${
-                                  checked
-                                    ? "border-accent-primary bg-accent-primary/20"
-                                    : "border-border"
-                                }`}
-                              >
-                                {checked && (
-                                  <div className="w-1.5 h-1.5 bg-accent-primary" />
-                                )}
-                              </div>
-                              <FileText className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
-                              <span className="truncate text-xs">
-                                {doc.name}
-                              </span>
-                              <span className="ml-auto text-[10px] text-foreground-muted shrink-0">
-                                {doc.type}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={isLoading ? stop : () => submit()}
-              disabled={fetchingDocs || (!isLoading && !inputValue.trim())}
-              className={`flex items-center justify-center w-9 h-9 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
-                inputValue.trim() && !isLoading
-                  ? "bg-foreground text-background hover:bg-foreground/90 shadow-sm"
-                  : isLoading
-                    ? "bg-foreground text-background hover:bg-foreground/90"
-                    : "bg-background-tertiary text-foreground-muted border border-border"
-              }`}
-            >
-              {isLoading ? (
-                <Square className="w-3.5 h-3.5 fill-current" />
-              ) : fetchingDocs ? (
-                <span className="w-3.5 h-3.5 border border-background border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <ArrowUp className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-        </div>
-      </>
+      <Composer
+        value={inputValue}
+        onValueChange={setInputValue}
+        onSubmit={(text, image) => submit(text, image)}
+        isLoading={isLoading}
+        onStop={stop}
+        disabled={fetchingDocs}
+        allDocs={allDocs}
+        selectedDocIds={selectedDocIds}
+        onToggleDoc={toggleDoc}
+        docLoadError={docLoadError}
+        onDismissDocError={() => setDocLoadError("")}
+        maxWidth={maxWidth}
+      />
     );
   }
 
@@ -544,6 +476,8 @@ export function ChatWindow({
                   m.role === "assistant";
                 const attachments =
                   m.role === "user" ? msgAttachments.get(userIdx) : undefined;
+                const image =
+                  m.role === "user" ? msgImages.get(userIdx) : undefined;
                 if (m.role === "user") userIdx++;
                 return (
                   <MessageBubble
@@ -557,6 +491,7 @@ export function ChatWindow({
                     fontSize={msgFontSize}
                     showTimestamp={settings.showTimestamps}
                     attachments={attachments}
+                    image={image}
                     onEdit={
                       m.role === "user" && !isLoading
                         ? (newContent: string) =>

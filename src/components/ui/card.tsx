@@ -22,7 +22,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={` overflow-hidden ${variantStyles[variant]} ${noHover ? "" : hoverStyles[variant]} ${className}`}
+        className={`rounded-xl overflow-hidden ${variantStyles[variant]} ${noHover ? "" : hoverStyles[variant]} ${className}`}
         {...props}
       >
         {children}

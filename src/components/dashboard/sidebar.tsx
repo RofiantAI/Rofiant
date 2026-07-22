@@ -6,29 +6,24 @@ import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   MessageSquare,
-  Mic,
-  FileText,
-  Brain,
-  Key,
   BarChart3,
   Settings,
-  Building2,
-  Users,
-  CreditCard,
-  Radio,
-  BookOpen,
   Menu,
   X,
   ShieldCheck,
-  User,
   Megaphone,
   Layout,
-  Landmark,
-  ClipboardCheck,
-  Wrench,
+  ChevronDown,
+  Headphones,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BrandLogo } from "@/components/brand-logo";
+import { DashboardHeaderSearch } from "./header-search";
+import { WorkspaceMenu } from "./workspace-menu";
+import { DashboardNotifications } from "./dashboard-notifications";
+import { ContactModal } from "./contact-modal";
 import { canAccessTool, type ProductTool } from "@/lib/service-plan-access";
 
 function navItemVisible(plan: string, item: { tool?: ProductTool }) {
@@ -36,30 +31,25 @@ function navItemVisible(plan: string, item: { tool?: ProductTool }) {
 }
 
 const coreNav = [
-  { href: "/dashboard", navKey: "overview", tourId: "nav-overview", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/services", navKey: "toolsHub", icon: Wrench },
   { href: "/chat", navKey: "chatAi", tourId: "nav-chat", icon: MessageSquare },
-  { href: "/dashboard/documents", navKey: "documents", tourId: "nav-documents", icon: FileText, tool: "documents" as const },
-  { href: "/dashboard/voice-ai", navKey: "voiceAi", icon: Mic, tool: "voice" as const },
-  { href: "/dashboard/agents", navKey: "agents", tourId: "nav-agents", icon: Brain, tool: "agents" as const },
 ];
 
 const developerNav = [
   { href: "/dashboard/usage", navKey: "usage", tourId: "nav-usage", icon: BarChart3 },
-  { href: "/dashboard/api-keys", navKey: "apiKeys", tourId: "nav-api-keys", icon: Key, tool: "apiKeys" as const },
   { href: "/dashboard/audit-log", navKey: "auditLog", icon: ShieldCheck, tool: "security" as const },
 ];
 
-const agencyNav = [
-  { href: "/dashboard/agency", navKey: "agencyOverview", icon: Building2, exact: true },
-  { href: "/dashboard/agency/intelligence", navKey: "intelligence", icon: Radio, govOnly: true },
-  { href: "/dashboard/agency/access-review", navKey: "accessReview", icon: ClipboardCheck },
-  { href: "/dashboard/agency/broadcast", navKey: "broadcast", icon: Megaphone },
-  { href: "/dashboard/agency/members", navKey: "members", icon: Users, teamOnly: true },
-  { href: "/dashboard/knowledge-bases", navKey: "knowledgeBases", icon: BookOpen },
-  { href: "/dashboard/agency/billing", navKey: "billing", icon: CreditCard },
-  { href: "/dashboard/agency/settings", navKey: "agencySettings", icon: Settings },
-];
+function NavBadge({ label, tone = "count" }: { label: string; tone?: "count" | "new" }) {
+  const styles =
+    tone === "new"
+      ? "bg-emerald-500/15 text-emerald-400"
+      : "bg-background-tertiary text-foreground-muted";
+  return (
+    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${styles}`}>
+      {label}
+    </span>
+  );
+}
 
 function NavItem({
   href,
@@ -67,12 +57,16 @@ function NavItem({
   icon: Icon,
   exact = false,
   tourId,
+  badge,
+  indent = false,
 }: {
   href: string;
   label: string;
   icon: typeof LayoutDashboard;
   exact?: boolean;
   tourId?: string;
+  badge?: { label: string; tone?: "count" | "new" };
+  indent?: boolean;
 }) {
   const pathname = usePathname();
   const active = exact
@@ -83,17 +77,110 @@ function NavItem({
     <Link
       href={href}
       data-tour={tourId}
-      className={`flex items-center gap-2.5 px-3 py-2 text-sm rounded-md transition-colors ${
+      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${indent ? "text-[13px]" : ""} ${
         active
-          ? "bg-background-tertiary text-foreground font-medium"
+          ? "bg-foreground text-background font-semibold"
           : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary/60"
       }`}
     >
       <Icon
-        className={`w-4 h-4 shrink-0 ${active ? "text-accent-primary" : "text-foreground-muted"}`}
+        className={`w-4 h-4 shrink-0 ${active ? "text-background" : "text-foreground-muted"}`}
       />
-      {label}
+      <span className="flex-1 truncate">{label}</span>
+      {badge && <NavBadge {...badge} />}
     </Link>
+  );
+}
+
+function NavIconItem({
+  href,
+  label,
+  icon: Icon,
+  exact = false,
+}: {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+}) {
+  const pathname = usePathname();
+  const active = exact
+    ? pathname === href
+    : pathname === href || pathname.startsWith(href + "/");
+
+  return (
+    <Link
+      href={href}
+      title={label}
+      aria-label={label}
+      className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-colors ${
+        active
+          ? "bg-foreground text-background"
+          : "text-foreground-muted hover:text-foreground hover:bg-background-tertiary/60"
+      }`}
+    >
+      <Icon className="w-4 h-4" />
+    </Link>
+  );
+}
+
+function NavButton({
+  onClick,
+  label,
+  icon: Icon,
+  className = "",
+}: {
+  onClick: () => void;
+  label: string;
+  icon: typeof LayoutDashboard;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary/60 hover:text-foreground ${className}`}
+    >
+      <Icon className="w-4 h-4 shrink-0 text-foreground-muted" />
+      <span className="flex-1 truncate text-left">{label}</span>
+    </button>
+  );
+}
+
+function NavGroup({
+  label,
+  icon: Icon,
+  badge,
+  defaultOpen = false,
+  children,
+}: {
+  label: string;
+  icon: typeof LayoutDashboard;
+  badge?: { label: string; tone?: "count" | "new" };
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary/60 hover:text-foreground"
+      >
+        <Icon className="w-4 h-4 shrink-0 text-foreground-muted" />
+        <span className="flex-1 text-left truncate">{label}</span>
+        {badge && <NavBadge {...badge} />}
+        <ChevronDown
+          className={`w-3.5 h-3.5 shrink-0 text-foreground-muted transition-transform ${
+            open ? "" : "-rotate-90"
+          }`}
+        />
+      </button>
+      {open && <div className="mt-0.5 flex flex-col gap-0.5 pl-6">{children}</div>}
+    </div>
   );
 }
 
@@ -105,6 +192,9 @@ type SiteScreenNav = {
 export function DashboardSidebar({
   email,
   name,
+  orgName,
+  avatarUrl,
+  isPaid = false,
   plan = "free",
   locale = "en",
   isSiteOwner = false,
@@ -112,54 +202,55 @@ export function DashboardSidebar({
 }: {
   email?: string;
   name?: string;
+  orgName?: string | null;
+  avatarUrl?: string | null;
+  isPaid?: boolean;
   plan?: string;
   locale?: string;
   isSiteOwner?: boolean;
   siteScreens?: SiteScreenNav[];
 }) {
   const t = useTranslations("dashboard.sidebar");
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isAgency = ["agency", "enterprise"].includes(plan);
-  const isTeam = ["team", "pilot", "agency", "enterprise"].includes(plan);
-  const isGov = ["agency", "enterprise"].includes(plan);
-  const hasWorkflows = canAccessTool(plan, "workflows");
-  const hasKnowledgeBases = canAccessTool(plan, "knowledgeBases");
-  const hasApiKeys = canAccessTool(plan, "apiKeys");
+  const [contactOpen, setContactOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     function openForTour() {
       setMobileOpen(true);
+      setCollapsed(false);
     }
     window.addEventListener("dashboard-tour:open-sidebar", openForTour);
     return () => window.removeEventListener("dashboard-tour:open-sidebar", openForTour);
   }, []);
 
-  const displayName = name?.trim() || email || "—";
-  const planLabel =
-    plan === "enterprise" ? t("plans.enterprise")
-    : plan === "agency" ? t("plans.agency")
-    : plan === "pilot" ? t("plans.pilot")
-    : plan === "team" ? t("plans.team")
-    : plan === "pro" ? t("plans.pro")
-    : t("plans.free");
+  useEffect(() => {
+    // Read persisted collapse state after mount only, to keep SSR markup matching first paint.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCollapsed(window.localStorage.getItem("dashboard-sidebar-collapsed") === "1");
+  }, []);
 
-  const productNav = [
-    ...coreNav.filter((item) => navItemVisible(plan, item)),
-    ...(hasWorkflows
-      ? [{ href: "/dashboard/agency/solutions", navKey: "missionSolutions", icon: Landmark, exact: false }]
-      : []),
-    ...(hasKnowledgeBases && !isAgency
-      ? [{ href: "/dashboard/knowledge-bases", navKey: "knowledgeBases", icon: BookOpen, exact: false }]
-      : []),
-  ];
+  function toggleCollapsed() {
+    setCollapsed((v) => {
+      const next = !v;
+      window.localStorage.setItem("dashboard-sidebar-collapsed", next ? "1" : "0");
+      return next;
+    });
+  }
+
+  const displayName = name?.trim() || email || "—";
+
+  const productNav = coreNav;
 
   return (
     <>
       <div className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b border-border bg-background-secondary">
-        <Link href="/dashboard" className="flex min-w-0 flex-1 items-center pr-3">
+        <Link href="/chat" className="flex min-w-0 flex-1 items-center pr-3">
           <BrandLogo className="h-7 w-auto max-w-full" />
         </Link>
         <div className="flex items-center gap-1">
+          <DashboardNotifications />
           <button
             onClick={() => setMobileOpen(true)}
             aria-label={t("openMenu")}
@@ -181,9 +272,9 @@ export function DashboardSidebar({
       <aside
         data-tour="sidebar"
         onClick={() => setMobileOpen(false)}
-        className={`fixed md:static inset-y-0 left-0 z-50 md:z-auto w-60 shrink-0 min-h-screen border-r border-border bg-background-secondary flex flex-col transform transition-transform duration-200 md:translate-x-0 ${
+        className={`fixed md:sticky inset-y-0 left-0 md:top-0 z-50 md:z-auto shrink-0 min-h-screen md:self-start border-r border-border bg-background-secondary flex flex-col transform transition-all duration-200 md:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } ${collapsed ? "w-64 md:w-16" : "w-64"}`}
       >
         <button
           onClick={(e) => {
@@ -196,118 +287,141 @@ export function DashboardSidebar({
           <X className="w-4 h-4" />
         </button>
 
-        <div className="h-20 px-5 border-b border-border flex items-center shrink-0">
-          <Link href="/dashboard" className="flex h-full min-w-0 flex-1 items-center py-4">
-            <BrandLogo className="h-full w-auto max-w-full" />
-          </Link>
-        </div>
+        <div className={`hidden flex-1 min-h-0 flex-col items-center gap-1.5 py-4 ${collapsed ? "md:flex" : "md:hidden"}`}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleCollapsed();
+            }}
+            aria-label={t("expandSidebar")}
+            className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 text-foreground-muted hover:text-foreground hover:bg-background-tertiary/60"
+          >
+            <PanelLeftOpen className="w-4 h-4" />
+          </button>
 
-        <nav className="flex-1 py-4 px-3 flex flex-col gap-6 overflow-y-auto">
-          <div>
-            <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted">
-              {t("product")}
-            </p>
-            <div className="flex flex-col gap-0.5">
-              {productNav.map((item) => (
-                <NavItem
-                  key={item.href}
-                  href={item.href}
-                  icon={item.icon}
-                  label={t(`nav.${item.navKey}`)}
-                  exact={"exact" in item ? item.exact : undefined}
-                  tourId={"tourId" in item ? item.tourId : undefined}
-                />
-              ))}
-            </div>
+          <div className="my-1.5 w-8 border-t border-border" />
+
+          <div className="flex-1 flex flex-col gap-1.5 overflow-y-auto">
+            {productNav.map((item) => (
+              <NavIconItem
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={t(`nav.${item.navKey}`)}
+                exact
+              />
+            ))}
           </div>
 
-          {isAgency && (
-            <div>
-              <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted">
-                {t("agency")}
-              </p>
-              <div className="flex flex-col gap-0.5">
-                {agencyNav
-                  .filter((item) => !("teamOnly" in item && item.teamOnly && !isTeam))
-                  .filter((item) => !("govOnly" in item && item.govOnly && !isGov))
-                  .map((item) => (
-                    <NavItem
-                      key={item.href}
-                      href={item.href}
-                      icon={item.icon}
-                      label={t(`nav.${item.navKey}`)}
-                      exact={"exact" in item ? item.exact : undefined}
-                    />
-                  ))}
-              </div>
-            </div>
-          )}
+          <div className="flex flex-col gap-1.5 pb-2">
+            <NavIconItem href="/dashboard/settings" icon={Settings} label={t("accountSettings")} />
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setContactOpen(true);
+              }}
+              title={t("helpCenter")}
+              aria-label={t("helpCenter")}
+              className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 text-foreground-muted hover:text-foreground hover:bg-background-tertiary/60"
+            >
+              <Headphones className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
 
-          {siteScreens.length > 0 && (
-            <div>
-              <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted">
-                {t("sitePages")}
-              </p>
-              <div className="flex flex-col gap-0.5">
+        <div className={`flex flex-1 min-h-0 flex-col ${collapsed ? "md:hidden" : ""}`}>
+          <div
+            className="flex items-center gap-2 px-3 py-3 shrink-0 border-b border-border w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="min-w-0 flex-1">
+              <WorkspaceMenu
+                orgName={orgName}
+                displayName={displayName}
+                email={email}
+                avatarUrl={avatarUrl}
+                locale={locale}
+                isPaid={isPaid}
+              />
+            </div>
+            <DashboardNotifications align="left" />
+            <button
+              onClick={toggleCollapsed}
+              aria-label={t("collapseSidebar")}
+              title={t("collapseSidebar")}
+              className="hidden md:flex items-center justify-center w-8 h-8 rounded-lg shrink-0 text-foreground-muted hover:text-foreground hover:bg-background-tertiary/60"
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="px-3 pt-3 shrink-0" onClick={(e) => e.stopPropagation()}>
+            <DashboardHeaderSearch plan={plan} isSiteOwner={isSiteOwner} siteScreens={siteScreens} />
+          </div>
+
+          <nav className="flex-1 py-4 px-3 flex flex-col gap-1.5">
+            {productNav.map((item) => (
+              <NavItem
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={t(`nav.${item.navKey}`)}
+                exact
+                tourId={"tourId" in item ? item.tourId : undefined}
+                badge={"badgeKey" in item && item.badgeKey ? { label: t("badgeNew"), tone: "new" } : undefined}
+              />
+            ))}
+
+            {siteScreens.length > 0 && (
+              <NavGroup label={t("sitePages")} icon={Layout} defaultOpen={pathname.startsWith("/dashboard/pages")}>
                 {siteScreens.map((screen) => (
                   <NavItem
                     key={screen.slug}
                     href={`/dashboard/pages/${screen.slug}`}
                     icon={Layout}
                     label={screen.label}
+                    indent
                   />
                 ))}
-              </div>
-            </div>
-          )}
+              </NavGroup>
+            )}
 
-          {isSiteOwner && (
-            <div>
-              <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted">
-                {t("siteAdmin")}
-              </p>
-              <div className="flex flex-col gap-0.5">
+            {isSiteOwner && (
+              <NavItem
+                href="/dashboard/admin/broadcast"
+                icon={Megaphone}
+                label={t("nav.siteBroadcast")}
+              />
+            )}
+
+            <div className="my-2 border-t border-border" />
+
+            {developerNav
+              .filter((item) => navItemVisible(plan, item))
+              .map((item) => (
                 <NavItem
-                  href="/dashboard/admin/broadcast"
-                  icon={Megaphone}
-                  label={t("nav.siteBroadcast")}
+                  key={item.href}
+                  href={item.href}
+                  icon={item.icon}
+                  label={t(`nav.${item.navKey}`)}
+                  tourId={"tourId" in item ? item.tourId : undefined}
                 />
-              </div>
-            </div>
-          )}
+              ))}
+          </nav>
 
-          <div>
-            <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted">
-              {t("developer")}
-            </p>
-            <div className="flex flex-col gap-0.5">
-              {developerNav
-                .filter((item) => navItemVisible(plan, item))
-                .map((item) => (
-                  <NavItem
-                    key={item.href}
-                    href={item.href}
-                    icon={item.icon}
-                    label={t(`nav.${item.navKey}`)}
-                    tourId={"tourId" in item ? item.tourId : undefined}
-                  />
-                ))}
-            </div>
-          </div>
-        </nav>
-
-        <div className="border-t border-border p-3">
-          <div className="flex items-center gap-3 w-full px-2 py-2">
-            <div className="w-8 h-8 shrink-0 rounded-md bg-background-tertiary border border-border flex items-center justify-center">
-              <User className="w-4 h-4 text-foreground-muted" />
-            </div>
-            <div className="flex-1 min-w-0 text-left">
-              <p className="text-sm text-foreground truncate">{displayName}</p>
-              <p className="text-xs text-foreground-muted">{planLabel}</p>
-            </div>
+          <div className="px-3 pb-3 flex flex-col gap-1.5 border-t border-border pt-3">
+            <NavItem href="/dashboard/settings" icon={Settings} label={t("accountSettings")} />
+            <NavButton onClick={() => setContactOpen(true)} icon={Headphones} label={t("helpCenter")} />
           </div>
         </div>
       </aside>
+
+      <ContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        name={displayName}
+        email={email}
+      />
     </>
   );
 }

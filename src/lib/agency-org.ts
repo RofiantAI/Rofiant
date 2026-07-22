@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getOwnedAgency } from "@/lib/agency-broadcast";
 
 export function isOrgPlan(plan: string): boolean {
-  return plan === "agency" || plan === "enterprise";
+  return plan === "ultra";
 }
 
 export async function getOrgAgencyForUser(

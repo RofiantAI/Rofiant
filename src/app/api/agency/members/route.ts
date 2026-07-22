@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInviteEmail } from "@/lib/email";
 import { findOrCreateAuthUser } from "@/lib/agency-provision";
+import { isOrgPlan } from "@/lib/agency-org";
 
 
 export async function GET() {
@@ -53,9 +54,8 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const plan: string = (user.user_metadata?.plan ?? "free" as string).toLowerCase();
-  const isTeamOrAbove = ["team", "pilot", "agency", "enterprise"].includes(plan);
-  if (!isTeamOrAbove) {
-    return NextResponse.json({ error: "Team plan or above required to invite members" }, { status: 403 });
+  if (!isOrgPlan(plan)) {
+    return NextResponse.json({ error: "Ultra plan required to invite members" }, { status: 403 });
   }
 
   const { email, role } = await req.json();

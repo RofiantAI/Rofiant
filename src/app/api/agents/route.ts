@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const denied = planToolDeniedResponse(
     plan,
     "agents",
-    "Agents require a Pro, Team, Agency, or Enterprise plan.",
+    "Agents require a Pro or Ultra plan.",
   );
   if (denied) return denied;
 

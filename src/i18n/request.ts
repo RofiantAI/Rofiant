@@ -8,10 +8,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  const [base, products, agency, misc, settings] = await Promise.all([
+  const [base, products, misc, settings] = await Promise.all([
     import(`../../messages/${locale}.json`).then((m) => m.default),
     import(`../../messages/dashboard/products.${locale}.json`).then((m) => m.default),
-    import(`../../messages/dashboard/agency.${locale}.json`).then((m) => m.default),
     import(`../../messages/dashboard/misc.${locale}.json`).then((m) => m.default),
     import(`../../messages/dashboard/settings.${locale}.json`).then((m) => m.default),
   ]);
@@ -20,7 +19,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale,
     messages: {
       ...base,
-      dashboard: { ...products, ...agency, ...misc, ...settings },
+      dashboard: { ...products, ...misc, ...settings },
     },
     onError(error) {
       if (process.env.NODE_ENV !== "production") console.error(error);

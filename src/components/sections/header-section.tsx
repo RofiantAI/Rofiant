@@ -23,8 +23,6 @@ export async function HeaderSection() {
   const mobileLinks = [
     { href: "/platform/chat-ai", label: t("platform") },
     { href: "/company/about", label: t("company") },
-    { href: "/services", label: t("services") },
-    { href: "/solutions", label: t("solutions") },
     { href: "/pricing", label: t("pricing") },
     { href: "/resources/documentation", label: t("docs") },
   ];
@@ -60,18 +58,6 @@ export async function HeaderSection() {
                 </div>
 
                 <Link
-                  href="/services"
-                  className={`${linkBase} ${linkIdle}`}
-                >
-                  {t("services")}
-                </Link>
-                <Link
-                  href="/solutions"
-                  className={`${linkBase} ${linkIdle}`}
-                >
-                  {t("solutions")}
-                </Link>
-                <Link
                   href="/pricing"
                   className={`${linkBase} ${linkIdle}`}
                 >
@@ -96,7 +82,7 @@ export async function HeaderSection() {
             </div>
             {user ? (
               <a
-                href={appUrl("/dashboard")}
+                href={appUrl("/chat")}
                 className="inline-flex items-center justify-center h-12 px-3 sm:px-4 text-sm font-medium bg-white text-black transition-colors whitespace-nowrap"
               >
                 {t("dashboard")}

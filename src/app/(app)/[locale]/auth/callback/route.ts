@@ -30,8 +30,21 @@ export async function GET(request: Request) {
       }
     );
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Desktop app: hand the session back via the custom URL scheme instead
+      // of the cookie session above (that cookie is set on this domain and
+      // is useless to the native app). Tokens ride in the fragment, not the
+      // query string, so they never hit server logs on the receiving end.
+      if (next.startsWith("rofiant://") && data.session) {
+        const desktopUrl = new URL(next);
+        desktopUrl.hash = new URLSearchParams({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        }).toString();
+        return NextResponse.redirect(desktopUrl.toString());
+      }
+
       const destination = next.startsWith("http") ? next : `${origin}${next}`;
       return NextResponse.redirect(destination);
     }

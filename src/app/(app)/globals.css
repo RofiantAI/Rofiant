@@ -7,32 +7,32 @@
 :root,
 .dark {
   /* Background colors */
-  --background: #0a0a0a;
-  --background-secondary: #111111;
-  --background-tertiary: #18181b;
+  --background: #141414;
+  --background-secondary: #181818;
+  --background-tertiary: #1c1c1e;
 
   /* Foreground colors */
-  --foreground: #ffffff;
-  --foreground-secondary: #a1a1aa;
+  --foreground: #f5f5f4;
+  --foreground-secondary: #8c8c8c;
   --foreground-muted: #71717a;
 
   /* Accent colors */
-  --accent-primary: #eab308;
-  --accent-secondary: #3b82f6;
-  --accent-success: #22c55e;
-  --accent-warning: #f59e0b;
-  --accent-orange: #f97316;
+  --accent-primary: #6b8afd;
+  --accent-secondary: #d1a752;
+  --accent-success: #45b787;
+  --accent-warning: #e0a24d;
+  --accent-orange: #e0793e;
 
   /* Border colors */
   --border: #27272a;
   --border-light: #3f3f46;
 
   /* Card colors */
-  --card: #111111;
-  --card-hover: #1c1c1e;
+  --card: #141414;
+  --card-hover: #1e1e1e;
 
   /* Badge colors */
-  --badge-bg: #18181b;
+  --badge-bg: #1c1c1e;
   --badge-border: #3f3f46;
 
   /* Code colors */
@@ -50,37 +50,37 @@
 
 .light {
   /* Background colors */
-  --background: #ffffff;
-  --background-secondary: #f7f7f8;
-  --background-tertiary: #eeeeef;
+  --background: #fafaf9;
+  --background-secondary: #f2f2ef;
+  --background-tertiary: #eeeeec;
 
   /* Foreground colors */
-  --foreground: #0a0a0a;
-  --foreground-secondary: #52525b;
-  --foreground-muted: #71717a;
+  --foreground: #1a1a18;
+  --foreground-secondary: #6b6b67;
+  --foreground-muted: #9b9b96;
 
   /* Accent colors */
-  --accent-primary: #eab308;
-  --accent-secondary: #3b82f6;
-  --accent-success: #16a34a;
-  --accent-warning: #d97706;
-  --accent-orange: #ea580c;
+  --accent-primary: #4d6bc6;
+  --accent-secondary: #b8934a;
+  --accent-success: #2f9e6e;
+  --accent-warning: #c17f2e;
+  --accent-orange: #c2632a;
 
   /* Border colors */
-  --border: #e4e4e7;
-  --border-light: #d4d4d8;
+  --border: #e6e6e2;
+  --border-light: #d8d8d3;
 
   /* Card colors */
   --card: #ffffff;
-  --card-hover: #f4f4f5;
+  --card-hover: #f4f4f2;
 
   /* Badge colors */
-  --badge-bg: #f4f4f5;
-  --badge-border: #d4d4d8;
+  --badge-bg: #f0f0ee;
+  --badge-border: #d8d8d3;
 
   /* Code colors */
-  --code-bg: #f4f4f5;
-  --code-border: #e4e4e7;
+  --code-bg: #f2f2ef;
+  --code-border: #e2e2de;
 
   /* Button colors */
   --button-primary: #0a0a0a;

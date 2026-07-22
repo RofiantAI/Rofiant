@@ -1,10 +1,9 @@
 {
   "settings": {
-    "title": "Settings",
-    "subtitle": "Manage your account, security, and preferences",
     "tabs": {
       "account": "Account",
       "security": "Security",
+      "api": "API",
       "notifications": "Notifications",
       "preferences": "Preferences",
       "appearance": "Appearance",
@@ -181,21 +180,8 @@
     "nav": {
       "overview": "Overview",
       "chatAi": "Chat AI",
-      "voiceAi": "Voice AI",
-      "documents": "Documents",
-      "agents": "Agents",
       "apiKeys": "API Keys",
       "usage": "Usage",
-      "agencyOverview": "Overview",
-      "missionSolutions": "Workflows",
-      "toolsHub": "Tools",
-      "intelligence": "Intelligence",
-      "members": "Members",
-      "billing": "Billing",
-      "agencySettings": "Settings",
-      "broadcast": "Broadcast",
-      "accessReview": "Access review",
-      "knowledgeBases": "Knowledge Bases",
       "auditLog": "Audit log",
       "siteBroadcast": "Site broadcast"
     },
@@ -203,16 +189,17 @@
     "sitePages": "Site pages",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
     "accountMenu": "Account menu",
     "accountSettings": "Settings",
+    "helpCenter": "Help Center",
+    "badgeNew": "New",
     "planSuffix": "plan",
     "signOut": "Sign out",
     "upgrade": "Upgrade",
     "plans": {
-      "enterprise": "Enterprise",
-      "agency": "Agency",
-      "pilot": "Pilot",
-      "team": "Team",
+      "ultra": "Ultra",
       "pro": "Pro",
       "free": "Free"
     }

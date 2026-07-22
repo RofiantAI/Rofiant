@@ -13,7 +13,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const denied = planToolDeniedResponse(
     plan,
     "voice",
-    "Voice transcription requires a Pro, Team, Agency, or Enterprise plan.",
+    "Voice transcription requires a Pro or Ultra plan.",
   );
   if (denied) return denied;
 

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import {
-  Shield, Bell, Globe, Check, User, Trash2, Palette,
-  LogOut, AlertTriangle, Download, Key, Monitor, ShieldCheck,
-  Sun, Moon,
+  Bell, Globe, Check, Trash2, Palette,
+  LogOut, Download, Key, Monitor, ShieldCheck,
+  Sun, Moon, Plus, Copy, X, Lock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -15,9 +15,26 @@ import { routing } from "@/i18n/routing";
 import {
   DashboardCard,
   DashboardPrimaryButton,
+  DashboardSecondaryButton,
+  DashboardList,
+  DashboardUpgradeGate,
 } from "@/components/dashboard/ui/page-shell";
 import { ProfileAvatarUpload } from "@/components/dashboard/profile-avatar-upload";
 import { PasswordInput } from "@/components/ui/password-input";
+import { SkeletonListRows } from "@/components/ui/skeleton";
+import { formatDate as fmtDate } from "@/lib/user-prefs";
+import { canAccessTool, upgradeTargetForTool } from "@/lib/service-plan-access";
+import { SettingsTabSidebar, type Tab } from "./settings-tab-sidebar";
+import { WebhooksSection } from "../api-keys/webhooks-section";
+
+type ApiKey = {
+  id: string;
+  name: string;
+  key_prefix: string;
+  key_value: string;
+  created_at: string;
+  last_used_at: string | null;
+};
 
 const LOCALE_LABELS: Record<string, string> = {
   en: "English",
@@ -25,8 +42,6 @@ const LOCALE_LABELS: Record<string, string> = {
   fr: "French",
   de: "German",
 };
-
-type Tab = "account" | "security" | "notifications" | "preferences" | "appearance" | "danger";
 
 const NOTIF_KEYS = [
   "usage_alerts",
@@ -100,15 +115,6 @@ function loadAppearance(): { accent: AccentColor; density: Density } {
   };
 }
 
-const TABS: { id: Tab; icon: React.ElementType }[] = [
-  { id: "account",       icon: User },
-  { id: "security",      icon: Shield },
-  { id: "notifications", icon: Bell },
-  { id: "preferences",   icon: Globe },
-  { id: "appearance",    icon: Palette },
-  { id: "danger",        icon: AlertTriangle },
-];
-
 const TIMEZONES = [
   "UTC",
   "America/New_York",
@@ -158,6 +164,10 @@ export function SettingsClient({
   bio: initialBio,
   avatarUrl,
   hasCustomAvatar,
+  plan,
+  backHref,
+  backLabel,
+  initialTab,
 }: {
   email: string;
   userId: string;
@@ -165,10 +175,17 @@ export function SettingsClient({
   bio: string;
   avatarUrl: string | null;
   hasCustomAvatar: boolean;
+  plan: string;
+  backHref?: string;
+  backLabel?: string;
+  initialTab?: Tab;
 }) {
   const router = useRouter();
   const t = useTranslations("dashboard.settings");
-  const [tab, setTab] = useState<Tab>("account");
+  const tApi = useTranslations("dashboard.apiKeys");
+  const tGate = useTranslations("dashboard.planGate");
+  const [tab, setTab] = useState<Tab>(initialTab ?? "account");
+  const canUseApiKeys = canAccessTool(plan, "apiKeys");
 
   // Account
   const [displayName, setDisplayName] = useState(initialDisplayName);
@@ -259,6 +276,16 @@ export function SettingsClient({
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
 
+  // API keys
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+  const [apiKeysLoading, setApiKeysLoading] = useState(true);
+  const [apiKeyCreating, setApiKeyCreating] = useState(false);
+  const [newApiKeyName, setNewApiKeyName] = useState("");
+  const [showApiKeyForm, setShowApiKeyForm] = useState(false);
+  const [createdApiKey, setCreatedApiKey] = useState<ApiKey | null>(null);
+  const [copiedApiKeyId, setCopiedApiKeyId] = useState<string | null>(null);
+  const [deletingApiKeyId, setDeletingApiKeyId] = useState<string | null>(null);
+
   // Load 2FA status + session info
   useEffect(() => {
     const supabase = createClient();
@@ -287,6 +314,18 @@ export function SettingsClient({
         }
       });
   }, []);
+
+  // Load API keys (only if the plan actually has access)
+  useEffect(() => {
+    if (!canUseApiKeys) {
+      setApiKeysLoading(false);
+      return;
+    }
+    fetch("/api/api-keys")
+      .then((r) => r.json())
+      .then(setApiKeys)
+      .finally(() => setApiKeysLoading(false));
+  }, [canUseApiKeys]);
 
   // Load appearance from localStorage on mount and apply
   useEffect(() => {
@@ -406,6 +445,43 @@ export function SettingsClient({
       .upsert({ user_id: user.id, notification_prefs: next, updated_at: new Date().toISOString() });
   }
 
+  async function handleCreateApiKey(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newApiKeyName.trim()) return;
+    setApiKeyCreating(true);
+    const res = await fetch("/api/api-keys", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newApiKeyName.trim() }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setCreatedApiKey(data);
+      setApiKeys((prev) => [data, ...prev]);
+      setNewApiKeyName("");
+      setShowApiKeyForm(false);
+    }
+    setApiKeyCreating(false);
+  }
+
+  async function handleDeleteApiKey(id: string) {
+    setDeletingApiKeyId(id);
+    await fetch(`/api/api-keys/${id}`, { method: "DELETE" });
+    setApiKeys((prev) => prev.filter((k) => k.id !== id));
+    setDeletingApiKeyId(null);
+  }
+
+  async function handleCopyApiKey(text: string, id: string) {
+    await navigator.clipboard.writeText(text);
+    setCopiedApiKeyId(id);
+    setTimeout(() => setCopiedApiKeyId(null), 2000);
+  }
+
+  function formatApiKeyDate(iso: string | null) {
+    if (!iso) return tApi("table.noDate");
+    return fmtDate(iso);
+  }
+
   function savePreferences() {
     localStorage.setItem("pref_language", language);
     localStorage.setItem("pref_timezone", timezone);
@@ -456,22 +532,7 @@ export function SettingsClient({
   return (
     <div className="flex flex-col md:flex-row gap-6 md:gap-8">
       {/* Tab sidebar */}
-      <nav className="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible shrink-0 md:w-44 pb-1 md:pb-0">
-        {TABS.map(({ id, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setTab(id)}
-            className={`shrink-0 md:w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-md transition-colors text-left ${
-              tab === id
-                ? "bg-background-tertiary text-foreground font-medium"
-                : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary/60"
-            }`}
-          >
-            <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${id === "danger" && tab !== "danger" ? "text-red-400/60" : tab === id ? "text-accent-primary" : "text-foreground-muted"}`} />
-            <span className={id === "danger" ? "text-red-400/80" : ""}>{t(`tabs.${id}`)}</span>
-          </button>
-        ))}
-      </nav>
+      <SettingsTabSidebar tab={tab} setTab={setTab} t={t} backHref={backHref} backLabel={backLabel} />
 
       {/* Panel */}
       <div className="flex-1 min-w-0 space-y-4">
@@ -785,6 +846,117 @@ export function SettingsClient({
               </Link>
             </DashboardCard>
           </div>
+        )}
+
+        {/* ── API ── */}
+        {tab === "api" && (
+          canUseApiKeys ? (
+            <div className="space-y-4">
+              <DashboardCard>
+                <div className="flex items-center justify-between gap-4 mb-1">
+                  <div className="flex items-center gap-3">
+                    <Key className="w-4 h-4 text-foreground-muted" />
+                    <h2 className="text-sm font-medium text-foreground">{tApi("title")}</h2>
+                  </div>
+                  <DashboardPrimaryButton onClick={() => setShowApiKeyForm(true)}>
+                    <Plus className="w-4 h-4" />
+                    {tApi("createKey")}
+                  </DashboardPrimaryButton>
+                </div>
+                <p className="text-sm text-foreground-secondary mb-5">{tApi("subtitle")}</p>
+
+                {showApiKeyForm && (
+                  <form onSubmit={handleCreateApiKey} className="flex flex-wrap items-center gap-3 mb-5 pb-5 border-b border-border">
+                    <input
+                      autoFocus
+                      type="text"
+                      value={newApiKeyName}
+                      onChange={(e) => setNewApiKeyName(e.target.value)}
+                      placeholder={tApi("newKeyForm.namePlaceholder")}
+                      className="flex-1 min-w-[200px] h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                    />
+                    <DashboardPrimaryButton type="submit" disabled={apiKeyCreating}>
+                      {apiKeyCreating ? tApi("newKeyForm.creating") : tApi("newKeyForm.create")}
+                    </DashboardPrimaryButton>
+                    <DashboardSecondaryButton
+                      type="button"
+                      onClick={() => { setShowApiKeyForm(false); setNewApiKeyName(""); }}
+                    >
+                      {tApi("newKeyForm.cancel")}
+                    </DashboardSecondaryButton>
+                  </form>
+                )}
+
+                {createdApiKey && (
+                  <div className="mb-5 p-4 border border-accent-primary/30">
+                    <div className="flex items-start justify-between mb-2">
+                      <p className="text-sm font-medium text-foreground">{tApi("createdKey.message")}</p>
+                      <button onClick={() => setCreatedApiKey(null)}>
+                        <X className="w-4 h-4 text-foreground-muted hover:text-foreground" />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3">
+                      <code className="flex-1 text-xs font-mono bg-background-tertiary px-3 py-2 text-foreground break-all">
+                        {createdApiKey.key_value}
+                      </code>
+                      <DashboardSecondaryButton onClick={() => handleCopyApiKey(createdApiKey.key_value, "new")}>
+                        {copiedApiKeyId === "new" ? <Check className="w-3 h-3 text-accent-success" /> : <Copy className="w-3 h-3" />}
+                        {copiedApiKeyId === "new" ? tApi("createdKey.copied") : tApi("createdKey.copy")}
+                      </DashboardSecondaryButton>
+                    </div>
+                  </div>
+                )}
+
+                <DashboardList>
+                  <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 px-5 py-3 border-b border-border text-xs font-medium text-foreground-muted">
+                    <span>{tApi("table.name")}</span>
+                    <span>{tApi("table.keyPrefix")}</span>
+                    <span>{tApi("table.created")}</span>
+                    <span />
+                  </div>
+                  {apiKeysLoading ? (
+                    <SkeletonListRows rows={4} />
+                  ) : apiKeys.length === 0 ? (
+                    <div className="px-5 py-8 text-center text-sm text-foreground-secondary">{tApi("table.empty")}</div>
+                  ) : (
+                    apiKeys.map((k) => (
+                      <div key={k.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 items-center px-5 py-3.5 border-b border-border last:border-0">
+                        <span className="text-sm text-foreground">{k.name}</span>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary px-2 py-1">
+                            {k.key_prefix}…
+                          </code>
+                          <button onClick={() => handleCopyApiKey(k.key_value, k.id)} className="p-1 hover:bg-background-tertiary">
+                            {copiedApiKeyId === k.id ? <Check className="w-3 h-3 text-accent-success" /> : <Copy className="w-3 h-3 text-foreground-muted" />}
+                          </button>
+                        </div>
+                        <span className="text-xs text-foreground-muted">{formatApiKeyDate(k.created_at)}</span>
+                        <button
+                          onClick={() => handleDeleteApiKey(k.id)}
+                          disabled={deletingApiKeyId === k.id}
+                          className="p-1 hover:bg-background-tertiary disabled:opacity-40"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-foreground-muted" />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </DashboardList>
+              </DashboardCard>
+
+              <WebhooksSection />
+            </div>
+          ) : (
+            <DashboardCard>
+              <DashboardUpgradeGate
+                icon={Lock}
+                title={tGate("title", { plan: tGate(`plans.${upgradeTargetForTool("apiKeys").plan}`) })}
+                description={tGate("description", { tool: tGate("tools.apiKeys") })}
+                ctaHref="/pricing"
+                ctaLabel={tGate("cta", { plan: tGate(`plans.${upgradeTargetForTool("apiKeys").plan}`) })}
+              />
+            </DashboardCard>
+          )
         )}
 
         {/* ── NOTIFICATIONS ── */}

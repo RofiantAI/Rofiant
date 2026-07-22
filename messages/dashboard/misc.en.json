@@ -28,6 +28,7 @@
     },
     "activityChart": {
       "title": "Activity",
+      "total": "Total messages:",
       "empty": "No activity yet — start a chat or use the API to see trends here.",
       "totalMessages": "{count} messages in this period",
       "summary": "{messages} messages · {tokens} tokens",
@@ -50,10 +51,7 @@
       "title": "Plan",
       "free": "Free",
       "pro": "Pro",
-      "team": "Team",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise",
+      "ultra": "Ultra",
       "freeDescription": "Up to {limit} messages per day on the free plan.",
       "paidDescription": "Full access to your plan features and usage analytics.",
       "upgrade": "Upgrade plan",
@@ -141,7 +139,8 @@
     "modelBreakdown": {
       "title": "Top models",
       "period": "Last 14 days",
-      "tokens": "{count} tokens"
+      "tokens": "{count} tokens",
+      "empty": "No model usage yet"
     },
     "recentActivity": {
       "title": "Recent activity",
@@ -212,6 +211,7 @@
       "tooltipTokens": "tokens",
       "tooltipChatRequests": "chat requests",
       "tooltipApiRequests": "API requests",
+      "tooltipDesktopRequests": "desktop app requests",
       "tooltipInput": "input tokens",
       "tooltipOutput": "output tokens",
       "totalTokens": "{count} tokens total",
@@ -225,7 +225,8 @@
     "sources": {
       "chat": "Chat",
       "api": "API",
-      "agents": "Agents"
+      "agents": "Agents",
+      "desktop": "Desktop app"
     },
     "modelUsage": {
       "title": "Model usage",
@@ -251,182 +252,21 @@
       "daysAgo": "{count}d ago"
     }
   },
-  "urban": {
-    "header": {
-      "title": "Urban AI Monitor",
-      "refresh": "Refresh",
-      "scanning": "Scanning…",
-      "runScan": "Run scan (20 cameras)"
-    },
-    "banners": {
-      "serviceDown": "Urban AI service is not reachable. Start it with:",
-      "scanFailed": "Scan failed",
-      "serviceUnavailable": "Service unavailable"
-    },
-    "health": {
-      "serviceStatus": "Service {status}",
-      "model": "Model:",
-      "lastScan": "Last scan:",
-      "scanning": "● Scanning…"
-    },
-    "stats": {
-      "camerasSeen": {
-        "label": "Cameras seen",
-        "sub": "in last 500 records"
-      },
-      "cars": {
-        "label": "Cars",
-        "sub": "avg {avg}/camera"
-      },
-      "trucks": {
-        "label": "Trucks",
-        "sub": "heavy vehicles"
-      },
-      "people": {
-        "label": "People",
-        "sub": "avg {avg}/camera"
-      },
-      "anomalies": {
-        "label": "Anomalies",
-        "sub": "across all scans"
-      }
-    },
-    "tabs": {
-      "detections": "All detections",
-      "anomalies": "Anomalies",
-      "live": "Live stream"
-    },
-    "list": {
-      "loading": "Loading…",
-      "emptyLive": "Waiting for live events…",
-      "emptyDefault": "No data yet. Run a scan to populate.",
-      "columns": {
-        "location": "Location",
-        "cars": "Cars",
-        "trucks": "Trucks",
-        "motos": "Motos",
-        "people": "People",
-        "anomalies": "Anomalies",
-        "time": "Time"
-      },
-      "camLabel": "cam {id}",
-      "live": "live",
-      "justNow": "just now",
-      "minutesAgo": "{count}m ago",
-      "hoursAgo": "{count}h ago"
-    },
-    "anomalyTypes": {
-      "TRAFFIC_JAM": "TRAFFIC JAM",
-      "LARGE_CROWD": "LARGE CROWD",
-      "EMPTY_ROAD": "EMPTY ROAD"
-    },
-    "lightbox": {
-      "camLabel": "cam {id}",
-      "summary": "{cars} cars · {trucks} trucks · {motos} motos · {people} people",
-      "captured": "Captured {time}",
-      "openFullSize": "Open full size ↗"
-    },
-    "trends": {
-      "anomalyRate": {
-        "title": "Anomaly rate",
-        "sub": "of camera readings flagged"
-      },
-      "busiestType": {
-        "title": "Busiest type",
-        "vehicles": "Vehicles",
-        "sub": "{cars} cars across {readings} readings"
-      },
-      "coverage": {
-        "title": "Coverage",
-        "sub": "cameras available to scan"
-      }
-    },
-    "control": {
-      "title": "Urban AI Control Panel",
-      "subtitle": "Configure the Python service and monitor its activity from here.",
-      "status": {
-        "running": "Service is running",
-        "notRunning": "Service is not running. See start command below.",
-        "checking": "Checking…"
-      },
-      "setup": {
-        "title": "Start the service",
-        "step1Before": "1. Go to",
-        "step1After": "and create a key, then copy it.",
-        "apiKeysLinkText": "API Keys",
-        "step2": "2. Run this command in your terminal (replace with your full key):",
-        "copy": "Copy",
-        "copied": "Copied",
-        "note": "The service reads all other settings (data source, scan interval, model, thresholds) from this page automatically. No config files to edit."
-      },
-      "settings": {
-        "title": "Settings",
-        "unsavedChanges": "Unsaved changes",
-        "loading": "Loading settings…",
-        "fields": {
-          "datasourceUrl": {
-            "label": "Camera data source URL",
-            "hint": "CSV or JSON API. Leave blank for bundled Toronto TMC cameras."
-          },
-          "datasourceAuth": {
-            "label": "Data source auth key",
-            "hint": "Bearer token if the source requires auth."
-          },
-          "scanInterval": {
-            "label": "Scan interval (seconds)",
-            "hint": "How often the service scans all cameras."
-          },
-          "concurrency": {
-            "label": "Concurrency",
-            "hint": "Parallel camera requests per scan."
-          },
-          "confidence": {
-            "label": "Confidence threshold",
-            "hint": "Lower = more detections, more false positives."
-          },
-          "model": {
-            "label": "YOLO model",
-            "hint": "Larger = more accurate but slower."
-          },
-          "inferSize": {
-            "label": "Inference size (px)",
-            "hint": "Image size fed to YOLO. 1280 is best for traffic cams."
-          },
-          "crowdThreshold": {
-            "label": "Crowd threshold",
-            "hint": "People count that triggers LARGE_CROWD anomaly."
-          },
-          "trafficThreshold": {
-            "label": "Traffic threshold",
-            "hint": "Car count that triggers TRAFFIC_JAM anomaly."
-          }
-        },
-        "saveError": "Save failed",
-        "networkError": "Network error",
-        "save": "Save settings",
-        "saving": "Saving…",
-        "saved": "Saved",
-        "autoApply": "The running service picks up changes within {seconds}s automatically."
-      },
-      "logs": {
-        "title": "Service logs",
-        "refresh": "Refresh",
-        "notRunning": "Service is not running. Logs will appear here once started.",
-        "loading": "Loading logs…",
-        "empty": "No logs yet."
-      }
-    }
-  },
   "siteAdmin": {
     "broadcast": {
       "title": "Site broadcast",
       "subtitle": "Publish announcements and custom pages for all Rofiant users",
-      "tabs": { "announcements": "Announcements", "screens": "Custom pages" },
+      "tabs": {
+        "announcements": "Announcements",
+        "screens": "Custom pages"
+      },
       "saving": "Saving…",
       "inactive": "inactive",
       "draft": "draft",
       "delete": "Delete",
-      "errors": { "createFailed": "Failed to create" },
+      "errors": {
+        "createFailed": "Failed to create"
+      },
       "announcements": {
         "createTitle": "New site announcement",
         "titlePlaceholder": "Announcement title",
@@ -476,9 +316,6 @@
       },
       "agent": {
         "run": "Agent run"
-      },
-      "federal_workflow": {
-        "run": "Mission workflow run"
       }
     },
     "detail": {
@@ -493,16 +330,13 @@
     }
   },
   "globalSearch": {
-    "placeholder": "Search dashboard, chats, documents, agents…",
+    "placeholder": "Search dashboard",
     "clear": "Clear search",
     "searching": "Searching…",
     "noResults": "No results for \"{query}\"",
     "groups": {
       "pages": "Pages",
-      "conversations": "Chats",
-      "documents": "Documents",
-      "agents": "Agents",
-      "knowledgeBases": "Knowledge bases"
+      "conversations": "Chats"
     }
   },
   "notifications": {
@@ -525,10 +359,7 @@
     "plans": {
       "free": "Free",
       "pro": "Pro",
-      "team": "Team",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise"
+      "ultra": "Ultra"
     },
     "tools": {
       "chat": "Chat AI",
@@ -539,23 +370,21 @@
       "security": "Security",
       "apiKeys": "API keys",
       "knowledgeBases": "Knowledge bases",
-      "orgHub": "Organization hub",
-      "intelFeed": "Intelligence feed"
+      "orgHub": "Organization hub"
     }
   },
-  "servicesHub": {
-    "title": "Tools",
-    "subtitle": "Your {plan} plan includes the tools marked below. Upgrade to unlock the rest.",
-    "included": "Included",
-    "upgradeTo": "Requires {plan}",
-    "open": "Open tool",
-    "upgradeCta": "Upgrade to {plan}",
-    "descriptions": {
-      "documents": "Upload PDFs, search, and summarize with AI.",
-      "voice": "Transcribe audio and generate meeting summaries.",
-      "agents": "Multi-step AI assistants with approval gates.",
-      "workflows": "Ready-made workflow templates for repeatable tasks.",
-      "security": "Audit log and account activity history."
-    }
+  "contactModal": {
+    "title": "Contact support",
+    "subtitle": "We typically respond within one business day.",
+    "subject": "Subject",
+    "subjectPlaceholder": "What do you need help with?",
+    "message": "Message",
+    "messagePlaceholder": "Describe your issue or question…",
+    "send": "Send message",
+    "sending": "Sending…",
+    "sentTitle": "Message sent",
+    "sentMessage": "Thanks — our team will get back to you shortly.",
+    "close": "Close",
+    "genericError": "Something went wrong. Please try again."
   }
 }

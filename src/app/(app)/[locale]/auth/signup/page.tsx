@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { SignupForm } from "@/components/auth/signup-form";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
@@ -39,7 +40,9 @@ export default async function SignupPage() {
               {t("logoText")}
             </span>
           </div>
-          <SignupForm />
+          <Suspense fallback={null}>
+            <SignupForm />
+          </Suspense>
         </div>
       </div>
     </div>

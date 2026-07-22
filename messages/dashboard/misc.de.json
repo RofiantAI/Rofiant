@@ -28,6 +28,7 @@
     },
     "activityChart": {
       "title": "Aktivität",
+      "total": "Nachrichten gesamt:",
       "empty": "Noch keine Aktivität — starten Sie einen Chat oder nutzen Sie die API.",
       "totalMessages": "{count} Nachrichten in diesem Zeitraum",
       "summary": "{messages} Nachrichten · {tokens} Tokens",
@@ -50,10 +51,7 @@
       "title": "Plan",
       "free": "Kostenlos",
       "pro": "Pro",
-      "team": "Team",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise",
+      "ultra": "Ultra",
       "freeDescription": "Bis zu {limit} Nachrichten pro Tag im kostenlosen Plan.",
       "paidDescription": "Voller Zugriff auf Ihre Planfunktionen und Nutzungsanalysen.",
       "upgrade": "Plan upgraden",
@@ -141,7 +139,8 @@
     "modelBreakdown": {
       "title": "Top-Modelle",
       "period": "Letzte 14 Tage",
-      "tokens": "{count} Tokens"
+      "tokens": "{count} Tokens",
+      "empty": "Noch keine Modellnutzung"
     },
     "recentActivity": {
       "title": "Letzte Aktivität",
@@ -212,6 +211,7 @@
       "tooltipTokens": "Tokens",
       "tooltipChatRequests": "Chat-Anfragen",
       "tooltipApiRequests": "API-Anfragen",
+      "tooltipDesktopRequests": "Desktop-App-Anfragen",
       "tooltipInput": "Input-Tokens",
       "tooltipOutput": "Output-Tokens",
       "totalTokens": "{count} Tokens gesamt",
@@ -225,7 +225,8 @@
     "sources": {
       "chat": "Chat",
       "api": "API",
-      "agents": "Agenten"
+      "agents": "Agenten",
+      "desktop": "Desktop-App"
     },
     "modelUsage": {
       "title": "Modellnutzung",
@@ -249,172 +250,6 @@
       "minutesAgo": "vor {count} Min.",
       "hoursAgo": "vor {count} Std.",
       "daysAgo": "vor {count} Tg."
-    }
-  },
-  "urban": {
-    "header": {
-      "title": "Urban AI Monitor",
-      "refresh": "Aktualisieren",
-      "scanning": "Scanvorgang läuft…",
-      "runScan": "Scan starten (20 Kameras)"
-    },
-    "banners": {
-      "serviceDown": "Der Urban-AI-Dienst ist nicht erreichbar. Starten Sie ihn mit:",
-      "scanFailed": "Scan fehlgeschlagen",
-      "serviceUnavailable": "Dienst nicht verfügbar"
-    },
-    "health": {
-      "serviceStatus": "Dienst {status}",
-      "model": "Modell:",
-      "lastScan": "Letzter Scan:",
-      "scanning": "● Scanvorgang läuft…"
-    },
-    "stats": {
-      "camerasSeen": {
-        "label": "Erfasste Kameras",
-        "sub": "in den letzten 500 Einträgen"
-      },
-      "cars": {
-        "label": "Autos",
-        "sub": "Ø {avg}/Kamera"
-      },
-      "trucks": {
-        "label": "Lkw",
-        "sub": "Schwerfahrzeuge"
-      },
-      "people": {
-        "label": "Personen",
-        "sub": "Ø {avg}/Kamera"
-      },
-      "anomalies": {
-        "label": "Anomalien",
-        "sub": "über alle Scans"
-      }
-    },
-    "tabs": {
-      "detections": "Alle Erkennungen",
-      "anomalies": "Anomalien",
-      "live": "Live-Stream"
-    },
-    "list": {
-      "loading": "Wird geladen…",
-      "emptyLive": "Warten auf Live-Ereignisse…",
-      "emptyDefault": "Noch keine Daten. Führen Sie einen Scan aus, um Daten zu erfassen.",
-      "columns": {
-        "location": "Standort",
-        "cars": "Autos",
-        "trucks": "Lkw",
-        "motos": "Motorräder",
-        "people": "Personen",
-        "anomalies": "Anomalien",
-        "time": "Zeit"
-      },
-      "camLabel": "Kamera {id}",
-      "live": "live",
-      "justNow": "gerade eben",
-      "minutesAgo": "vor {count} Min.",
-      "hoursAgo": "vor {count} Std."
-    },
-    "anomalyTypes": {
-      "TRAFFIC_JAM": "VERKEHRSSTAU",
-      "LARGE_CROWD": "GROSSE MENSCHENANSAMMLUNG",
-      "EMPTY_ROAD": "LEERE STRASSE"
-    },
-    "lightbox": {
-      "camLabel": "Kamera {id}",
-      "summary": "{cars} Autos · {trucks} Lkw · {motos} Motorräder · {people} Personen",
-      "captured": "Aufgenommen {time}",
-      "openFullSize": "In voller Größe öffnen ↗"
-    },
-    "trends": {
-      "anomalyRate": {
-        "title": "Anomalierate",
-        "sub": "der markierten Kameraaufnahmen"
-      },
-      "busiestType": {
-        "title": "Häufigster Typ",
-        "vehicles": "Fahrzeuge",
-        "sub": "{cars} Autos bei {readings} Messungen"
-      },
-      "coverage": {
-        "title": "Abdeckung",
-        "sub": "verfügbare Kameras zum Scannen"
-      }
-    },
-    "control": {
-      "title": "Urban AI Kontrollzentrum",
-      "subtitle": "Konfigurieren Sie den Python-Dienst und überwachen Sie hier seine Aktivität.",
-      "status": {
-        "running": "Dienst läuft",
-        "notRunning": "Dienst läuft nicht. Siehe Startbefehl unten.",
-        "checking": "Wird überprüft…"
-      },
-      "setup": {
-        "title": "Dienst starten",
-        "step1Before": "1. Gehen Sie zu",
-        "step1After": ", erstellen Sie einen Schlüssel und kopieren Sie ihn.",
-        "apiKeysLinkText": "API-Schlüssel",
-        "step2": "2. Führen Sie diesen Befehl in Ihrem Terminal aus (durch Ihren vollständigen Schlüssel ersetzen):",
-        "copy": "Kopieren",
-        "copied": "Kopiert",
-        "note": "Der Dienst liest alle übrigen Einstellungen (Datenquelle, Scan-Intervall, Modell, Schwellenwerte) automatisch von dieser Seite. Keine Konfigurationsdateien zu bearbeiten."
-      },
-      "settings": {
-        "title": "Einstellungen",
-        "unsavedChanges": "Nicht gespeicherte Änderungen",
-        "loading": "Einstellungen werden geladen…",
-        "fields": {
-          "datasourceUrl": {
-            "label": "URL der Kamera-Datenquelle",
-            "hint": "CSV- oder JSON-API. Leer lassen, um die integrierten Toronto-TMC-Kameras zu verwenden."
-          },
-          "datasourceAuth": {
-            "label": "Authentifizierungsschlüssel der Datenquelle",
-            "hint": "Bearer-Token, falls die Quelle eine Authentifizierung erfordert."
-          },
-          "scanInterval": {
-            "label": "Scan-Intervall (Sekunden)",
-            "hint": "Wie oft der Dienst alle Kameras scannt."
-          },
-          "concurrency": {
-            "label": "Parallelität",
-            "hint": "Parallele Kameraanfragen pro Scan."
-          },
-          "confidence": {
-            "label": "Konfidenzschwelle",
-            "hint": "Niedriger = mehr Erkennungen, mehr Fehlalarme."
-          },
-          "model": {
-            "label": "YOLO-Modell",
-            "hint": "Größer = genauer, aber langsamer."
-          },
-          "inferSize": {
-            "label": "Inferenzgröße (px)",
-            "hint": "An YOLO übergebene Bildgröße. 1280 eignet sich am besten für Verkehrskameras."
-          },
-          "crowdThreshold": {
-            "label": "Schwellenwert für Menschenansammlung",
-            "hint": "Personenanzahl, die die Anomalie GROSSE MENSCHENANSAMMLUNG auslöst."
-          },
-          "trafficThreshold": {
-            "label": "Verkehrsschwellenwert",
-            "hint": "Fahrzeuganzahl, die die Anomalie VERKEHRSSTAU auslöst."
-          }
-        },
-        "saveError": "Speichern fehlgeschlagen",
-        "networkError": "Netzwerkfehler",
-        "save": "Einstellungen speichern",
-        "saving": "Wird gespeichert…",
-        "saved": "Gespeichert",
-        "autoApply": "Der laufende Dienst übernimmt Änderungen automatisch innerhalb von {seconds}s."
-      },
-      "logs": {
-        "title": "Dienstprotokolle",
-        "refresh": "Aktualisieren",
-        "notRunning": "Dienst läuft nicht. Protokolle erscheinen hier, sobald er gestartet wurde.",
-        "loading": "Protokolle werden geladen…",
-        "empty": "Noch keine Protokolle."
-      }
     }
   },
   "siteAdmin": {
@@ -481,9 +316,6 @@
       },
       "agent": {
         "run": "Agent ausgeführt"
-      },
-      "federal_workflow": {
-        "run": "Missions-Workflow ausgeführt"
       }
     },
     "detail": {
@@ -504,10 +336,7 @@
     "noResults": "Keine Ergebnisse für \"{query}\"",
     "groups": {
       "pages": "Seiten",
-      "conversations": "Chats",
-      "documents": "Dokumente",
-      "agents": "Agenten",
-      "knowledgeBases": "Wissensdatenbanken"
+      "conversations": "Chats"
     }
   },
   "notifications": {
@@ -530,10 +359,7 @@
     "plans": {
       "free": "Free",
       "pro": "Pro",
-      "team": "Team",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise"
+      "ultra": "Ultra"
     },
     "tools": {
       "chat": "Chat AI",
@@ -544,23 +370,21 @@
       "security": "Security",
       "apiKeys": "API keys",
       "knowledgeBases": "Knowledge bases",
-      "orgHub": "Organization hub",
-      "intelFeed": "Intel feed"
+      "orgHub": "Organization hub"
     }
   },
-  "servicesHub": {
-    "title": "Tools",
-    "subtitle": "Your {plan} plan includes the tools marked below. Upgrade to unlock the rest.",
-    "included": "Included",
-    "upgradeTo": "Requires {plan}",
-    "open": "Open tool",
-    "upgradeCta": "Upgrade to {plan}",
-    "descriptions": {
-      "documents": "Upload PDFs, search, and summarize with AI.",
-      "voice": "Transcribe audio and generate meeting summaries.",
-      "agents": "Multi-step AI assistants with approval gates.",
-      "workflows": "Ready-made workflow templates for repeatable tasks.",
-      "security": "Audit log and account activity history."
-    }
+  "contactModal": {
+    "title": "Support kontaktieren",
+    "subtitle": "Wir antworten in der Regel innerhalb eines Werktags.",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Wobei brauchen Sie Hilfe?",
+    "message": "Nachricht",
+    "messagePlaceholder": "Beschreiben Sie Ihr Problem oder Ihre Frage…",
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet…",
+    "sentTitle": "Nachricht gesendet",
+    "sentMessage": "Danke — unser Team meldet sich in Kürze bei Ihnen.",
+    "close": "Schließen",
+    "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
   }
 }

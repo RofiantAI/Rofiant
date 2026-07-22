@@ -9,15 +9,12 @@ export async function getDashboardLocale() {
 }
 
 export async function getDashboardMessages(locale: string) {
-  const [products, agency, misc, settings, main] = await Promise.all([
+  const [products, misc, settings] = await Promise.all([
     import(`../../messages/dashboard/products.${locale}.json`).then((m) => m.default),
-    import(`../../messages/dashboard/agency.${locale}.json`).then((m) => m.default),
     import(`../../messages/dashboard/misc.${locale}.json`).then((m) => m.default),
     import(`../../messages/dashboard/settings.${locale}.json`).then((m) => m.default),
-    import(`../../messages/${locale}.json`).then((m) => m.default),
   ]);
   return {
-    dashboard: { ...products, ...agency, ...misc, ...settings },
-    solutions: { federalAgencies: main.solutions?.federalAgencies ?? {} },
+    dashboard: { ...products, ...misc, ...settings },
   };
 }

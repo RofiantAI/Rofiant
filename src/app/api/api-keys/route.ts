@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   const denied = planToolDeniedResponse(
     plan,
     "apiKeys",
-    "API keys require a Pro, Team, Agency, or Enterprise plan.",
+    "API keys require a Pro or Ultra plan.",
   );
   if (denied) return denied;
 

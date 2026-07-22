@@ -28,6 +28,7 @@
     },
     "activityChart": {
       "title": "Actividad",
+      "total": "Total de mensajes:",
       "empty": "Aún no hay actividad — inicia un chat o usa la API para ver tendencias.",
       "totalMessages": "{count} mensajes en este periodo",
       "summary": "{messages} mensajes · {tokens} tokens",
@@ -50,10 +51,7 @@
       "title": "Plan",
       "free": "Gratis",
       "pro": "Pro",
-      "team": "Equipo",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise",
+      "ultra": "Ultra",
       "freeDescription": "Hasta {limit} mensajes al día en el plan gratuito.",
       "paidDescription": "Acceso completo a las funciones de tu plan y analíticas de uso.",
       "upgrade": "Mejorar plan",
@@ -141,7 +139,8 @@
     "modelBreakdown": {
       "title": "Modelos principales",
       "period": "Últimos 14 días",
-      "tokens": "{count} tokens"
+      "tokens": "{count} tokens",
+      "empty": "Aún no hay uso de modelos"
     },
     "recentActivity": {
       "title": "Actividad reciente",
@@ -212,6 +211,7 @@
       "tooltipTokens": "tokens",
       "tooltipChatRequests": "solicitudes de chat",
       "tooltipApiRequests": "solicitudes de API",
+      "tooltipDesktopRequests": "solicitudes de la app de escritorio",
       "tooltipInput": "tokens de entrada",
       "tooltipOutput": "tokens de salida",
       "totalTokens": "{count} tokens en total",
@@ -225,7 +225,8 @@
     "sources": {
       "chat": "Chat",
       "api": "API",
-      "agents": "Agentes"
+      "agents": "Agentes",
+      "desktop": "App de escritorio"
     },
     "modelUsage": {
       "title": "Uso de modelos",
@@ -249,172 +250,6 @@
       "minutesAgo": "hace {count} min",
       "hoursAgo": "hace {count} h",
       "daysAgo": "hace {count} d"
-    }
-  },
-  "urban": {
-    "header": {
-      "title": "Monitor Urban AI",
-      "refresh": "Actualizar",
-      "scanning": "Escaneando…",
-      "runScan": "Ejecutar escaneo (20 cámaras)"
-    },
-    "banners": {
-      "serviceDown": "El servicio Urban AI no está disponible. Inícialo con:",
-      "scanFailed": "Error en el escaneo",
-      "serviceUnavailable": "Servicio no disponible"
-    },
-    "health": {
-      "serviceStatus": "Servicio {status}",
-      "model": "Modelo:",
-      "lastScan": "Último escaneo:",
-      "scanning": "● Escaneando…"
-    },
-    "stats": {
-      "camerasSeen": {
-        "label": "Cámaras vistas",
-        "sub": "en los últimos 500 registros"
-      },
-      "cars": {
-        "label": "Autos",
-        "sub": "prom. {avg}/cámara"
-      },
-      "trucks": {
-        "label": "Camiones",
-        "sub": "vehículos pesados"
-      },
-      "people": {
-        "label": "Personas",
-        "sub": "prom. {avg}/cámara"
-      },
-      "anomalies": {
-        "label": "Anomalías",
-        "sub": "en todos los escaneos"
-      }
-    },
-    "tabs": {
-      "detections": "Todas las detecciones",
-      "anomalies": "Anomalías",
-      "live": "Transmisión en vivo"
-    },
-    "list": {
-      "loading": "Cargando…",
-      "emptyLive": "Esperando eventos en vivo…",
-      "emptyDefault": "Aún no hay datos. Ejecuta un escaneo para completarlos.",
-      "columns": {
-        "location": "Ubicación",
-        "cars": "Autos",
-        "trucks": "Camiones",
-        "motos": "Motos",
-        "people": "Personas",
-        "anomalies": "Anomalías",
-        "time": "Hora"
-      },
-      "camLabel": "cám. {id}",
-      "live": "en vivo",
-      "justNow": "ahora mismo",
-      "minutesAgo": "hace {count} min",
-      "hoursAgo": "hace {count} h"
-    },
-    "anomalyTypes": {
-      "TRAFFIC_JAM": "CONGESTIÓN VIAL",
-      "LARGE_CROWD": "AGLOMERACIÓN",
-      "EMPTY_ROAD": "VÍA VACÍA"
-    },
-    "lightbox": {
-      "camLabel": "cám. {id}",
-      "summary": "{cars} autos · {trucks} camiones · {motos} motos · {people} personas",
-      "captured": "Capturado {time}",
-      "openFullSize": "Ver tamaño completo ↗"
-    },
-    "trends": {
-      "anomalyRate": {
-        "title": "Tasa de anomalías",
-        "sub": "de las lecturas de cámaras marcadas"
-      },
-      "busiestType": {
-        "title": "Tipo más frecuente",
-        "vehicles": "Vehículos",
-        "sub": "{cars} autos en {readings} lecturas"
-      },
-      "coverage": {
-        "title": "Cobertura",
-        "sub": "cámaras disponibles para escanear"
-      }
-    },
-    "control": {
-      "title": "Panel de control de Urban AI",
-      "subtitle": "Configura el servicio Python y supervisa su actividad desde aquí.",
-      "status": {
-        "running": "El servicio está en ejecución",
-        "notRunning": "El servicio no está en ejecución. Consulta el comando de inicio a continuación.",
-        "checking": "Verificando…"
-      },
-      "setup": {
-        "title": "Iniciar el servicio",
-        "step1Before": "1. Ve a",
-        "step1After": "y crea una clave, luego cópiala.",
-        "apiKeysLinkText": "Claves de API",
-        "step2": "2. Ejecuta este comando en tu terminal (reemplaza con tu clave completa):",
-        "copy": "Copiar",
-        "copied": "Copiado",
-        "note": "El servicio lee el resto de la configuración (fuente de datos, intervalo de escaneo, modelo, umbrales) automáticamente desde esta página. No hay archivos de configuración que editar."
-      },
-      "settings": {
-        "title": "Configuración",
-        "unsavedChanges": "Cambios sin guardar",
-        "loading": "Cargando configuración…",
-        "fields": {
-          "datasourceUrl": {
-            "label": "URL de la fuente de datos de cámaras",
-            "hint": "API en CSV o JSON. Déjalo en blanco para usar las cámaras TMC de Toronto incluidas."
-          },
-          "datasourceAuth": {
-            "label": "Clave de autenticación de la fuente de datos",
-            "hint": "Token de portador si la fuente requiere autenticación."
-          },
-          "scanInterval": {
-            "label": "Intervalo de escaneo (segundos)",
-            "hint": "Con qué frecuencia el servicio escanea todas las cámaras."
-          },
-          "concurrency": {
-            "label": "Concurrencia",
-            "hint": "Solicitudes de cámara en paralelo por escaneo."
-          },
-          "confidence": {
-            "label": "Umbral de confianza",
-            "hint": "Menor = más detecciones, más falsos positivos."
-          },
-          "model": {
-            "label": "Modelo YOLO",
-            "hint": "Más grande = más preciso pero más lento."
-          },
-          "inferSize": {
-            "label": "Tamaño de inferencia (px)",
-            "hint": "Tamaño de imagen que se envía a YOLO. 1280 es lo mejor para cámaras de tráfico."
-          },
-          "crowdThreshold": {
-            "label": "Umbral de multitud",
-            "hint": "Cantidad de personas que activa la anomalía AGLOMERACIÓN."
-          },
-          "trafficThreshold": {
-            "label": "Umbral de tráfico",
-            "hint": "Cantidad de autos que activa la anomalía CONGESTIÓN VIAL."
-          }
-        },
-        "saveError": "Error al guardar",
-        "networkError": "Error de red",
-        "save": "Guardar configuración",
-        "saving": "Guardando…",
-        "saved": "Guardado",
-        "autoApply": "El servicio en ejecución aplicará los cambios automáticamente en un plazo de {seconds}s."
-      },
-      "logs": {
-        "title": "Registros del servicio",
-        "refresh": "Actualizar",
-        "notRunning": "El servicio no está en ejecución. Los registros aparecerán aquí una vez que se inicie.",
-        "loading": "Cargando registros…",
-        "empty": "Aún no hay registros."
-      }
     }
   },
   "siteAdmin": {
@@ -481,9 +316,6 @@
       },
       "agent": {
         "run": "Ejecución de agente"
-      },
-      "federal_workflow": {
-        "run": "Flujo de misión ejecutado"
       }
     },
     "detail": {
@@ -504,10 +336,7 @@
     "noResults": "Sin resultados para \"{query}\"",
     "groups": {
       "pages": "Páginas",
-      "conversations": "Chats",
-      "documents": "Documentos",
-      "agents": "Agentes",
-      "knowledgeBases": "Bases de conocimiento"
+      "conversations": "Chats"
     }
   },
   "notifications": {
@@ -530,10 +359,7 @@
     "plans": {
       "free": "Free",
       "pro": "Pro",
-      "team": "Team",
-      "pilot": "Pilot",
-      "agency": "Agency",
-      "enterprise": "Enterprise"
+      "ultra": "Ultra"
     },
     "tools": {
       "chat": "Chat AI",
@@ -544,23 +370,21 @@
       "security": "Security",
       "apiKeys": "API keys",
       "knowledgeBases": "Knowledge bases",
-      "orgHub": "Organization hub",
-      "intelFeed": "Intel feed"
+      "orgHub": "Organization hub"
     }
   },
-  "servicesHub": {
-    "title": "Tools",
-    "subtitle": "Your {plan} plan includes the tools marked below. Upgrade to unlock the rest.",
-    "included": "Included",
-    "upgradeTo": "Requires {plan}",
-    "open": "Open tool",
-    "upgradeCta": "Upgrade to {plan}",
-    "descriptions": {
-      "documents": "Upload PDFs, search, and summarize with AI.",
-      "voice": "Transcribe audio and generate meeting summaries.",
-      "agents": "Multi-step AI assistants with approval gates.",
-      "workflows": "Ready-made workflow templates for repeatable tasks.",
-      "security": "Audit log and account activity history."
-    }
+  "contactModal": {
+    "title": "Contactar con soporte",
+    "subtitle": "Normalmente respondemos en un día hábil.",
+    "subject": "Asunto",
+    "subjectPlaceholder": "¿En qué necesitas ayuda?",
+    "message": "Mensaje",
+    "messagePlaceholder": "Describe tu problema o pregunta…",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "sentTitle": "Mensaje enviado",
+    "sentMessage": "Gracias — nuestro equipo te responderá en breve.",
+    "close": "Cerrar",
+    "genericError": "Algo salió mal. Inténtalo de nuevo."
   }
 }

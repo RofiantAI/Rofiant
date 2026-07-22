@@ -20,8 +20,6 @@ export const metadata: Metadata = {
 import { UnifySection } from "@/components/sections/unify-section";
 import { DeploySection } from "@/components/sections/deploy-section";
 import { ProtectSection } from "@/components/sections/protect-section";
-import { ScaleSection } from "@/components/sections/scale-section";
-import { MonitorSection } from "@/components/sections/monitor-section";
 import { DeveloperSection } from "@/components/sections/developer-section";
 import { PublicAISection } from "@/components/sections/public-ai-section";
 import { FooterCtaSection } from "@/components/sections/footer-cta-section";
@@ -30,7 +28,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 export default async function Home() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (user) redirect("/dashboard");
+  if (user) redirect("/chat");
 
   return (
     <>
@@ -46,12 +44,6 @@ export default async function Home() {
       </ScrollReveal>
       <ScrollReveal>
         <ProtectSection />
-      </ScrollReveal>
-      <ScrollReveal>
-        <ScaleSection />
-      </ScrollReveal>
-      <ScrollReveal>
-        <MonitorSection />
       </ScrollReveal>
       <ScrollReveal>
         <DeveloperSection />

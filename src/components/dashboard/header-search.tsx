@@ -8,21 +8,11 @@ import {
   X,
   LayoutDashboard,
   MessageSquare,
-  FileText,
-  Brain,
-  BookOpen,
-  Mic,
   Key,
   BarChart3,
   Settings,
-  Building2,
-  Users,
-  CreditCard,
-  Radio,
   Megaphone,
   Layout,
-  Landmark,
-  ClipboardCheck,
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
@@ -45,9 +35,6 @@ type SiteScreen = { slug: string; label: string };
 const TYPE_ICONS: Record<SearchResult["type"], LucideIcon> = {
   page: LayoutDashboard,
   conversation: MessageSquare,
-  document: FileText,
-  agent: Brain,
-  knowledge_base: BookOpen,
 };
 
 function useSearchablePages(
@@ -56,76 +43,15 @@ function useSearchablePages(
   siteScreens: SiteScreen[],
   t: ReturnType<typeof useTranslations<"dashboard.sidebar">>,
 ) {
-  const isAgency = ["agency", "enterprise"].includes(plan);
-  const isTeam = ["team", "pilot", "agency", "enterprise"].includes(plan);
-  const isGov = ["agency", "enterprise"].includes(plan);
-  const hasWorkflows = canAccessTool(plan, "workflows");
-  const hasKnowledgeBases = canAccessTool(plan, "knowledgeBases");
-  const hasApiKeys = canAccessTool(plan, "apiKeys");
-
   return useMemo(() => {
     const pages: { href: string; label: string; icon: LucideIcon }[] = [
-      { href: "/dashboard", label: t("nav.overview"), icon: LayoutDashboard },
-      { href: "/dashboard/services", label: t("nav.toolsHub"), icon: LayoutDashboard },
       { href: "/chat", label: t("nav.chatAi"), icon: MessageSquare },
-    ];
-
-    if (canAccessTool(plan, "documents")) {
-      pages.push({ href: "/dashboard/documents", label: t("nav.documents"), icon: FileText });
-    }
-    if (canAccessTool(plan, "voice")) {
-      pages.push({ href: "/dashboard/voice-ai", label: t("nav.voiceAi"), icon: Mic });
-    }
-    if (canAccessTool(plan, "agents")) {
-      pages.push({ href: "/dashboard/agents", label: t("nav.agents"), icon: Brain });
-    }
-
-    if (hasWorkflows) {
-      pages.push({
-        href: "/dashboard/agency/solutions",
-        label: t("nav.missionSolutions"),
-        icon: Landmark,
-      });
-    }
-
-    if (hasKnowledgeBases && !isAgency) {
-      pages.push({
-        href: "/dashboard/knowledge-bases",
-        label: t("nav.knowledgeBases"),
-        icon: BookOpen,
-      });
-    }
-
-    if (isAgency) {
-      pages.push(
-        { href: "/dashboard/agency", label: t("nav.agencyOverview"), icon: Building2 },
-        { href: "/dashboard/agency/access-review", label: t("nav.accessReview"), icon: ClipboardCheck },
-        { href: "/dashboard/agency/broadcast", label: t("nav.broadcast"), icon: Megaphone },
-      );
-      if (isGov) {
-        pages.push({
-          href: "/dashboard/agency/intelligence",
-          label: t("nav.intelligence"),
-          icon: Radio,
-        });
-      }
-      if (isTeam) {
-        pages.push({ href: "/dashboard/agency/members", label: t("nav.members"), icon: Users });
-      }
-      pages.push(
-        { href: "/dashboard/knowledge-bases", label: t("nav.knowledgeBases"), icon: BookOpen },
-        { href: "/dashboard/agency/billing", label: t("nav.billing"), icon: CreditCard },
-        { href: "/dashboard/agency/settings", label: t("nav.agencySettings"), icon: Settings },
-      );
-    }
-
-    pages.push(
       { href: "/dashboard/usage", label: t("nav.usage"), icon: BarChart3 },
       { href: "/dashboard/audit-log", label: t("nav.auditLog"), icon: ShieldCheck },
-    );
+    ];
 
-    if (hasApiKeys) {
-      pages.push({ href: "/dashboard/api-keys", label: t("nav.apiKeys"), icon: Key });
+    if (canAccessTool(plan, "apiKeys")) {
+      pages.push({ href: "/dashboard/settings?tab=api", label: t("nav.apiKeys"), icon: Key });
     }
 
     pages.push({ href: "/dashboard/settings", label: t("accountSettings"), icon: Settings });
@@ -147,7 +73,7 @@ function useSearchablePages(
     }
 
     return pages;
-  }, [hasApiKeys, hasKnowledgeBases, hasWorkflows, isAgency, isGov, isSiteOwner, isTeam, plan, siteScreens, t]);
+  }, [isSiteOwner, plan, siteScreens, t]);
 }
 
 export function DashboardHeaderSearch({
@@ -285,19 +211,10 @@ export function DashboardHeaderSearch({
 
   const grouped = useMemo(() => {
     const groups: { key: SearchResult["type"]; label: string; items: SearchResult[] }[] = [];
-    const order: SearchResult["type"][] = [
-      "page",
-      "conversation",
-      "document",
-      "agent",
-      "knowledge_base",
-    ];
+    const order: SearchResult["type"][] = ["page", "conversation"];
     const labels: Record<SearchResult["type"], string> = {
       page: t("groups.pages"),
       conversation: t("groups.conversations"),
-      document: t("groups.documents"),
-      agent: t("groups.agents"),
-      knowledge_base: t("groups.knowledgeBases"),
     };
 
     for (const type of order) {
@@ -311,7 +228,7 @@ export function DashboardHeaderSearch({
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted pointer-events-none" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted pointer-events-none" />
       <input
         ref={inputRef}
         type="search"
@@ -326,9 +243,9 @@ export function DashboardHeaderSearch({
         aria-label={t("placeholder")}
         aria-expanded={open && isActive}
         aria-controls="dashboard-search-results"
-        className="w-full h-12 pl-12 pr-24 rounded-lg bg-background border border-border text-base text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary shadow-sm"
+        className="w-full h-9 pl-9 pr-14 rounded-xl bg-background border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
       />
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
         {query ? (
           <button
             type="button"
@@ -339,10 +256,10 @@ export function DashboardHeaderSearch({
             className="p-1 text-foreground-muted hover:text-foreground transition-colors"
             aria-label={t("clear")}
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         ) : (
-          <kbd className="hidden sm:inline text-[11px] text-foreground-muted border border-border rounded px-1.5 py-0.5">
+          <kbd className="hidden sm:inline text-[10px] text-foreground-muted border border-border rounded px-1.5 py-0.5">
             ⌘K
           </kbd>
         )}
@@ -352,7 +269,7 @@ export function DashboardHeaderSearch({
         <div
           id="dashboard-search-results"
           role="listbox"
-          className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[min(420px,60vh)] overflow-y-auto rounded-lg border border-border bg-background-secondary shadow-xl"
+          className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[min(420px,60vh)] overflow-y-auto rounded-xl border border-border bg-background-secondary shadow-xl"
         >
           {loading && allResults.length === 0 && (
             <p className="px-4 py-3 text-sm text-foreground-muted">{t("searching")}</p>

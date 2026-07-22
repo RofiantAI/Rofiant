@@ -17,5 +17,5 @@ export function getOrgPlanSupport(): OrgPlanSupport {
 }
 
 export function isContractPlan(plan: string): boolean {
-  return ["pilot", "agency", "enterprise"].includes(plan.toLowerCase());
+  return plan.toLowerCase() === "ultra";
 }

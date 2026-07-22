@@ -1,19 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
-import { PasswordInput } from "@/components/ui/password-input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Spinner } from "@/components/ui/spinner";
 import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
 const MAX_AGE = 120;
 const MINOR_AGE = 18;
 
+// Signup opened from the desktop app (see ROFIANT_SIGNUP_URL in
+// rofiant-desktop's src/lib/auth-redirect.ts) carries this marker so the
+// post-confirmation redirect hands the session back to the app's custom URL
+// scheme instead of landing in the web chat.
+const DESKTOP_REDIRECT = "rofiant://auth-callback";
+
 export function SignupForm() {
   const t = useTranslations("auth.signup");
+  const searchParams = useSearchParams();
+  const isDesktopClient = searchParams.get("client") === "desktop";
   const [step, setStep] = useState<1 | 2>(1);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -33,7 +42,7 @@ export function SignupForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
       },
     });
     if (error) {
@@ -71,7 +80,8 @@ export function SignupForm() {
 
     setLoading(true);
 
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`;
+    const next = isDesktopClient ? DESKTOP_REDIRECT : appUrl("/chat");
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const res = await fetch("/api/auth/signup", {
       method: "POST",
@@ -146,25 +156,16 @@ export function SignupForm() {
       {step === 1 ? (
         <>
           <form onSubmit={handleEmailContinue} className="space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground-secondary mb-2"
-              >
-                {t("email")}
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t("emailPlaceholder")}
-                required
-                autoComplete="email"
-                autoFocus
-                className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-              />
-            </div>
+            <FloatingLabelInput
+              id="email"
+              label={t("email")}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              autoFocus
+            />
 
             {error && (
               <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
@@ -204,46 +205,28 @@ export function SignupForm() {
         </>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-foreground-secondary mb-2"
-            >
-              {t("name")}
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={t("namePlaceholder")}
-              required={nameRequired}
-              autoComplete="name"
-              autoFocus
-              className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-            />
-          </div>
+          <FloatingLabelInput
+            id="name"
+            label={t("name")}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required={nameRequired}
+            autoComplete="name"
+            autoFocus
+          />
 
-          <div>
-            <label
-              htmlFor="age"
-              className="block text-sm font-medium text-foreground-secondary mb-2"
-            >
-              {t("age")}
-            </label>
-            <input
-              id="age"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              max={MAX_AGE}
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder={t("agePlaceholder")}
-              required
-              className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-            />
-          </div>
+          <FloatingLabelInput
+            id="age"
+            label={t("age")}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={MAX_AGE}
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            required
+          />
 
           {showMinorNotice ? (
             <p className="text-xs text-foreground-muted leading-relaxed border border-border bg-background-secondary px-3 py-2">
@@ -251,43 +234,27 @@ export function SignupForm() {
             </p>
           ) : null}
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-foreground-secondary mb-2"
-            >
-              {t("password")}
-            </label>
-            <PasswordInput
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              minLength={6}
-              autoComplete="new-password"
-              className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-            />
-          </div>
+          <FloatingLabelInput
+            id="password"
+            label={t("password")}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+            autoComplete="new-password"
+          />
 
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm font-medium text-foreground-secondary mb-2"
-            >
-              {t("confirmPassword")}
-            </label>
-            <PasswordInput
-              id="confirm-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              minLength={6}
-              autoComplete="new-password"
-              className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary transition-colors"
-            />
-          </div>
+          <FloatingLabelInput
+            id="confirm-password"
+            label={t("confirmPassword")}
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            minLength={6}
+            autoComplete="new-password"
+          />
 
           <TurnstileWidget onVerify={setTurnstileToken} />
 

@@ -2,14 +2,22 @@ import { getTranslations } from "next-intl/server";
 import { getDashboardLocale } from "@/i18n/dashboard-locale";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsClient } from "./settings-client";
+import type { Tab } from "./settings-tab-sidebar";
 import { getUserAvatarUrl, hasCustomAvatar } from "@/lib/user-avatar";
 import { DashboardPage, DashboardHeader } from "@/components/dashboard/ui/page-shell";
 
-export default async function SettingsPage() {
+const VALID_TABS: Tab[] = ["account", "security", "api", "notifications", "preferences", "appearance", "danger"];
+
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: { tab?: string };
+}) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const locale = await getDashboardLocale();
   const t = await getTranslations({ locale, namespace: "dashboard.settings" });
+  const initialTab = VALID_TABS.find((tab) => tab === searchParams.tab);
 
   return (
     <DashboardPage>
@@ -22,6 +30,8 @@ export default async function SettingsPage() {
           bio={user?.user_metadata?.bio ?? ""}
           avatarUrl={user ? getUserAvatarUrl(user) : null}
           hasCustomAvatar={user ? hasCustomAvatar(user) : false}
+          plan={(user?.user_metadata?.plan ?? "free").toLowerCase()}
+          initialTab={initialTab}
         />
       </div>
     </DashboardPage>
