@@ -17,7 +17,7 @@
   },
   "footer": {
     "tagline": "Ein KI-Agent für Ihre Dateien, standardmäßig lokal.",
-    "copyright": "© {year} Rofiant Inc. Alle Rechte vorbehalten.",
+    "copyright": "© {year} Rofiant. Alle Rechte vorbehalten.",
     "columns": {
       "platform": {
         "title": "Plattform",

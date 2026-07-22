@@ -17,7 +17,7 @@
   },
   "footer": {
     "tagline": "An AI agent for your files, local by default.",
-    "copyright": "© {year} Rofiant Inc. All rights reserved.",
+    "copyright": "© {year} Rofiant. All rights reserved.",
     "columns": {
       "platform": {
         "title": "Platform",
