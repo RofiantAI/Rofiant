@@ -83,6 +83,21 @@ export async function FooterSection() {
             </div>
           ))}
         </div>
+
+        <div className="mt-8 border-t border-border pt-8">
+          <a
+            href="https://startupfa.me/s/rofiant?utm_source=rofiant.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://startupfa.me/badges/featured-badge.webp"
+              alt="Rofiant - Featured on Startup Fame"
+              width="171"
+              height="54"
+            />
+          </a>
+        </div>
       </div>
     </footer>
   );
