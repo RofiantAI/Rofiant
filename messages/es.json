@@ -311,7 +311,7 @@
   "download": {
     "badge": "DESCARGA",
     "title": "Descargar Rofiant",
-    "subtitle": "Rofiant es una aplicación de escritorio nativa. Linux y Windows ya son compatibles; macOS llegará próximamente.",
+    "subtitle": "Rofiant es una aplicación de escritorio nativa para Linux, macOS y Windows.",
     "heroTitle": "Rofiant para {platform}",
     "detected": "Tu sistema operativo",
     "version": "Versión {version}",
@@ -320,6 +320,7 @@
     "downloadCta": "Descargar .{ext}",
     "noRelease": "Aún no hay una versión publicada. Vuelve pronto.",
     "viewReleases": "Ver versiones en GitHub",
+    "filesLabel": "Descargas",
     "platformsSection": {
       "title": "Compatibilidad de plataformas",
       "subtitle": "Dónde funciona Rofiant hoy y qué viene después."
@@ -331,7 +332,8 @@
       },
       "macos": {
         "title": "macOS",
-        "desc": "Próximamente."
+        "descAvailable": "Versión temprana disponible.",
+        "descComingSoon": "Próximamente."
       },
       "windows": {
         "title": "Windows",

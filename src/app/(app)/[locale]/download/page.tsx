@@ -81,9 +81,15 @@ export default async function DownloadPage() {
     (detected && assets.find((a) => a.platform === detected)) ??
     assets.find((a) => a.platform === "linux") ??
     assets[0];
-  const secondary = assets.filter((a) => a !== primary);
   const primaryPlatform: PlatformKey = primary?.platform ?? detected ?? "linux";
   const ext = primary?.match.replace(/^\./, "") ?? "AppImage";
+  const assetsByPlatform = (["linux", "macos", "windows"] as const).reduce(
+    (acc, p) => {
+      acc[p] = assets.filter((a) => a.platform === p);
+      return acc;
+    },
+    {} as Record<PlatformKey, typeof assets>,
+  );
 
   return (
     <PageLayout
@@ -137,35 +143,47 @@ export default async function DownloadPage() {
               </a>
             </div>
           )}
-
-          {secondary.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-border flex flex-wrap gap-3">
-              {secondary.map(({ asset, match }) => (
-                <a
-                  key={match}
-                  href={asset.browser_download_url}
-                  className="inline-flex items-center gap-2 text-sm text-foreground-secondary hover:text-foreground transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  {asset.name} · {formatBytes(asset.size)}
-                </a>
-              ))}
-            </div>
-          )}
         </Card>
       }
     >
       <PageSection title={t("platformsSection.title")} subtitle={t("platformsSection.subtitle")}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mt-8">
-          {(["linux", "macos", "windows"] as const).map((p) => (
-            <Card key={p} variant="bordered" className="p-6">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-foreground">{t(`platforms.${p}.title`)}</h3>
-                {detected === p && <Badge variant="info">{t("detected")}</Badge>}
-              </div>
-              <p className="mt-2 text-sm text-foreground-secondary">{t(`platforms.${p}.desc`)}</p>
-            </Card>
-          ))}
+          {(["linux", "macos", "windows"] as const).map((p) => {
+            const platformAssets = assetsByPlatform[p];
+            const desc =
+              p === "macos"
+                ? t(platformAssets.length > 0 ? "platforms.macos.descAvailable" : "platforms.macos.descComingSoon")
+                : t(`platforms.${p}.desc`);
+            return (
+              <Card key={p} variant="bordered" className="p-6">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-foreground">{t(`platforms.${p}.title`)}</h3>
+                  {detected === p && <Badge variant="info">{t("detected")}</Badge>}
+                </div>
+                <p className="mt-2 text-sm text-foreground-secondary">{desc}</p>
+                {platformAssets.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-border space-y-2">
+                    <p className="text-xs font-medium uppercase tracking-wide text-foreground-secondary/70">
+                      {t("filesLabel")}
+                    </p>
+                    {platformAssets.map(({ asset, match, icon: Icon }) => (
+                      <a
+                        key={match}
+                        href={asset.browser_download_url}
+                        className="flex items-center gap-2 text-sm text-foreground-secondary hover:text-foreground transition-colors"
+                      >
+                        <Icon className="w-4 h-4 shrink-0" />
+                        <span className="truncate">{asset.name}</span>
+                        <span className="text-foreground-secondary/70 shrink-0">
+                          · {formatBytes(asset.size)}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            );
+          })}
         </div>
       </PageSection>
     </PageLayout>

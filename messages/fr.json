@@ -311,7 +311,7 @@
   "download": {
     "badge": "TÉLÉCHARGEMENT",
     "title": "Télécharger Rofiant",
-    "subtitle": "Rofiant est une application de bureau native. Linux et Windows sont pris en charge dès aujourd'hui — macOS arrive bientôt.",
+    "subtitle": "Rofiant est une application de bureau native pour Linux, macOS et Windows.",
     "heroTitle": "Rofiant pour {platform}",
     "detected": "Votre système",
     "version": "Version {version}",
@@ -320,6 +320,7 @@
     "downloadCta": "Télécharger .{ext}",
     "noRelease": "Aucune version publiée pour le moment. Revenez bientôt.",
     "viewReleases": "Voir les versions sur GitHub",
+    "filesLabel": "Téléchargements",
     "platformsSection": {
       "title": "Plateformes prises en charge",
       "subtitle": "Où Rofiant fonctionne aujourd'hui, et ce qui arrive ensuite."
@@ -331,7 +332,8 @@
       },
       "macos": {
         "title": "macOS",
-        "desc": "Bientôt disponible."
+        "descAvailable": "Version préliminaire disponible.",
+        "descComingSoon": "Bientôt disponible."
       },
       "windows": {
         "title": "Windows",
