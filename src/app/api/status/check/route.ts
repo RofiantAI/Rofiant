@@ -21,9 +21,10 @@ async function checkService(admin: ReturnType<typeof createAdminClient>, table: 
   }
 }
 
-// Invoked every 5 minutes by the Vercel Cron defined in vercel.json.
-// Vercel automatically sends `Authorization: Bearer ${CRON_SECRET}` on cron
-// requests when that env var is set, so we verify it the same way here.
+// Invoked once daily by the Vercel Cron defined in vercel.json (Hobby plan
+// caps cron frequency at once/day). Vercel automatically sends
+// `Authorization: Bearer ${CRON_SECRET}` on cron requests when that env var
+// is set, so we verify it the same way here.
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   if (cronSecret) {
