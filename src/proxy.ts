@@ -64,7 +64,7 @@ export async function proxy(request: NextRequest) {
       return Response.json({
         name: "Rofiant API",
         version: "v1",
-        docs: "https://rofiant.ca/resources/api-reference",
+        docs: "https://www.rofiant.ca/resources/api-reference",
       });
     }
     // Rewrite /v1/... → /api/v1/... if not already prefixed
@@ -100,7 +100,7 @@ export async function proxy(request: NextRequest) {
     ) {
       const marketingUrl = request.nextUrl.clone();
       marketingUrl.hostname =
-        process.env.NODE_ENV === "development" ? "localhost" : "rofiant.ca";
+        process.env.NODE_ENV === "development" ? "localhost" : "www.rofiant.ca";
       return NextResponse.redirect(marketingUrl);
     }
   }

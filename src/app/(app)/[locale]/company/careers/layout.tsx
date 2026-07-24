@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description:
       "Join Rofiant. We're hiring engineers, ML researchers, and operators building AI for government and enterprise.",
   },
-  alternates: { canonical: "https://rofiant.ca/company/careers" },
+  alternates: { canonical: "https://www.rofiant.ca/company/careers" },
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;

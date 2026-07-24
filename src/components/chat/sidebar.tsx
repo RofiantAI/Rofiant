@@ -511,7 +511,7 @@ export function ChatSidebar({
         {menuOpen && (
           <div className="absolute bottom-full left-3 right-3 mb-1.5 rounded-lg bg-card border border-border shadow-lg py-1 px-0.5 overflow-hidden">
             <a
-              href="https://rofiant.ca/resources/documentation"
+              href="https://www.rofiant.ca/resources/documentation"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"

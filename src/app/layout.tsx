@@ -17,7 +17,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rofiant.ca"),
+  metadataBase: new URL("https://www.rofiant.ca"),
   title: {
     default: SITE_TITLE,
     template: "%s | Rofiant",
@@ -33,12 +33,12 @@ export const metadata: Metadata = {
     "document intelligence",
     "voice AI",
   ],
-  authors: [{ name: "Rofiant", url: "https://rofiant.ca" }],
+  authors: [{ name: "Rofiant", url: "https://www.rofiant.ca" }],
   creator: "Rofiant",
   openGraph: {
     type: "website",
     locale: "en_CA",
-    url: "https://rofiant.ca",
+    url: "https://www.rofiant.ca",
     siteName: "Rofiant",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   alternates: {
-    canonical: "https://rofiant.ca",
+    canonical: "https://www.rofiant.ca",
   },
 };
 
@@ -70,8 +70,8 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Rofiant",
-    url: "https://rofiant.ca",
-    logo: "https://rofiant.ca/logo.svg",
+    url: "https://www.rofiant.ca",
+    logo: "https://www.rofiant.ca/logo.svg",
     description:
       "AI platform for government, enterprise, and everyone. Secure, compliant, and ready for mission-critical workloads.",
     sameAs: [],

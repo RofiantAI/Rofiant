@@ -7,7 +7,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site-metadata";
 export const metadata: Metadata = {
   title: { absolute: SITE_TITLE },
   description: SITE_DESCRIPTION,
-  alternates: { canonical: "https://rofiant.ca" },
+  alternates: { canonical: "https://www.rofiant.ca" },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
