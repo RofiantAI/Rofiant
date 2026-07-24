@@ -118,6 +118,19 @@ export async function FooterSection() {
               className="h-9 w-auto"
             />
           </a>
+
+          <a
+            href="https://fazier.com/launches/rofiant.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark"
+              alt="Fazier badge"
+              width="250"
+              className="h-9 w-auto"
+            />
+          </a>
         </div>
       </div>
     </footer>
