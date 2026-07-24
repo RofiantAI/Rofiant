@@ -1,7 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { routing } from "@/i18n/routing";
 
 const STORAGE_KEY = "cookie-consent";
 
@@ -24,6 +26,14 @@ function getServerSnapshot() {
 
 export function CookieBanner() {
   const needsConsent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // Rendered in the root layout, outside NextIntlClientProvider (so it also
+  // shows on locale-free routes like /chat and /dashboard) — can't use
+  // next-intl's Link/useLocale here, so the locale is derived from the URL.
+  const pathname = usePathname();
+  const firstSegment = pathname.split("/")[1];
+  const locale = routing.locales.includes(firstSegment as (typeof routing.locales)[number])
+    ? firstSegment
+    : routing.defaultLocale;
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
@@ -46,7 +56,7 @@ export function CookieBanner() {
           <p className="text-sm font-semibold text-foreground tracking-wide uppercase">Cookie Notice</p>
           <p className="text-sm text-foreground-secondary mt-1">
             We use cookies to improve your experience and analyze traffic.{" "}
-            <Link href="/legal/privacy-policy" className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors">
+            <Link href={`/${locale}/legal/privacy-policy`} className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors">
               Privacy Policy
             </Link>
           </p>
