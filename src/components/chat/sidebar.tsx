@@ -1,6 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import NextLink from "next/link";
+import { Link as LocaleLink } from "@/i18n/navigation";
 import {
   Plus,
   Home,
@@ -232,6 +234,7 @@ export function ChatSidebar({
   const router = useRouter();
   const supabase = createClient();
   const [conversations, setConversations] = useState(initialConversations);
+  const [prevInitialConversations, setPrevInitialConversations] = useState(initialConversations);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Conversation[] | null>(
     null,
@@ -239,12 +242,22 @@ export function ChatSidebar({
   const [searchLoading, setSearchLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  if (initialConversations !== prevInitialConversations) {
+    setPrevInitialConversations(initialConversations);
     setConversations(initialConversations);
-  }, [initialConversations]);
+  }
 
   const trimmedQuery = searchQuery.trim();
   const isSearching = trimmedQuery.length > 0;
+
+  const [prevIsSearching, setPrevIsSearching] = useState(isSearching);
+  if (isSearching !== prevIsSearching) {
+    setPrevIsSearching(isSearching);
+    if (!isSearching) {
+      setSearchResults(null);
+      setSearchLoading(false);
+    }
+  }
 
   const localSearchResults = useMemo(() => {
     if (!isSearching) return null;
@@ -253,11 +266,7 @@ export function ChatSidebar({
   }, [conversations, isSearching, trimmedQuery]);
 
   useEffect(() => {
-    if (!isSearching) {
-      setSearchResults(null);
-      setSearchLoading(false);
-      return;
-    }
+    if (!isSearching) return;
 
     const controller = new AbortController();
     const timer = setTimeout(async () => {
@@ -417,20 +426,20 @@ export function ChatSidebar({
       </div>
 
       <div className="px-2 pb-1">
-        <a
+        <NextLink
           href="/dashboard"
           className="flex items-center gap-2.5 w-full h-8 px-2 rounded-md text-sm text-foreground hover:bg-background-tertiary transition-colors"
         >
           <Home className="w-4 h-4 text-foreground-muted" />
           <span className="flex-1 text-left">Home</span>
-        </a>
-        <a
+        </NextLink>
+        <NextLink
           href="/chat"
           className="flex items-center gap-2.5 w-full h-8 px-2 rounded-md text-sm text-foreground hover:bg-background-tertiary transition-colors"
         >
           <Plus className="w-4 h-4 text-foreground-muted" />
           <span className="flex-1 text-left">New Chat</span>
-        </a>
+        </NextLink>
       </div>
 
       <nav className="flex-1 overflow-y-auto pb-2">
@@ -510,21 +519,21 @@ export function ChatSidebar({
               <BookOpen className="w-3.5 h-3.5" />
               Docs
             </a>
-            <a
+            <LocaleLink
               href="/company/contact"
               className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               Contact Us
-            </a>
+            </LocaleLink>
             {!isPro && (
-              <a
+              <LocaleLink
                 href="/pricing"
                 className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
               >
                 <Zap className="w-3.5 h-3.5" />
                 Upgrade
-              </a>
+              </LocaleLink>
             )}
             <div className="h-px bg-border my-1" />
             <button

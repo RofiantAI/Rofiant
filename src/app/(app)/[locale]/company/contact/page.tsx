@@ -38,7 +38,9 @@ export default function ContactPage() {
   function focusForm(topic: string) {
     setCategory(topic);
     setSubject((prev) => prev || `${topic} ${t("inquirySuffix")}`);
-    document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById("contact-form")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -49,7 +51,14 @@ export default function ContactPage() {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, subject, message, category, turnstileToken }),
+      body: JSON.stringify({
+        name,
+        email,
+        subject,
+        message,
+        category,
+        turnstileToken,
+      }),
     });
 
     if (!res.ok) {
@@ -67,11 +76,7 @@ export default function ContactPage() {
   }
 
   return (
-    <PageLayout
-      badge={t("badge")}
-      title={t("title")}
-      subtitle={t("subtitle")}
-    >
+    <PageLayout badge={t("badge")} title={t("title")} subtitle={t("subtitle")}>
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div className="space-y-6">
           {contacts.map((c) => {
@@ -117,7 +122,10 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div id="contact-form" className=" border border-border bg-card p-8 hover:border-border-light transition-colors">
+        <div
+          id="contact-form"
+          className="rounded-xl border border-border bg-card p-8 hover:border-border-light transition-colors"
+        >
           <h3 className="font-semibold text-foreground mb-6 flex items-center gap-2">
             <Send className="w-4 h-4" />
             {t("form.heading")}
@@ -137,7 +145,7 @@ export default function ContactPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className={`w-full  border bg-background-tertiary px-4 py-2.5 text-sm text-foreground outline-none transition-colors ${
+                  className={`w-full border bg-background-tertiary px-4 py-2.5 text-sm text-foreground outline-none transition-colors ${
                     formFocused === "name"
                       ? "border-accent-secondary"
                       : "border-border"
@@ -201,10 +209,12 @@ export default function ContactPage() {
                 />
               </div>
               <TurnstileWidget onVerify={setTurnstileToken} />
-              {error && (
-                <p className="text-sm text-red-400">{error}</p>
-              )}
-              <Button type="submit" disabled={status === "sending" || !turnstileToken} className="w-full">
+              {error && <p className="text-sm text-red-400">{error}</p>}
+              <Button
+                type="submit"
+                disabled={status === "sending" || !turnstileToken}
+                className="w-full"
+              >
                 {status === "sending" ? t("form.sending") : t("form.send")}
               </Button>
             </form>

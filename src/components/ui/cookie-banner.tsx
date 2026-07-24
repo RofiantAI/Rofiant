@@ -1,33 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+import { Link } from "@/i18n/navigation";
 
 const STORAGE_KEY = "cookie-consent";
 
-export function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+function subscribe(callback: () => void) {
+  window.addEventListener(STORAGE_KEY, callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener(STORAGE_KEY, callback);
+    window.removeEventListener("storage", callback);
+  };
+}
 
-  useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      setVisible(true);
-    }
-  }, []);
+function getSnapshot() {
+  return localStorage.getItem(STORAGE_KEY) === null;
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+export function CookieBanner() {
+  const needsConsent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     document.cookie = `${STORAGE_KEY}=accepted; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
-    window.dispatchEvent(new CustomEvent("cookie-consent", { detail: "accepted" }));
-    setVisible(false);
+    window.dispatchEvent(new CustomEvent(STORAGE_KEY, { detail: "accepted" }));
   }
 
   function decline() {
     localStorage.setItem(STORAGE_KEY, "declined");
     document.cookie = `${STORAGE_KEY}=declined; max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
-    window.dispatchEvent(new CustomEvent("cookie-consent", { detail: "declined" }));
-    setVisible(false);
+    window.dispatchEvent(new CustomEvent(STORAGE_KEY, { detail: "declined" }));
   }
 
-  if (!visible) return null;
+  if (!needsConsent) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border-light bg-background-secondary">
@@ -36,9 +46,9 @@ export function CookieBanner() {
           <p className="text-sm font-semibold text-foreground tracking-wide uppercase">Cookie Notice</p>
           <p className="text-sm text-foreground-secondary mt-1">
             We use cookies to improve your experience and analyze traffic.{" "}
-            <a href="/legal/privacy-policy" className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors">
+            <Link href="/legal/privacy-policy" className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors">
               Privacy Policy
-            </a>
+            </Link>
           </p>
         </div>
         <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">

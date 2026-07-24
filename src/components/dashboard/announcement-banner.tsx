@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Megaphone, X } from "lucide-react";
 
 export type AnnouncementItem = {
@@ -44,20 +44,20 @@ export function AnnouncementBanner({
 }) {
   const tDismiss = dismissLabel;
   const [announcements, setAnnouncements] = useState(initialAnnouncements);
-  const [visible, setVisible] = useState<AnnouncementItem[]>([]);
+  const [prevInitialAnnouncements, setPrevInitialAnnouncements] = useState(initialAnnouncements);
+  const [dismissedVersion, setDismissedVersion] = useState(0);
 
-  const applyVisible = useCallback((items: AnnouncementItem[]) => {
-    const dismissed = getDismissed();
-    setVisible(items.filter((a) => !dismissed.has(a.id)));
-  }, []);
-
-  useEffect(() => {
+  if (initialAnnouncements !== prevInitialAnnouncements) {
+    setPrevInitialAnnouncements(initialAnnouncements);
     setAnnouncements(initialAnnouncements);
-  }, [initialAnnouncements]);
+  }
 
-  useEffect(() => {
-    applyVisible(announcements);
-  }, [announcements, applyVisible]);
+  const visible = useMemo(() => {
+    const dismissed = getDismissed();
+    return announcements.filter((a) => !dismissed.has(a.id));
+    // dismissedVersion bumps this memo after a dismiss() localStorage write
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [announcements, dismissedVersion]);
 
   useEffect(() => {
     let cancelled = false;
@@ -89,7 +89,7 @@ export function AnnouncementBanner({
 
   const handleDismiss = (id: string) => {
     dismiss(id);
-    setVisible((prev) => prev.filter((a) => a.id !== id));
+    setDismissedVersion((v) => v + 1);
   };
 
   if (visible.length === 0) return null;

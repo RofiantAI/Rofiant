@@ -11,6 +11,7 @@
     "company": "Unternehmen",
     "pricing": "Preise",
     "docs": "Dokumentation",
+    "download": "Download",
     "dashboard": "Dashboard",
     "login": "Anmelden",
     "signup": "Registrieren"
@@ -24,8 +25,7 @@
         "links": {
           "pricing": "Preise",
           "chatAi": "Chat",
-          "agents": "Agenten",
-          "api": "API"
+          "agents": "Agenten"
         }
       },
       "resources": {
@@ -209,6 +209,7 @@
       "save": "Sparen Sie ~20 %"
     },
     "mostPopular": "Am beliebtesten",
+    "comingSoon": "Bald verfügbar",
     "free": "Kostenlos",
     "perMonth": "/ Monat",
     "perMonthPerUser": "/ Monat / Nutzer",
@@ -310,8 +311,9 @@
   "download": {
     "badge": "DOWNLOAD",
     "title": "Rofiant herunterladen",
-    "subtitle": "Rofiant ist eine native Desktop-App. Derzeit wird nur Linux unterstützt — macOS und Windows folgen in Kürze.",
-    "linuxTitle": "Rofiant für Linux",
+    "subtitle": "Rofiant ist eine native Desktop-App. Linux und Windows werden bereits unterstützt — macOS folgt in Kürze.",
+    "heroTitle": "Rofiant für {platform}",
+    "detected": "Ihr Betriebssystem",
     "version": "Version {version}",
     "stable": "Stabil",
     "prerelease": "Beta",
@@ -333,7 +335,7 @@
       },
       "windows": {
         "title": "Windows",
-        "desc": "Demnächst verfügbar."
+        "desc": "Unterstützt, aber noch etwas fehlerhaft. Rechnen Sie mit ein paar Ecken und Kanten, während wir daran arbeiten."
       }
     }
   },
@@ -565,34 +567,6 @@
         "readDocs": "Dokumentation lesen"
       },
       "roadmapNotice": "Heute verfügbar: Agenten mit mehrstufigem Plan-und-Ausführ-Reasoning über Ihre Dateien und Ihren Rechner erstellen, verwalten und ausführen. Vollständige App- und Fenstersteuerung, lokale Tool-Ausführung, Freigabe-Workflows und Einrichtung von Entwicklungsumgebungen stehen auf unserer Roadmap."
-    },
-    "api": {
-      "title": "API",
-      "badge": "PLATTFORM",
-      "subtitle": "Einfache, leistungsstarke APIs für Aufgaben und Automatisierung. SDKs für Python, TypeScript, Go und mehr.",
-      "terminalLabel": "Terminal",
-      "quickInstall": "Schnellinstallation",
-      "featuresTitle": "Funktionen",
-      "features": {
-        "restApi": {
-          "title": "REST-API",
-          "desc": "Übersichtliche, gut dokumentierte REST-Endpunkte zum Auslösen und Überwachen von Aufgaben."
-        },
-        "webhooks": {
-          "title": "Webhooks",
-          "desc": "Erhalten Sie Echtzeitbenachrichtigungen zu Aufgabenereignissen: gestartet, abgeschlossen, Freigabe erforderlich — weitere Ereignistypen folgen."
-        },
-        "rateLimiting": {
-          "title": "Ratenbegrenzung",
-          "desc": "Integrierte Ratenbegrenzung und Kontingentverwaltung. Steuern Sie die Nutzung pro Nutzer, Team oder API-Schlüssel."
-        },
-        "streaming": {
-          "title": "Streaming",
-          "desc": "Server-Sent Events für Echtzeit-Fortschritt bei Aufgaben. Antworten mit geringer Latenz, während Rofiant arbeitet."
-        }
-      },
-      "readDocs": "Dokumentation lesen",
-      "fullReference": "Vollständige API-Referenz verfügbar"
     },
     "chatAi": {
       "title": "Chat",

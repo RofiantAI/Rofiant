@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, ChevronDown, Cpu, Lock } from "lucide-react";
+import { Check, ChevronDown, Lock } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useChatSettings } from "@/contexts/chat-settings-context";
 import {
   ALL_MODELS,
@@ -43,7 +44,6 @@ export function ModelSwitcher({ disabled }: { disabled?: boolean }) {
         className="flex items-center gap-1.5 h-8 px-2.5 text-xs text-foreground-secondary hover:text-foreground hover:bg-background-tertiary rounded-lg border border-transparent hover:border-border/50 transition-all disabled:opacity-40 disabled:cursor-not-allowed max-w-[148px]"
         title="Switch model"
       >
-        <Cpu className="w-3.5 h-3.5 shrink-0 text-foreground-muted" />
         <span className="truncate font-medium">{current.name}</span>
         <ChevronDown
           className={`w-3 h-3 shrink-0 text-foreground-muted transition-transform ${
@@ -86,12 +86,12 @@ export function ModelSwitcher({ disabled }: { disabled?: boolean }) {
               />
             ))}
             {!isPro && (
-              <a
+              <Link
                 href="/pricing"
                 className="block mx-2 mb-2 mt-1 px-3 py-2 text-xs text-center text-accent-primary hover:bg-accent-primary/10 rounded-md transition-colors"
               >
                 Upgrade for Pro models →
-              </a>
+              </Link>
             )}
           </div>
         </div>

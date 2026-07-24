@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   Bell, Globe, Check, Trash2, Palette,
   LogOut, Download, Key, Monitor, ShieldCheck,
-  Sun, Moon, Plus, Copy, X, Lock,
+  Plus, Copy, X, Lock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -97,10 +97,10 @@ const DENSITIES: { id: Density }[] = [
   { id: "spacious" },
 ];
 
-const THEMES: { id: "light" | "dark" | "system"; icon: React.ElementType }[] = [
-  { id: "light", icon: Sun },
-  { id: "dark", icon: Moon },
-  { id: "system", icon: Monitor },
+const THEMES: { id: "light" | "dark" | "system" }[] = [
+  { id: "light" },
+  { id: "dark" },
+  { id: "system" },
 ];
 
 function applyAccent(value: string) {
@@ -140,20 +140,51 @@ const DATE_FORMATS: { value: string; label: string; example: string }[] = [
 function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
   return (
     <button
+      type="button"
+      role="switch"
+      aria-checked={on}
       onClick={onClick}
-      aria-pressed={on}
-      className={`w-10 h-5 border relative transition-colors ${
+      className={`relative w-9 h-5 rounded-full shrink-0 cursor-pointer ring-1 ring-inset transition-colors duration-150 ${
         on
-          ? "bg-accent-primary/20 border-accent-primary/40"
-          : "bg-background-tertiary border-border"
+          ? "bg-accent-success ring-accent-success"
+          : "bg-background-tertiary ring-border hover:ring-border-light"
       }`}
     >
-      <div
-        className={`absolute top-0.5 w-3.5 h-3.5 transition-all ${
-          on ? "left-5 bg-accent-primary" : "left-0.5 bg-foreground-muted"
+      <span
+        className={`absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-150 ${
+          on ? "translate-x-4" : "translate-x-0"
         }`}
       />
     </button>
+  );
+}
+
+function SegmentedControl<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-background-tertiary border border-border">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`px-3 h-7 rounded-md text-xs transition-colors ${
+            value === opt.value
+              ? "bg-card text-foreground shadow-sm"
+              : "text-foreground-muted hover:text-foreground"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
   );
 }
 
@@ -317,19 +348,18 @@ export function SettingsClient({
 
   // Load API keys (only if the plan actually has access)
   useEffect(() => {
-    if (!canUseApiKeys) {
-      setApiKeysLoading(false);
-      return;
-    }
+    if (!canUseApiKeys) return;
     fetch("/api/api-keys")
       .then((r) => r.json())
       .then(setApiKeys)
       .finally(() => setApiKeysLoading(false));
   }, [canUseApiKeys]);
 
-  // Load appearance from localStorage on mount and apply
+  // Load appearance from localStorage on mount and apply. Deferred to an
+  // effect since localStorage is unavailable during SSR.
   useEffect(() => {
     const { accent: a, density: d } = loadAppearance();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAccent(a);
     setDensity(d);
     const color = ACCENT_COLORS.find((c) => c.id === a);
@@ -562,12 +592,12 @@ export function SettingsClient({
                   onChange={(e) => setDisplayName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && saveDisplayName()}
                   placeholder={t("account.displayNamePlaceholder")}
-                  className="flex-1 h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                  className="flex-1 h-9 px-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light"
                 />
                 <button
                   onClick={saveDisplayName}
                   disabled={displayNameSaving || !displayName.trim()}
-                  className="h-9 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                  className="h-9 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {displayNameSaved ? <><Check className="w-3.5 h-3.5" /> {t("account.saved")}</> : displayNameSaving ? t("account.saving") : t("account.save")}
                 </button>
@@ -585,14 +615,14 @@ export function SettingsClient({
                 placeholder={t("account.bioPlaceholder")}
                 maxLength={200}
                 rows={3}
-                className="w-full px-3 py-2 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary resize-none"
+                className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light resize-none"
               />
               <div className="flex items-center justify-between mt-1.5">
                 <span className="text-xs text-foreground-muted">{t("account.bioCount", { count: bio.length })}</span>
                 <button
                   onClick={saveBio}
                   disabled={bioSaving}
-                  className="h-7 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1"
+                  className="h-7 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1"
                 >
                   {bioSaved ? <><Check className="w-3 h-3" /> {t("account.saved")}</> : bioSaving ? t("account.saving") : t("account.saveBio")}
                 </button>
@@ -613,7 +643,7 @@ export function SettingsClient({
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("account.userId")}
               </label>
-              <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary px-2 py-1 break-all">
+              <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary rounded-md px-2 py-1 break-all">
                 {userId}
               </code>
             </div>
@@ -628,7 +658,7 @@ export function SettingsClient({
                 {!showPwForm && (
                   <button
                     onClick={() => setShowPwForm(true)}
-                    className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
+                    className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
                   >
                     {t("account.change")}
                   </button>
@@ -642,14 +672,14 @@ export function SettingsClient({
                     onChange={(e) => setPw(e.target.value)}
                     placeholder={t("account.newPassword")}
                     autoComplete="new-password"
-                    className="w-full h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                    className="w-full h-9 px-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light"
                   />
                   <PasswordInput
                     value={pwConfirm}
                     onChange={(e) => setPwConfirm(e.target.value)}
                     placeholder={t("account.confirmPassword")}
                     autoComplete="new-password"
-                    className="w-full h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                    className="w-full h-9 px-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light"
                   />
                   {pwError && <p className="text-xs text-red-400">{pwError}</p>}
                   {pwStatus === "done" && (
@@ -661,7 +691,7 @@ export function SettingsClient({
                     <button
                       type="submit"
                       disabled={pwStatus === "saving"}
-                      className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
+                      className="h-8 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                     >
                       {pwStatus === "saving" ? t("account.saving") : t("account.save")}
                     </button>
@@ -671,7 +701,7 @@ export function SettingsClient({
                         setShowPwForm(false);
                         setPw(""); setPwConfirm(""); setPwError(""); setPwStatus("idle");
                       }}
-                      className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
+                      className="h-8 px-3 rounded-lg text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                     >
                       {t("account.cancel")}
                     </button>
@@ -1037,22 +1067,14 @@ export function SettingsClient({
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.dateFormat")}
               </label>
-              <div className="grid grid-cols-2 gap-2">
-                {DATE_FORMATS.map((fmt) => (
-                  <button
-                    key={fmt.value}
-                    onClick={() => setDateFormat(fmt.value)}
-                    className={`flex items-center justify-between px-3 py-2.5 border text-left transition-colors ${
-                      dateFormat === fmt.value
-                        ? "border-accent-primary/40 bg-accent-primary/5"
-                        : "border-border hover:border-border-light"
-                    }`}
-                  >
-                    <span className="text-xs font-mono text-foreground">{fmt.label}</span>
-                    <span className="text-xs text-foreground-muted">{fmt.example}</span>
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                value={dateFormat}
+                onChange={setDateFormat}
+                options={DATE_FORMATS.map((fmt) => ({ value: fmt.value, label: fmt.label }))}
+              />
+              <p className="text-xs text-foreground-muted mt-2 font-mono">
+                {DATE_FORMATS.find((fmt) => fmt.value === dateFormat)?.example}
+              </p>
             </div>
 
             {/* Time format */}
@@ -1060,21 +1082,14 @@ export function SettingsClient({
               <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.timeFormat")}
               </label>
-              <div className="flex gap-2">
-                {(["12h", "24h"] as const).map((fmt) => (
-                  <button
-                    key={fmt}
-                    onClick={() => setTimeFormat(fmt)}
-                    className={`flex-1 h-9 text-xs font-medium border transition-colors ${
-                      timeFormat === fmt
-                        ? "border-accent-primary/40 bg-accent-primary/5 text-foreground"
-                        : "border-border text-foreground-secondary hover:text-foreground hover:border-border-light"
-                    }`}
-                  >
-                    {fmt === "12h" ? t("preferences.time12h") : t("preferences.time24h")}
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                value={timeFormat}
+                onChange={setTimeFormat}
+                options={[
+                  { value: "12h" as const, label: t("preferences.time12h") },
+                  { value: "24h" as const, label: t("preferences.time24h") },
+                ]}
+              />
             </div>
 
             {/* Data region */}
@@ -1109,7 +1124,7 @@ export function SettingsClient({
 
         {/* ── APPEARANCE ── */}
         {tab === "appearance" && (
-          <DashboardCard className="space-y-6">
+          <DashboardCard className="space-y-4 max-w-md">
             <div className="flex items-center gap-3">
               <Palette className="w-4 h-4 text-foreground-muted" />
               <h2 className="text-sm font-medium text-foreground">{t("appearance.heading")}</h2>
@@ -1117,33 +1132,25 @@ export function SettingsClient({
 
             {/* Theme */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.theme")}
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {THEMES.map(({ id, icon: Icon }) => (
-                  <button
-                    key={id}
-                    onClick={() => setTheme(id)}
-                    className={`flex flex-col items-center gap-2 px-4 py-3 border text-center transition-colors ${
-                      theme === id
-                        ? "border-accent-primary/40 bg-accent-primary/5"
-                        : "border-border hover:border-border-light"
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${theme === id ? "text-accent-primary" : "text-foreground-muted"}`} />
-                    <div>
-                      <p className="text-sm text-foreground">{t(`appearance.themes.${id}.label`)}</p>
-                      <p className="text-xs text-foreground-muted">{t(`appearance.themes.${id}.desc`)}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                value={theme ?? "system"}
+                onChange={setTheme}
+                options={THEMES.map(({ id }) => ({
+                  value: id,
+                  label: t(`appearance.themes.${id}.label`),
+                }))}
+              />
+              <p className="text-xs text-foreground-muted mt-1.5">
+                {t(`appearance.themes.${theme ?? "system"}.desc`)}
+              </p>
             </div>
 
             {/* Accent color */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.accentColor")}
               </label>
               <div className="flex gap-3">
@@ -1164,38 +1171,30 @@ export function SettingsClient({
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-foreground-muted mt-2">
+              <p className="text-xs text-foreground-muted mt-1.5">
                 {t("appearance.selected")} <span className="text-foreground">{t(`appearance.accentNames.${accent}`)}</span>
               </p>
             </div>
 
             {/* UI Density */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-3 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.uiDensity")}
               </label>
-              <div className="space-y-2">
-                {DENSITIES.map((d) => (
-                  <button
-                    key={d.id}
-                    onClick={() => setDensity(d.id)}
-                    className={`w-full flex items-center justify-between px-4 py-3 border text-left transition-colors ${
-                      density === d.id
-                        ? "border-accent-primary/40 bg-accent-primary/5"
-                        : "border-border hover:border-border-light"
-                    }`}
-                  >
-                    <div>
-                      <p className="text-sm text-foreground">{t(`appearance.densities.${d.id}.label`)}</p>
-                      <p className="text-xs text-foreground-muted">{t(`appearance.densities.${d.id}.desc`)}</p>
-                    </div>
-                    {density === d.id && <Check className="w-3.5 h-3.5 text-accent-primary" />}
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl
+                value={density}
+                onChange={setDensity}
+                options={DENSITIES.map((d) => ({
+                  value: d.id,
+                  label: t(`appearance.densities.${d.id}.label`),
+                }))}
+              />
+              <p className="text-xs text-foreground-muted mt-1.5">
+                {t(`appearance.densities.${density}.desc`)}
+              </p>
             </div>
 
-            <div className="pt-2">
+            <div>
               <DashboardPrimaryButton onClick={saveAppearance}>
                 {appearanceSaved ? <><Check className="w-3.5 h-3.5" /> {t("appearance.applied")}</> : t("appearance.apply")}
               </DashboardPrimaryButton>

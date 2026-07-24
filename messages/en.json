@@ -11,6 +11,7 @@
     "company": "Company",
     "pricing": "Pricing",
     "docs": "Docs",
+    "download": "Download",
     "dashboard": "Dashboard",
     "login": "Log in",
     "signup": "Sign Up"
@@ -24,8 +25,7 @@
         "links": {
           "pricing": "Pricing",
           "chatAi": "Chat",
-          "agents": "Agents",
-          "api": "API"
+          "agents": "Agents"
         }
       },
       "resources": {
@@ -166,8 +166,7 @@
         "audit": {
           "title": "A full local activity log",
           "subtitle": "See every action, every time",
-          "description": "Every file Rofiant touches is logged on your machine. Review, undo, or audit anything it did.",
-          "desc": "Every action Rofiant takes, on any app or file, is logged on your machine. Review, undo, or audit anything it did."
+          "description": "Every file Rofiant touches is logged on your machine. Review, undo, or audit anything it did."
         }
       }
     },
@@ -210,6 +209,7 @@
       "save": "Save ~20%"
     },
     "mostPopular": "Most popular",
+    "comingSoon": "Available soon",
     "free": "Free",
     "perMonth": "/ mo",
     "perMonthPerUser": "/ mo / user",
@@ -311,8 +311,9 @@
   "download": {
     "badge": "DOWNLOAD",
     "title": "Download Rofiant",
-    "subtitle": "Rofiant is a native desktop app. Linux is the only supported platform right now — macOS and Windows are on the way.",
-    "linuxTitle": "Rofiant for Linux",
+    "subtitle": "Rofiant is a native desktop app. Linux and Windows are supported today — macOS is on the way.",
+    "heroTitle": "Rofiant for {platform}",
+    "detected": "Your OS",
     "version": "Version {version}",
     "stable": "Stable",
     "prerelease": "Beta",
@@ -334,7 +335,7 @@
       },
       "windows": {
         "title": "Windows",
-        "desc": "Coming soon."
+        "desc": "Supported, but still a bit buggy. Expect rough edges while we iron them out."
       }
     }
   },
@@ -566,34 +567,6 @@
         "readDocs": "Read the docs"
       },
       "roadmapNotice": "Available today: create, manage, and run agents with multi-step plan-and-execute reasoning across your files and machine. Full app and window control, local tool execution, approval workflows, and dev-environment setup are on our roadmap."
-    },
-    "api": {
-      "title": "API",
-      "badge": "PLATFORM",
-      "subtitle": "Simple, powerful APIs for tasks and automation. SDKs for Python, TypeScript, Go, and more.",
-      "terminalLabel": "terminal",
-      "quickInstall": "Quick install",
-      "featuresTitle": "Features",
-      "features": {
-        "restApi": {
-          "title": "REST API",
-          "desc": "Clean, well-documented REST endpoints for triggering and monitoring tasks."
-        },
-        "webhooks": {
-          "title": "Webhooks",
-          "desc": "Get real-time notifications for task events: started, completed, needs approval, with more event types coming."
-        },
-        "rateLimiting": {
-          "title": "Rate limiting",
-          "desc": "Built-in rate limiting and quota management. Control usage per user, team, or API key."
-        },
-        "streaming": {
-          "title": "Streaming",
-          "desc": "Server-sent events for real-time task progress. Low-latency updates as Rofiant works."
-        }
-      },
-      "readDocs": "Read the docs",
-      "fullReference": "Full API reference available"
     },
     "chatAi": {
       "title": "Chat",

@@ -23,12 +23,12 @@ export function LoginForm() {
 
   useEffect(() => {
     const normalized = email.trim().toLowerCase();
-    if (!normalized.includes("@")) {
-      setSsoDomain(null);
-      return;
-    }
 
     const timer = window.setTimeout(async () => {
+      if (!normalized.includes("@")) {
+        setSsoDomain(null);
+        return;
+      }
       const res = await fetch(`/api/auth/sso-domain?email=${encodeURIComponent(normalized)}`);
       const data = await res.json().catch(() => ({}));
       setSsoDomain(data.available && data.domain ? data.domain : null);

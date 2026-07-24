@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -54,6 +54,14 @@ async function markTourSeen() {
   } catch {
     /* ignore */
   }
+}
+
+function subscribeNever() {
+  return () => {};
+}
+
+function useMounted() {
+  return useSyncExternalStore(subscribeNever, () => true, () => false);
 }
 
 function measureTarget(selector: string): Rect | null {
@@ -166,7 +174,7 @@ export function DashboardTour({
   const [stepIndex, setStepIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const [tooltipSize, setTooltipSize] = useState({ w: 320, h: 280 });
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -195,7 +203,6 @@ export function DashboardTour({
   }, []);
 
   useEffect(() => {
-    setMounted(true);
     if (!tourSeen) {
       const timer = window.setTimeout(() => setActive(true), 400);
       return () => window.clearTimeout(timer);
@@ -204,6 +211,9 @@ export function DashboardTour({
 
   useEffect(() => {
     if (!active || !step) return;
+    // Measuring the target element's DOM layout can't happen during render;
+    // this syncs tooltip position to real (post-paint) geometry.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshRect();
     const timer = window.setTimeout(refreshRect, 350);
     const onLayout = () => refreshRect();

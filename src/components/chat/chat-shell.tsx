@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ChatSidebar } from "./sidebar";
 import { ChatTabs } from "./chat-tabs";
+import { BetaBanner } from "./beta-banner";
 import { ChatShellContext } from "@/contexts/chat-shell-context";
 import { ChatTabsContext } from "@/contexts/chat-tabs-context";
 import type { User } from "@supabase/supabase-js";
@@ -53,6 +54,7 @@ export function ChatShell({
           )}
 
           <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            {!isSettings && <BetaBanner />}
             {!isSettings && <ChatTabs conversations={conversations} />}
             {children}
           </main>

@@ -27,6 +27,10 @@ export function ChatSettingsProvider({
   const [settings, setSettings] = useState<ChatSettings>(DEFAULT_SETTINGS);
 
   useEffect(() => {
+    // Deliberately deferred past mount: localStorage is unavailable during SSR,
+    // so state starts as DEFAULT_SETTINGS (matches server) and swaps to the
+    // real persisted value post-hydration to avoid a hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSettings(loadSettings(isPro));
   }, [isPro]);
 

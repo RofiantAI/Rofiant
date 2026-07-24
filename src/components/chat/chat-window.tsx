@@ -45,6 +45,28 @@ const PENDING_DOC_CONTENTS_KEY = (id: string) =>
   `rofiant-pending-doc-contents-${id}`;
 const PENDING_IMAGE_KEY = (id: string) => `rofiant-pending-image-${id}`;
 
+// Images/attachments are never persisted to Supabase — only the text is.
+// An image-only send with no caption would otherwise store empty content,
+// which comes back on reload as a bare empty-text history entry and makes
+// the provider reject the whole conversation on the next request.
+function historyContent(text: string, hasImage: boolean, hasAttachments: boolean): string {
+  if (text) return text;
+  if (hasImage) return "[Image]";
+  if (hasAttachments) return "[Attachment]";
+  return text;
+}
+
+// sessionStorage has a hard per-origin quota; a base64 image (or a large
+// document) can blow past it even when nothing is actually wrong.
+function trySessionStorageSet(key: string, value: string): boolean {
+  try {
+    sessionStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function makeId() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -109,6 +131,9 @@ export function ChatWindow({
 
   const transport = useMemo(
     () =>
+      // body() is only invoked by useChat at send-time (not during this render),
+      // so reading pendingDocContentsRef.current here is safe despite the lint.
+      // eslint-disable-next-line react-hooks/refs
       new DefaultChatTransport({
         api: "/api/chat",
         body: () => {
@@ -129,7 +154,6 @@ export function ChatWindow({
           };
         },
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       activeId,
       settings.model,
@@ -175,6 +199,9 @@ export function ChatWindow({
     const val = sessionStorage.getItem(key);
     if (val) {
       sessionStorage.removeItem(key);
+      // One-time cross-navigation handoff value; sessionStorage is unavailable
+      // during SSR and this doesn't affect initial paint.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPendingMessage(val);
       userMsgCountRef.current = 1;
     }
@@ -200,6 +227,14 @@ export function ChatWindow({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function supabaseInsertUserMessage(convId: string, content: string) {
+    await fetch("/api/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId: convId, content }),
+    });
+  }
 
   // Auto-send the pending message once it's read from sessionStorage.
   useEffect(() => {
@@ -339,21 +374,29 @@ export function ChatWindow({
         return;
       }
       const conv = await res.json();
-      sessionStorage.setItem(PENDING_KEY(conv.id), text);
+      trySessionStorageSet(
+        PENDING_KEY(conv.id),
+        historyContent(text, !!image, attachmentMeta.length > 0),
+      );
       if (attachmentMeta.length > 0) {
-        sessionStorage.setItem(
+        trySessionStorageSet(
           PENDING_ATTACHMENTS_KEY(conv.id),
           JSON.stringify(attachmentMeta),
         );
-        sessionStorage.setItem(
+        trySessionStorageSet(
           PENDING_DOC_CONTENTS_KEY(conv.id),
           JSON.stringify(pendingDocContentsRef.current),
         );
       }
-      if (image) sessionStorage.setItem(PENDING_IMAGE_KEY(conv.id), image);
+      if (image && !trySessionStorageSet(PENDING_IMAGE_KEY(conv.id), image)) {
+        setDocLoadError("Image too large to carry over — sent without it.");
+      }
       router.push(`/chat/${conv.id}`);
     } else {
-      await supabaseInsertUserMessage(activeId, text);
+      await supabaseInsertUserMessage(
+        activeId,
+        historyContent(text, !!image, attachmentMeta.length > 0),
+      );
       await sendMessage({ text }, { body: { image } });
     }
   }
@@ -384,13 +427,6 @@ export function ChatWindow({
     await sendMessage({ text: content });
   }
 
-  async function supabaseInsertUserMessage(convId: string, content: string) {
-    await fetch("/api/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ conversationId: convId, content }),
-    });
-  }
 
   const isEmpty = messages.length === 0 && !pendingMessage;
   const msgFontSize = fontSizeClass[settings.fontSize];

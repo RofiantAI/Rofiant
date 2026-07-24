@@ -59,8 +59,10 @@ export function Composer({
   const [attachError, setAttachError] = useState<string | null>(null);
   const [docPickerOpen, setDocPickerOpen] = useState(false);
   const [modeOpen, setModeOpen] = useState(false);
+  const [prevModeOpen, setPrevModeOpen] = useState(modeOpen);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [commandIndex, setCommandIndex] = useState(0);
+  const [prevValue, setPrevValue] = useState(value);
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
@@ -77,14 +79,18 @@ export function Composer({
   const SEGMENT_MS = 3000;
 
   const commandMatches = value.startsWith("/")
-    ? SLASH_COMMANDS.filter((c) => c.cmd.toLowerCase().startsWith(value.toLowerCase()))
+    ? SLASH_COMMANDS.filter((c) =>
+        c.cmd.toLowerCase().startsWith(value.toLowerCase()),
+      )
     : [];
   const showCommandMenu =
-    commandMatches.length > 0 && !(commandMatches.length === 1 && commandMatches[0].cmd === value);
+    commandMatches.length > 0 &&
+    !(commandMatches.length === 1 && commandMatches[0].cmd === value);
 
-  useEffect(() => {
+  if (value !== prevValue) {
+    setPrevValue(value);
     setCommandIndex(0);
-  }, [value]);
+  }
 
   function applyCommand(cmd: string) {
     onValueChange(`${cmd} `);
@@ -94,7 +100,10 @@ export function Composer({
   useEffect(() => {
     if (!docPickerOpen) return;
     function onClick(e: MouseEvent) {
-      if (docPickerRef.current && !docPickerRef.current.contains(e.target as Node)) {
+      if (
+        docPickerRef.current &&
+        !docPickerRef.current.contains(e.target as Node)
+      ) {
         setDocPickerOpen(false);
       }
     }
@@ -102,9 +111,13 @@ export function Composer({
     return () => document.removeEventListener("mousedown", onClick);
   }, [docPickerOpen]);
 
+  if (modeOpen !== prevModeOpen) {
+    setPrevModeOpen(modeOpen);
+    if (modeOpen) setAgents(loadAgents());
+  }
+
   useEffect(() => {
     if (!modeOpen) return;
-    setAgents(loadAgents());
     function onClick(e: MouseEvent) {
       if (modeRef.current && !modeRef.current.contains(e.target as Node)) {
         setModeOpen(false);
@@ -150,7 +163,9 @@ export function Composer({
   }
 
   function handlePaste(e: React.ClipboardEvent<HTMLTextAreaElement>) {
-    const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith("image/"));
+    const item = Array.from(e.clipboardData.items).find((i) =>
+      i.type.startsWith("image/"),
+    );
     if (!item) return;
     const file = item.getAsFile();
     if (!file) return;
@@ -170,7 +185,11 @@ export function Composer({
     });
   }
 
-  async function transcribeSegment(blob: Blob, mimeType: string, isFinal: boolean) {
+  async function transcribeSegment(
+    blob: Blob,
+    mimeType: string,
+    isFinal: boolean,
+  ) {
     if (blob.size === 0) return;
     if (isFinal) setIsTranscribing(true);
     try {
@@ -187,7 +206,8 @@ export function Composer({
         textareaRef.current?.focus();
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Transcription failed";
+      const message =
+        err instanceof Error ? err.message : "Transcription failed";
       console.error("transcribe failed", err);
       setVoiceError(message);
     } finally {
@@ -198,7 +218,9 @@ export function Composer({
   function runSegment() {
     const stream = streamRef.current;
     if (!stream || !isRecordingRef.current) return;
-    const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/ogg";
+    const mimeType = MediaRecorder.isTypeSupported("audio/webm")
+      ? "audio/webm"
+      : "audio/ogg";
     const recorder = new MediaRecorder(stream, { mimeType });
     const chunks: Blob[] = [];
     recorder.ondataavailable = (e) => {
@@ -246,7 +268,10 @@ export function Composer({
       window.clearTimeout(segmentTimeoutRef.current);
       segmentTimeoutRef.current = null;
     }
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     }
     mediaRecorderRef.current = null;
@@ -267,9 +292,18 @@ export function Composer({
     if (textareaRef.current) textareaRef.current.style.height = "auto";
   }
 
-  const activeAgent = agents.find((a) => a.id === settings.activeAgentId) ?? null;
-  const modeLabel = activeAgent ? activeAgent.name : settings.chatMode === "plan" ? "Plan" : "Ask";
-  const ModeIcon = activeAgent ? Bot : settings.chatMode === "plan" ? ListChecks : MessageCircle;
+  const activeAgent =
+    agents.find((a) => a.id === settings.activeAgentId) ?? null;
+  const modeLabel = activeAgent
+    ? activeAgent.name
+    : settings.chatMode === "plan"
+      ? "Plan"
+      : "Ask";
+  const ModeIcon = activeAgent
+    ? Bot
+    : settings.chatMode === "plan"
+      ? ListChecks
+      : MessageCircle;
 
   return (
     <>
@@ -278,7 +312,11 @@ export function Composer({
           className={`${maxWidth} mx-auto mb-2 px-3 py-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-center justify-between gap-2`}
         >
           <span>{docLoadError}</span>
-          <button type="button" onClick={onDismissDocError} className="shrink-0 text-red-500/70 hover:text-red-500">
+          <button
+            type="button"
+            onClick={onDismissDocError}
+            className="shrink-0 text-red-500/70 hover:text-red-500"
+          >
             <X className="w-3 h-3" />
           </button>
         </div>
@@ -293,12 +331,18 @@ export function Composer({
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyCommand(c.cmd)}
                 className={`w-full flex items-center gap-2 px-3 py-1.5 text-left transition-colors ${
-                  i === commandIndex ? "bg-background-tertiary" : "hover:bg-background-tertiary"
+                  i === commandIndex
+                    ? "bg-background-tertiary"
+                    : "hover:bg-background-tertiary"
                 }`}
               >
                 <Terminal className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
-                <span className="text-[13px] text-foreground font-medium">{c.cmd}</span>
-                <span className="text-[11px] text-foreground-muted truncate">{c.desc}</span>
+                <span className="text-[13px] text-foreground font-medium">
+                  {c.cmd}
+                </span>
+                <span className="text-[11px] text-foreground-muted truncate">
+                  {c.desc}
+                </span>
               </button>
             ))}
           </div>
@@ -309,7 +353,11 @@ export function Composer({
             <div className="flex items-center gap-2 px-3 pt-2.5">
               <div className="relative shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={image} alt="Attached" className="w-10 h-10 rounded-md object-cover border border-border" />
+                <img
+                  src={image}
+                  alt="Attached"
+                  className="w-10 h-10 rounded-md object-cover border border-border"
+                />
                 <button
                   type="button"
                   onClick={() => setImage(null)}
@@ -350,7 +398,11 @@ export function Composer({
           {attachError && (
             <div className="flex items-center justify-between gap-2 px-3 pt-2 text-[11px] text-red-500">
               <span>{attachError}</span>
-              <button type="button" onClick={() => setAttachError(null)} className="shrink-0 text-red-500/70 hover:text-red-500">
+              <button
+                type="button"
+                onClick={() => setAttachError(null)}
+                className="shrink-0 text-red-500/70 hover:text-red-500"
+              >
                 <X className="w-3 h-3" />
               </button>
             </div>
@@ -358,14 +410,24 @@ export function Composer({
           {voiceError && (
             <div className="flex items-center justify-between gap-2 px-3 pt-2 text-[11px] text-red-500">
               <span>{voiceError}</span>
-              <button type="button" onClick={() => setVoiceError(null)} className="shrink-0 text-red-500/70 hover:text-red-500">
+              <button
+                type="button"
+                onClick={() => setVoiceError(null)}
+                className="shrink-0 text-red-500/70 hover:text-red-500"
+              >
                 <X className="w-3 h-3" />
               </button>
             </div>
           )}
 
           <div className="flex items-end gap-2 px-3 pt-2.5">
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -391,7 +453,10 @@ export function Composer({
                   }
                   if (e.key === "ArrowUp") {
                     e.preventDefault();
-                    setCommandIndex((i) => (i - 1 + commandMatches.length) % commandMatches.length);
+                    setCommandIndex(
+                      (i) =>
+                        (i - 1 + commandMatches.length) % commandMatches.length,
+                    );
                     return;
                   }
                   if (e.key === "Tab" || (e.key === "Enter" && !e.shiftKey)) {
@@ -442,8 +507,12 @@ export function Composer({
                       <span className="flex items-center gap-2">
                         <MessageCircle className="w-3.5 h-3.5 text-foreground-muted" />
                         <span>
-                          <span className="block text-[13px] text-foreground font-medium leading-tight">Ask</span>
-                          <span className="block text-[11px] text-foreground-muted leading-tight">Normal chat</span>
+                          <span className="block text-[13px] text-foreground font-medium leading-tight">
+                            Ask
+                          </span>
+                          <span className="block text-[11px] text-foreground-muted leading-tight">
+                            Normal chat
+                          </span>
                         </span>
                       </span>
                       {settings.chatMode === "ask" && !activeAgent && (
@@ -461,7 +530,9 @@ export function Composer({
                       <span className="flex items-center gap-2">
                         <ListChecks className="w-3.5 h-3.5 text-foreground-muted" />
                         <span>
-                          <span className="block text-[13px] text-foreground font-medium leading-tight">Plan</span>
+                          <span className="block text-[13px] text-foreground font-medium leading-tight">
+                            Plan
+                          </span>
                           <span className="block text-[11px] text-foreground-muted leading-tight">
                             Outline steps before acting
                           </span>
@@ -490,7 +561,9 @@ export function Composer({
                             >
                               <span className="flex items-center gap-2 min-w-0">
                                 <Bot className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
-                                <span className="text-[13px] text-foreground font-medium truncate">{a.name}</span>
+                                <span className="text-[13px] text-foreground font-medium truncate">
+                                  {a.name}
+                                </span>
                               </span>
                               {settings.activeAgentId === a.id && (
                                 <Check className="w-3.5 h-3.5 text-accent-primary shrink-0" />
@@ -505,8 +578,6 @@ export function Composer({
               </div>
 
               <ModelSwitcher disabled={isLoading} />
-
-              
             </div>
 
             {isLoading ? (
@@ -530,7 +601,11 @@ export function Composer({
                     : "bg-foreground text-background disabled:bg-background-tertiary disabled:text-foreground-muted"
                 }`}
               >
-                {isTranscribing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mic className="w-4 h-4" />}
+                {isTranscribing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Mic className="w-4 h-4" />
+                )}
               </button>
             ) : (
               <button

@@ -1,33 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+
+function subscribe(callback: () => void) {
+  window.addEventListener("offline", callback);
+  window.addEventListener("online", callback);
+  return () => {
+    window.removeEventListener("offline", callback);
+    window.removeEventListener("online", callback);
+  };
+}
+
+function getSnapshot() {
+  return navigator.onLine;
+}
+
+function getServerSnapshot() {
+  return true;
+}
 
 export function OfflineToast() {
-  const [status, setStatus] = useState<"offline" | "online" | null>(null);
+  const isOnline = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [prevIsOnline, setPrevIsOnline] = useState(isOnline);
+  const [justReconnected, setJustReconnected] = useState(false);
+
+  if (isOnline !== prevIsOnline) {
+    setPrevIsOnline(isOnline);
+    setJustReconnected(isOnline);
+  }
 
   useEffect(() => {
-    if (!navigator.onLine) setStatus("offline");
-
-    function handleOffline() {
-      setStatus("offline");
-    }
-    function handleOnline() {
-      setStatus("online");
-    }
-
-    window.addEventListener("offline", handleOffline);
-    window.addEventListener("online", handleOnline);
-    return () => {
-      window.removeEventListener("offline", handleOffline);
-      window.removeEventListener("online", handleOnline);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (status !== "online") return;
-    const timer = setTimeout(() => setStatus(null), 3000);
+    if (!justReconnected) return;
+    const timer = setTimeout(() => setJustReconnected(false), 3000);
     return () => clearTimeout(timer);
-  }, [status]);
+  }, [justReconnected]);
+
+  const status = !isOnline ? "offline" : justReconnected ? "online" : null;
 
   if (!status) return null;
 

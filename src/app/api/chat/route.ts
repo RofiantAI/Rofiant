@@ -103,6 +103,24 @@ export async function POST(req: Request) {
     }
   }
 
+  // Older history entries can carry an empty text part with no attachment
+  // (e.g. an image-only send from before content was backfilled with a
+  // placeholder, or any other message stored with empty content). Groq
+  // rejects a message whose content resolves to an empty array outright,
+  // which would otherwise 400 every future turn in that conversation. Runs
+  // after the image attach above so it never touches the live message that
+  // just received a file part.
+  for (const m of trimmedMessages) {
+    const parts = m.parts ?? [];
+    const hasContent = parts.some(
+      (p: { type: string; text?: string }) =>
+        p.type !== "text" || (p.text && p.text.trim().length > 0),
+    );
+    if (!hasContent) {
+      m.parts = [...parts, { type: "text", text: "[empty message]" }];
+    }
+  }
+
   const systemParts = [CHAT_SYSTEM_PROMPT];
   if (customInstructions?.trim()) systemParts.push(customInstructions.trim());
   if (mode === "plan") systemParts.push(PLAN_MODE_INSTRUCTION);

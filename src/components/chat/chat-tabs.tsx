@@ -46,6 +46,9 @@ export function ChatTabs({ conversations }: { conversations: Conversation[] }) {
   const lastActiveKey = useRef<string>("new");
 
   useEffect(() => {
+    // localStorage is unavailable during SSR, so tabs start empty (matching
+    // the server render) and hydrate from storage right after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTabs(loadTabs());
   }, []);
 
@@ -80,6 +83,9 @@ export function ChatTabs({ conversations }: { conversations: Conversation[] }) {
 
   // keep titles fresh as conversations load/rename
   useEffect(() => {
+    // Bundled with the saveTabs localStorage write below (a real external-
+    // system side effect), so this stays in an effect rather than render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTabs((prev) => {
       let changed = false;
       const next = prev.map((t) => {

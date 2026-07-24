@@ -43,6 +43,9 @@ function formatDuration(ms: number, t: (key: string, values?: Record<string, num
 export default async function StatusPage() {
   const t = await getTranslations("status");
   const admin = createAdminClient();
+  // Server Component executed fresh per request (not memoized/re-rendered
+  // client-side), so the current timestamp here is safe to compute once.
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
 
   const [dayChecksRes, dailyUptimeRes, incidentChecksRes] = await Promise.all([

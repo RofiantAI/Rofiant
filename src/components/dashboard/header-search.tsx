@@ -115,12 +115,17 @@ export function DashboardHeaderSearch({
       }));
   }, [isActive, pages, trimmed]);
 
-  useEffect(() => {
+  const [prevIsActive, setPrevIsActive] = useState(isActive);
+  if (isActive !== prevIsActive) {
+    setPrevIsActive(isActive);
     if (!isActive) {
       setApiResults([]);
       setLoading(false);
-      return;
     }
+  }
+
+  useEffect(() => {
+    if (!isActive) return;
 
     const controller = new AbortController();
     const timer = setTimeout(async () => {
@@ -146,13 +151,16 @@ export function DashboardHeaderSearch({
   }, [trimmed, isActive]);
 
   const allResults = useMemo(
-    () => [...pageResults, ...apiResults],
-    [pageResults, apiResults],
+    () => (isActive ? [...pageResults, ...apiResults] : []),
+    [isActive, pageResults, apiResults],
   );
 
-  useEffect(() => {
+  const activeIndexKey = `${trimmed}:${allResults.length}`;
+  const [prevActiveIndexKey, setPrevActiveIndexKey] = useState(activeIndexKey);
+  if (activeIndexKey !== prevActiveIndexKey) {
+    setPrevActiveIndexKey(activeIndexKey);
     setActiveIndex(0);
-  }, [allResults.length, trimmed]);
+  }
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {

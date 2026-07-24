@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -35,11 +35,15 @@ export function ProfileAvatarUpload({
   const [custom, setCustom] = useState(hasCustomAvatar);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [prevInitialAvatarUrl, setPrevInitialAvatarUrl] = useState(initialAvatarUrl);
+  const [prevHasCustomAvatar, setPrevHasCustomAvatar] = useState(hasCustomAvatar);
 
-  useEffect(() => {
+  if (initialAvatarUrl !== prevInitialAvatarUrl || hasCustomAvatar !== prevHasCustomAvatar) {
+    setPrevInitialAvatarUrl(initialAvatarUrl);
+    setPrevHasCustomAvatar(hasCustomAvatar);
     setAvatarUrl(initialAvatarUrl);
     setCustom(hasCustomAvatar);
-  }, [initialAvatarUrl, hasCustomAvatar]);
+  }
 
   async function handleUpload(file: File) {
     setError(null);
@@ -140,7 +144,7 @@ export function ProfileAvatarUpload({
             type="button"
             disabled={uploading}
             onClick={() => inputRef.current?.click()}
-            className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
+            className="h-8 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
           >
             {uploading ? t("photoUploading") : t("photoUpload")}
           </button>
@@ -149,7 +153,7 @@ export function ProfileAvatarUpload({
               type="button"
               disabled={uploading}
               onClick={() => void handleRemove()}
-              className="h-8 px-3 text-xs font-medium border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
+              className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
             >
               {t("photoRemove")}
             </button>

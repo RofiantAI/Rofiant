@@ -7,9 +7,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 const consumerTierMeta = [
-  { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false },
-  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true },
-  { key: "ultra", icon: Crown, price: { monthly: 60, annual: 50 }, href: "/api/checkout?plan=ultra", highlighted: false },
+  { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false, comingSoon: false },
+  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true, comingSoon: true },
+  { key: "ultra", icon: Crown, price: { monthly: 60, annual: 50 }, href: "/api/checkout?plan=ultra", highlighted: false, comingSoon: true },
 ] as const;
 
 export default function PricingPage() {
@@ -68,9 +68,14 @@ export default function PricingPage() {
                   : "border-border bg-card"
               }`}
             >
-              {tier.highlighted && (
-                <div className="text-xs font-medium uppercase tracking-widest text-foreground mb-6 pb-4 border-b border-border">
-                  {t("mostPopular")}
+              {(tier.highlighted || tier.comingSoon) && (
+                <div className="flex items-center justify-between text-xs font-medium uppercase tracking-widest text-foreground mb-6 pb-4 border-b border-border">
+                  <span>{tier.highlighted ? t("mostPopular") : " "}</span>
+                  {tier.comingSoon && (
+                    <Badge variant="default" className="text-xs normal-case tracking-normal">
+                      {t("comingSoon")}
+                    </Badge>
+                  )}
                 </div>
               )}
               <div className="flex items-center gap-3 mb-2">
@@ -102,16 +107,27 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <a
-                href={tier.href}
-                className={`inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium transition-colors ${
-                  tier.highlighted
-                    ? "bg-foreground text-background hover:bg-foreground/90"
-                    : "border border-border text-foreground hover:bg-background-tertiary"
-                }`}
-              >
-                {t(`consumerTiers.${tier.key}.cta`)}
-              </a>
+              {tier.comingSoon ? (
+                <button
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium border border-border text-foreground-muted bg-background-tertiary cursor-not-allowed"
+                >
+                  {t("comingSoon")}
+                </button>
+              ) : (
+                <a
+                  href={tier.href}
+                  className={`inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium transition-colors ${
+                    tier.highlighted
+                      ? "bg-foreground text-background hover:bg-foreground/90"
+                      : "border border-border text-foreground hover:bg-background-tertiary"
+                  }`}
+                >
+                  {t(`consumerTiers.${tier.key}.cta`)}
+                </a>
+              )}
             </div>
           );
         })}

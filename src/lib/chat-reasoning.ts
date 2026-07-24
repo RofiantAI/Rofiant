@@ -17,8 +17,8 @@ export function supportsNativeReasoning(model: string) {
 // models; others (e.g. qwen3.6-27b) reject anything but "none"/"default".
 const GRADED_REASONING_EFFORT_MODELS = new Set(["openai/gpt-oss-120b"]);
 
-export function reasoningEffortFor(model: string): "medium" | "default" {
-  return GRADED_REASONING_EFFORT_MODELS.has(model) ? "medium" : "default";
+export function reasoningEffortFor(model: string): "medium" | "provider-default" {
+  return GRADED_REASONING_EFFORT_MODELS.has(model) ? "medium" : "provider-default";
 }
 
 export function stripThinkingTags(text: string) {

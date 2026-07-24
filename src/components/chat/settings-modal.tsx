@@ -19,6 +19,7 @@ import {
   Users,
   Plus,
 } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useChatSettings } from "@/contexts/chat-settings-context";
 import { FREE_MODELS, PRO_MODELS } from "@/lib/chat-settings";
 import type { ChatSettings } from "@/lib/chat-settings";
@@ -214,19 +215,16 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
   const [knowledgeBases, setKnowledgeBases] = useState<
     { id: string; name: string }[]
   >([]);
-  const [rules, setRules] = useState<Rule[]>([]);
+  const [rules, setRules] = useState<Rule[]>(() => loadRules());
   const [newRuleText, setNewRuleText] = useState("");
-  const [agents, setAgents] = useState<Agent[]>([]);
+  const [agents, setAgents] = useState<Agent[]>(() => loadAgents());
   const [addAgentOpen, setAddAgentOpen] = useState(false);
   const [newAgent, setNewAgent] = useState({ name: "", systemPrompt: "" });
 
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
-
   useEffect(() => {
-    setRules(loadRules());
-    setAgents(loadAgents());
-  }, []);
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   function addRule() {
     const text = newRuleText.trim();
@@ -430,13 +428,13 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
                 ))}
 
                 {!isPro && (
-                  <a
+                  <Link
                     href="/pricing"
                     className="flex items-center justify-center gap-2 mt-2 px-4 py-2.5 rounded-lg border border-accent-primary/30 bg-accent-primary/5 text-xs text-accent-primary hover:bg-accent-primary/10 transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     Upgrade to unlock Pro models
-                  </a>
+                  </Link>
                 )}
               </div>
             )}

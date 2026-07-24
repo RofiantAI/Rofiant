@@ -11,12 +11,15 @@ const PUBLIC_APP_SEGMENTS = [
   "",
   "auth",
   "company",
+  "download",
   "legal",
+  "pages",
   "platform",
   "pricing",
   "resources",
   "solutions",
   "services",
+  "status",
   "_preview",
 ];
 

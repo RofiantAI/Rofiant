@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LogIn } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
@@ -25,6 +25,7 @@ export async function HeaderSection() {
     { href: "/company/about", label: t("company") },
     { href: "/pricing", label: t("pricing") },
     { href: "/resources/documentation", label: t("docs") },
+    { href: "/download", label: t("download") },
   ];
 
   return (
@@ -41,26 +42,31 @@ export async function HeaderSection() {
               <nav className="hidden md:flex items-center gap-7">
                 {/* Resources dropdown */}
                 <div className="relative group">
-                  <button className={`${linkBase} ${linkIdle} inline-flex items-center gap-1`}>
+                  <button
+                    className={`${linkBase} ${linkIdle} inline-flex items-center gap-1`}
+                  >
                     {t("resources")}
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   <div className="absolute left-0 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50">
                     <div className="bg-foreground border border-border shadow-lg py-1 min-w-[180px]">
-                      <Link href="/platform/chat-ai" className="block px-4 py-2 text-sm text-black hover:bg-black/5">
+                      <Link
+                        href="/platform/chat-ai"
+                        className="block px-4 py-2 text-sm text-black hover:bg-black/5"
+                      >
                         {t("platform")}
                       </Link>
-                      <Link href="/company/about" className="block px-4 py-2 text-sm text-black hover:bg-black/5">
+                      <Link
+                        href="/company/about"
+                        className="block px-4 py-2 text-sm text-black hover:bg-black/5"
+                      >
                         {t("company")}
                       </Link>
                     </div>
                   </div>
                 </div>
 
-                <Link
-                  href="/pricing"
-                  className={`${linkBase} ${linkIdle}`}
-                >
+                <Link href="/pricing" className={`${linkBase} ${linkIdle}`}>
                   {t("pricing")}
                 </Link>
                 <Link
@@ -68,6 +74,9 @@ export async function HeaderSection() {
                   className={`${linkBase} ${linkIdle}`}
                 >
                   {t("docs")}
+                </Link>
+                <Link href="/download" className={`${linkBase} ${linkIdle}`}>
+                  {t("download")}
                 </Link>
               </nav>
             </div>
@@ -91,7 +100,7 @@ export async function HeaderSection() {
               <>
                 <a
                   href={appUrl("/auth/login")}
-                  className="inline-flex items-center justify-center h-12 px-3 sm:px-4 text-sm font-medium bg-background text-foreground border border-white transition-colors hover:bg-[#1c1e22] whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-2 h-12 px-3 sm:px-4 text-sm font-medium bg-background text-foreground border border-white transition-colors hover:bg-[#1c1e22] whitespace-nowrap"
                 >
                   {t("login")}
                 </a>

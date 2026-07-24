@@ -1,6 +1,7 @@
 "use client";
 
 import { Geist } from "next/font/google";
+import Link from "next/link";
 import "./(app)/globals.css";
 import { ErrorState } from "@/components/error-console";
 
@@ -23,9 +24,9 @@ export default function GlobalError({
         <header className="w-full pt-4">
           <div className="mx-auto max-w-8xl px-2 sm:px-3 lg:px-4">
             <div className="flex h-12 items-center border border-border bg-foreground px-4 sm:px-6">
-              <a href="/" className="flex items-center">
+              <Link href="/" className="flex items-center">
                 <img src="/logo.svg" alt="Rofiant" className="h-6 w-auto" />
-              </a>
+              </Link>
             </div>
           </div>
         </header>
@@ -42,12 +43,12 @@ export default function GlobalError({
               >
                 Try again
               </button>
-              <a
+              <Link
                 href="/"
                 className="inline-flex h-11 items-center justify-center border border-border px-6 text-sm font-medium transition-colors hover:bg-background-tertiary"
               >
                 Back home
-              </a>
+              </Link>
             </>
           }
         />

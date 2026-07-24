@@ -11,13 +11,14 @@ const VALID_TABS: Tab[] = ["account", "security", "api", "notifications", "prefe
 export default async function SettingsPage({
   searchParams,
 }: {
-  searchParams: { tab?: string };
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const locale = await getDashboardLocale();
   const t = await getTranslations({ locale, namespace: "dashboard.settings" });
-  const initialTab = VALID_TABS.find((tab) => tab === searchParams.tab);
+  const { tab } = await searchParams;
+  const initialTab = VALID_TABS.find((v) => v === tab);
 
   return (
     <DashboardPage>

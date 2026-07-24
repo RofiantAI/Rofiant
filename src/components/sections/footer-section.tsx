@@ -8,7 +8,6 @@ const footerColumns = [
       { key: "pricing", href: "/pricing" },
       { key: "chatAi", href: "/platform/chat-ai" },
       { key: "agents", href: "/platform/agents" },
-      { key: "api", href: "/platform/api" },
     ],
   },
   {
@@ -83,14 +82,6 @@ export async function FooterSection() {
               </ul>
             </div>
           ))}
-
-          <div className="col-span-2 flex items-end justify-end sm:col-span-5">
-            <img
-              src="/footer.svg"
-              alt=""
-              className="h-auto w-full max-w-3xl"
-            />
-          </div>
         </div>
       </div>
     </footer>

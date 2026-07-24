@@ -1,10 +1,13 @@
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { PageLayout, PageSection } from "@/components/page-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, Package, Terminal, Boxes } from "lucide-react";
+import { Download, Package, Terminal, Boxes, Monitor, Apple } from "lucide-react";
 
 const REPO = "RofiantAI/RofiantDesktop";
+
+type PlatformKey = "linux" | "macos" | "windows";
 
 interface ReleaseAsset {
   name: string;
@@ -33,20 +36,37 @@ async function getLatestRelease(): Promise<Release | null> {
   }
 }
 
+// Order matters: mobile UAs can also match /Linux/ (Android) or contain
+// "like Mac OS X" (iOS), so those must be ruled out before the desktop checks.
+function detectPlatform(userAgent: string): PlatformKey | null {
+  if (/iPhone|iPad|iPod|Android/i.test(userAgent)) return null;
+  if (/Windows NT/i.test(userAgent)) return "windows";
+  if (/Macintosh|Mac OS X/i.test(userAgent)) return "macos";
+  if (/Linux/i.test(userAgent)) return "linux";
+  return null;
+}
+
 function formatBytes(bytes: number) {
   const mb = bytes / (1024 * 1024);
   return `${mb.toFixed(1)} MB`;
 }
 
 const formatConfig = [
-  { match: ".AppImage", icon: Boxes, primary: true },
-  { match: ".deb", icon: Package, primary: false },
-  { match: ".rpm", icon: Terminal, primary: false },
+  { match: ".AppImage", icon: Boxes, platform: "linux" as PlatformKey },
+  { match: ".deb", icon: Package, platform: "linux" as PlatformKey },
+  { match: ".rpm", icon: Terminal, platform: "linux" as PlatformKey },
+  { match: ".exe", icon: Monitor, platform: "windows" as PlatformKey },
+  { match: ".msi", icon: Monitor, platform: "windows" as PlatformKey },
+  { match: ".dmg", icon: Apple, platform: "macos" as PlatformKey },
 ] as const;
 
 export default async function DownloadPage() {
   const t = await getTranslations("download");
-  const release = await getLatestRelease();
+  const [release, requestHeaders] = await Promise.all([
+    getLatestRelease(),
+    headers(),
+  ]);
+  const detected = detectPlatform(requestHeaders.get("user-agent") ?? "");
 
   const assets = release
     ? formatConfig
@@ -57,8 +77,13 @@ export default async function DownloadPage() {
         .filter((a): a is typeof a & { asset: ReleaseAsset } => Boolean(a.asset))
     : [];
 
-  const primary = assets.find((a) => a.primary) ?? assets[0];
+  const primary =
+    (detected && assets.find((a) => a.platform === detected)) ??
+    assets.find((a) => a.platform === "linux") ??
+    assets[0];
   const secondary = assets.filter((a) => a !== primary);
+  const primaryPlatform: PlatformKey = primary?.platform ?? detected ?? "linux";
+  const ext = primary?.match.replace(/^\./, "") ?? "AppImage";
 
   return (
     <PageLayout
@@ -73,11 +98,14 @@ export default async function DownloadPage() {
               <div>
                 <div className="flex items-center gap-3">
                   <span className="text-lg font-semibold text-foreground">
-                    {t("linuxTitle")}
+                    {t("heroTitle", { platform: t(`platforms.${primaryPlatform}.title`) })}
                   </span>
                   <Badge variant={release.prerelease ? "warning" : "success"} dot>
                     {release.prerelease ? t("prerelease") : t("stable")}
                   </Badge>
+                  {detected === primaryPlatform && (
+                    <Badge variant="info">{t("detected")}</Badge>
+                  )}
                 </div>
                 <p className="mt-2 text-sm text-foreground-secondary">
                   {t("version", { version: release.tag_name })} · {formatBytes(primary.asset.size)}
@@ -88,13 +116,15 @@ export default async function DownloadPage() {
                 className="inline-flex items-center justify-center gap-2 h-12 px-6 text-base font-medium rounded-lg bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors duration-200 whitespace-nowrap"
               >
                 <Download className="w-4 h-4" />
-                {t("downloadCta", { ext: "AppImage" })}
+                {t("downloadCta", { ext })}
               </a>
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
               <div>
-                <span className="text-lg font-semibold text-foreground">{t("linuxTitle")}</span>
+                <span className="text-lg font-semibold text-foreground">
+                  {t("heroTitle", { platform: t(`platforms.${primaryPlatform}.title`) })}
+                </span>
                 <p className="mt-2 text-sm text-foreground-secondary">{t("noRelease")}</p>
               </div>
               <a
@@ -129,7 +159,10 @@ export default async function DownloadPage() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mt-8">
           {(["linux", "macos", "windows"] as const).map((p) => (
             <Card key={p} variant="bordered" className="p-6">
-              <h3 className="font-semibold text-foreground">{t(`platforms.${p}.title`)}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-foreground">{t(`platforms.${p}.title`)}</h3>
+                {detected === p && <Badge variant="info">{t("detected")}</Badge>}
+              </div>
               <p className="mt-2 text-sm text-foreground-secondary">{t(`platforms.${p}.desc`)}</p>
             </Card>
           ))}
