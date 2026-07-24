@@ -5,6 +5,20 @@ import { routing } from "@/i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
+// Knowledge base / document routes are also called cross-origin by the
+// desktop app (Bearer-token auth, no cookies — see getAuthedUser in
+// src/lib/api-auth.ts), so they need CORS headers the browser dashboard's
+// same-origin requests never required.
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Authorization, Content-Type",
+};
+
+function isKbOrDocsApiPath(pathname: string) {
+  return /^\/api\/(knowledge-bases|documents)(\/|$)/.test(pathname);
+}
+
 // Top-level segments that live under (app)/[locale] — used to decide whether
 // a given pathname should go through locale routing.
 const PUBLIC_APP_SEGMENTS = [
@@ -42,6 +56,10 @@ function isAuthPath(pathname: string) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get("host") ?? "";
+
+  if (isKbOrDocsApiPath(pathname) && request.method === "OPTIONS") {
+    return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+  }
 
   // Dashboard/chat are locale-free. /en/dashboard/... is a common footgun from
   // marketing pages — strip the locale and redirect so links don't 404.
@@ -163,6 +181,12 @@ export async function proxy(request: NextRequest) {
     const loginUrl = new URL(`/${routing.defaultLocale}/auth/login`, request.url);
     loginUrl.searchParams.set("next", effectivePathname);
     return NextResponse.redirect(loginUrl);
+  }
+
+  if (isKbOrDocsApiPath(pathname)) {
+    for (const [key, value] of Object.entries(CORS_HEADERS)) {
+      response.headers.set(key, value);
+    }
   }
 
   return response;
