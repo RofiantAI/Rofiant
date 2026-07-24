@@ -17,7 +17,7 @@
     "signup": "Sign Up"
   },
   "footer": {
-    "tagline": "An AI agent for your files, local by default.",
+    "tagline": "An AI agent for your files and desktop.",
     "copyright": "© {year} Rofiant. All rights reserved.",
     "columns": {
       "platform": {
@@ -60,14 +60,14 @@
       "titleLine1": "Tell your computer",
       "titleLine2": "what to",
       "titleHighlight": "do.",
-      "subtitle": "Rofiant is a local-first AI agent that controls your computer, apps, files, and browser, and handles repetitive tasks, in plain English.",
+      "subtitle": "Rofiant is an AI agent for your files and apps. It reads, edits, and organizes files, runs commands, and opens apps, in plain English.",
       "startFree": "Get started free",
       "talkToSales": "Talk to sales"
     },
     "publicAi": {
       "titlePrefix": "Your computer,",
       "titleHighlight": "understood.",
-      "subtitle": "Ask in plain English. Rofiant clicks, types, opens apps, browses the web, and organizes files, running locally by default, always under your control.",
+      "subtitle": "Ask in plain English. Rofiant reads, edits, and organizes your files, runs commands, and opens apps, always under your control, with your approval before anything risky.",
       "cta": "Try Rofiant free",
       "features": {
         "chat": {
@@ -75,8 +75,8 @@
           "desc": "Tell Rofiant what you need in plain English. No scripts, no rules, no hotkeys to memorize."
         },
         "write": {
-          "title": "Control any app",
-          "desc": "Ask Rofiant to open apps, fill out forms, click buttons, or automate a workflow across your desktop. It just does it."
+          "title": "Run commands & launch apps",
+          "desc": "Ask Rofiant to open an app, run a shell command, or chain a few of these together across your desktop."
         },
         "research": {
           "title": "Find anything",
@@ -107,9 +107,9 @@
           "text": "Skip the folder rules and rename scripts. Say what you want in plain English and Rofiant handles it."
         },
         "security": {
-          "label": "Stays local",
-          "strong": "Local by default.",
-          "text": "Your files are read and processed on-device by default. We never use your data to train a model."
+          "label": "Your control",
+          "strong": "You choose what's cloud and what's not.",
+          "text": "File edits, commands, and screenshots run on your machine. Knowledge bases, Agents, voice, and document search are optional cloud features you turn on when you need them. We never use your data to train a model."
         },
         "control": {
           "label": "Remembers",
@@ -117,18 +117,18 @@
           "text": "Rofiant picks up on your naming conventions, folder structure, and preferences, and gets better the more you use it."
         },
         "usage": {
-          "label": "Activity log",
-          "strong": "See everything it did.",
-          "text": "Every action is recorded locally: what changed, when, and why. Nothing happens without a trace."
+          "label": "Approval gate",
+          "strong": "You approve every risky action.",
+          "text": "Rofiant pauses and asks before it writes, edits, deletes, or runs anything that changes your system."
         }
       }
     },
     "deploy": {
-      "badge": "LOCAL AGENT",
-      "titleLine1": "Your machine.",
+      "badge": "DESKTOP AGENT",
+      "titleLine1": "Your files.",
       "titleLine2": "Your apps.",
       "titleLine3": "Your rules.",
-      "subtitle": "No manual scripting, no complex setup. Tell Rofiant what you want done, and it handles it locally by default, on your desktop.",
+      "subtitle": "No manual scripting, no complex setup. Tell Rofiant what you want done, and it gets to work on your desktop.",
       "tabs": {
         "chat": "Chat",
         "documents": "Automation",
@@ -142,21 +142,21 @@
         },
         "documents": {
           "title": "Control your whole desktop",
-          "subtitle": "Any app, any window, any file",
-          "description": "Ask Rofiant to fill out a form, switch between apps, resize windows, or clean up a messy Downloads folder. It sees your screen to know what's what."
+          "subtitle": "Any app, any file",
+          "description": "Ask Rofiant to open an app, clean up a messy Downloads folder, or run a batch of file changes. It can take a screenshot to see what's on screen when it needs to."
         },
         "agents": {
           "title": "Multi-step tasks, handled locally",
-          "subtitle": "App workflows, batch renames, desktop cleanup",
-          "description": "Rofiant plans and runs multi-step tasks on your machine, from filling out a stack of forms to setting up a dev environment."
+          "subtitle": "Batch renames, multi-file edits, desktop cleanup",
+          "description": "Rofiant plans and runs multi-step tasks on your machine, from batch file renames to multi-file edits across a project. Dev-environment setup is coming soon."
         }
       }
     },
     "protect": {
       "badge": "PRIVACY",
-      "titlePrefix": "Your data stays",
-      "titleHighlight": "on your machine.",
-      "subtitle": "Rofiant runs locally and asks before it touches anything risky. You're always in control.",
+      "titlePrefix": "You're always",
+      "titleHighlight": "in control.",
+      "subtitle": "Rofiant asks before it touches anything risky, and cloud features are opt-in.",
       "features": {
         "identity": {
           "title": "Your account, protected",
@@ -164,9 +164,9 @@
           "description": "One account protects access to your Rofiant settings and sync. No enterprise identity provider required, no complexity."
         },
         "audit": {
-          "title": "A full local activity log",
-          "subtitle": "See every action, every time",
-          "description": "Every file Rofiant touches is logged on your machine. Review, undo, or audit anything it did."
+          "title": "Approval before anything risky",
+          "subtitle": "You're asked, every time",
+          "description": "Rofiant asks before it writes, deletes, runs a command, or closes a process. Nothing risky happens without your OK."
         }
       }
     },
@@ -176,16 +176,16 @@
       "titleMuted": "Simple API. Powerful automation.",
       "features": {
         "cloud": {
-          "title": "No servers required",
-          "desc": "Rofiant's automation API runs against your local agent. No servers to deploy, no infrastructure to manage."
+          "title": "Hosted API, OpenAI-compatible",
+          "desc": "A hosted, OpenAI-compatible chat completions API. No servers to deploy, no infrastructure to manage."
         },
         "multiModel": {
           "title": "Multi-model support",
-          "desc": "Swap the underlying model for chat and task planning without changing your automation scripts."
+          "desc": "Swap the underlying model for chat completions without changing your automation scripts."
         },
         "observability": {
           "title": "Built-in observability",
-          "desc": "Every task call is logged with timing, outcome, and cost. Exportable for your own analytics."
+          "desc": "Every API call is recorded with timing and token usage in your account's usage and audit logs, queryable via the API."
         }
       }
     },
@@ -219,44 +219,40 @@
       "free": {
         "name": "Free",
         "tagline": "Start automating today",
-        "description": "Everything you need to try Rofiant. No credit card required.",
+        "description": "The full desktop app, no credit card required.",
         "cta": "Get started free",
         "features": [
-          "Unlimited tasks (fair-use rate limits)",
-          "Chat with Llama 3.1 8B & Gemma 2 9B",
-          "Local activity log (read-only)",
-          "Standard response speed"
+          { "title": "Local file, command & app tools", "desc": "Read, edit, and organize files, run commands, and open apps, with your approval required before anything risky." },
+          { "title": "Chat with hosted or local models", "desc": "Use hosted GPT OSS 20B and Llama 3.1 8B for free, or connect your own local Ollama model for fully on-device chat." },
+          { "title": "MCP server support", "desc": "Connect your own tools and servers over the Model Context Protocol to extend what Rofiant can do." },
+          { "title": "Voice transcription", "desc": "Turn recordings into transcripts and summaries automatically." },
+          { "title": "Unlimited tasks", "desc": "No caps on how much you use Rofiant, subject to fair-use rate limits." }
         ]
       },
       "pro": {
         "name": "Pro",
         "tagline": "For power users",
-        "description": "Unlimited local tasks, priority processing, and early access to new platforms.",
+        "description": "Our most capable models and cloud Agents.",
         "cta": "Start Pro",
         "features": [
-          "Everything in Free",
-          "Higher rate limits & priority queue",
-          "Llama 3.3 70B & GPT OSS 120B models",
-          "Document upload, voice mode & multi-step agents",
-          "File search & organization",
-          "1 knowledge base",
-          "API access",
-          "Priority response speed"
+          { "title": "Everything in Free", "desc": "Every Free feature, included." },
+          { "title": "Our most capable models", "desc": "Get responses from GPT OSS 120B and Llama 3.3 70B for complex reasoning and coding tasks." },
+          { "title": "Multi-step Agents", "desc": "Rofiant plans and executes multi-step tasks across your files and apps, pausing for your approval before anything risky." },
+          { "title": "Full API access", "desc": "An OpenAI-compatible API with higher usage limits than Free." }
         ]
       },
       "ultra": {
         "name": "Ultra",
         "tagline": "For your heaviest workloads",
-        "description": "The highest usage limits, first access to new models, and priority support for individuals who rely on Rofiant every day.",
+        "description": "The highest usage limits, first access to new models, and priority support for individuals and teams who rely on Rofiant every day.",
         "cta": "Start Ultra",
         "features": [
-          "Everything in Pro",
-          "Highest usage limits (5x Pro)",
-          "Priority access to newest models",
-          "Unlimited knowledge bases",
-          "Extended context window",
-          "Priority support with faster response times",
-          "Early access to new features"
+          { "title": "Everything in Pro", "desc": "Every Pro feature, included." },
+          { "title": "5x higher usage limits", "desc": "Get usage limits that are 5x higher than Pro." },
+          { "title": "First access to new models", "desc": "Be the first to try new models as we add them." },
+          { "title": "Unlimited knowledge bases", "desc": "Create as many knowledge bases as you need, with no cap." },
+          { "title": "Priority support", "desc": "Get faster responses from our support team." },
+          { "title": "Early access to new features", "desc": "Try new Rofiant features before they roll out to everyone." }
         ]
       }
     },
@@ -265,7 +261,6 @@
       "title": "Included on every plan",
       "items": [
         "No data used for model training",
-        "AES-256 encryption at rest",
         "TLS 1.3 in transit",
         "GDPR compliant",
         "Cancel any time",
@@ -345,14 +340,14 @@
     "about": {
       "title": "About Rofiant",
       "badge": "COMPANY",
-      "subtitle": "We're building an AI agent that actually works on your machine.",
-      "intro1": "Rofiant is a local-first AI agent: it organizes files, finds documents, and runs repetitive tasks on your computer, controlled entirely in plain English.",
-      "intro2": "We started local-first because privacy and reliability matter for a tool that touches your personal files. Rofiant runs on your machine by default, remembers how you work, and only sends data elsewhere if you opt into a cloud feature.",
+      "subtitle": "We're building an AI agent that actually gets things done.",
+      "intro1": "Rofiant is an AI agent: it organizes files, edits them, and runs repetitive tasks on your computer, plus optional cloud features like knowledge bases and Agents, controlled entirely in plain English.",
+      "intro2": "Privacy and reliability matter for a tool that touches your personal files. Rofiant's file, command, and screenshot tools run on your machine. Chat replies use hosted models unless you configure a local Ollama model, and Pro/Ultra cloud features (knowledge bases, documents, voice, Agents, API) sync to your account so you can use them from the web dashboard too.",
       "intro3": "We're starting with file organization and search on Linux, with dev-environment setup and cross-platform support next.",
       "values": {
         "missionFirst": {
-          "title": "Local-first",
-          "desc": "We build for your machine first, keeping privacy and reliability the default as we grow."
+          "title": "Transparent by default",
+          "desc": "We're upfront about what runs on your machine and what touches the cloud, and we never train on your data."
         },
         "developerFirst": {
           "title": "Developer-first",
@@ -368,7 +363,7 @@
       "title": "Careers",
       "badge": "COMPANY",
       "subtitle": "Help us build an AI agent that works where your files live.",
-      "intro": "We are a remote-first team building a local-first AI agent. If you care about developer experience, privacy, and building tools that respect your machine, we want to hear from you.",
+      "intro": "We are a remote-first team building an AI agent for your files and desktop. If you care about developer experience, privacy, and building tools that respect your machine, we want to hear from you.",
       "roles": {
         "seniorBackend": {
           "title": "Senior Backend Engineer",
@@ -452,23 +447,23 @@
       "areas": {
         "encryption": {
           "title": "Encryption",
-          "desc": "Local data is encrypted at rest. Any account or sync data is encrypted in transit (TLS 1.3)."
+          "desc": "Account, sync, and cloud-feature traffic is encrypted in transit (TLS 1.3). At rest, we rely on our infrastructure providers' storage-level encryption — Rofiant does not add its own encryption layer today."
         },
         "accessControl": {
           "title": "Permission gates",
-          "desc": "Rofiant asks before touching anything risky. You grant folder-level permissions and approve sensitive actions."
+          "desc": "Rofiant asks before touching anything risky. You approve file edits, deletes, commands, and process changes before they happen."
         },
         "auditLogging": {
-          "title": "Local activity log",
-          "desc": "Every action Rofiant takes is logged on your machine, and you can export it anytime."
+          "title": "Cloud audit log",
+          "desc": "Actions taken through Agents, the API, and other cloud features are recorded in your account's audit log, viewable and exportable via the API. The desktop app doesn't keep a separate local action log today."
         },
         "infrastructure": {
-          "title": "Local-first architecture",
-          "desc": "Rofiant runs on your machine by default, not shared cloud infrastructure. Less attack surface, since your files stay put unless you opt into sync."
+          "title": "Local tools, optional cloud features",
+          "desc": "The desktop app's file, command, and screenshot tools run entirely on your machine. Chat replies use hosted models unless you configure a local Ollama model. Pro and Ultra features — documents, voice, Agents, the API — run on our cloud infrastructure."
         },
         "dataResidency": {
-          "title": "Your files stay put",
-          "desc": "Rofiant doesn't upload your files anywhere. If you use account sync, you choose what, if anything, syncs."
+          "title": "You choose what leaves your machine",
+          "desc": "The desktop app's file tools don't upload your files anywhere. If you use a Pro or Ultra cloud feature, like document upload, voice transcription, or a knowledge base, that specific file or recording is sent to our cloud infrastructure to process it."
         },
         "incidentResponse": {
           "title": "Incident response",
@@ -515,32 +510,32 @@
         },
         "toolUse": {
           "title": "Local tool use",
-          "desc": "Rofiant reads and writes files, clicks and types in any app, and runs local commands, not just answers questions.",
+          "desc": "Rofiant reads and writes files, opens apps, and runs local commands, not just answers questions.",
           "details": [
             "Read, move, rename, and organize files on your machine",
-            "Click, type, and navigate any desktop app",
-            "Run local shell commands and scripts",
-            "Every action sandboxed with limits and confirmation"
+            "Open apps and run local shell commands",
+            "Take a screenshot to see what's on screen",
+            "Every risky action requires your confirmation first"
           ]
         },
         "humanInLoop": {
           "title": "Human-in-the-loop",
           "desc": "Set approval gates for anything risky. Rofiant pauses and asks before deleting, overwriting, or moving files it's unsure about.",
           "details": [
-            "Define approval rules per action type",
-            "Always-ask mode for anything destructive",
-            "Timeout and safe fallback if you don't respond",
-            "Full local record of every approval decision"
+            "Approval required before write_file, edit_file, run_command, kill_process, and open_app",
+            "Always-ask for anything destructive",
+            "Approve or deny each request from the chat",
+            "Denied actions are simply not run"
           ]
         },
         "observability": {
           "title": "Full observability",
-          "desc": "See every step Rofiant takes. Replay, debug, and review its work at any time.",
+          "desc": "See every step Rofiant takes in the chat. Review its work at any time.",
           "details": [
             "Step-by-step trace with timing",
-            "Local log of every file touched and every command run",
-            "Error handling with automatic retry",
-            "Export your local activity log any time"
+            "See every tool call and its result in the conversation",
+            "Cloud Agent runs are also recorded in your account's audit log",
+            "Query your audit log anytime via the API"
           ]
         }
       },
@@ -555,7 +550,7 @@
         },
         "support": {
           "title": "Desktop automation",
-          "desc": "Ask Rofiant to fill out forms, clean up Downloads, sort screenshots by project, or archive old files. Describe it once, done every time."
+          "desc": "Ask Rofiant to clean up Downloads, sort screenshots by project, or archive old files. Describe it once, done every time."
         },
         "finance": {
           "title": "Batch tasks",
@@ -568,15 +563,15 @@
         "startTrial": "Start free trial",
         "readDocs": "Read the docs"
       },
-      "roadmapNotice": "Available today: create, manage, and run agents with multi-step plan-and-execute reasoning across your files and machine. Full app and window control, local tool execution, approval workflows, and dev-environment setup are on our roadmap."
+      "roadmapNotice": "Available today: create, manage, and run agents with multi-step plan-and-execute reasoning, local file and command tool execution, and approval workflows before anything risky. Clicking and typing inside other apps, and dev-environment setup, are on our roadmap."
     },
     "chatAi": {
       "title": "Chat",
       "badge": "PLATFORM",
-      "subtitle": "The natural-language interface to your local agent. Ask Rofiant to click, type, open apps, browse, or organize files, no commands to memorize.",
+      "subtitle": "The natural-language interface to your local agent. Ask Rofiant to open apps, run commands, or organize files, no commands to memorize.",
       "mockup": {
         "header": "Rofiant Chat",
-        "connectedTo": "Connected to: Desktop, Browser, Apps, Files",
+        "connectedTo": "Connected to: Desktop, Apps, Files",
         "inputPlaceholder": "Ask Rofiant to do something on your computer...",
         "sourcePrefix": "Found in:",
         "q1": "Where's that contract I downloaded last week?",
@@ -589,15 +584,15 @@
       "stats": {
         "avgResponse": {
           "label": "Avg response",
-          "sub": "On your machine"
+          "sub": "Typical chat reply"
         },
         "languages": {
           "label": "Languages",
           "sub": "Auto-detected"
         },
         "uptime": {
-          "label": "Data location",
-          "sub": "Your machine only"
+          "label": "File tools",
+          "sub": "Run on your machine"
         },
         "sources": {
           "label": "Sources",
@@ -619,7 +614,7 @@
         "upload": {
           "step": "01",
           "title": "Point Rofiant at your computer",
-          "desc": "Rofiant can see your screen, apps, and files securely, processed locally by default."
+          "desc": "Rofiant can read your files and take a screenshot when it needs to see what's on screen. File tools run locally; chat replies use hosted models unless you set up a local Ollama model."
         },
         "configure": {
           "step": "02",
@@ -643,57 +638,57 @@
       },
       "features": {
         "knowledgeBase": {
-          "title": "Knows your computer",
-          "desc": "Rofiant reads your screen, apps, and files, not just filenames.",
+          "title": "Knows your files",
+          "desc": "Rofiant reads file contents, not just filenames, when you ask it to find or work with something.",
           "details": [
-            "Sees open windows, apps, and files locally",
-            "Stays current as your screen changes",
-            "Cites the exact app, file, or location for every answer",
-            "Works with common apps and file formats out of the box"
+            "Reads files locally to answer your request",
+            "Take a screenshot any time to show it what's on screen",
+            "References the exact file or folder in its answer",
+            "Works with common file formats out of the box"
           ]
         },
         "roleBasedAccess": {
           "title": "You decide what it can touch",
-          "desc": "Set permissions per app or folder. Rofiant asks before touching anything outside its lane.",
+          "desc": "Every write, edit, delete, command, or app launch needs your approval before it happens.",
           "details": [
-            "Grant access app by app, folder by folder",
-            "Risky actions require your approval",
-            "Nothing is touched without a matching permission",
-            "Local log of every access and action"
+            "Approve or deny each risky action from the chat",
+            "Read-only actions (like reading a file) don't need approval",
+            "Nothing destructive happens without your OK",
+            "Cloud Agent runs are recorded in your account's audit log"
           ]
         },
         "multiLanguage": {
           "title": "Multi-language",
-          "desc": "Talk to Rofiant in English, Spanish, French, German, and more.",
+          "desc": "Talk to Rofiant in English, Spanish, French, German, and more, since the underlying model is multilingual.",
           "details": [
-            "Auto-detect your language from the request",
+            "Auto-detects your language from the request",
             "Multiple languages supported out of the box",
             "Understands mixed-language file names and content",
-            "Right-to-left language support"
+            "Reply language follows your request"
           ]
         },
         "auditTrail": {
-          "title": "Full local activity log",
-          "desc": "Every request and action logged on your machine, with what changed and when.",
+          "title": "Cloud audit log for Agents & API",
+          "desc": "Runs through Agents, the API, and other cloud features are recorded in your account's audit log.",
           "details": [
-            "Local, tamper-evident action log",
-            "Export your log anytime",
-            "Searchable by app, file, date, or request",
-            "You control retention, nothing synced without consent"
+            "Written server-side; only your account can read it",
+            "Query it anytime via the API",
+            "Searchable by API key, event type, and date",
+            "The desktop app's own file/command tools aren't logged here today"
           ]
         }
       },
       "securitySection": {
         "title": "Privacy",
-        "subtitle": "Local-first, by default."
+        "subtitle": "File tools run on your machine; cloud features are optional."
       },
       "securityItems": {
-        "i1": "Runs locally, everything it touches stays on your machine",
-        "i2": "Encryption at rest for local data",
-        "i3": "No screen or file content uploaded without your permission",
+        "i1": "File, command & screenshot tools run locally on your machine",
+        "i2": "Encrypted in transit (TLS 1.3); at rest via our infrastructure providers",
+        "i3": "No file or screenshot content sent to a cloud feature without your permission",
         "i4": "Approval required before risky actions",
-        "i6": "Folder-level permissions you control",
-        "i7": "Full local activity log, exportable anytime",
+        "i6": "You choose which Pro/Ultra cloud features to use",
+        "i7": "Cloud audit log for Agents, API, and other cloud features, exportable via the API",
         "i8": "Public status page for the sync and account service"
       },
       "useCasesSection": {
@@ -703,7 +698,7 @@
       "useCases": {
         "hr": {
           "title": "App automation",
-          "desc": "Fill out forms, switch between apps, and run repetitive clicks and keystrokes without lifting a finger."
+          "desc": "Launch apps and run repetitive shell commands without lifting a finger."
         },
         "it": {
           "title": "Downloads & Desktop",
@@ -716,7 +711,7 @@
       },
       "cta": {
         "title": "Ready to talk to your computer?",
-        "subtitle": "Start free with up to 10 users. No credit card required.",
+        "subtitle": "Start free. No credit card required.",
         "startTrial": "Start free trial",
         "talkToSales": "Talk to sales"
       }
@@ -733,27 +728,27 @@
         },
         "chatAi": {
           "title": "Chat",
-          "desc": "Ask Rofiant to click, type, open apps, or manage your files in plain language."
+          "desc": "Ask Rofiant to open apps, run commands, or manage your files in plain language."
         },
         "voiceAi": {
           "title": "File Search",
-          "desc": "How Rofiant finds files, apps, and windows by what's inside them, not just names."
+          "desc": "How Rofiant finds files by what's inside them, not just names, by reading their contents when you ask."
         },
         "documentIntelligence": {
           "title": "File Organization",
-          "desc": "How Rofiant reads, classifies, and organizes files and windows on your machine."
+          "desc": "How Rofiant reads, classifies, and organizes files on your machine."
         },
         "agents": {
           "title": "Agents",
-          "desc": "Deploy task agents with multi-step reasoning and local tool connectors."
+          "desc": "Deploy task agents with multi-step reasoning, local tool execution, and an approval gate before anything risky."
         },
         "integrations": {
           "title": "Integrations",
-          "desc": "Connect Rofiant to your own scripts and tools via API."
+          "desc": "Connect Rofiant to your own scripts and tools via API, or extra tools via MCP servers."
         },
         "security": {
           "title": "Security",
-          "desc": "Local encryption, permissions, and activity logging."
+          "desc": "Permissions, approval gates, and the cloud audit log for Agents and API usage."
         }
       }
     },
@@ -779,9 +774,9 @@
         "v250": {
           "date": "July 3, 2026",
           "changes": [
-            "Local file search — indexed folder search with natural-language queries",
+            "Natural-language file search across your files",
             "In-flow file preview on agent task runs",
-            "Local activity log entries for every task run"
+            "Tool-call approval flow for agent task runs"
           ]
         },
         "v240": {
@@ -804,7 +799,7 @@
           "date": "November 30, 2025",
           "changes": [
             "Chat interface improvements",
-            "Improved local activity log query performance",
+            "Chat streaming performance improvements",
             "Fixed MFA session handling for dashboard access"
           ]
         }
@@ -814,14 +809,14 @@
   "auth": {
     "login": {
       "title": "Log in",
-      "quote": "An AI agent that works on your files, running locally by default.",
+      "quote": "An AI agent that works on your files.",
       "teamName": "Rofiant Team",
       "teamRole": "Engineering",
       "logoText": "Rofiant"
     },
     "signup": {
       "title": "Sign up",
-      "quote": "Join early access for a local AI agent that organizes your files and runs tasks, on your machine, in plain English.",
+      "quote": "Join early access for an AI agent that organizes your files and runs tasks, in plain English.",
       "logoText": "Rofiant",
       "stepEmailTitle": "What's your email?",
       "stepEmailSubtitle": "Enter your work or personal email to get started.",
@@ -856,7 +851,7 @@
       "minorNotice": "Accounts under 18 use limited mode. We do not collect or store your name, age, chats, uploads, or usage data."
     },
     "mfa": {
-      "quote": "An AI agent that works on your files, running locally by default.",
+      "quote": "An AI agent that works on your files.",
       "logoText": "Rofiant"
     }
   },

@@ -38,10 +38,10 @@ const codeLines = [
 
 export async function DeveloperSection() {
   const t = await getTranslations("home.developer");
-  const tableHeaders = ["model", "latency", "tokens", "cost"];
+  const tableHeaders = ["model", "requests", "tokens"];
   const tableRows = [
-    ["groq-llama-3.3-70b", "120ms", "2,847", "$0.003"],
-    ["groq-llama-3.1-8b", "45ms", "1,205", "$0.001"],
+    ["groq-llama-3.3-70b", "42", "2,847"],
+    ["groq-llama-3.1-8b", "118", "1,205"],
   ];
 
   return (

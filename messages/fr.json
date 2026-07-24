@@ -17,7 +17,7 @@
     "signup": "S'inscrire"
   },
   "footer": {
-    "tagline": "Un agent IA pour vos fichiers, local par défaut.",
+    "tagline": "Un agent IA pour vos fichiers et votre bureau.",
     "copyright": "© {year} Rofiant. Tous droits réservés.",
     "columns": {
       "platform": {
@@ -60,14 +60,14 @@
       "titleLine1": "Dites à votre ordinateur",
       "titleLine2": "quoi",
       "titleHighlight": "faire.",
-      "subtitle": "Rofiant est un agent IA local qui contrôle votre ordinateur, vos applications, fichiers et navigateur, et gère les tâches répétitives en langage simple.",
+      "subtitle": "Rofiant est un agent IA pour vos fichiers et applications. Il lit, modifie et organise les fichiers, exécute des commandes et ouvre des applications, en langage simple.",
       "startFree": "Commencer gratuitement",
       "talkToSales": "Parler aux ventes"
     },
     "publicAi": {
       "titlePrefix": "Votre ordinateur,",
       "titleHighlight": "enfin compris.",
-      "subtitle": "Demandez en langage simple. Rofiant clique, tape, ouvre des applications, navigue sur le web et organise les fichiers, en local par défaut, toujours sous votre contrôle.",
+      "subtitle": "Demandez en langage simple. Rofiant lit, modifie et organise vos fichiers, exécute des commandes et ouvre des applications, toujours sous votre contrôle, avec votre approbation avant toute action risquée.",
       "cta": "Essayer Rofiant gratuitement",
       "features": {
         "chat": {
@@ -75,8 +75,8 @@
           "desc": "Dites à Rofiant ce dont vous avez besoin en langage naturel. Pas de scripts, pas de règles, pas de raccourcis à mémoriser."
         },
         "write": {
-          "title": "Contrôlez n'importe quelle app",
-          "desc": "Demandez à Rofiant d'ouvrir des applications, de remplir des formulaires, de cliquer sur des boutons ou d'automatiser un workflow sur votre bureau. Il le fait, tout simplement."
+          "title": "Exécutez des commandes et lancez des applications",
+          "desc": "Demandez à Rofiant d'ouvrir une application, d'exécuter une commande shell, ou d'enchaîner plusieurs de ces actions sur votre bureau."
         },
         "research": {
           "title": "Trouvez n'importe quoi",
@@ -107,9 +107,9 @@
           "text": "Oubliez les règles de dossiers et les scripts de renommage. Dites à Rofiant ce que vous voulez, il s'en occupe."
         },
         "security": {
-          "label": "Reste en local",
-          "strong": "Local par défaut.",
-          "text": "Vos fichiers sont lus et traités sur votre appareil par défaut. Nous n'utilisons jamais vos données pour entraîner un modèle."
+          "label": "Votre contrôle",
+          "strong": "Vous choisissez ce qui est cloud et ce qui ne l'est pas.",
+          "text": "Les modifications de fichiers, les commandes et les captures d'écran s'exécutent sur votre machine. Les bases de connaissances, les Agents, la voix et la recherche de documents sont des fonctionnalités cloud facultatives que vous activez quand vous en avez besoin. Nous n'utilisons jamais vos données pour entraîner un modèle."
         },
         "control": {
           "label": "Se souvient",
@@ -117,18 +117,18 @@
           "text": "Rofiant repère vos conventions de nommage, votre organisation de dossiers et vos préférences, et s'améliore à chaque utilisation."
         },
         "usage": {
-          "label": "Journal d'activité",
-          "strong": "Voyez tout ce qu'il a fait.",
-          "text": "Chaque action est enregistrée localement : ce qui a changé, quand et pourquoi. Rien ne se passe sans laisser de trace."
+          "label": "Porte d'approbation",
+          "strong": "Vous approuvez chaque action risquée.",
+          "text": "Rofiant marque une pause et demande votre accord avant d'écrire, de modifier, de supprimer ou d'exécuter quoi que ce soit qui change votre système."
         }
       }
     },
     "deploy": {
-      "badge": "AGENT LOCAL",
-      "titleLine1": "Votre machine.",
+      "badge": "AGENT DE BUREAU",
+      "titleLine1": "Vos fichiers.",
       "titleLine2": "Vos applications.",
       "titleLine3": "Vos règles.",
-      "subtitle": "Pas de script manuel, pas de configuration complexe. Dites à Rofiant ce que vous voulez faire, il s'en occupe localement par défaut, sur votre bureau.",
+      "subtitle": "Pas de script manuel, pas de configuration complexe. Dites à Rofiant ce que vous voulez faire, et il se met au travail sur votre bureau.",
       "tabs": {
         "chat": "Chat",
         "documents": "Automatisation",
@@ -142,21 +142,21 @@
         },
         "documents": {
           "title": "Contrôlez tout votre bureau",
-          "subtitle": "N'importe quelle app, fenêtre ou fichier",
-          "description": "Demandez à Rofiant de remplir un formulaire, de basculer entre applications, de réorganiser des fenêtres ou de nettoyer un dossier Téléchargements en désordre. Il voit votre écran pour savoir ce qui est quoi."
+          "subtitle": "N'importe quelle application, n'importe quel fichier",
+          "description": "Demandez à Rofiant d'ouvrir une application, de nettoyer un dossier Téléchargements en désordre, ou d'effectuer une série de modifications de fichiers. Il peut prendre une capture d'écran pour voir ce qui s'affiche quand c'est nécessaire."
         },
         "agents": {
           "title": "Tâches à plusieurs étapes, gérées localement",
-          "subtitle": "Workflows d'applications, renommage par lots, nettoyage du bureau",
-          "description": "Rofiant planifie et exécute des tâches en plusieurs étapes sur votre machine, du remplissage d'une pile de formulaires à la configuration d'un environnement de développement."
+          "subtitle": "Renommage par lots, modifications multi-fichiers, nettoyage du bureau",
+          "description": "Rofiant planifie et exécute des tâches en plusieurs étapes sur votre machine, du renommage de fichiers par lots aux modifications multi-fichiers dans un projet. La configuration d'environnement de développement arrive bientôt."
         }
       }
     },
     "protect": {
       "badge": "CONFIDENTIALITÉ",
-      "titlePrefix": "Vos données restent",
-      "titleHighlight": "sur votre machine.",
-      "subtitle": "Rofiant fonctionne localement et demande votre accord avant de toucher à quoi que ce soit de risqué. Vous gardez toujours le contrôle.",
+      "titlePrefix": "Vous gardez toujours",
+      "titleHighlight": "le contrôle.",
+      "subtitle": "Rofiant demande votre accord avant de toucher à quoi que ce soit de risqué, et les fonctionnalités cloud sont activées à la demande.",
       "features": {
         "identity": {
           "title": "Votre compte, protégé",
@@ -164,9 +164,9 @@
           "description": "Un seul compte protège l'accès à vos paramètres Rofiant et à la synchronisation. Aucun fournisseur d'identité d'entreprise requis, aucune complexité."
         },
         "audit": {
-          "title": "Un journal d'activité local complet",
-          "subtitle": "Voyez chaque action, à tout moment",
-          "description": "Chaque action que Rofiant effectue, sur une app ou un fichier, est journalisée sur votre machine. Vérifiez, annulez ou auditez tout ce qu'il a fait."
+          "title": "Approbation avant toute action risquée",
+          "subtitle": "On vous demande, à chaque fois",
+          "description": "Rofiant demande votre accord avant d'écrire, de supprimer, d'exécuter une commande ou de fermer un processus. Rien de risqué ne se produit sans votre accord."
         }
       }
     },
@@ -176,16 +176,16 @@
       "titleMuted": "API simple. Automatisation puissante.",
       "features": {
         "cloud": {
-          "title": "Aucun serveur requis",
-          "desc": "L'API d'automatisation de Rofiant fonctionne avec votre agent local. Aucun serveur à déployer, aucune infrastructure à gérer."
+          "title": "API hébergée, compatible OpenAI",
+          "desc": "Une API de complétion de chat hébergée, compatible OpenAI. Aucun serveur à déployer, aucune infrastructure à gérer."
         },
         "multiModel": {
           "title": "Support multi-modèles",
-          "desc": "Changez le modèle sous-jacent pour le chat et la planification de tâches sans modifier vos scripts d'automatisation."
+          "desc": "Changez le modèle sous-jacent pour les complétions de chat sans modifier vos scripts d'automatisation."
         },
         "observability": {
           "title": "Observabilité intégrée",
-          "desc": "Chaque appel de tâche est enregistré avec sa durée, son résultat et son coût. Exportable pour votre propre analytique."
+          "desc": "Chaque appel API est enregistré avec sa durée et son utilisation de jetons dans les journaux d'utilisation et d'audit de votre compte, interrogeables via l'API."
         }
       }
     },
@@ -219,29 +219,53 @@
       "free": {
         "name": "Gratuit",
         "tagline": "Commencez à automatiser dès aujourd'hui",
-        "description": "Tout ce dont vous avez besoin pour essayer Rofiant. Aucune carte de crédit requise.",
+        "description": "L'application de bureau complète, aucune carte de crédit requise.",
         "cta": "Commencer gratuitement",
         "features": [
-          "Tâches illimitées (limites d'utilisation équitable)",
-          "Discutez avec Llama 3.1 8B et Gemma 2 9B",
-          "Journal d'activité local (lecture seule)",
-          "Vitesse de réponse standard"
+          {
+            "title": "Outils locaux de fichiers, de commandes et d'applications",
+            "desc": "Lisez, modifiez et organisez des fichiers, exécutez des commandes et ouvrez des applications, avec votre approbation requise avant toute action risquée."
+          },
+          {
+            "title": "Discutez avec des modèles hébergés ou locaux",
+            "desc": "Utilisez gratuitement les modèles hébergés GPT OSS 20B et Llama 3.1 8B, ou connectez votre propre modèle Ollama local pour un chat entièrement sur votre appareil."
+          },
+          {
+            "title": "Prise en charge des serveurs MCP",
+            "desc": "Connectez vos propres outils et serveurs via le Model Context Protocol pour étendre les capacités de Rofiant."
+          },
+          {
+            "title": "Transcription vocale",
+            "desc": "Transformez automatiquement vos enregistrements en transcriptions et résumés."
+          },
+          {
+            "title": "Tâches illimitées",
+            "desc": "Aucune limite sur votre utilisation de Rofiant, sous réserve de limites d'utilisation équitable."
+          }
         ]
       },
       "pro": {
         "name": "Pro",
         "tagline": "Pour les utilisateurs avancés",
-        "description": "Tâches locales illimitées, traitement prioritaire et accès anticipé aux nouvelles plateformes.",
+        "description": "Nos modèles les plus performants et les Agents cloud.",
         "cta": "Passer à Pro",
         "features": [
-          "Tout dans Gratuit",
-          "Limites plus élevées & file prioritaire",
-          "Modèles Llama 3.3 70B et GPT OSS 120B",
-          "Téléversement de documents, mode vocal et agents multi-étapes",
-          "Recherche et organisation de fichiers",
-          "1 base de connaissances",
-          "Accès API",
-          "Vitesse de réponse prioritaire"
+          {
+            "title": "Tout dans Gratuit",
+            "desc": "Toutes les fonctionnalités de Gratuit, incluses."
+          },
+          {
+            "title": "Nos modèles les plus performants",
+            "desc": "Obtenez des réponses de GPT OSS 120B et Llama 3.3 70B pour le raisonnement complexe et les tâches de code."
+          },
+          {
+            "title": "Agents multi-étapes",
+            "desc": "Rofiant planifie et exécute des tâches en plusieurs étapes sur vos fichiers et applications, en marquant une pause pour votre approbation avant toute action risquée."
+          },
+          {
+            "title": "Accès API complet",
+            "desc": "Une API compatible OpenAI avec des limites d'utilisation plus élevées que Gratuit."
+          }
         ]
       },
       "ultra": {
@@ -250,13 +274,30 @@
         "description": "Les limites d'utilisation les plus élevées, un accès prioritaire aux nouveaux modèles et un support prioritaire pour ceux qui utilisent Rofiant au quotidien.",
         "cta": "Démarrer avec Ultra",
         "features": [
-          "Tout dans Pro",
-          "Les limites d'utilisation les plus élevées (5x Pro)",
-          "Accès prioritaire aux modèles les plus récents",
-          "Bases de connaissances illimitées",
-          "Fenêtre de contexte étendue",
-          "Support prioritaire avec des temps de réponse plus rapides",
-          "Accès anticipé aux nouvelles fonctionnalités"
+          {
+            "title": "Tout dans Pro",
+            "desc": "Toutes les fonctionnalités de Pro, incluses."
+          },
+          {
+            "title": "Limites d'utilisation 5 fois plus élevées",
+            "desc": "Bénéficiez de limites d'utilisation 5 fois plus élevées que Pro."
+          },
+          {
+            "title": "Premier accès aux nouveaux modèles",
+            "desc": "Soyez parmi les premiers à essayer les nouveaux modèles à mesure que nous les ajoutons."
+          },
+          {
+            "title": "Bases de connaissances illimitées",
+            "desc": "Créez autant de bases de connaissances que nécessaire, sans limite."
+          },
+          {
+            "title": "Support prioritaire",
+            "desc": "Obtenez des réponses plus rapides de notre équipe de support."
+          },
+          {
+            "title": "Accès anticipé aux nouvelles fonctionnalités",
+            "desc": "Essayez les nouvelles fonctionnalités de Rofiant avant leur déploiement général."
+          }
         ]
       }
     },
@@ -265,7 +306,6 @@
       "title": "Inclus dans tous les forfaits",
       "items": [
         "Aucune donnée utilisée pour entraîner les modèles",
-        "Chiffrement AES-256 au repos",
         "TLS 1.3 en transit",
         "Conforme au RGPD",
         "Annulez à tout moment",
@@ -345,14 +385,14 @@
     "about": {
       "title": "À propos de Rofiant",
       "badge": "ENTREPRISE",
-      "subtitle": "Nous concevons un agent IA qui fonctionne vraiment sur votre machine.",
-      "intro1": "Rofiant est un agent IA local avant tout : il organise vos fichiers, retrouve vos documents et exécute des tâches répétitives sur votre ordinateur, entièrement piloté en langage naturel.",
-      "intro2": "Nous avons commencé en local d'abord, car la confidentialité et la fiabilité comptent pour un outil qui touche à vos fichiers personnels. Rofiant fonctionne sur votre machine par défaut, apprend votre façon de travailler, et n'envoie vos données ailleurs que si vous activez une fonctionnalité cloud.",
+      "subtitle": "Nous concevons un agent IA qui accomplit vraiment le travail.",
+      "intro1": "Rofiant est un agent IA : il organise vos fichiers, les modifie et exécute des tâches répétitives sur votre ordinateur, avec en complément des fonctionnalités cloud facultatives comme les bases de connaissances et les Agents, entièrement piloté en langage simple.",
+      "intro2": "La confidentialité et la fiabilité comptent pour un outil qui touche à vos fichiers personnels. Les outils de fichiers, de commandes et de captures d'écran de Rofiant fonctionnent sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local, et les fonctionnalités cloud Pro/Ultra (bases de connaissances, documents, voix, Agents, API) se synchronisent avec votre compte afin que vous puissiez aussi les utiliser depuis le tableau de bord web.",
       "intro3": "Nous commençons par l'organisation et la recherche de fichiers sous Linux, avec la configuration d'environnement de développement et le support multiplateforme à venir.",
       "values": {
         "missionFirst": {
-          "title": "Local d'abord",
-          "desc": "Nous construisons d'abord pour votre machine, en gardant la confidentialité et la fiabilité comme standard à mesure que nous grandissons."
+          "title": "Transparent par défaut",
+          "desc": "Nous indiquons clairement ce qui fonctionne sur votre machine et ce qui touche au cloud, et nous n'entraînons jamais de modèle sur vos données."
         },
         "developerFirst": {
           "title": "Pensé pour les développeurs",
@@ -368,7 +408,7 @@
       "title": "Carrières",
       "badge": "ENTREPRISE",
       "subtitle": "Aidez-nous à concevoir un agent IA qui fonctionne là où vivent vos fichiers.",
-      "intro": "Nous sommes une équipe entièrement à distance qui conçoit un agent IA local avant tout. Si l'expérience développeur, la confidentialité et la création d'outils qui respectent votre machine vous tiennent à cœur, nous voulons vous entendre.",
+      "intro": "Nous sommes une équipe entièrement à distance qui conçoit un agent IA pour vos fichiers et votre bureau. Si l'expérience développeur, la confidentialité et la création d'outils qui respectent votre machine vous tiennent à cœur, nous voulons vous entendre.",
       "roles": {
         "seniorBackend": {
           "title": "Ingénieur·e backend senior",
@@ -452,23 +492,23 @@
       "areas": {
         "encryption": {
           "title": "Chiffrement",
-          "desc": "Les données locales sont chiffrées au repos. Toute donnée de compte ou de synchronisation est chiffrée en transit (TLS 1.3)."
+          "desc": "Le trafic lié au compte, à la synchronisation et aux fonctionnalités cloud est chiffré en transit (TLS 1.3). Au repos, nous nous appuyons sur le chiffrement au niveau du stockage de nos fournisseurs d'infrastructure — Rofiant n'ajoute pas encore sa propre couche de chiffrement."
         },
         "accessControl": {
           "title": "Portes de permission",
-          "desc": "Rofiant demande votre accord avant de toucher à quoi que ce soit de risqué. Vous accordez des permissions par dossier et approuvez les actions sensibles."
+          "desc": "Rofiant demande votre accord avant de toucher à quoi que ce soit de risqué. Vous approuvez les modifications de fichiers, les suppressions, les commandes et les changements de processus avant qu'ils ne se produisent."
         },
         "auditLogging": {
-          "title": "Journal d'activité local",
-          "desc": "Chaque action de Rofiant est enregistrée sur votre machine, et vous pouvez l'exporter à tout moment."
+          "title": "Journal d'audit cloud",
+          "desc": "Les actions effectuées via les Agents, l'API et les autres fonctionnalités cloud sont enregistrées dans le journal d'audit de votre compte, consultable et exportable via l'API. L'application de bureau ne tient pas encore de journal d'actions local distinct."
         },
         "infrastructure": {
-          "title": "Architecture locale avant tout",
-          "desc": "Rofiant fonctionne sur votre machine par défaut, pas sur une infrastructure cloud partagée. Moins de surface d'attaque, car vos fichiers restent en place sauf si vous activez la synchronisation."
+          "title": "Outils locaux, fonctionnalités cloud facultatives",
+          "desc": "Les outils de fichiers, de commandes et de captures d'écran de l'application de bureau fonctionnent entièrement sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local. Les fonctionnalités Pro et Ultra — documents, voix, Agents, API — fonctionnent sur notre infrastructure cloud."
         },
         "dataResidency": {
-          "title": "Vos fichiers restent en place",
-          "desc": "Rofiant ne téléverse vos fichiers nulle part. Si vous utilisez la synchronisation de compte, vous choisissez ce qui, le cas échéant, se synchronise."
+          "title": "Vous choisissez ce qui quitte votre machine",
+          "desc": "Les outils de fichiers de l'application de bureau ne téléversent vos fichiers nulle part. Si vous utilisez une fonctionnalité cloud Pro ou Ultra, comme le téléversement de documents, la transcription vocale ou une base de connaissances, ce fichier ou cet enregistrement spécifique est envoyé à notre infrastructure cloud pour être traité."
         },
         "incidentResponse": {
           "title": "Réponse aux incidents",
@@ -515,32 +555,32 @@
         },
         "toolUse": {
           "title": "Utilisation d'outils locaux",
-          "desc": "Rofiant lit et écrit des fichiers, clique et tape dans n'importe quelle application, et exécute des commandes locales, pas seulement des réponses.",
+          "desc": "Rofiant lit et écrit des fichiers, ouvre des applications et exécute des commandes locales, pas seulement des réponses à des questions.",
           "details": [
             "Lire, déplacer, renommer et organiser des fichiers sur votre machine",
-            "Cliquer, taper et naviguer dans n'importe quelle application de bureau",
-            "Exécuter des commandes shell et scripts locaux",
-            "Chaque action est cadrée par des limites et une confirmation"
+            "Ouvrir des applications et exécuter des commandes shell locales",
+            "Prendre une capture d'écran pour voir ce qui s'affiche",
+            "Chaque action risquée nécessite d'abord votre confirmation"
           ]
         },
         "humanInLoop": {
           "title": "Supervision humaine",
           "desc": "Définissez des portes d'approbation pour tout ce qui est risqué. Rofiant se met en pause et demande votre accord avant de supprimer, écraser ou déplacer des fichiers dont il n'est pas sûr.",
           "details": [
-            "Définissez des règles d'approbation par type d'action",
+            "Approbation requise avant write_file, edit_file, run_command, kill_process et open_app",
             "Mode « toujours demander » pour tout ce qui est destructeur",
-            "Délai d'expiration et solution de repli sécurisée en l'absence de réponse",
-            "Registre local complet de chaque décision d'approbation"
+            "Approuvez ou refusez chaque demande depuis le chat",
+            "Les actions refusées ne sont tout simplement pas exécutées"
           ]
         },
         "observability": {
           "title": "Observabilité complète",
-          "desc": "Voyez chaque étape suivie par Rofiant. Rejouez, déboguez et examinez son travail à tout moment.",
+          "desc": "Voyez chaque étape franchie par Rofiant dans le chat. Examinez son travail à tout moment.",
           "details": [
             "Trace étape par étape avec horodatage",
-            "Journal local de chaque fichier touché et de chaque commande exécutée",
-            "Gestion des erreurs avec nouvelle tentative automatique",
-            "Exportez votre journal d'activité local à tout moment"
+            "Voyez chaque appel d'outil et son résultat dans la conversation",
+            "Les exécutions d'Agents cloud sont également enregistrées dans le journal d'audit de votre compte",
+            "Interrogez votre journal d'audit à tout moment via l'API"
           ]
         }
       },
@@ -555,7 +595,7 @@
         },
         "support": {
           "title": "Automatisation du bureau",
-          "desc": "Demandez à Rofiant de remplir des formulaires, de nettoyer les téléchargements, de trier les captures d'écran par projet ou d'archiver d'anciens fichiers. Décrivez-le une fois, c'est fait à chaque fois."
+          "desc": "Demandez à Rofiant de nettoyer les Téléchargements, de trier les captures d'écran par projet ou d'archiver d'anciens fichiers. Décrivez-le une fois, c'est fait à chaque fois."
         },
         "finance": {
           "title": "Tâches en lot",
@@ -568,15 +608,15 @@
         "startTrial": "Démarrer l'essai gratuit",
         "readDocs": "Lire la documentation"
       },
-      "roadmapNotice": "Disponible aujourd'hui : créer, gérer et exécuter des agents avec un raisonnement de planification et d'exécution en plusieurs étapes sur vos fichiers et votre machine. Le contrôle complet des applications et fenêtres, l'exécution locale d'outils, les workflows d'approbation et la configuration d'environnements de développement sont sur notre feuille de route."
+      "roadmapNotice": "Disponible aujourd'hui : créer, gérer et exécuter des agents avec un raisonnement de planification et d'exécution en plusieurs étapes, l'exécution d'outils locaux de fichiers et de commandes, et des workflows d'approbation avant toute action risquée. Cliquer et taper dans d'autres applications, ainsi que la configuration d'environnements de développement, sont sur notre feuille de route."
     },
     "chatAi": {
       "title": "Chat",
       "badge": "PLATEFORME",
-      "subtitle": "L'interface en langage naturel de votre agent local. Demandez à Rofiant de cliquer, taper, ouvrir des applications, naviguer ou organiser des fichiers, aucune commande à mémoriser.",
+      "subtitle": "L'interface en langage naturel de votre agent local. Demandez à Rofiant d'ouvrir des applications, d'exécuter des commandes ou d'organiser des fichiers, aucune commande à mémoriser.",
       "mockup": {
         "header": "Chat Rofiant",
-        "connectedTo": "Connecté à : Bureau, Navigateur, Applications, Fichiers",
+        "connectedTo": "Connecté à : Bureau, Applications, Fichiers",
         "inputPlaceholder": "Demandez à Rofiant de faire quelque chose sur votre ordinateur...",
         "sourcePrefix": "Trouvé dans :",
         "q1": "Où est ce contrat que j'ai téléchargé la semaine dernière ?",
@@ -589,15 +629,15 @@
       "stats": {
         "avgResponse": {
           "label": "Réponse moyenne",
-          "sub": "Sur votre machine"
+          "sub": "Réponse de chat typique"
         },
         "languages": {
           "label": "Langues",
           "sub": "Détection automatique"
         },
         "uptime": {
-          "label": "Emplacement des données",
-          "sub": "Votre machine uniquement"
+          "label": "Outils de fichiers",
+          "sub": "Fonctionnent sur votre machine"
         },
         "sources": {
           "label": "Sources",
@@ -619,7 +659,7 @@
         "upload": {
           "step": "01",
           "title": "Pointez Rofiant vers votre ordinateur",
-          "desc": "Rofiant voit votre écran, vos applications et vos fichiers en toute sécurité, traités localement par défaut."
+          "desc": "Rofiant peut lire vos fichiers et prendre une capture d'écran quand il a besoin de voir ce qui s'affiche. Les outils de fichiers s'exécutent en local ; les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local."
         },
         "configure": {
           "step": "02",
@@ -643,57 +683,57 @@
       },
       "features": {
         "knowledgeBase": {
-          "title": "Connaît votre ordinateur",
-          "desc": "Rofiant lit votre écran, vos applications et vos fichiers, pas seulement les noms de fichiers.",
+          "title": "Connaît vos fichiers",
+          "desc": "Rofiant lit le contenu des fichiers, pas seulement leur nom, quand vous lui demandez de trouver ou de traiter quelque chose.",
           "details": [
-            "Voit les fenêtres, applications et fichiers ouverts localement",
-            "Reste à jour à mesure que votre écran change",
-            "Cite l'application, le fichier ou l'emplacement exact pour chaque réponse",
-            "Fonctionne avec les applications et formats de fichiers courants d'origine"
+            "Lit les fichiers en local pour répondre à votre demande",
+            "Prenez une capture d'écran à tout moment pour lui montrer ce qui s'affiche",
+            "Cite le fichier ou dossier exact dans sa réponse",
+            "Fonctionne dès l'installation avec les formats de fichiers courants"
           ]
         },
         "roleBasedAccess": {
           "title": "Vous décidez ce qu'il peut toucher",
-          "desc": "Définissez des permissions par application ou dossier. Rofiant demande avant de toucher à quoi que ce soit en dehors de son périmètre.",
+          "desc": "Chaque écriture, modification, suppression, commande ou lancement d'application nécessite votre approbation avant de se produire.",
           "details": [
-            "Accordez l'accès application par application, dossier par dossier",
-            "Les actions risquées nécessitent votre approbation",
-            "Rien n'est touché sans permission correspondante",
-            "Journal local de chaque accès et action"
+            "Approuvez ou refusez chaque action risquée depuis le chat",
+            "Les actions en lecture seule (comme lire un fichier) ne nécessitent pas d'approbation",
+            "Rien de destructeur ne se produit sans votre accord",
+            "Les exécutions d'Agents cloud sont enregistrées dans le journal d'audit de votre compte"
           ]
         },
         "multiLanguage": {
           "title": "Multilingue",
-          "desc": "Parlez à Rofiant en anglais, espagnol, français, allemand et plus encore.",
+          "desc": "Parlez à Rofiant en anglais, espagnol, français, allemand et plus encore, le modèle sous-jacent étant multilingue.",
           "details": [
             "Détection automatique de votre langue à partir de la demande",
             "Plusieurs langues prises en charge dès l'installation",
             "Comprend les noms de fichiers et contenus en langues mixtes",
-            "Prise en charge des langues de droite à gauche"
+            "La langue de réponse suit celle de votre demande"
           ]
         },
         "auditTrail": {
-          "title": "Journal d'activité local complet",
-          "desc": "Chaque demande et action enregistrée sur votre machine, avec ce qui a changé et quand.",
+          "title": "Journal d'audit cloud pour les Agents et l'API",
+          "desc": "Les exécutions via les Agents, l'API et les autres fonctionnalités cloud sont enregistrées dans le journal d'audit de votre compte.",
           "details": [
-            "Journal d'actions local et inviolable",
-            "Exportez votre journal à tout moment",
-            "Recherchable par application, fichier, date ou demande",
-            "Vous contrôlez la conservation, rien n'est synchronisé sans consentement"
+            "Écrit côté serveur ; seul votre compte peut le consulter",
+            "Interrogez-le à tout moment via l'API",
+            "Recherchable par clé API, type d'événement et date",
+            "Les outils de fichiers/commandes de l'application de bureau ne sont pas encore journalisés ici"
           ]
         }
       },
       "securitySection": {
         "title": "Confidentialité",
-        "subtitle": "Local avant tout, par défaut."
+        "subtitle": "Les outils de fichiers s'exécutent sur votre machine ; les fonctionnalités cloud sont facultatives."
       },
       "securityItems": {
-        "i1": "Fonctionne localement, tout ce qu'il touche reste sur votre machine",
-        "i2": "Chiffrement au repos pour les données locales",
-        "i3": "Aucun contenu d'écran ou de fichier n'est envoyé sans votre permission",
+        "i1": "Les outils de fichiers, de commandes et de captures d'écran s'exécutent en local sur votre machine",
+        "i2": "Chiffré en transit (TLS 1.3) ; au repos via nos fournisseurs d'infrastructure",
+        "i3": "Aucun contenu de fichier ou de capture d'écran n'est envoyé à une fonctionnalité cloud sans votre permission",
         "i4": "Approbation requise avant les actions risquées",
-        "i6": "Permissions au niveau du dossier, sous votre contrôle",
-        "i7": "Journal d'activité local complet, exportable à tout moment",
+        "i6": "Vous choisissez quelles fonctionnalités cloud Pro/Ultra utiliser",
+        "i7": "Journal d'audit cloud pour les Agents, l'API et les autres fonctionnalités cloud, exportable via l'API",
         "i8": "Page de statut publique pour le service de synchronisation et de compte"
       },
       "useCasesSection": {
@@ -703,7 +743,7 @@
       "useCases": {
         "hr": {
           "title": "Automatisation d'applications",
-          "desc": "Remplissez des formulaires, basculez entre applications et effectuez des clics et frappes répétitifs sans lever le petit doigt."
+          "desc": "Lancez des applications et exécutez des commandes shell répétitives sans lever le petit doigt."
         },
         "it": {
           "title": "Téléchargements et Bureau",
@@ -716,7 +756,7 @@
       },
       "cta": {
         "title": "Prêt à parler à votre ordinateur ?",
-        "subtitle": "Commencez gratuitement avec jusqu'à 10 utilisateurs. Aucune carte de crédit requise.",
+        "subtitle": "Commencez gratuitement. Aucune carte de crédit requise.",
         "startTrial": "Démarrer l'essai gratuit",
         "talkToSales": "Parler aux ventes"
       }
@@ -1087,27 +1127,27 @@
         },
         "chatAi": {
           "title": "Chat",
-          "desc": "Demandez à Rofiant de cliquer, taper, ouvrir des applications ou gérer vos fichiers en langage simple."
+          "desc": "Demandez à Rofiant d'ouvrir des applications, d'exécuter des commandes ou de gérer vos fichiers en langage simple."
         },
         "voiceAi": {
           "title": "Recherche de fichiers",
-          "desc": "Comment Rofiant trouve des fichiers, applications et fenêtres par leur contenu, pas seulement leur nom."
+          "desc": "Comment Rofiant trouve des fichiers selon leur contenu, pas seulement leur nom, en lisant leur contenu à votre demande."
         },
         "documentIntelligence": {
           "title": "Organisation de fichiers",
-          "desc": "Comment Rofiant lit, classe et organise les fichiers et fenêtres sur votre machine."
+          "desc": "Comment Rofiant lit, classe et organise les fichiers sur votre machine."
         },
         "agents": {
           "title": "Agents",
-          "desc": "Déployez des agents de tâches avec raisonnement à plusieurs étapes et connecteurs d'outils locaux."
+          "desc": "Déployez des agents de tâches avec un raisonnement à plusieurs étapes, l'exécution d'outils locaux et une porte d'approbation avant toute action risquée."
         },
         "integrations": {
           "title": "Intégrations",
-          "desc": "Connectez Rofiant à vos propres scripts et outils via l'API."
+          "desc": "Connectez Rofiant à vos propres scripts et outils via l'API, ou à des outils supplémentaires via des serveurs MCP."
         },
         "security": {
           "title": "Sécurité",
-          "desc": "Chiffrement local, permissions et journalisation d'activité."
+          "desc": "Permissions, portes d'approbation et journal d'audit cloud pour l'utilisation des Agents et de l'API."
         }
       }
     },
@@ -1133,9 +1173,9 @@
         "v250": {
           "date": "3 juillet 2026",
           "changes": [
-            "Recherche de fichiers locale — recherche indexée par dossier avec requêtes en langage naturel",
+            "Recherche de fichiers en langage naturel dans vos fichiers",
             "Aperçu de fichier intégré lors des exécutions de tâches d'agent",
-            "Entrées de journal d'activité local pour chaque exécution de tâche"
+            "Workflow d'approbation des appels d'outils pour les exécutions de tâches d'agent"
           ]
         },
         "v240": {
@@ -1158,7 +1198,7 @@
           "date": "30 novembre 2025",
           "changes": [
             "Améliorations de l'interface de chat",
-            "Amélioration des performances des requêtes de journal d'activité local",
+            "Améliorations des performances du streaming de chat",
             "Correction de la gestion de session MFA pour l'accès au tableau de bord"
           ]
         }
@@ -1168,14 +1208,14 @@
   "auth": {
     "login": {
       "title": "Connexion",
-      "quote": "Un agent IA qui travaille sur vos fichiers, en local par défaut.",
+      "quote": "Un agent IA qui travaille sur vos fichiers.",
       "teamName": "Équipe Rofiant",
       "teamRole": "Ingénierie",
       "logoText": "Rofiant"
     },
     "signup": {
       "title": "S'inscrire",
-      "quote": "Rejoignez l'accès anticipé pour un agent IA local qui organise vos fichiers et exécute des tâches, sur votre machine, en langage naturel.",
+      "quote": "Rejoignez l'accès anticipé pour un agent IA qui organise vos fichiers et exécute des tâches, en langage simple.",
       "logoText": "Rofiant",
       "stepEmailTitle": "Quelle est votre adresse e-mail ?",
       "stepEmailSubtitle": "Entrez votre e-mail professionnel ou personnel pour commencer.",
@@ -1210,7 +1250,7 @@
       "minorNotice": "Les comptes de moins de 18 ans utilisent un mode limité. Nous ne collectons ni ne stockons votre nom, âge, chats, fichiers ou données d'utilisation."
     },
     "mfa": {
-      "quote": "Un agent IA qui travaille sur vos fichiers, en local par défaut.",
+      "quote": "Un agent IA qui travaille sur vos fichiers.",
       "logoText": "Rofiant"
     }
   },

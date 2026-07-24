@@ -1,8 +1,8 @@
 export function StatsSection() {
   const stats = [
     { value: "24/7", label: "Uptime monitoring" },
-    { value: "24/7", label: "Enterprise support" },
-    { value: "AES-256", label: "Encryption standard" },
+    { value: "TLS 1.3", label: "Encryption in transit" },
+    { value: "12", label: "Built-in desktop tools" },
   ];
 
   return (

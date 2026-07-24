@@ -1,4 +1,4 @@
 export const SITE_TITLE = "Rofiant: Your AI Desktop Agent";
 
 export const SITE_DESCRIPTION =
-  "Rofiant is a local AI agent that controls your computer, apps, files, and browser in plain English. Nothing leaves your machine.";
+  "Rofiant is an AI agent for your files and desktop. It reads, edits, and organizes files, runs commands, and opens apps, in plain English.";

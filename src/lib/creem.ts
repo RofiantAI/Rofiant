@@ -1,6 +1,7 @@
 import { Creem } from "creem";
 
 export const creem = new Creem({
+  server: process.env.NODE_ENV === "production" ? "prod" : "test",
   apiKey: process.env.CREEM_API_KEY ?? "",
 });
 

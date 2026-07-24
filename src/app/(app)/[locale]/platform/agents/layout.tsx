@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Agents",
-  description: "Build AI workflow agents with multi-step reasoning, tool use, and approval gates. Automate complex tasks across your organization.",
-  openGraph: { title: "Agents — Rofiant", description: "Build AI workflow agents with multi-step reasoning, tool use, and approval gates. Automate complex tasks across your organization." },
+  description: "Build AI agents with multi-step reasoning, local tool use, and an approval gate before anything risky runs.",
+  openGraph: { title: "Agents — Rofiant", description: "Build AI agents with multi-step reasoning, local tool use, and an approval gate before anything risky runs." },
   alternates: { canonical: "https://www.rofiant.ca/platform/agents" },
 };
 export default function Layout({ children }: { children: React.ReactNode }) {

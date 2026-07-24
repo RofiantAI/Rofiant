@@ -8,8 +8,8 @@ import { useTranslations } from "next-intl";
 
 const consumerTierMeta = [
   { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false, comingSoon: false },
-  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true, comingSoon: true },
-  { key: "ultra", icon: Crown, price: { monthly: 60, annual: 50 }, href: "/api/checkout?plan=ultra", highlighted: false, comingSoon: true },
+  { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true, comingSoon: false },
+  { key: "ultra", icon: Crown, price: { monthly: 30, annual: 25 }, href: "/api/checkout?plan=ultra", highlighted: false, comingSoon: false },
 ] as const;
 
 export default function PricingPage() {
@@ -58,7 +58,7 @@ export default function PricingPage() {
         {consumerTierMeta.map((tier) => {
           const Icon = tier.icon;
           const price = annual ? tier.price.annual : tier.price.monthly;
-          const features = t.raw(`consumerTiers.${tier.key}.features`) as string[];
+          const features = t.raw(`consumerTiers.${tier.key}.features`) as { title: string; desc: string }[];
           return (
             <div
               key={tier.key}
@@ -99,11 +99,14 @@ export default function PricingPage() {
                   </p>
                 )}
               </div>
-              <ul className="space-y-3 mb-10 flex-1">
+              <ul className="space-y-4 mb-10 flex-1">
                 {features.map((f) => (
-                  <li key={f} className="flex items-start gap-3 text-sm text-foreground-secondary">
+                  <li key={f.title} className="flex items-start gap-3 text-sm">
                     <Check className="w-4 h-4 text-foreground shrink-0 mt-0.5" />
-                    {f}
+                    <div>
+                      <p className="font-medium text-foreground">{f.title}</p>
+                      <p className="text-foreground-secondary">{f.desc}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -16,7 +16,6 @@ const PAGES: { path: string; changeFrequency: MetadataRoute.Sitemap[number]["cha
   { path: "/company/contact", changeFrequency: "monthly", priority: 0.5 },
   { path: "/company/security", changeFrequency: "monthly", priority: 0.6 },
   { path: "/download", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/status", changeFrequency: "daily", priority: 0.3 },
   { path: "/legal/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/terms-of-service", changeFrequency: "yearly", priority: 0.3 },
   { path: "/auth/login", changeFrequency: "yearly", priority: 0.3 },

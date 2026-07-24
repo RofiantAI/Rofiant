@@ -16,7 +16,6 @@ const footerColumns = [
       { key: "documentation", href: "/resources/documentation" },
       { key: "apiReference", href: "/resources/api-reference" },
       { key: "changelog", href: "/resources/changelog" },
-      { key: "status", href: "/status" },
     ],
   },
   {
@@ -79,6 +78,16 @@ export async function FooterSection() {
                     </Link>
                   </li>
                 ))}
+                {column.key === "resources" && (
+                  <li>
+                    <a
+                      href="https://status.rofiant.ca"
+                      className="text-sm text-foreground-secondary transition-colors hover:text-foreground"
+                    >
+                      {t("columns.resources.links.status")}
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           ))}

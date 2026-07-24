@@ -1,13 +1,13 @@
-import { createClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dispatchWebhook } from "@/lib/webhooks";
 import { extractTextFromBuffer, truncateText } from "@/lib/document-text";
 import { classifyDocument, summarizeDocument } from "@/lib/document-processing";
 import { isMinorUser, minorDataCollectionBlockedResponse } from "@/lib/minor-account";
 import { planToolDeniedResponse } from "@/lib/plan-guard";
+import { getAuthedUser } from "@/lib/api-auth";
 
 async function indexDocument(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: Awaited<ReturnType<typeof getAuthedUser>>["supabase"],
   userId: string,
   doc: { id: string; name: string; type: string; storage_path: string },
 ) {
@@ -38,9 +38,8 @@ async function indexDocument(
   }
 }
 
-export async function GET() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export async function GET(req: NextRequest) {
+  const { supabase, user } = await getAuthedUser(req);
   if (!user) return new Response("Unauthorized", { status: 401 });
 
   if (isMinorUser(user)) {
@@ -57,9 +56,8 @@ export async function GET() {
   return NextResponse.json(data);
 }
 
-export async function POST(req: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export async function POST(req: NextRequest) {
+  const { supabase, user } = await getAuthedUser(req);
   if (!user) return new Response("Unauthorized", { status: 401 });
 
   if (isMinorUser(user)) {

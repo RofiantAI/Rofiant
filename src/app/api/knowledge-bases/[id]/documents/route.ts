@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
+import { getAuthedUser } from "@/lib/api-auth";
 
-async function ownsKb(supabase: Awaited<ReturnType<typeof createClient>>, id: string, userId: string) {
+async function ownsKb(supabase: Awaited<ReturnType<typeof getAuthedUser>>["supabase"], id: string, userId: string) {
   const { data } = await supabase
     .from("knowledge_bases")
     .select("id")
@@ -13,8 +13,7 @@ async function ownsKb(supabase: Awaited<ReturnType<typeof createClient>>, id: st
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getAuthedUser(req);
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
   if (!await ownsKb(supabase, id, user.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -45,8 +44,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getAuthedUser(req);
   if (!user) return new NextResponse("Unauthorized", { status: 401 });
   if (!await ownsKb(supabase, id, user.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
