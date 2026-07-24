@@ -84,7 +84,7 @@ export async function FooterSection() {
           ))}
         </div>
 
-        <div className="mt-8 border-t border-border pt-8">
+        <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-border pt-8">
           <a
             href="https://startupfa.me/s/rofiant?utm_source=rofiant.ca"
             target="_blank"
@@ -95,6 +95,16 @@ export async function FooterSection() {
               alt="Rofiant - Featured on Startup Fame"
               width="171"
               height="54"
+              className="h-9 w-auto"
+            />
+          </a>
+
+          <a href="https://dang.ai" target="_blank" rel="dofollow noopener">
+            <img
+              src="https://assets.dang.ai/badges/dang-verified-dark.png"
+              alt="Verified on DANG!"
+              width="260"
+              height="94"
               className="h-9 w-auto"
             />
           </a>
