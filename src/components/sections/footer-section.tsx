@@ -95,6 +95,7 @@ export async function FooterSection() {
               alt="Rofiant - Featured on Startup Fame"
               width="171"
               height="54"
+              className="h-9 w-auto"
             />
           </a>
         </div>
