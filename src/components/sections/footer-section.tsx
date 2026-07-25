@@ -118,7 +118,11 @@ export async function FooterSection() {
             />
           </a>
 
-          <a href="https://twelve.tools" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://twelve.tools"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src="https://twelve.tools/badge0-dark.svg"
               alt="Featured on Twelve Tools"

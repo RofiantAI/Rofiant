@@ -222,37 +222,82 @@
         "description": "The full desktop app, no credit card required.",
         "cta": "Get started free",
         "features": [
-          { "title": "Local file, command & app tools", "desc": "Read, edit, and organize files, run commands, and open apps, with your approval required before anything risky." },
-          { "title": "Chat with hosted or local models", "desc": "Use hosted GPT OSS 20B and Llama 3.1 8B for free, or connect your own local Ollama model for fully on-device chat." },
-          { "title": "MCP server support", "desc": "Connect your own tools and servers over the Model Context Protocol to extend what Rofiant can do." },
-          { "title": "Voice transcription", "desc": "Turn recordings into transcripts and summaries automatically." },
-          { "title": "Unlimited tasks", "desc": "No caps on how much you use Rofiant, subject to fair-use rate limits." }
+          {
+            "title": "Local file, command & app tools",
+            "desc": "Read, edit, and organize files, run commands, and open apps, with your approval required before anything risky."
+          },
+          {
+            "title": "Chat with hosted or local models",
+            "desc": "Use hosted GPT OSS 20B and Llama 3.1 8B for free, or connect your own local Ollama model for fully on-device chat."
+          },
+          {
+            "title": "MCP server support",
+            "desc": "Connect your own tools and servers over the Model Context Protocol to extend what Rofiant can do."
+          },
+          {
+            "title": "Voice transcription",
+            "desc": "Turn recordings into transcripts and summaries automatically."
+          },
+          {
+            "title": "Unlimited tasks",
+            "desc": "No caps on how much you use Rofiant, subject to fair-use rate limits."
+          }
         ]
       },
       "pro": {
         "name": "Pro",
         "tagline": "For power users",
         "description": "Our most capable models and cloud Agents.",
-        "cta": "Start Pro",
+        "cta": "Get Pro",
         "features": [
-          { "title": "Everything in Free", "desc": "Every Free feature, included." },
-          { "title": "Our most capable models", "desc": "Get responses from GPT OSS 120B and Llama 3.3 70B for complex reasoning and coding tasks." },
-          { "title": "Multi-step Agents", "desc": "Rofiant plans and executes multi-step tasks across your files and apps, pausing for your approval before anything risky." },
-          { "title": "Full API access", "desc": "An OpenAI-compatible API with higher usage limits than Free." }
+          {
+            "title": "Everything in Free",
+            "desc": "Every Free feature, included."
+          },
+          {
+            "title": "Our most capable models",
+            "desc": "Get responses from GPT OSS 120B and Llama 3.3 70B for complex reasoning and coding tasks."
+          },
+          {
+            "title": "Multi-step Agents",
+            "desc": "Rofiant plans and executes multi-step tasks across your files and apps, pausing for your approval before anything risky."
+          },
+          {
+            "title": "Full API access",
+            "desc": "An OpenAI-compatible API with higher usage limits than Free."
+          }
         ]
       },
       "ultra": {
         "name": "Ultra",
         "tagline": "For your heaviest workloads",
         "description": "The highest usage limits, first access to new models, and priority support for individuals and teams who rely on Rofiant every day.",
-        "cta": "Start Ultra",
+        "cta": "Get Ultra",
         "features": [
-          { "title": "Everything in Pro", "desc": "Every Pro feature, included." },
-          { "title": "5x higher usage limits", "desc": "Get usage limits that are 5x higher than Pro." },
-          { "title": "First access to new models", "desc": "Be the first to try new models as we add them." },
-          { "title": "Unlimited knowledge bases", "desc": "Create as many knowledge bases as you need, with no cap." },
-          { "title": "Priority support", "desc": "Get faster responses from our support team." },
-          { "title": "Early access to new features", "desc": "Try new Rofiant features before they roll out to everyone." }
+          {
+            "title": "Everything in Pro",
+            "desc": "Every Pro feature, included."
+          },
+          {
+            "title": "5x higher usage limits",
+            "desc": "Get usage limits that are 5x higher than Pro."
+          },
+          {
+            "title": "First access to new models",
+            "desc": "Be the first to try new models as we add them."
+          },
+          {
+            "title": "Unlimited knowledge bases",
+            "desc": "Create as many knowledge bases as you need, with no cap."
+          },
+          {
+            "title": "Priority support",
+            "desc": "Get faster responses from our support team."
+          },
+          {
+            "title": "Early access to new features",
+            "desc": "Try new Rofiant features before they roll out to everyone."
+          }
         ]
       }
     },
@@ -560,7 +605,7 @@
       "cta": {
         "title": "Ready to put an agent on your machine?",
         "subtitle": "Start free. Give Rofiant its first task in minutes.",
-        "startTrial": "Start free trial",
+        "startTrial": "Try it Now",
         "readDocs": "Read the docs"
       },
       "roadmapNotice": "Available today: create, manage, and run agents with multi-step plan-and-execute reasoning, local file and command tool execution, and approval workflows before anything risky. Clicking and typing inside other apps, and dev-environment setup, are on our roadmap."
@@ -712,7 +757,7 @@
       "cta": {
         "title": "Ready to talk to your computer?",
         "subtitle": "Start free. No credit card required.",
-        "startTrial": "Start free trial",
+        "startTrial": "Try it Now",
         "talkToSales": "Talk to sales"
       }
     }

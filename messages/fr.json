@@ -605,7 +605,7 @@
       "cta": {
         "title": "Prêt à installer un agent sur votre machine ?",
         "subtitle": "Commencez gratuitement. Donnez à Rofiant sa première tâche en quelques minutes.",
-        "startTrial": "Démarrer l'essai gratuit",
+        "startTrial": "Essayez maintenant",
         "readDocs": "Lire la documentation"
       },
       "roadmapNotice": "Disponible aujourd'hui : créer, gérer et exécuter des agents avec un raisonnement de planification et d'exécution en plusieurs étapes, l'exécution d'outils locaux de fichiers et de commandes, et des workflows d'approbation avant toute action risquée. Cliquer et taper dans d'autres applications, ainsi que la configuration d'environnements de développement, sont sur notre feuille de route."
@@ -757,7 +757,7 @@
       "cta": {
         "title": "Prêt à parler à votre ordinateur ?",
         "subtitle": "Commencez gratuitement. Aucune carte de crédit requise.",
-        "startTrial": "Démarrer l'essai gratuit",
+        "startTrial": "Essayez maintenant",
         "talkToSales": "Parler aux ventes"
       }
     }

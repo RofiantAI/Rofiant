@@ -605,7 +605,7 @@
       "cta": {
         "title": "Bereit, einen Agenten auf Ihrem Rechner einzusetzen?",
         "subtitle": "Kostenlos starten. Geben Sie Rofiant in wenigen Minuten seine erste Aufgabe.",
-        "startTrial": "Kostenlose Testversion starten",
+        "startTrial": "Jetzt ausprobieren",
         "readDocs": "Dokumentation lesen"
       },
       "roadmapNotice": "Heute verfügbar: Agenten mit mehrstufigem Plan-und-Ausführ-Reasoning, lokaler Datei- und Befehlsausführung sowie Freigabe-Workflows vor allem Riskanten erstellen, verwalten und ausführen. Klicken und Tippen in anderen Apps sowie die Einrichtung von Entwicklungsumgebungen stehen auf unserer Roadmap."
@@ -757,7 +757,7 @@
       "cta": {
         "title": "Bereit, mit Ihrem Computer zu sprechen?",
         "subtitle": "Kostenlos starten. Keine Kreditkarte erforderlich.",
-        "startTrial": "Kostenlose Testversion starten",
+        "startTrial": "Jetzt ausprobieren",
         "talkToSales": "Vertrieb kontaktieren"
       }
     }

@@ -51,6 +51,16 @@ function formatBytes(bytes: number) {
   return `${mb.toFixed(1)} MB`;
 }
 
+function trackedDownloadUrl(asset: ReleaseAsset, platform: PlatformKey, version: string) {
+  const params = new URLSearchParams({
+    url: asset.browser_download_url,
+    name: asset.name,
+    platform,
+    version,
+  });
+  return `/api/download?${params.toString()}`;
+}
+
 const formatConfig = [
   { match: ".AppImage", icon: Boxes, platform: "linux" as PlatformKey },
   { match: ".deb", icon: Package, platform: "linux" as PlatformKey },
@@ -118,7 +128,7 @@ export default async function DownloadPage() {
                 </p>
               </div>
               <a
-                href={primary.asset.browser_download_url}
+                href={trackedDownloadUrl(primary.asset, primaryPlatform, release.tag_name)}
                 className="inline-flex items-center justify-center gap-2 h-12 px-6 text-base font-medium rounded-lg bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors duration-200 whitespace-nowrap"
               >
                 <Download className="w-4 h-4" />
@@ -169,7 +179,7 @@ export default async function DownloadPage() {
                     {platformAssets.map(({ asset, match, icon: Icon }) => (
                       <a
                         key={match}
-                        href={asset.browser_download_url}
+                        href={trackedDownloadUrl(asset, p, release?.tag_name ?? "")}
                         className="flex items-center gap-2 text-sm text-foreground-secondary hover:text-foreground transition-colors"
                       >
                         <Icon className="w-4 h-4 shrink-0" />

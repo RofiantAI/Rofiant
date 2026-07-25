@@ -605,7 +605,7 @@
       "cta": {
         "title": "¿Listo para poner un agente en tu equipo?",
         "subtitle": "Empieza gratis. Dale a Rofiant su primera tarea en minutos.",
-        "startTrial": "Iniciar prueba gratuita",
+        "startTrial": "Pruébalo ahora",
         "readDocs": "Leer la documentación"
       },
       "roadmapNotice": "Disponible hoy: crear, gestionar y ejecutar agentes con razonamiento de planificación y ejecución en varios pasos, ejecución de herramientas locales de archivos y comandos, y flujos de aprobación antes de cualquier cosa riesgosa. Hacer clic y escribir dentro de otras apps, y la configuración de entornos de desarrollo, están en nuestra hoja de ruta."
@@ -757,7 +757,7 @@
       "cta": {
         "title": "¿Listo para hablar con tu computadora?",
         "subtitle": "Empieza gratis. No se requiere tarjeta de crédito.",
-        "startTrial": "Iniciar prueba gratuita",
+        "startTrial": "Pruébalo ahora",
         "talkToSales": "Hablar con ventas"
       }
     }
