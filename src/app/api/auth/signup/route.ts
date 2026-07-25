@@ -17,29 +17,35 @@ export async function POST(req: NextRequest) {
   const { email, password, name, age, turnstileToken, redirectTo } = await req.json();
 
   if (!email?.trim() || !password || age === undefined || age === null) {
+    console.error("[auth/signup] 400: missing required field(s)");
     return NextResponse.json({ error: "All fields are required" }, { status: 400 });
   }
 
   const parsedAge = Number.parseInt(String(age), 10);
   if (!Number.isFinite(parsedAge) || parsedAge < 1 || parsedAge > 120) {
+    console.error("[auth/signup] 400: invalid age", age);
     return NextResponse.json({ error: "Enter a valid age" }, { status: 400 });
   }
 
   const isMinor = parsedAge < MINOR_AGE_THRESHOLD;
   if (!isMinor && !name?.trim()) {
+    console.error("[auth/signup] 400: missing name for adult signup");
     return NextResponse.json({ error: "All fields are required" }, { status: 400 });
   }
 
   if (password.length < 6) {
+    console.error("[auth/signup] 400: password too short");
     return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
   }
 
   const verified = await verifyTurnstileToken(turnstileToken, ip);
   if (!verified) {
+    console.error("[auth/signup] 400: captcha verification failed");
     return NextResponse.json({ error: "Captcha verification failed" }, { status: 400 });
   }
 
   if (!redirectTo || typeof redirectTo !== "string") {
+    console.error("[auth/signup] 400: missing redirectTo");
     return NextResponse.json({ error: "Missing redirect URL" }, { status: 400 });
   }
 
