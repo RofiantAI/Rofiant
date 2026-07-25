@@ -4,7 +4,6 @@ export type ChatSettings = {
   model: string;
   customInstructions: string;
   contextLimit: number;
-  knowledgeBaseId: string;
   enterToSend: boolean;
   autoTitle: boolean;
   fontSize: "sm" | "md" | "lg";
@@ -43,7 +42,6 @@ export const DEFAULT_SETTINGS: ChatSettings = {
   model: DEFAULT_FREE_MODEL,
   customInstructions: "",
   contextLimit: 20,
-  knowledgeBaseId: "",
   enterToSend: true,
   autoTitle: true,
   fontSize: "md",

@@ -5,7 +5,6 @@ import { ALL_MODELS, DEFAULT_FREE_MODEL, isVisionModel } from "@/lib/chat-settin
 import { PLAN_MODE_INSTRUCTION } from "@/lib/chat-agents";
 import { isMinorUser } from "@/lib/minor-account";
 import { chatRatelimit, enforceRatelimit } from "@/lib/ratelimit";
-import { getKnowledgeBaseContext } from "@/lib/knowledge-base-context";
 import {
   supportsNativeReasoning,
   reasoningEffortFor,
@@ -18,21 +17,6 @@ const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 const ALLOWED_MODELS = new Set(ALL_MODELS.map((m) => m.id));
 
 const FREE_TIER_DAILY_MESSAGE_LIMIT = 100;
-
-function lastUserText(messages: unknown[]): string {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const m = messages[i] as {
-      role?: string;
-      content?: string;
-      parts?: { type: string; text?: string }[];
-    };
-    if (m.role !== "user") continue;
-    if (typeof m.content === "string") return m.content;
-    const part = m.parts?.find((p) => p.type === "text");
-    if (part?.text) return part.text;
-  }
-  return "";
-}
 
 export async function POST(req: Request) {
   const supabase = await createClient();
@@ -79,7 +63,6 @@ export async function POST(req: Request) {
     customInstructions,
     contextLimit,
     documentContents,
-    knowledgeBaseId,
     image,
     mode,
     agentSystemPrompt,
@@ -129,20 +112,6 @@ export async function POST(req: Request) {
   }
   if (typeof rulesPrompt === "string" && rulesPrompt.trim()) {
     systemParts.push(rulesPrompt.trim());
-  }
-
-  if (typeof knowledgeBaseId === "string" && knowledgeBaseId) {
-    const query = lastUserText(trimmedMessages);
-    const kbContext = await getKnowledgeBaseContext(user.id, knowledgeBaseId, query || "overview");
-    if (kbContext.length > 0) {
-      const kbText = kbContext
-        .map((doc) => `--- ${doc.name} ---\n${doc.excerpts.join("\n\n")}`)
-        .join("\n\n");
-      systemParts.push(
-        "Relevant excerpts from the user's knowledge base. Cite document names when using this information:\n\n" +
-          kbText,
-      );
-    }
   }
 
   // Inject pre-fetched document contents

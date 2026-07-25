@@ -127,12 +127,6 @@
     "title": "Chat AI",
     "subtitle": "IA conversacional entrenada con tus documentos",
     "newChat": "Nuevo chat",
-    "knowledgeBases": {
-      "heading": "Bases de conocimiento",
-      "documentCount": "{count} documentos",
-      "defaultName": "Predeterminada",
-      "statusActive": "Activa"
-    },
     "conversation": {
       "heading": "Nueva conversación",
       "startTitle": "Inicia una conversación",
@@ -209,59 +203,6 @@
       "heading": "Transcripciones recientes",
       "loading": "Cargando…",
       "empty": "Aún no hay transcripciones. Sube tu primer archivo de audio para empezar."
-    }
-  },
-  "knowledgeBases": {
-    "title": "Bases de conocimiento",
-    "subtitle": "Colecciones con nombre de documentos que la IA usa como contexto persistente en el chat.",
-    "usedCount": "({used}/{limit} usadas)",
-    "newKnowledgeBase": "Nueva base de conocimiento",
-    "planLimitError": "Tu plan permite hasta {limit} base{plural} de conocimiento. Actualiza tu plan para crear más.",
-    "viewPlans": "Ver planes →",
-    "createForm": {
-      "heading": "Nueva base de conocimiento",
-      "nameLabel": "Nombre",
-      "namePlaceholder": "p. ej., Documentos de políticas FY2026",
-      "descriptionLabel": "Descripción (opcional)",
-      "descriptionPlaceholder": "¿Qué documentos pertenecen aquí?",
-      "create": "Crear",
-      "cancel": "Cancelar"
-    },
-    "loading": "Cargando…",
-    "empty": {
-      "heading": "Aún no hay bases de conocimiento",
-      "description": "Crea una y añade documentos para darle a la IA contexto persistente entre chats.",
-      "upgradeCta": "Actualiza tu plan para crear bases de conocimiento →",
-      "createCta": "Crea tu primera base de conocimiento →"
-    },
-    "list": {
-      "docCount": "{count} documento{plural}",
-      "manage": "Administrar"
-    },
-    "deleteConfirm": "¿Eliminar esta base de conocimiento? Esta acción no se puede deshacer.",
-    "detail": {
-      "back": "Bases de conocimiento",
-      "addDocument": "Añadir documento",
-      "loading": "Cargando…",
-      "notFound": "Base de conocimiento no encontrada.",
-      "backLink": "← Volver",
-      "addDocForm": {
-        "heading": "Añadir documento a la base de conocimiento",
-        "noDocsUploaded": "Aún no se han subido documentos.",
-        "uploadLink": "Sube un documento →",
-        "allDocsAdded": "Todos tus documentos ya están en esta base de conocimiento.",
-        "adding": "Añadiendo…",
-        "add": "Añadir"
-      },
-      "empty": {
-        "heading": "Aún no hay documentos",
-        "description": "Añade documentos de tu biblioteca para incluirlos como contexto de la IA.",
-        "cta": "Añade tu primer documento →"
-      },
-      "addedOn": "Añadido el {date}",
-      "footerSummary": "{count} documento{plural} · Última actualización {date}",
-      "removeConfirm": "¿Quitar este documento de la base de conocimiento?",
-      "failedToAdd": "Error al añadir"
     }
   }
 }

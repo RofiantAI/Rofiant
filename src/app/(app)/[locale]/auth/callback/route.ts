@@ -32,6 +32,17 @@ export async function GET(request: Request) {
 
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const refFrom = cookieStore.get("rf_ref")?.value;
+      if (refFrom && data.user && refFrom !== data.user.id) {
+        // Best-effort, error ignored: RLS lets a user insert only their own
+        // referred_id row, and the UNIQUE constraint makes this a no-op on
+        // repeat logins/OAuth re-auth (already-attributed users just conflict).
+        await supabase
+          .from("referrals")
+          .insert({ referrer_id: refFrom, referred_id: data.user.id });
+        cookieStore.delete("rf_ref");
+      }
+
       // Desktop app: hand the session back via the custom URL scheme instead
       // of the cookie session above (that cookie is set on this domain and
       // is useless to the native app). Tokens ride in the fragment, not the

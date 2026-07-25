@@ -109,7 +109,7 @@
         "security": {
           "label": "Your control",
           "strong": "You choose what's cloud and what's not.",
-          "text": "File edits, commands, and screenshots run on your machine. Knowledge bases, Agents, voice, and document search are optional cloud features you turn on when you need them. We never use your data to train a model."
+          "text": "File edits, commands, and screenshots run on your machine. Agents, voice, and document search are optional cloud features you turn on when you need them. We never use your data to train a model."
         },
         "control": {
           "label": "Remembers",
@@ -250,7 +250,6 @@
         "features": [
           "5x higher usage limits",
           "First access to new models",
-          "Unlimited knowledge bases",
           "Priority support",
           "Early access to new features"
         ],
@@ -342,8 +341,8 @@
       "title": "About Rofiant",
       "badge": "COMPANY",
       "subtitle": "We're building an AI agent that actually gets things done.",
-      "intro1": "Rofiant is an AI agent: it organizes files, edits them, and runs repetitive tasks on your computer, plus optional cloud features like knowledge bases and Agents, controlled entirely in plain English.",
-      "intro2": "Privacy and reliability matter for a tool that touches your personal files. Rofiant's file, command, and screenshot tools run on your machine. Chat replies use hosted models unless you configure a local Ollama model, and Pro/Ultra cloud features (knowledge bases, documents, voice, Agents, API) sync to your account so you can use them from the web dashboard too.",
+      "intro1": "Rofiant is an AI agent: it organizes files, edits them, and runs repetitive tasks on your computer, plus optional cloud features like Agents, controlled entirely in plain English.",
+      "intro2": "Privacy and reliability matter for a tool that touches your personal files. Rofiant's file, command, and screenshot tools run on your machine. Chat replies use hosted models unless you configure a local Ollama model, and Pro/Ultra cloud features (documents, voice, Agents, API) sync to your account so you can use them from the web dashboard too.",
       "intro3": "We're starting with file organization and search on Linux, with dev-environment setup and cross-platform support next.",
       "values": {
         "missionFirst": {
@@ -464,7 +463,7 @@
         },
         "dataResidency": {
           "title": "You choose what leaves your machine",
-          "desc": "The desktop app's file tools don't upload your files anywhere. If you use a Pro or Ultra cloud feature, like document upload, voice transcription, or a knowledge base, that specific file or recording is sent to our cloud infrastructure to process it."
+          "desc": "The desktop app's file tools don't upload your files anywhere. If you use a Pro or Ultra cloud feature, like document upload or voice transcription, that specific file or recording is sent to our cloud infrastructure to process it."
         },
         "incidentResponse": {
           "title": "Incident response",
@@ -934,7 +933,7 @@
           "intro": "We collect the categories of information below depending on how you use the Services:",
           "items": {
             "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
-            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, knowledge base entries, and metadata associated with those records (timestamps, model identifiers, token counts).",
+            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
             "documents": "Screen and file data: documents, PDFs, files, and on-screen content Rofiant accesses on your machine to complete tasks, including extracted text and indexing metadata.",
             "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
@@ -1130,7 +1129,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, knowledge bases, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on a commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {

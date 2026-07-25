@@ -212,9 +212,6 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
   const [exportStatus, setExportStatus] = useState<
     "idle" | "exporting" | "done"
   >("idle");
-  const [knowledgeBases, setKnowledgeBases] = useState<
-    { id: string; name: string }[]
-  >([]);
   const [rules, setRules] = useState<Rule[]>(() => loadRules());
   const [newRuleText, setNewRuleText] = useState("");
   const [agents, setAgents] = useState<Agent[]>(() => loadAgents());
@@ -261,22 +258,6 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
     saveAgents(next);
     if (draft.activeAgentId === id) patch({ activeAgentId: null });
   }
-
-  useEffect(() => {
-    fetch("/api/knowledge-bases")
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setKnowledgeBases(
-            data.map((kb: { id: string; name: string }) => ({
-              id: kb.id,
-              name: kb.name,
-            })),
-          );
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -463,24 +444,6 @@ export function ChatSettingsModal({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <SettingsList>
-                  <Row
-                    label="Knowledge base"
-                    desc="Include saved notes and docs in responses"
-                  >
-                    <SelectField
-                      value={draft.knowledgeBaseId}
-                      onChange={(v) => patch({ knowledgeBaseId: v })}
-                      className="max-w-[180px]"
-                    >
-                      <option value="">None</option>
-                      {knowledgeBases.map((kb) => (
-                        <option key={kb.id} value={kb.id}>
-                          {kb.name}
-                        </option>
-                      ))}
-                    </SelectField>
-                  </Row>
-
                   <Row
                     label="Context limit"
                     desc="Previous messages sent with each request"

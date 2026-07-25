@@ -109,7 +109,7 @@
         "security": {
           "label": "Tu control",
           "strong": "Tú eliges qué es en la nube y qué no.",
-          "text": "Las ediciones de archivos, los comandos y las capturas de pantalla se ejecutan en tu equipo. Las bases de conocimiento, los Agents, la voz y la búsqueda de documentos son funciones opcionales en la nube que activas cuando las necesitas. Nunca usamos tus datos para entrenar un modelo."
+          "text": "Las ediciones de archivos, los comandos y las capturas de pantalla se ejecutan en tu equipo. Los Agents, la voz y la búsqueda de documentos son funciones opcionales en la nube que activas cuando las necesitas. Nunca usamos tus datos para entrenar un modelo."
         },
         "control": {
           "label": "Recuerda",
@@ -250,7 +250,6 @@
         "features": [
           "Límites de uso 5 veces más altos",
           "Acceso prioritario a los modelos nuevos",
-          "Bases de conocimiento ilimitadas",
           "Soporte prioritario",
           "Acceso anticipado a nuevas funciones"
         ],
@@ -342,8 +341,8 @@
       "title": "Acerca de Rofiant",
       "badge": "EMPRESA",
       "subtitle": "Estamos construyendo un agente de IA que realmente hace las cosas.",
-      "intro1": "Rofiant es un agente de IA: organiza archivos, los edita y ejecuta tareas repetitivas en tu equipo, además de funciones opcionales en la nube como bases de conocimiento y Agents, todo controlado en lenguaje sencillo.",
-      "intro2": "La privacidad y la fiabilidad importan en una herramienta que toca tus archivos personales. Las herramientas de archivos, comandos y capturas de pantalla de Rofiant se ejecutan en tu equipo. Las respuestas del chat usan modelos alojados a menos que configures un modelo local de Ollama, y las funciones en la nube de Pro/Ultra (bases de conocimiento, documentos, voz, Agents, API) se sincronizan con tu cuenta para que también puedas usarlas desde el panel web.",
+      "intro1": "Rofiant es un agente de IA: organiza archivos, los edita y ejecuta tareas repetitivas en tu equipo, además de funciones opcionales en la nube como Agents, todo controlado en lenguaje sencillo.",
+      "intro2": "La privacidad y la fiabilidad importan en una herramienta que toca tus archivos personales. Las herramientas de archivos, comandos y capturas de pantalla de Rofiant se ejecutan en tu equipo. Las respuestas del chat usan modelos alojados a menos que configures un modelo local de Ollama, y las funciones en la nube de Pro/Ultra (documentos, voz, Agents, API) se sincronizan con tu cuenta para que también puedas usarlas desde el panel web.",
       "intro3": "Empezamos con la organización y búsqueda de archivos en Linux; a continuación llegarán la configuración de entornos de desarrollo y el soporte multiplataforma.",
       "values": {
         "missionFirst": {
@@ -464,7 +463,7 @@
         },
         "dataResidency": {
           "title": "Tú eliges qué sale de tu equipo",
-          "desc": "Las herramientas de archivos de la app de escritorio no suben tus archivos a ningún sitio. Si usas una función en la nube de Pro o Ultra, como la subida de documentos, la transcripción de voz o una base de conocimiento, ese archivo o grabación específico se envía a nuestra infraestructura en la nube para procesarlo."
+          "desc": "Las herramientas de archivos de la app de escritorio no suben tus archivos a ningún sitio. Si usas una función en la nube de Pro o Ultra, como la subida de documentos o la transcripción de voz, ese archivo o grabación específico se envía a nuestra infraestructura en la nube para procesarlo."
         },
         "incidentResponse": {
           "title": "Respuesta a incidentes",
@@ -738,7 +737,7 @@
           "intro": "We collect the categories of information below depending on how you use the Services:",
           "items": {
             "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
-            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, knowledge base entries, and metadata associated with those records (timestamps, model identifiers, token counts).",
+            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
             "documents": "Datos de pantalla y archivos: documentos, PDFs, archivos y contenido en pantalla a los que Rofiant accede en tu equipo para completar tareas, incluido el texto extraído y los metadatos de indexación.",
             "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
@@ -934,7 +933,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, knowledge bases, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {

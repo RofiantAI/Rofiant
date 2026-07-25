@@ -109,7 +109,7 @@ export async function startAgentPipeline({
   const planResult = await generateText({
     model: groq(MODEL),
     system: agentInstructions(agentName, agentDescription),
-    prompt: `Task:\n${resolvedTask}\n\nCreate a numbered 3-5 step execution plan. Be specific about which documents or knowledge bases to inspect. Output only the plan.`,
+    prompt: `Task:\n${resolvedTask}\n\nCreate a numbered 3-5 step execution plan. Be specific about which documents to inspect. Output only the plan.`,
   });
   inputTokens += planResult.usage.inputTokens ?? 0;
   outputTokens += planResult.usage.outputTokens ?? 0;
@@ -128,7 +128,7 @@ export async function startAgentPipeline({
     stopWhen: isStepCount(8),
     instructions: [
       agentInstructions(agentName, agentDescription),
-      "Search phase only. Use tools to find relevant documents and knowledge base excerpts.",
+      "Search phase only. Use tools to find relevant documents.",
       `Task: ${resolvedTask}`,
       `Plan:\n${planResult.text}`,
       "Do not produce the final answer yet — only gather search results.",

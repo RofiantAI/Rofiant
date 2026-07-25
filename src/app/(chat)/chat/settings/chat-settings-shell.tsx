@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft, Home, Settings2, Sparkles, MoreHorizontal, LogOut,
-  CreditCard, ExternalLink,
+  CreditCard, ExternalLink, Gift, Check, Copy,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { routing } from "@/i18n/routing";
@@ -30,6 +30,52 @@ const PLAN_META: Record<string, { label: string; tagline: string; price: number 
 
 const PLAN_RANK: Record<string, number> = { free: 0, pro: 1, ultra: 2 };
 const TIER_ORDER = ["free", "pro", "ultra"] as const;
+
+const MARKETING_ORIGIN =
+  process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://www.rofiant.ca";
+
+function InviteFriendsCard({ userId, referralCount }: { userId: string; referralCount: number }) {
+  const [copied, setCopied] = useState(false);
+  const inviteLink = `${MARKETING_ORIGIN}/en/auth/signup?ref=${userId}`;
+
+  async function handleCopy() {
+    await navigator.clipboard.writeText(inviteLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <DashboardCard>
+      <div className="flex items-center gap-2 mb-1">
+        <Gift className="w-4 h-4 text-foreground-muted" />
+        <span className="text-sm font-medium text-foreground">Invite friends</span>
+      </div>
+      <p className="text-sm text-foreground-secondary mb-4">
+        Share your link. {referralCount > 0 && (
+          <span className="text-foreground-secondary">
+            {referralCount} {referralCount === 1 ? "person has" : "people have"} joined so far.
+          </span>
+        )}
+      </p>
+      <div className="flex items-center gap-2">
+        <input
+          readOnly
+          value={inviteLink}
+          onFocus={(e) => e.currentTarget.select()}
+          className="flex-1 min-w-0 h-9 px-3 text-xs font-mono text-foreground-secondary bg-background-tertiary border border-border rounded-lg truncate"
+        />
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="inline-flex items-center gap-1.5 h-9 px-3 text-sm font-medium border border-border rounded-lg text-foreground hover:bg-background-tertiary transition-colors shrink-0"
+        >
+          {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? "Copied" : "Copy"}
+        </button>
+      </div>
+    </DashboardCard>
+  );
+}
 
 function ManagePlanTab({ plan }: { plan: string }) {
   const [portalLoading, setPortalLoading] = useState(false);
@@ -151,6 +197,7 @@ export function ChatSettingsShell({
   chartData,
   sourceBreakdown,
   modelRows,
+  referralCount,
   settingsProps,
 }: {
   displayName: string;
@@ -160,6 +207,7 @@ export function ChatSettingsShell({
   chartData: UsageDayPoint[];
   sourceBreakdown: SourceBreakdown[];
   modelRows: ModelUsageRow[];
+  referralCount: number;
   settingsProps: {
     email: string;
     userId: string;
@@ -319,6 +367,8 @@ export function ChatSettingsShell({
                 )}
               </DashboardCard>
             </div>
+
+            <InviteFriendsCard userId={settingsProps.userId} referralCount={referralCount} />
 
             <UsageAnalytics
               chartData={chartData}

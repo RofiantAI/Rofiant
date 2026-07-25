@@ -5,18 +5,18 @@ import { routing } from "@/i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-// Knowledge base / document routes are also called cross-origin by the
-// desktop app (Bearer-token auth, no cookies — see getAuthedUser in
-// src/lib/api-auth.ts), so they need CORS headers the browser dashboard's
-// same-origin requests never required.
+// Document routes are also called cross-origin by the desktop app
+// (Bearer-token auth, no cookies — see getAuthedUser in src/lib/api-auth.ts),
+// so they need CORS headers the browser dashboard's same-origin requests
+// never required.
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Authorization, Content-Type",
 };
 
-function isKbOrDocsApiPath(pathname: string) {
-  return /^\/api\/(knowledge-bases|documents)(\/|$)/.test(pathname);
+function isDocsApiPath(pathname: string) {
+  return /^\/api\/documents(\/|$)/.test(pathname);
 }
 
 // Top-level segments that live under (app)/[locale] — used to decide whether
@@ -57,7 +57,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get("host") ?? "";
 
-  if (isKbOrDocsApiPath(pathname) && request.method === "OPTIONS") {
+  if (isDocsApiPath(pathname) && request.method === "OPTIONS") {
     return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
   }
 
@@ -193,10 +193,23 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/chat", request.url));
   }
 
-  if (isKbOrDocsApiPath(pathname)) {
+  if (isDocsApiPath(pathname)) {
     for (const [key, value] of Object.entries(CORS_HEADERS)) {
       response.headers.set(key, value);
     }
+  }
+
+  // Referral attribution: a shared invite link is /<locale>/auth/signup?ref=<referrer-user-id>.
+  // Stash it in a cookie so /auth/callback can credit the referral once the
+  // new account actually gets a session (works for both email and OAuth signup).
+  const refParam = request.nextUrl.searchParams.get("ref");
+  if (refParam && stripLocalePrefix(effectivePathname) === "/auth/signup") {
+    response.cookies.set("rf_ref", refParam, {
+      maxAge: 60 * 60 * 24 * 30,
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    });
   }
 
   return response;

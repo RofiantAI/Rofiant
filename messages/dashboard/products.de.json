@@ -127,12 +127,6 @@
     "title": "Chat AI",
     "subtitle": "Konversations-KI, trainiert mit Ihren Dokumenten",
     "newChat": "Neuer Chat",
-    "knowledgeBases": {
-      "heading": "Wissensdatenbanken",
-      "documentCount": "{count} Dokumente",
-      "defaultName": "Standard",
-      "statusActive": "Aktiv"
-    },
     "conversation": {
       "heading": "Neue Unterhaltung",
       "startTitle": "Unterhaltung starten",
@@ -209,59 +203,6 @@
       "heading": "Neueste Transkriptionen",
       "loading": "Wird geladen…",
       "empty": "Noch keine Transkriptionen vorhanden. Laden Sie Ihre erste Audiodatei hoch, um zu beginnen."
-    }
-  },
-  "knowledgeBases": {
-    "title": "Wissensdatenbanken",
-    "subtitle": "Benannte Dokumentsammlungen, die die KI als dauerhaften Kontext im Chat verwendet.",
-    "usedCount": "({used}/{limit} verwendet)",
-    "newKnowledgeBase": "Neue Wissensdatenbank",
-    "planLimitError": "Ihr Plan erlaubt bis zu {limit} Wissensdatenbank{plural}. Upgraden Sie, um mehr zu erstellen.",
-    "viewPlans": "Pläne ansehen →",
-    "createForm": {
-      "heading": "Neue Wissensdatenbank",
-      "nameLabel": "Name",
-      "namePlaceholder": "z. B. Richtliniendokumente GJ2026",
-      "descriptionLabel": "Beschreibung (optional)",
-      "descriptionPlaceholder": "Welche Dokumente gehören hierher?",
-      "create": "Erstellen",
-      "cancel": "Abbrechen"
-    },
-    "loading": "Wird geladen…",
-    "empty": {
-      "heading": "Noch keine Wissensdatenbanken vorhanden",
-      "description": "Erstellen Sie eine und fügen Sie Dokumente hinzu, um der KI dauerhaften Kontext über Chats hinweg zu geben.",
-      "upgradeCta": "Upgraden Sie Ihren Plan, um Wissensdatenbanken zu erstellen →",
-      "createCta": "Erstellen Sie Ihre erste Wissensdatenbank →"
-    },
-    "list": {
-      "docCount": "{count} Dokument{plural}",
-      "manage": "Verwalten"
-    },
-    "deleteConfirm": "Diese Wissensdatenbank löschen? Dies kann nicht rückgängig gemacht werden.",
-    "detail": {
-      "back": "Wissensdatenbanken",
-      "addDocument": "Dokument hinzufügen",
-      "loading": "Wird geladen…",
-      "notFound": "Wissensdatenbank nicht gefunden.",
-      "backLink": "← Zurück",
-      "addDocForm": {
-        "heading": "Dokument zur Wissensdatenbank hinzufügen",
-        "noDocsUploaded": "Noch keine Dokumente hochgeladen.",
-        "uploadLink": "Dokument hochladen →",
-        "allDocsAdded": "Alle Ihre Dokumente befinden sich bereits in dieser Wissensdatenbank.",
-        "adding": "Wird hinzugefügt…",
-        "add": "Hinzufügen"
-      },
-      "empty": {
-        "heading": "Noch keine Dokumente vorhanden",
-        "description": "Fügen Sie Dokumente aus Ihrer Bibliothek hinzu, um sie als KI-Kontext einzubeziehen.",
-        "cta": "Fügen Sie Ihr erstes Dokument hinzu →"
-      },
-      "addedOn": "Hinzugefügt am {date}",
-      "footerSummary": "{count} Dokument{plural} · Zuletzt aktualisiert am {date}",
-      "removeConfirm": "Dieses Dokument aus der Wissensdatenbank entfernen?",
-      "failedToAdd": "Hinzufügen fehlgeschlagen"
     }
   }
 }

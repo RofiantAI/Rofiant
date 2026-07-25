@@ -109,7 +109,7 @@
         "security": {
           "label": "Deine Kontrolle",
           "strong": "Du entscheidest, was Cloud ist und was nicht.",
-          "text": "Dateibearbeitungen, Befehle und Screenshots laufen auf deinem Rechner. Wissensdatenbanken, Agenten, Sprache und Dokumentensuche sind optionale Cloud-Funktionen, die du bei Bedarf aktivierst. Wir nutzen deine Daten nie, um ein Modell zu trainieren."
+          "text": "Dateibearbeitungen, Befehle und Screenshots laufen auf deinem Rechner. Agenten, Sprache und Dokumentensuche sind optionale Cloud-Funktionen, die du bei Bedarf aktivierst. Wir nutzen deine Daten nie, um ein Modell zu trainieren."
         },
         "control": {
           "label": "Merkt sich alles",
@@ -250,7 +250,6 @@
         "features": [
           "5x höhere Nutzungslimits",
           "Erster Zugang zu neuen Modellen",
-          "Unbegrenzte Wissensdatenbanken",
           "Priorisierter Support",
           "Früher Zugang zu neuen Funktionen"
         ],
@@ -342,8 +341,8 @@
       "title": "Über Rofiant",
       "badge": "UNTERNEHMEN",
       "subtitle": "Wir entwickeln einen KI-Agenten, der wirklich etwas erledigt.",
-      "intro1": "Rofiant ist ein KI-Agent: Er organisiert Dateien, bearbeitet sie und erledigt wiederkehrende Aufgaben auf Ihrem Computer, dazu optionale Cloud-Funktionen wie Wissensdatenbanken und Agenten, gesteuert ganz in einfacher Sprache.",
-      "intro2": "Privatsphäre und Zuverlässigkeit zählen bei einem Tool, das Ihre persönlichen Dateien anfasst. Die Datei-, Befehls- und Screenshot-Tools von Rofiant laufen auf Ihrem Rechner. Chat-Antworten nutzen gehostete Modelle, sofern Sie kein lokales Ollama-Modell konfigurieren, und Pro/Ultra-Cloud-Funktionen (Wissensdatenbanken, Dokumente, Sprache, Agenten, API) synchronisieren sich mit Ihrem Konto, sodass Sie sie auch über das Web-Dashboard nutzen können.",
+      "intro1": "Rofiant ist ein KI-Agent: Er organisiert Dateien, bearbeitet sie und erledigt wiederkehrende Aufgaben auf Ihrem Computer, dazu optionale Cloud-Funktionen wie Agenten, gesteuert ganz in einfacher Sprache.",
+      "intro2": "Privatsphäre und Zuverlässigkeit zählen bei einem Tool, das Ihre persönlichen Dateien anfasst. Die Datei-, Befehls- und Screenshot-Tools von Rofiant laufen auf Ihrem Rechner. Chat-Antworten nutzen gehostete Modelle, sofern Sie kein lokales Ollama-Modell konfigurieren, und Pro/Ultra-Cloud-Funktionen (Dokumente, Sprache, Agenten, API) synchronisieren sich mit Ihrem Konto, sodass Sie sie auch über das Web-Dashboard nutzen können.",
       "intro3": "Wir starten mit Dateiorganisation und -suche unter Linux, gefolgt von Dev-Umgebungs-Einrichtung und plattformübergreifender Unterstützung.",
       "values": {
         "missionFirst": {
@@ -464,7 +463,7 @@
         },
         "dataResidency": {
           "title": "Sie entscheiden, was Ihren Rechner verlässt",
-          "desc": "Die Datei-Tools der Desktop-App laden Ihre Dateien nirgendwohin hoch. Wenn Sie eine Pro- oder Ultra-Cloud-Funktion nutzen, etwa Dokumenten-Upload, Sprachtranskription oder eine Wissensdatenbank, wird genau diese Datei oder Aufnahme zur Verarbeitung an unsere Cloud-Infrastruktur gesendet."
+          "desc": "Die Datei-Tools der Desktop-App laden Ihre Dateien nirgendwohin hoch. Wenn Sie eine Pro- oder Ultra-Cloud-Funktion nutzen, etwa Dokumenten-Upload oder Sprachtranskription, wird genau diese Datei oder Aufnahme zur Verarbeitung an unsere Cloud-Infrastruktur gesendet."
         },
         "incidentResponse": {
           "title": "Incident Response",
@@ -738,7 +737,7 @@
           "intro": "We collect the categories of information below depending on how you use the Services:",
           "items": {
             "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
-            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, knowledge base entries, and metadata associated with those records (timestamps, model identifiers, token counts).",
+            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
             "documents": "Bildschirm- und Dateidaten: Dokumente, PDFs, Dateien und Bildschirminhalte, auf die Rofiant auf Ihrem Rechner zugreift, um Aufgaben zu erledigen, einschließlich extrahiertem Text und Indexierungsmetadaten.",
             "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
@@ -934,7 +933,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, knowledge bases, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {

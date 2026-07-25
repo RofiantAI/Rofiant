@@ -8,8 +8,8 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
   title: "Chat AI",
-  description: "Conversational AI for your files, with document search, permission gates, and custom knowledge bases on Pro and Ultra.",
-  openGraph: { title: "Chat AI — Rofiant", description: "Conversational AI for your files, with document search, permission gates, and custom knowledge bases on Pro and Ultra." },
+  description: "Conversational AI for your files, with document search and permission gates.",
+  openGraph: { title: "Chat AI — Rofiant", description: "Conversational AI for your files, with document search and permission gates." },
   alternates: localeAlternates(locale, "/platform/chat-ai"),
   };
 }

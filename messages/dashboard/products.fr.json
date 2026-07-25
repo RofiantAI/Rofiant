@@ -127,12 +127,6 @@
     "title": "Chat AI",
     "subtitle": "IA conversationnelle entraînée sur vos documents",
     "newChat": "Nouvelle conversation",
-    "knowledgeBases": {
-      "heading": "Bases de connaissances",
-      "documentCount": "{count} documents",
-      "defaultName": "Par défaut",
-      "statusActive": "Active"
-    },
     "conversation": {
       "heading": "Nouvelle conversation",
       "startTitle": "Démarrer une conversation",
@@ -209,59 +203,6 @@
       "heading": "Transcriptions récentes",
       "loading": "Chargement…",
       "empty": "Aucune transcription pour le moment. Téléchargez votre premier fichier audio pour commencer."
-    }
-  },
-  "knowledgeBases": {
-    "title": "Bases de connaissances",
-    "subtitle": "Collections nommées de documents que l'IA utilise comme contexte persistant dans le chat.",
-    "usedCount": "({used}/{limit} utilisées)",
-    "newKnowledgeBase": "Nouvelle base de connaissances",
-    "planLimitError": "Votre forfait autorise jusqu'à {limit} base{plural} de connaissances. Passez à un forfait supérieur pour en créer davantage.",
-    "viewPlans": "Voir les forfaits →",
-    "createForm": {
-      "heading": "Nouvelle base de connaissances",
-      "nameLabel": "Nom",
-      "namePlaceholder": "p. ex. Documents de politiques FY2026",
-      "descriptionLabel": "Description (facultatif)",
-      "descriptionPlaceholder": "Quels documents appartiennent ici ?",
-      "create": "Créer",
-      "cancel": "Annuler"
-    },
-    "loading": "Chargement…",
-    "empty": {
-      "heading": "Aucune base de connaissances pour le moment",
-      "description": "Créez-en une et ajoutez des documents pour donner à l'IA un contexte persistant entre les conversations.",
-      "upgradeCta": "Passez à un forfait supérieur pour créer des bases de connaissances →",
-      "createCta": "Créez votre première base de connaissances →"
-    },
-    "list": {
-      "docCount": "{count} document{plural}",
-      "manage": "Gérer"
-    },
-    "deleteConfirm": "Supprimer cette base de connaissances ? Cette action est irréversible.",
-    "detail": {
-      "back": "Bases de connaissances",
-      "addDocument": "Ajouter un document",
-      "loading": "Chargement…",
-      "notFound": "Base de connaissances introuvable.",
-      "backLink": "← Retour",
-      "addDocForm": {
-        "heading": "Ajouter un document à la base de connaissances",
-        "noDocsUploaded": "Aucun document téléchargé pour le moment.",
-        "uploadLink": "Téléchargez un document →",
-        "allDocsAdded": "Tous vos documents figurent déjà dans cette base de connaissances.",
-        "adding": "Ajout…",
-        "add": "Ajouter"
-      },
-      "empty": {
-        "heading": "Aucun document pour le moment",
-        "description": "Ajoutez des documents depuis votre bibliothèque pour les inclure comme contexte pour l'IA.",
-        "cta": "Ajoutez votre premier document →"
-      },
-      "addedOn": "Ajouté le {date}",
-      "footerSummary": "{count} document{plural} · Dernière mise à jour {date}",
-      "removeConfirm": "Retirer ce document de la base de connaissances ?",
-      "failedToAdd": "Échec de l'ajout"
     }
   }
 }

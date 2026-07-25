@@ -9,7 +9,6 @@ export const PRODUCT_TOOLS = [
   "workflows",
   "security",
   "apiKeys",
-  "knowledgeBases",
   "orgHub",
   "intelFeed",
 ] as const;
@@ -23,7 +22,6 @@ const PRO_TOOLS: ProductTool[] = [
   "voice",
   "agents",
   "apiKeys",
-  "knowledgeBases",
 ];
 
 const ULTRA_TOOLS: ProductTool[] = [
@@ -48,17 +46,9 @@ export const TOOL_MIN_PLAN: Record<ProductTool, PlanId> = {
   voice: "pro",
   agents: "pro",
   apiKeys: "pro",
-  knowledgeBases: "pro",
   workflows: "ultra",
   orgHub: "ultra",
   intelFeed: "ultra",
-};
-
-/** Knowledge base count limits per plan. */
-export const KB_LIMITS: Record<PlanId, number> = {
-  free: 0,
-  pro: 1,
-  ultra: Infinity,
 };
 
 export function normalizePlan(plan: string | undefined | null): PlanId {
@@ -69,10 +59,6 @@ export function normalizePlan(plan: string | undefined | null): PlanId {
 
 export function canAccessTool(plan: string, tool: ProductTool): boolean {
   return PLAN_TOOLS[normalizePlan(plan)].includes(tool);
-}
-
-export function kbLimitForPlan(plan: string): number {
-  return KB_LIMITS[normalizePlan(plan)] ?? 0;
 }
 
 export function upgradeTargetForTool(tool: ProductTool): { plan: PlanId; href: string } {

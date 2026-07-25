@@ -27,6 +27,11 @@ export default async function Page() {
     locale,
   );
 
+  const { count: referralCount } = await supabase
+    .from("referrals")
+    .select("id", { count: "exact", head: true })
+    .eq("referrer_id", user.id);
+
   return (
     <div className="h-full min-h-0">
       <ChatSettingsShell
@@ -37,6 +42,7 @@ export default async function Page() {
         chartData={chartData}
         sourceBreakdown={sourceBreakdown}
         modelRows={modelRows}
+        referralCount={referralCount ?? 0}
         settingsProps={{
           email: user.email ?? "",
           userId: user.id,

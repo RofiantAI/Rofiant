@@ -2,7 +2,6 @@ import { tool } from "ai";
 import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { searchText, truncateText } from "@/lib/document-text";
-import { getKnowledgeBaseContext } from "@/lib/knowledge-base-context";
 
 const READ_DOC_MAX_CHARS = 12_000;
 
@@ -52,33 +51,6 @@ export function createSearchTools(supabase: SupabaseClient, userId: string) {
           .slice(0, limit);
 
         return { query, results };
-      },
-    }),
-
-    list_knowledge_bases: tool({
-      description: "List knowledge bases the user can search.",
-      inputSchema: z.object({}),
-      execute: async () => {
-        const { data, error } = await supabase
-          .from("knowledge_bases")
-          .select("id, name, description, created_at")
-          .eq("owner_id", userId)
-          .order("created_at", { ascending: false });
-
-        if (error) return { error: error.message, knowledge_bases: [] as const };
-        return { knowledge_bases: data ?? [] };
-      },
-    }),
-
-    search_knowledge_base: tool({
-      description: "Search a knowledge base for relevant document excerpts.",
-      inputSchema: z.object({
-        knowledge_base_id: z.string().uuid(),
-        query: z.string().min(1),
-      }),
-      execute: async ({ knowledge_base_id, query }) => {
-        const results = await getKnowledgeBaseContext(userId, knowledge_base_id, query);
-        return { knowledge_base_id, query, results };
       },
     }),
   };

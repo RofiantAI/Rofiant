@@ -167,7 +167,7 @@ function DocsMockup() {
 
 const PIPELINE_STEPS = [
   "1. Receive query",
-  "2. Search knowledge base",
+  "2. Search documents",
   "3. Cross-reference data",
   "4. Generate summary",
   "5. Return response",

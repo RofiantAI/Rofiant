@@ -109,7 +109,7 @@
         "security": {
           "label": "Votre contrôle",
           "strong": "Vous choisissez ce qui est cloud et ce qui ne l'est pas.",
-          "text": "Les modifications de fichiers, les commandes et les captures d'écran s'exécutent sur votre machine. Les bases de connaissances, les Agents, la voix et la recherche de documents sont des fonctionnalités cloud facultatives que vous activez quand vous en avez besoin. Nous n'utilisons jamais vos données pour entraîner un modèle."
+          "text": "Les modifications de fichiers, les commandes et les captures d'écran s'exécutent sur votre machine. Les Agents, la voix et la recherche de documents sont des fonctionnalités cloud facultatives que vous activez quand vous en avez besoin. Nous n'utilisons jamais vos données pour entraîner un modèle."
         },
         "control": {
           "label": "Se souvient",
@@ -250,7 +250,6 @@
         "features": [
           "Limites d'utilisation 5 fois plus élevées",
           "Premier accès aux nouveaux modèles",
-          "Bases de connaissances illimitées",
           "Support prioritaire",
           "Accès anticipé aux nouvelles fonctionnalités"
         ],
@@ -342,8 +341,8 @@
       "title": "À propos de Rofiant",
       "badge": "ENTREPRISE",
       "subtitle": "Nous concevons un agent IA qui accomplit vraiment le travail.",
-      "intro1": "Rofiant est un agent IA : il organise vos fichiers, les modifie et exécute des tâches répétitives sur votre ordinateur, avec en complément des fonctionnalités cloud facultatives comme les bases de connaissances et les Agents, entièrement piloté en langage simple.",
-      "intro2": "La confidentialité et la fiabilité comptent pour un outil qui touche à vos fichiers personnels. Les outils de fichiers, de commandes et de captures d'écran de Rofiant fonctionnent sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local, et les fonctionnalités cloud Pro/Ultra (bases de connaissances, documents, voix, Agents, API) se synchronisent avec votre compte afin que vous puissiez aussi les utiliser depuis le tableau de bord web.",
+      "intro1": "Rofiant est un agent IA : il organise vos fichiers, les modifie et exécute des tâches répétitives sur votre ordinateur, avec en complément des fonctionnalités cloud facultatives comme les Agents, entièrement piloté en langage simple.",
+      "intro2": "La confidentialité et la fiabilité comptent pour un outil qui touche à vos fichiers personnels. Les outils de fichiers, de commandes et de captures d'écran de Rofiant fonctionnent sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local, et les fonctionnalités cloud Pro/Ultra (documents, voix, Agents, API) se synchronisent avec votre compte afin que vous puissiez aussi les utiliser depuis le tableau de bord web.",
       "intro3": "Nous commençons par l'organisation et la recherche de fichiers sous Linux, avec la configuration d'environnement de développement et le support multiplateforme à venir.",
       "values": {
         "missionFirst": {
@@ -464,7 +463,7 @@
         },
         "dataResidency": {
           "title": "Vous choisissez ce qui quitte votre machine",
-          "desc": "Les outils de fichiers de l'application de bureau ne téléversent vos fichiers nulle part. Si vous utilisez une fonctionnalité cloud Pro ou Ultra, comme le téléversement de documents, la transcription vocale ou une base de connaissances, ce fichier ou cet enregistrement spécifique est envoyé à notre infrastructure cloud pour être traité."
+          "desc": "Les outils de fichiers de l'application de bureau ne téléversent vos fichiers nulle part. Si vous utilisez une fonctionnalité cloud Pro ou Ultra, comme le téléversement de documents ou la transcription vocale, ce fichier ou cet enregistrement spécifique est envoyé à notre infrastructure cloud pour être traité."
         },
         "incidentResponse": {
           "title": "Réponse aux incidents",
@@ -738,7 +737,7 @@
           "intro": "We collect the categories of information below depending on how you use the Services:",
           "items": {
             "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
-            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, knowledge base entries, and metadata associated with those records (timestamps, model identifiers, token counts).",
+            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
             "documents": "Données d'écran et de fichiers : documents, PDF, fichiers et contenu affiché à l'écran auxquels Rofiant accède sur votre machine pour accomplir des tâches, y compris le texte extrait et les métadonnées d'indexation.",
             "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
@@ -934,7 +933,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, knowledge bases, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {

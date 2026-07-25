@@ -127,12 +127,6 @@
     "title": "Chat AI",
     "subtitle": "Conversational AI trained on your documents",
     "newChat": "New chat",
-    "knowledgeBases": {
-      "heading": "Knowledge bases",
-      "documentCount": "{count} documents",
-      "defaultName": "Default",
-      "statusActive": "Active"
-    },
     "conversation": {
       "heading": "New conversation",
       "startTitle": "Start a conversation",
@@ -224,59 +218,6 @@
       "heading": "Recent transcriptions",
       "loading": "Loading…",
       "empty": "No transcriptions yet. Upload your first audio file to get started."
-    }
-  },
-  "knowledgeBases": {
-    "title": "Knowledge Bases",
-    "subtitle": "Named collections of documents the AI uses as persistent context in chat.",
-    "usedCount": "({used}/{limit} used)",
-    "newKnowledgeBase": "New knowledge base",
-    "planLimitError": "Your plan allows up to {limit} knowledge base{plural}. Upgrade to create more.",
-    "viewPlans": "View plans →",
-    "createForm": {
-      "heading": "New knowledge base",
-      "nameLabel": "Name",
-      "namePlaceholder": "e.g. FY2026 Policy Documents",
-      "descriptionLabel": "Description (optional)",
-      "descriptionPlaceholder": "What documents belong here?",
-      "create": "Create",
-      "cancel": "Cancel"
-    },
-    "loading": "Loading…",
-    "empty": {
-      "heading": "No knowledge bases yet",
-      "description": "Create one and add documents to give the AI persistent context across chats.",
-      "upgradeCta": "Upgrade your plan to create knowledge bases →",
-      "createCta": "Create your first knowledge base →"
-    },
-    "list": {
-      "docCount": "{count} doc{plural}",
-      "manage": "Manage"
-    },
-    "deleteConfirm": "Delete this knowledge base? This cannot be undone.",
-    "detail": {
-      "back": "Knowledge Bases",
-      "addDocument": "Add document",
-      "loading": "Loading…",
-      "notFound": "Knowledge base not found.",
-      "backLink": "← Back",
-      "addDocForm": {
-        "heading": "Add document to knowledge base",
-        "noDocsUploaded": "No documents uploaded yet.",
-        "uploadLink": "Upload a document →",
-        "allDocsAdded": "All your documents are already in this knowledge base.",
-        "adding": "Adding…",
-        "add": "Add"
-      },
-      "empty": {
-        "heading": "No documents yet",
-        "description": "Add documents from your library to include them as AI context.",
-        "cta": "Add your first document →"
-      },
-      "addedOn": "Added {date}",
-      "footerSummary": "{count} document{plural} · Last updated {date}",
-      "removeConfirm": "Remove this document from the knowledge base?",
-      "failedToAdd": "Failed to add"
     }
   }
 }
