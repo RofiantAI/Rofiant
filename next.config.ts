@@ -13,15 +13,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [{ source: "/v1/:path*", destination: "/api/v1/:path*" }];
   },
-  async redirects() {
-    return [
-      {
-        source: "/:locale(en|es|fr|de)/status",
-        destination: "https://status.rofiant.ca",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default withSentryConfig(withNextIntl(nextConfig), {

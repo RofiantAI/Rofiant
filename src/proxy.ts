@@ -139,6 +139,18 @@ export async function proxy(request: NextRequest) {
     rewriteUrl.pathname = effectivePathname;
   }
 
+  // status.rofiant.ca (and status.localhost in dev) → /en/status internally.
+  // No locale negotiation here, same as app./chat. — status page is English-only for now.
+  const isStatusHost =
+    host.startsWith("status.") ||
+    (process.env.NODE_ENV === "development" && host === "status.localhost:3000");
+
+  if (isStatusHost && !pathname.startsWith("/_next") && !pathname.startsWith("/api")) {
+    effectivePathname = `/${routing.defaultLocale}/status`;
+    rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = effectivePathname;
+  }
+
   // Locale routing for public marketing/legal pages only. /dashboard, /chat,
   // and /api never match isPublicAppPath, so they fall through unaffected.
   if (!rewriteUrl && isPublicAppPath(pathname) && !pathname.startsWith("/api")) {
