@@ -8,8 +8,8 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
   title: "API Reference",
-  description: "Complete Rofiant API reference. Endpoints, parameters, authentication, rate limits, and response schemas.",
-  openGraph: { title: "API Reference — Rofiant", description: "Complete Rofiant API reference. Endpoints, parameters, authentication, rate limits, and response schemas." },
+  description: "Rofiant API reference: available endpoints, HTTP methods, and what each one does.",
+  openGraph: { title: "API Reference — Rofiant", description: "Rofiant API reference: available endpoints, HTTP methods, and what each one does." },
   alternates: localeAlternates(locale, "/resources/api-reference"),
   };
 }

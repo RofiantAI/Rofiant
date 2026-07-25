@@ -195,7 +195,7 @@
       "subtitle": "Dile a Rofiant lo que necesitas hacer, con tus propias palabras. Empieza gratis y mejora tu plan cuando necesites más.",
       "startFree": "Empieza gratis",
       "talkToSales": "Hablar con ventas",
-      "fineprint": "No se requiere tarjeta de crédito · Primero en Linux, multiplataforma próximamente"
+      "fineprint": "No se requiere tarjeta de crédito · Disponible para Linux, macOS y Windows"
     }
   },
   "pricing": {
@@ -343,7 +343,7 @@
       "subtitle": "Estamos construyendo un agente de IA que realmente hace las cosas.",
       "intro1": "Rofiant es un agente de IA: organiza archivos, los edita y ejecuta tareas repetitivas en tu equipo, además de funciones opcionales en la nube como Agents, todo controlado en lenguaje sencillo.",
       "intro2": "La privacidad y la fiabilidad importan en una herramienta que toca tus archivos personales. Las herramientas de archivos, comandos y capturas de pantalla de Rofiant se ejecutan en tu equipo. Las respuestas del chat usan modelos alojados a menos que configures un modelo local de Ollama, y las funciones en la nube de Pro/Ultra (documentos, voz, Agents, API) se sincronizan con tu cuenta para que también puedas usarlas desde el panel web.",
-      "intro3": "Empezamos con la organización y búsqueda de archivos en Linux; a continuación llegarán la configuración de entornos de desarrollo y el soporte multiplataforma.",
+      "intro3": "Rofiant ya funciona en Linux, macOS y Windows; a continuación llega la configuración de entornos de desarrollo.",
       "values": {
         "missionFirst": {
           "title": "Transparente por defecto",
@@ -1108,12 +1108,16 @@
     },
     "apiReference": {
       "title": "Referencia de API",
-      "subtitle": "Referencia completa de todos los endpoints, parámetros y respuestas de la API de Rofiant.",
+      "subtitle": "Referencia de la API de Rofiant: endpoints disponibles y su función.",
       "endpoints": {
         "chatCompletions": "Crear una finalización de chat",
         "models": "Listar modelos disponibles",
         "usage": "Obtener estadísticas de uso",
-        "auditLogs": "Consultar registros de auditoría"
+        "auditLogs": "Consultar registros de auditoría",
+        "scimListUsers": "Listar usuarios aprovisionados (SCIM, Agency/Enterprise)",
+        "scimCreateUser": "Aprovisionar un usuario (SCIM, Agency/Enterprise)",
+        "scimUpdateUser": "Actualizar un usuario aprovisionado (SCIM, Agency/Enterprise)",
+        "scimDeactivateUser": "Retirar el aprovisionamiento de un usuario (SCIM, Agency/Enterprise)"
       }
     },
     "changelog": {

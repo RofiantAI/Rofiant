@@ -195,7 +195,7 @@
       "subtitle": "Dites à Rofiant ce que vous avez besoin de faire, en langage naturel. Commencez gratuitement, passez à un forfait supérieur quand vous en avez besoin.",
       "startFree": "Commencer gratuitement",
       "talkToSales": "Parler aux ventes",
-      "fineprint": "Aucune carte de crédit requise · Linux d'abord, multiplateforme à venir"
+      "fineprint": "Aucune carte de crédit requise · Disponible sur Linux, macOS et Windows"
     }
   },
   "pricing": {
@@ -343,7 +343,7 @@
       "subtitle": "Nous concevons un agent IA qui accomplit vraiment le travail.",
       "intro1": "Rofiant est un agent IA : il organise vos fichiers, les modifie et exécute des tâches répétitives sur votre ordinateur, avec en complément des fonctionnalités cloud facultatives comme les Agents, entièrement piloté en langage simple.",
       "intro2": "La confidentialité et la fiabilité comptent pour un outil qui touche à vos fichiers personnels. Les outils de fichiers, de commandes et de captures d'écran de Rofiant fonctionnent sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local, et les fonctionnalités cloud Pro/Ultra (documents, voix, Agents, API) se synchronisent avec votre compte afin que vous puissiez aussi les utiliser depuis le tableau de bord web.",
-      "intro3": "Nous commençons par l'organisation et la recherche de fichiers sous Linux, avec la configuration d'environnement de développement et le support multiplateforme à venir.",
+      "intro3": "Rofiant fonctionne déjà sous Linux, macOS et Windows ; la configuration d'environnement de développement arrive ensuite.",
       "values": {
         "missionFirst": {
           "title": "Transparent par défaut",
@@ -1108,12 +1108,16 @@
     },
     "apiReference": {
       "title": "Référence API",
-      "subtitle": "Référence complète de tous les points de terminaison, paramètres et réponses de l'API Rofiant.",
+      "subtitle": "Référence de l'API Rofiant : points de terminaison disponibles et leur fonction.",
       "endpoints": {
         "chatCompletions": "Créer une complétion de chat",
         "models": "Lister les modèles disponibles",
         "usage": "Obtenir les statistiques d'utilisation",
-        "auditLogs": "Interroger les journaux d'audit"
+        "auditLogs": "Interroger les journaux d'audit",
+        "scimListUsers": "Lister les utilisateurs provisionnés (SCIM, Agency/Enterprise)",
+        "scimCreateUser": "Provisionner un utilisateur (SCIM, Agency/Enterprise)",
+        "scimUpdateUser": "Mettre à jour un utilisateur provisionné (SCIM, Agency/Enterprise)",
+        "scimDeactivateUser": "Déprovisionner un utilisateur (SCIM, Agency/Enterprise)"
       }
     },
     "changelog": {

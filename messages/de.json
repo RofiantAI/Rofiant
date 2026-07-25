@@ -195,7 +195,7 @@
       "subtitle": "Sagen Sie Rofiant, was erledigt werden soll — in normaler Sprache. Kostenlos starten, upgraden, wenn Sie mehr brauchen.",
       "startFree": "Kostenlos starten",
       "talkToSales": "Vertrieb kontaktieren",
-      "fineprint": "Keine Kreditkarte erforderlich · Zuerst für Linux, plattformübergreifend folgt"
+      "fineprint": "Keine Kreditkarte erforderlich · Verfügbar für Linux, macOS und Windows"
     }
   },
   "pricing": {
@@ -343,7 +343,7 @@
       "subtitle": "Wir entwickeln einen KI-Agenten, der wirklich etwas erledigt.",
       "intro1": "Rofiant ist ein KI-Agent: Er organisiert Dateien, bearbeitet sie und erledigt wiederkehrende Aufgaben auf Ihrem Computer, dazu optionale Cloud-Funktionen wie Agenten, gesteuert ganz in einfacher Sprache.",
       "intro2": "Privatsphäre und Zuverlässigkeit zählen bei einem Tool, das Ihre persönlichen Dateien anfasst. Die Datei-, Befehls- und Screenshot-Tools von Rofiant laufen auf Ihrem Rechner. Chat-Antworten nutzen gehostete Modelle, sofern Sie kein lokales Ollama-Modell konfigurieren, und Pro/Ultra-Cloud-Funktionen (Dokumente, Sprache, Agenten, API) synchronisieren sich mit Ihrem Konto, sodass Sie sie auch über das Web-Dashboard nutzen können.",
-      "intro3": "Wir starten mit Dateiorganisation und -suche unter Linux, gefolgt von Dev-Umgebungs-Einrichtung und plattformübergreifender Unterstützung.",
+      "intro3": "Rofiant läuft heute unter Linux, macOS und Windows; als Nächstes folgt die Dev-Umgebungs-Einrichtung.",
       "values": {
         "missionFirst": {
           "title": "Standardmäßig transparent",
@@ -1108,12 +1108,16 @@
     },
     "apiReference": {
       "title": "API-Referenz",
-      "subtitle": "Vollständige Referenz für alle Rofiant-API-Endpunkte, Parameter und Antworten.",
+      "subtitle": "Referenz für die Rofiant-API: verfügbare Endpunkte und ihre Funktion.",
       "endpoints": {
         "chatCompletions": "Eine Chat-Vervollständigung erstellen",
         "models": "Verfügbare Modelle auflisten",
         "usage": "Nutzungsstatistiken abrufen",
-        "auditLogs": "Audit-Protokolle abfragen"
+        "auditLogs": "Audit-Protokolle abfragen",
+        "scimListUsers": "Bereitgestellte Benutzer auflisten (SCIM, Agency/Enterprise)",
+        "scimCreateUser": "Einen Benutzer bereitstellen (SCIM, Agency/Enterprise)",
+        "scimUpdateUser": "Einen bereitgestellten Benutzer aktualisieren (SCIM, Agency/Enterprise)",
+        "scimDeactivateUser": "Einen Benutzer deprovisionieren (SCIM, Agency/Enterprise)"
       }
     },
     "changelog": {

@@ -195,7 +195,7 @@
       "subtitle": "Tell Rofiant what you need done, in plain English. Start for free, upgrade when you need more.",
       "startFree": "Start for free",
       "talkToSales": "Talk to sales",
-      "fineprint": "No credit card required · Linux first, cross-platform coming"
+      "fineprint": "No credit card required · Available for Linux, macOS, and Windows"
     }
   },
   "pricing": {
@@ -343,7 +343,7 @@
       "subtitle": "We're building an AI agent that actually gets things done.",
       "intro1": "Rofiant is an AI agent: it organizes files, edits them, and runs repetitive tasks on your computer, plus optional cloud features like Agents, controlled entirely in plain English.",
       "intro2": "Privacy and reliability matter for a tool that touches your personal files. Rofiant's file, command, and screenshot tools run on your machine. Chat replies use hosted models unless you configure a local Ollama model, and Pro/Ultra cloud features (documents, voice, Agents, API) sync to your account so you can use them from the web dashboard too.",
-      "intro3": "We're starting with file organization and search on Linux, with dev-environment setup and cross-platform support next.",
+      "intro3": "Rofiant runs today on Linux, macOS, and Windows, with dev-environment setup coming next.",
       "values": {
         "missionFirst": {
           "title": "Transparent by default",
@@ -754,12 +754,16 @@
     },
     "apiReference": {
       "title": "API Reference",
-      "subtitle": "Complete reference for all Rofiant API endpoints, parameters, and responses.",
+      "subtitle": "Reference for the Rofiant API — available endpoints and what they do.",
       "endpoints": {
         "chatCompletions": "Create a chat completion",
         "models": "List available models",
         "usage": "Get usage statistics",
-        "auditLogs": "Query audit logs"
+        "auditLogs": "Query audit logs",
+        "scimListUsers": "List provisioned users (SCIM, Agency/Enterprise)",
+        "scimCreateUser": "Provision a user (SCIM, Agency/Enterprise)",
+        "scimUpdateUser": "Update a provisioned user (SCIM, Agency/Enterprise)",
+        "scimDeactivateUser": "Deprovision a user (SCIM, Agency/Enterprise)"
       }
     },
     "changelog": {
