@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       const plan: string | undefined = checkout.metadata?.plan;
       if (userId && plan) {
         await supabase.auth.admin.updateUserById(userId, {
-          user_metadata: { plan },
+          user_metadata: { plan, ...(plan === "pro" ? { trial_used: true } : {}) },
         });
       }
       break;

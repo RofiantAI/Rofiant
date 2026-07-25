@@ -1,11 +1,30 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { PageLayout, PageSection } from "@/components/page-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Download, Package, Terminal, Boxes, Monitor, Apple } from "lucide-react";
+import { localeAlternates } from "@/lib/seo";
 
 const REPO = "RofiantAI/RofiantDesktop";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const title = "Download";
+  const description =
+    "Download Rofiant, the native desktop AI agent for Linux, macOS, and Windows.";
+  return {
+    title,
+    description,
+    openGraph: { title: `${title} — Rofiant`, description },
+    alternates: localeAlternates(locale, "/download"),
+  };
+}
 
 type PlatformKey = "linux" | "macos" | "windows";
 

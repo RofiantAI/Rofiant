@@ -3,8 +3,9 @@
 import { PageLayout } from "@/components/page-layout";
 import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Crown, Building2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { createClient } from "@/lib/supabase/client";
 
 const consumerTierMeta = [
   { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false, comingSoon: false },
@@ -16,6 +17,14 @@ export default function PricingPage() {
   const t = useTranslations("pricing");
   const [annual, setAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [trialUsed, setTrialUsed] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setTrialUsed(Boolean(user?.user_metadata?.trial_used));
+    });
+  }, []);
 
   const includedItems = t.raw("included.items") as string[];
   const faqs = t.raw("faq.items") as { q: string; a: string }[];
@@ -58,11 +67,13 @@ export default function PricingPage() {
         {consumerTierMeta.map((tier) => {
           const Icon = tier.icon;
           const price = annual ? tier.price.annual : tier.price.monthly;
-          const features = t.raw(`consumerTiers.${tier.key}.features`) as { title: string; desc: string }[];
+          const features = t.raw(`consumerTiers.${tier.key}.features`) as string[];
+          const featuresIntro =
+            tier.key === "free" ? null : t(`consumerTiers.${tier.key}.featuresIntro`);
           return (
             <div
               key={tier.key}
-              className={`flex flex-col p-8 border ${
+              className={`flex flex-col p-8 rounded-2xl border ${
                 tier.highlighted
                   ? "border-foreground bg-card"
                   : "border-border bg-card"
@@ -99,17 +110,19 @@ export default function PricingPage() {
                   </p>
                 )}
               </div>
-              <ul className="space-y-4 mb-10 flex-1">
-                {features.map((f) => (
-                  <li key={f.title} className="flex items-start gap-3 text-sm">
-                    <Check className="w-4 h-4 text-foreground shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-foreground">{f.title}</p>
-                      <p className="text-foreground-secondary">{f.desc}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <div className="mb-10 flex-1">
+                {featuresIntro && (
+                  <p className="text-sm text-foreground-secondary mb-3">{featuresIntro}</p>
+                )}
+                <ul className="space-y-2.5">
+                  {features.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-foreground-secondary">
+                      <Check className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
               {tier.comingSoon ? (
                 <button
                   type="button"
@@ -128,7 +141,9 @@ export default function PricingPage() {
                       : "border border-border text-foreground hover:bg-background-tertiary"
                   }`}
                 >
-                  {t(`consumerTiers.${tier.key}.cta`)}
+                  {tier.key === "pro" && trialUsed
+                    ? t("consumerTiers.pro.ctaReturning")
+                    : t(`consumerTiers.${tier.key}.cta`)}
                 </a>
               )}
             </div>

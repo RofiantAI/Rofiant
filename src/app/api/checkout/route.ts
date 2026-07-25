@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { creem, PLAN_PRODUCT_IDS } from "@/lib/creem";
+import { creem, PLAN_PRODUCT_IDS, PRO_PRODUCT_ID_NO_TRIAL } from "@/lib/creem";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(req: NextRequest) {
   const plan = req.nextUrl.searchParams.get("plan");
-  const productId = plan ? PLAN_PRODUCT_IDS[plan] : undefined;
-  if (!plan || !productId) {
+  if (!plan || !PLAN_PRODUCT_IDS[plan]) {
     return NextResponse.json({ error: "Invalid or unavailable plan" }, { status: 400 });
   }
 
@@ -14,6 +13,14 @@ export async function GET(req: NextRequest) {
   if (!user?.email) {
     const next = encodeURIComponent(`/api/checkout?plan=${plan}`);
     return NextResponse.redirect(new URL(`/auth/login?next=${next}`, req.url));
+  }
+
+  // Pro ships a 7-day free trial, but only for a user's first Pro checkout.
+  const trialUsed = Boolean(user.user_metadata?.trial_used);
+  const productId =
+    plan === "pro" && trialUsed ? PRO_PRODUCT_ID_NO_TRIAL : PLAN_PRODUCT_IDS[plan];
+  if (!productId) {
+    return NextResponse.json({ error: "Invalid or unavailable plan" }, { status: 400 });
   }
 
   try {

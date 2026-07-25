@@ -62,7 +62,7 @@
       "titleHighlight": "faire.",
       "subtitle": "Rofiant est un agent IA pour vos fichiers et applications. Il lit, modifie et organise les fichiers, exécute des commandes et ouvre des applications, en langage simple.",
       "startFree": "Commencer gratuitement",
-      "talkToSales": "Parler aux ventes"
+      "talkToSales": "Tarifs"
     },
     "publicAi": {
       "titlePrefix": "Votre ordinateur,",
@@ -222,51 +222,25 @@
         "description": "L'application de bureau complète, aucune carte de crédit requise.",
         "cta": "Commencer gratuitement",
         "features": [
-          {
-            "title": "Outils locaux de fichiers, de commandes et d'applications",
-            "desc": "Lisez, modifiez et organisez des fichiers, exécutez des commandes et ouvrez des applications, avec votre approbation requise avant toute action risquée."
-          },
-          {
-            "title": "Discutez avec des modèles hébergés ou locaux",
-            "desc": "Utilisez gratuitement les modèles hébergés GPT OSS 20B et Llama 3.1 8B, ou connectez votre propre modèle Ollama local pour un chat entièrement sur votre appareil."
-          },
-          {
-            "title": "Prise en charge des serveurs MCP",
-            "desc": "Connectez vos propres outils et serveurs via le Model Context Protocol pour étendre les capacités de Rofiant."
-          },
-          {
-            "title": "Transcription vocale",
-            "desc": "Transformez automatiquement vos enregistrements en transcriptions et résumés."
-          },
-          {
-            "title": "Tâches illimitées",
-            "desc": "Aucune limite sur votre utilisation de Rofiant, sous réserve de limites d'utilisation équitable."
-          }
+          "Outils locaux de fichiers, de commandes et d'applications",
+          "Discutez avec des modèles hébergés ou locaux",
+          "Prise en charge des serveurs MCP",
+          "Transcription vocale",
+          "Tâches illimitées"
         ]
       },
       "pro": {
         "name": "Pro",
         "tagline": "Pour les utilisateurs avancés",
         "description": "Nos modèles les plus performants et les Agents cloud.",
-        "cta": "Passer à Pro",
+        "cta": "Essai gratuit de 7 jours",
+        "ctaReturning": "Passer à Pro",
         "features": [
-          {
-            "title": "Tout dans Gratuit",
-            "desc": "Toutes les fonctionnalités de Gratuit, incluses."
-          },
-          {
-            "title": "Nos modèles les plus performants",
-            "desc": "Obtenez des réponses de GPT OSS 120B et Llama 3.3 70B pour le raisonnement complexe et les tâches de code."
-          },
-          {
-            "title": "Agents multi-étapes",
-            "desc": "Rofiant planifie et exécute des tâches en plusieurs étapes sur vos fichiers et applications, en marquant une pause pour votre approbation avant toute action risquée."
-          },
-          {
-            "title": "Accès API complet",
-            "desc": "Une API compatible OpenAI avec des limites d'utilisation plus élevées que Gratuit."
-          }
-        ]
+          "Nos modèles les plus performants",
+          "Agents multi-étapes",
+          "Accès API complet"
+        ],
+        "featuresIntro": "Tout dans Gratuit et :"
       },
       "ultra": {
         "name": "Ultra",
@@ -274,31 +248,13 @@
         "description": "Les limites d'utilisation les plus élevées, un accès prioritaire aux nouveaux modèles et un support prioritaire pour ceux qui utilisent Rofiant au quotidien.",
         "cta": "Démarrer avec Ultra",
         "features": [
-          {
-            "title": "Tout dans Pro",
-            "desc": "Toutes les fonctionnalités de Pro, incluses."
-          },
-          {
-            "title": "Limites d'utilisation 5 fois plus élevées",
-            "desc": "Bénéficiez de limites d'utilisation 5 fois plus élevées que Pro."
-          },
-          {
-            "title": "Premier accès aux nouveaux modèles",
-            "desc": "Soyez parmi les premiers à essayer les nouveaux modèles à mesure que nous les ajoutons."
-          },
-          {
-            "title": "Bases de connaissances illimitées",
-            "desc": "Créez autant de bases de connaissances que nécessaire, sans limite."
-          },
-          {
-            "title": "Support prioritaire",
-            "desc": "Obtenez des réponses plus rapides de notre équipe de support."
-          },
-          {
-            "title": "Accès anticipé aux nouvelles fonctionnalités",
-            "desc": "Essayez les nouvelles fonctionnalités de Rofiant avant leur déploiement général."
-          }
-        ]
+          "Limites d'utilisation 5 fois plus élevées",
+          "Premier accès aux nouveaux modèles",
+          "Bases de connaissances illimitées",
+          "Support prioritaire",
+          "Accès anticipé aux nouvelles fonctionnalités"
+        ],
+        "featuresIntro": "Tout dans Pro, plus :"
       }
     },
     "fairUseNote": "* Les tâches sont illimitées sur tous les forfaits, sous réserve de limites d'utilisation équitable pour prévenir les abus. Contactez-nous si votre équipe a besoin de limites plus élevées.",

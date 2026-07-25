@@ -62,7 +62,7 @@
       "titleHighlight": "tun soll.",
       "subtitle": "Rofiant ist ein KI-Agent für Ihre Dateien und Apps. Er liest, bearbeitet und organisiert Dateien, führt Befehle aus und öffnet Apps, in einfacher Sprache.",
       "startFree": "Kostenlos starten",
-      "talkToSales": "Vertrieb kontaktieren"
+      "talkToSales": "Preise"
     },
     "publicAi": {
       "titlePrefix": "Ihr Computer,",
@@ -222,51 +222,25 @@
         "description": "Die vollständige Desktop-App, keine Kreditkarte erforderlich.",
         "cta": "Kostenlos starten",
         "features": [
-          {
-            "title": "Lokale Datei-, Befehls- & App-Tools",
-            "desc": "Lesen, bearbeiten und organisieren Sie Dateien, führen Sie Befehle aus und öffnen Sie Apps — mit Ihrer Freigabe, bevor etwas Riskantes passiert."
-          },
-          {
-            "title": "Chat mit gehosteten oder lokalen Modellen",
-            "desc": "Nutzen Sie die gehosteten Modelle GPT OSS 20B und Llama 3.1 8B kostenlos, oder verbinden Sie ein eigenes lokales Ollama-Modell für vollständig lokalen Chat."
-          },
-          {
-            "title": "Unterstützung für MCP-Server",
-            "desc": "Verbinden Sie eigene Tools und Server über das Model Context Protocol, um zu erweitern, was Rofiant kann."
-          },
-          {
-            "title": "Sprachtranskription",
-            "desc": "Verwandeln Sie Aufnahmen automatisch in Transkripte und Zusammenfassungen."
-          },
-          {
-            "title": "Unbegrenzte Aufgaben",
-            "desc": "Keine Obergrenze für die Nutzung von Rofiant, vorbehaltlich Fair-Use-Limits."
-          }
+          "Lokale Datei-, Befehls- & App-Tools",
+          "Chat mit gehosteten oder lokalen Modellen",
+          "Unterstützung für MCP-Server",
+          "Sprachtranskription",
+          "Unbegrenzte Aufgaben"
         ]
       },
       "pro": {
         "name": "Pro",
         "tagline": "Für Power-User",
         "description": "Unsere leistungsfähigsten Modelle und Cloud-Agenten.",
-        "cta": "Pro starten",
+        "cta": "7 Tage kostenlos testen",
+        "ctaReturning": "Pro holen",
         "features": [
-          {
-            "title": "Alles in Kostenlos",
-            "desc": "Alle Funktionen von Kostenlos inklusive."
-          },
-          {
-            "title": "Unsere leistungsfähigsten Modelle",
-            "desc": "Erhalten Sie Antworten von GPT OSS 120B und Llama 3.3 70B für komplexe Reasoning- und Coding-Aufgaben."
-          },
-          {
-            "title": "Mehrstufige Agenten",
-            "desc": "Rofiant plant und führt mehrstufige Aufgaben über Ihre Dateien und Apps hinweg aus und pausiert vor riskanten Schritten für Ihre Freigabe."
-          },
-          {
-            "title": "Vollständiger API-Zugriff",
-            "desc": "Eine OpenAI-kompatible API mit höheren Nutzungslimits als Kostenlos."
-          }
-        ]
+          "Unsere leistungsfähigsten Modelle",
+          "Mehrstufige Agenten",
+          "Vollständiger API-Zugriff"
+        ],
+        "featuresIntro": "Alles in Kostenlos und:"
       },
       "ultra": {
         "name": "Ultra",
@@ -274,31 +248,13 @@
         "description": "Die höchsten Nutzungslimits, bevorzugter Zugang zu neuen Modellen und priorisierter Support für alle, die Rofiant täglich nutzen.",
         "cta": "Mit Ultra starten",
         "features": [
-          {
-            "title": "Alles in Pro",
-            "desc": "Alle Funktionen von Pro inklusive."
-          },
-          {
-            "title": "5x höhere Nutzungslimits",
-            "desc": "Erhalten Sie Nutzungslimits, die 5x höher sind als bei Pro."
-          },
-          {
-            "title": "Erster Zugang zu neuen Modellen",
-            "desc": "Testen Sie neue Modelle als Erste, sobald wir sie hinzufügen."
-          },
-          {
-            "title": "Unbegrenzte Wissensdatenbanken",
-            "desc": "Erstellen Sie so viele Wissensdatenbanken, wie Sie brauchen, ohne Obergrenze."
-          },
-          {
-            "title": "Priorisierter Support",
-            "desc": "Erhalten Sie schnellere Antworten von unserem Support-Team."
-          },
-          {
-            "title": "Früher Zugang zu neuen Funktionen",
-            "desc": "Testen Sie neue Rofiant-Funktionen, bevor sie für alle ausgerollt werden."
-          }
-        ]
+          "5x höhere Nutzungslimits",
+          "Erster Zugang zu neuen Modellen",
+          "Unbegrenzte Wissensdatenbanken",
+          "Priorisierter Support",
+          "Früher Zugang zu neuen Funktionen"
+        ],
+        "featuresIntro": "Alles in Pro, plus:"
       }
     },
     "fairUseNote": "* Aufgaben sind in jedem Plan unbegrenzt, unterliegen aber Fair-Use-Limits zur Missbrauchsvermeidung. Kontaktieren Sie uns, wenn Ihr Team höhere Limits benötigt.",

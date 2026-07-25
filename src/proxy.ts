@@ -183,6 +183,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Signed-in users land on /chat instead of the marketing homepage. Done here
+  // (not in page.tsx) so the home page itself has no blocking async work —
+  // page.tsx previously awaited its own getUser() call, which made Next wrap
+  // the page segment's Suspense boundary (from the sibling loading.tsx) around
+  // real content, delaying it behind the footer in the streamed HTML and
+  // hiding the H1/hero copy from crawlers that don't execute JS.
+  if (user && !isAppHost && !isChatHost && !isApiHost && stripLocalePrefix(effectivePathname) === "/") {
+    return NextResponse.redirect(new URL("/chat", request.url));
+  }
+
   if (isKbOrDocsApiPath(pathname)) {
     for (const [key, value] of Object.entries(CORS_HEADERS)) {
       response.headers.set(key, value);

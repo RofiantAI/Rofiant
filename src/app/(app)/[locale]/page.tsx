@@ -1,22 +1,28 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { HeroSection } from "@/components/sections/hero-section";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/site-metadata";
+import { localeAlternates } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: { absolute: SITE_TITLE },
-  description: SITE_DESCRIPTION,
-  alternates: { canonical: "https://www.rofiant.ca" },
-  openGraph: {
-    title: SITE_TITLE,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: { absolute: SITE_TITLE },
     description: SITE_DESCRIPTION,
-  },
-  twitter: {
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-  },
-};
+    alternates: localeAlternates(locale),
+    openGraph: {
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+    },
+    twitter: {
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+    },
+  };
+}
 import { UnifySection } from "@/components/sections/unify-section";
 import { DeploySection } from "@/components/sections/deploy-section";
 import { ProtectSection } from "@/components/sections/protect-section";
@@ -25,11 +31,7 @@ import { PublicAISection } from "@/components/sections/public-ai-section";
 import { FooterCtaSection } from "@/components/sections/footer-cta-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export default async function Home() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (user) redirect("/chat");
-
+export default function Home() {
   return (
     <>
       <HeroSection />
