@@ -146,6 +146,16 @@ export async function proxy(request: NextRequest) {
     (process.env.NODE_ENV === "development" && host === "status.localhost:3000");
 
   if (isStatusHost && !pathname.startsWith("/_next") && !pathname.startsWith("/api")) {
+    if (pathname !== "/") {
+      // Header/footer links (logo, Pricing, Docs, ...) are same-origin relative
+      // links. Without this, clicking them just re-requests status.rofiant.ca/<path>,
+      // which would fall through to the rewrite below and re-render the status
+      // page instead of leaving the subdomain.
+      const marketingUrl = request.nextUrl.clone();
+      marketingUrl.hostname =
+        process.env.NODE_ENV === "development" ? "localhost" : "www.rofiant.ca";
+      return NextResponse.redirect(marketingUrl);
+    }
     effectivePathname = `/${routing.defaultLocale}/status`;
     rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = effectivePathname;
