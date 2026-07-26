@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { getLocale } from "next-intl/server";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./(app)/globals.css";
 import { CookieBanner } from "@/components/ui/cookie-banner";
 import { OfflineToast } from "@/components/ui/offline-toast";

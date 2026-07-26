@@ -59,6 +59,16 @@ export async function FooterSection() {
             <p className="mt-2 text-sm text-foreground-muted">
               {t("copyright", { year: new Date().getFullYear() })}
             </p>
+
+            <a
+              href="https://x.com/rofiantai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-foreground-secondary transition-colors hover:text-foreground"
+            >
+              <i className="fa-brands fa-x-twitter text-lg" aria-hidden="true"></i>
+              <span className="sr-only">X (Twitter)</span>
+            </a>
           </div>
 
           {footerColumns.map((column) => (
