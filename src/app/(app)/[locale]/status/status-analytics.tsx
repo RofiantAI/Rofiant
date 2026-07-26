@@ -17,13 +17,12 @@ type Check = {
   checked_at: string;
 };
 
-const SERVICE_ORDER = ["chatAi", "voiceAi", "documentIntelligence", "publicApi", "dashboard"];
+const SERVICE_ORDER = ["chatAi", "documentIntelligence", "publicApi", "dashboard"];
 
 // Fixed categorical order — never cycled, never reusing the status green/red
 // reserved for healthy/degraded elsewhere on this page.
 const SERVICE_COLORS: Record<string, string> = {
   chatAi: "#3b82f6",
-  voiceAi: "#a78bfa",
   documentIntelligence: "#2dd4bf",
   publicApi: "#fbbf24",
   dashboard: "#fb7185",

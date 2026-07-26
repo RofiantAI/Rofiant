@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { StatusAnalytics } from "./status-analytics";
 import { StatusUptimeBar } from "./status-uptime-bar";
 
-const SERVICE_KEYS = ["chatAi", "voiceAi", "documentIntelligence", "publicApi", "dashboard"] as const;
+const SERVICE_KEYS = ["chatAi", "documentIntelligence", "publicApi", "dashboard"] as const;
 type ServiceKey = (typeof SERVICE_KEYS)[number];
 
 const DAY_MS = 24 * 60 * 60 * 1000;

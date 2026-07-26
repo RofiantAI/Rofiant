@@ -5,7 +5,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 // against each is a reasonable proxy for "is this subsystem reachable."
 const SERVICE_TABLES: Record<string, string> = {
   chatAi: "conversations",
-  voiceAi: "voice_records",
   documentIntelligence: "documents",
   publicApi: "api_keys",
   dashboard: "agencies",
