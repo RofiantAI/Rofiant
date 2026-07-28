@@ -21,7 +21,7 @@ export default async function MfaPage() {
         </div>
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <div className="text-foreground font-semibold text-xl tracking-tight">
-            <img src={"/logo-light.svg"} className="h-6 w-auto" />
+            <img src={"/logo-light.svg"} alt="Rofiant" className="h-6 w-auto" />
           </div>
           <div>
             <blockquote className="text-lg text-foreground-secondary leading-relaxed max-w-md">

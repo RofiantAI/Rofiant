@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
+import { Button } from "@/components/ui/button";
 import { UserAvatar } from "./user-avatar-button";
 
 const ALLOWED_TYPES = new Set([
@@ -140,14 +141,14 @@ export function ProfileAvatarUpload({
               e.target.value = "";
             }}
           />
-          <button
+          <Button
             type="button"
+            size="xs"
             disabled={uploading}
             onClick={() => inputRef.current?.click()}
-            className="h-8 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
           >
             {uploading ? t("photoUploading") : t("photoUpload")}
-          </button>
+          </Button>
           {custom && (
             <button
               type="button"

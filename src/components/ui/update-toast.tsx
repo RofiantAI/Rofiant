@@ -46,8 +46,11 @@ export function UpdateToast() {
 
   return (
     <div
-      className="fixed bottom-20 right-6 z-50 flex items-center gap-3 border border-border-light bg-background-secondary shadow-lg px-5 py-3"
-      style={{ animation: "toast-in 0.3s ease-out" }}
+      className="fixed right-6 z-50 flex items-center gap-3 border border-border-light bg-background-secondary shadow-lg px-5 py-3"
+      style={{
+        bottom: "calc(5rem + var(--cookie-banner-height, 0px))",
+        animation: "toast-in 0.3s ease-out",
+      }}
     >
       <span className="h-2 w-2 rounded-full shrink-0 bg-accent-primary" />
       <p className="text-sm font-medium text-foreground">

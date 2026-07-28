@@ -1,31 +1,16 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { routing } from "@/i18n/routing";
-
-const STORAGE_KEY = "cookie-consent";
-
-function subscribe(callback: () => void) {
-  window.addEventListener(STORAGE_KEY, callback);
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener(STORAGE_KEY, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
-
-function getSnapshot() {
-  return localStorage.getItem(STORAGE_KEY) === null;
-}
-
-function getServerSnapshot() {
-  return false;
-}
+import {
+  COOKIE_CONSENT_STORAGE_KEY as STORAGE_KEY,
+  useCookieConsentNeeded,
+} from "@/lib/hooks/use-cookie-consent-needed";
 
 export function CookieBanner() {
-  const needsConsent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const needsConsent = useCookieConsentNeeded();
   // Rendered in the root layout, outside NextIntlClientProvider (so it also
   // shows on locale-free routes like /chat and /dashboard) — can't use
   // next-intl's Link/useLocale here, so the locale is derived from the URL.
@@ -34,6 +19,31 @@ export function CookieBanner() {
   const locale = routing.locales.includes(firstSegment as (typeof routing.locales)[number])
     ? firstSegment
     : routing.defaultLocale;
+
+  const bannerRef = useRef<HTMLDivElement>(null);
+
+  // Other fixed-position toasts (offline/update) read this to stack above the
+  // banner instead of being hidden underneath it — banner height varies by
+  // breakpoint (stacked on mobile) and content, so measure rather than guess.
+  useEffect(() => {
+    if (!needsConsent) {
+      document.documentElement.style.setProperty("--cookie-banner-height", "0px");
+      return;
+    }
+    const el = bannerRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      document.documentElement.style.setProperty(
+        "--cookie-banner-height",
+        `${entry.contentRect.height}px`,
+      );
+    });
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.setProperty("--cookie-banner-height", "0px");
+    };
+  }, [needsConsent]);
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
@@ -50,7 +60,10 @@ export function CookieBanner() {
   if (!needsConsent) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border-light bg-background-secondary">
+    <div
+      ref={bannerRef}
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border-light bg-background-secondary"
+    >
       <div className="mx-auto max-w-[1600px] px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-6">
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-foreground tracking-wide uppercase">Cookie Notice</p>

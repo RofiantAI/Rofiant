@@ -44,8 +44,11 @@ export function OfflineToast() {
   return (
     <div
       key={status}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-3 border border-border-light bg-background-secondary shadow-lg px-5 py-3"
-      style={{ animation: "toast-in 0.3s ease-out" }}
+      className="fixed right-6 z-50 flex items-center gap-3 border border-border-light bg-background-secondary shadow-lg px-5 py-3"
+      style={{
+        bottom: "calc(1.5rem + var(--cookie-banner-height, 0px))",
+        animation: "toast-in 0.3s ease-out",
+      }}
     >
       <span className={`h-2 w-2 rounded-full shrink-0 ${isOffline ? "bg-red-500" : "bg-green-500"}`} />
       <p className="text-sm font-medium text-foreground">

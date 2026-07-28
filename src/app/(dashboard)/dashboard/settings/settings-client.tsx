@@ -20,6 +20,7 @@ import {
   DashboardUpgradeGate,
 } from "@/components/dashboard/ui/page-shell";
 import { ProfileAvatarUpload } from "@/components/dashboard/profile-avatar-upload";
+import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { SkeletonListRows } from "@/components/ui/skeleton";
 import { formatDate as fmtDate } from "@/lib/user-prefs";
@@ -163,13 +164,19 @@ function SegmentedControl<T extends string>({
   value,
   options,
   onChange,
+  labelledBy,
 }: {
   value: T;
   options: { value: T; label: string }[];
   onChange: (v: T) => void;
+  labelledBy?: string;
 }) {
   return (
-    <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-background-tertiary border border-border">
+    <div
+      role="group"
+      aria-labelledby={labelledBy}
+      className="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-background-tertiary border border-border"
+    >
       {options.map((opt) => (
         <button
           key={opt.value}
@@ -583,33 +590,35 @@ export function SettingsClient({
 
             {/* Display name */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label htmlFor="settings-display-name" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("account.displayName")}
               </label>
               <div className="flex gap-2">
                 <input
+                  id="settings-display-name"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && saveDisplayName()}
                   placeholder={t("account.displayNamePlaceholder")}
                   className="flex-1 h-9 px-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light"
                 />
-                <button
+                <Button
+                  size="xs"
                   onClick={saveDisplayName}
                   disabled={displayNameSaving || !displayName.trim()}
-                  className="h-9 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {displayNameSaved ? <><Check className="w-3.5 h-3.5" /> {t("account.saved")}</> : displayNameSaving ? t("account.saving") : t("account.save")}
-                </button>
+                </Button>
               </div>
             </div>
 
             {/* Bio */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label htmlFor="settings-bio" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("account.bio")}
               </label>
               <textarea
+                id="settings-bio"
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 placeholder={t("account.bioPlaceholder")}
@@ -619,13 +628,13 @@ export function SettingsClient({
               />
               <div className="flex items-center justify-between mt-1.5">
                 <span className="text-xs text-foreground-muted">{t("account.bioCount", { count: bio.length })}</span>
-                <button
+                <Button
+                  size="xs"
                   onClick={saveBio}
                   disabled={bioSaving}
-                  className="h-7 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors flex items-center gap-1"
                 >
                   {bioSaved ? <><Check className="w-3 h-3" /> {t("account.saved")}</> : bioSaving ? t("account.saving") : t("account.saveBio")}
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -688,13 +697,13 @@ export function SettingsClient({
                     </p>
                   )}
                   <div className="flex gap-2">
-                    <button
+                    <Button
                       type="submit"
+                      size="xs"
                       disabled={pwStatus === "saving"}
-                      className="h-8 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                     >
                       {pwStatus === "saving" ? t("account.saving") : t("account.save")}
-                    </button>
+                    </Button>
                     <button
                       type="button"
                       onClick={() => {
@@ -759,8 +768,9 @@ export function SettingsClient({
                   )}
                   <form onSubmit={verifyMfa} className="space-y-3">
                     <div>
-                      <label className="block text-xs text-foreground-muted mb-1">{t("security.enterCode")}</label>
+                      <label htmlFor="settings-mfa-code" className="block text-xs text-foreground-muted mb-1">{t("security.enterCode")}</label>
                       <input
+                        id="settings-mfa-code"
                         autoFocus
                         value={mfaCode}
                         onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
@@ -771,13 +781,13 @@ export function SettingsClient({
                     </div>
                     {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
                     <div className="flex gap-2">
-                      <button
+                      <Button
                         type="submit"
+                        size="xs"
                         disabled={mfaCode.length !== 6}
-                        className="h-8 px-3 text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                       >
                         {t("security.verifyAndEnable")}
-                      </button>
+                      </Button>
                       <button
                         type="button"
                         onClick={cancelMfaEnroll}
@@ -1026,10 +1036,11 @@ export function SettingsClient({
 
             {/* Language */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label htmlFor="settings-language" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.language")}
               </label>
               <select
+                id="settings-language"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
@@ -1044,10 +1055,11 @@ export function SettingsClient({
 
             {/* Timezone */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label htmlFor="settings-timezone" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.timezone")}
               </label>
               <select
+                id="settings-timezone"
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
                 className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
@@ -1064,10 +1076,11 @@ export function SettingsClient({
 
             {/* Date format */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label id="settings-date-format-label" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.dateFormat")}
               </label>
               <SegmentedControl
+                labelledBy="settings-date-format-label"
                 value={dateFormat}
                 onChange={setDateFormat}
                 options={DATE_FORMATS.map((fmt) => ({ value: fmt.value, label: fmt.label }))}
@@ -1079,10 +1092,11 @@ export function SettingsClient({
 
             {/* Time format */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label id="settings-time-format-label" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.timeFormat")}
               </label>
               <SegmentedControl
+                labelledBy="settings-time-format-label"
                 value={timeFormat}
                 onChange={setTimeFormat}
                 options={[
@@ -1094,7 +1108,7 @@ export function SettingsClient({
 
             {/* Data region */}
             <div className="pt-4 border-t border-border">
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label htmlFor="settings-data-region" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("preferences.dataRegion")}
               </label>
               <div className="flex items-center gap-2 mb-1">
@@ -1102,6 +1116,7 @@ export function SettingsClient({
                 <span className="text-xs text-foreground-muted">{t("preferences.dataRegionDesc")}</span>
               </div>
               <select
+                id="settings-data-region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary mt-2"
@@ -1132,10 +1147,11 @@ export function SettingsClient({
 
             {/* Theme */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label id="settings-theme-label" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.theme")}
               </label>
               <SegmentedControl
+                labelledBy="settings-theme-label"
                 value={theme ?? "system"}
                 onChange={setTheme}
                 options={THEMES.map(({ id }) => ({
@@ -1150,10 +1166,10 @@ export function SettingsClient({
 
             {/* Accent color */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label id="settings-accent-color-label" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.accentColor")}
               </label>
-              <div className="flex gap-3">
+              <div role="group" aria-labelledby="settings-accent-color-label" className="flex gap-3">
                 {ACCENT_COLORS.map((c) => (
                   <button
                     key={c.id}
@@ -1178,10 +1194,11 @@ export function SettingsClient({
 
             {/* UI Density */}
             <div>
-              <label className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
+              <label id="settings-ui-density-label" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
                 {t("appearance.uiDensity")}
               </label>
               <SegmentedControl
+                labelledBy="settings-ui-density-label"
                 value={density}
                 onChange={setDensity}
                 options={DENSITIES.map((d) => ({
@@ -1234,10 +1251,11 @@ export function SettingsClient({
               </p>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs text-foreground-muted mb-1.5">
+                  <label htmlFor="settings-delete-confirm" className="block text-xs text-foreground-muted mb-1.5">
                     {t("danger.typeToConfirm", { email })}
                   </label>
                   <input
+                    id="settings-delete-confirm"
                     value={deleteConfirm}
                     onChange={(e) => setDeleteConfirm(e.target.value)}
                     placeholder={email}

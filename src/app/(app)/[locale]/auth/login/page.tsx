@@ -21,7 +21,7 @@ export default async function LoginPage() {
         </div>
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <div className="text-foreground font-semibold text-xl tracking-tight">
-            <img src={"/logo-light.svg"} className="h-6 w-auto" />
+            <img src={"/logo-light.svg"} alt="Rofiant" className="h-6 w-auto" />
           </div>
           <div>
             <blockquote className="text-lg text-foreground-secondary leading-relaxed max-w-md">
@@ -29,7 +29,7 @@ export default async function LoginPage() {
             </blockquote>
             <div className="mt-6 flex items-center gap-3">
               <div className="w-10 h-10 bg-background-tertiary flex items-center justify-center">
-                <img src={"/icon.svg"} />
+                <img src={"/icon.svg"} alt="" />
               </div>
               <div>
                 <p className="text-sm font-medium text-foreground">
