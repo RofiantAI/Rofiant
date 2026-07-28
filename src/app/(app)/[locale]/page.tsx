@@ -36,9 +36,6 @@ export default function Home() {
     <>
       <HeroSection />
       <ScrollReveal>
-        <PublicAISection />
-      </ScrollReveal>
-      <ScrollReveal>
         <UnifySection />
       </ScrollReveal>
       <ScrollReveal>
@@ -49,6 +46,9 @@ export default function Home() {
       </ScrollReveal>
       <ScrollReveal>
         <DeveloperSection />
+      </ScrollReveal>
+      <ScrollReveal>
+        <PublicAISection />
       </ScrollReveal>
       <ScrollReveal>
         <FooterCtaSection />

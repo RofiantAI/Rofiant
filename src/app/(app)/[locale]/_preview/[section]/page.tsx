@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { HeaderSection } from "@/components/sections/header-section";
 import { HeroSection } from "@/components/sections/hero-section";
+import { HeroSectionCursor } from "@/components/sections/hero-section-cursor";
 import { StatsSection } from "@/components/sections/stats-section";
 import { LogoCloudSection } from "@/components/sections/logo-cloud-section";
 import { UnifySection } from "@/components/sections/unify-section";
@@ -15,6 +16,7 @@ import { FooterSection } from "@/components/sections/footer-section";
 const sections: Record<string, React.ComponentType> = {
   header: HeaderSection,
   hero: HeroSection,
+  "hero-cursor": HeroSectionCursor,
   stats: StatsSection,
   "logo-cloud": LogoCloudSection,
   unify: UnifySection,

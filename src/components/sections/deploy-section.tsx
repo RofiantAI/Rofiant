@@ -7,13 +7,13 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Check } from "lucide-react";
 
-const tabs = ["chat", "documents", "agents"] as const;
+const tabs = ["agents", "documents", "chat"] as const;
 
 type TabKey = (typeof tabs)[number];
 
 export function DeploySection() {
   const t = useTranslations("home.deploy");
-  const [activeTab, setActiveTab] = useState<TabKey>("chat");
+  const [activeTab, setActiveTab] = useState<TabKey>("agents");
 
   return (
     <section className="py-24 px-6">

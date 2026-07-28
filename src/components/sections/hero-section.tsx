@@ -33,7 +33,7 @@ export async function HeroSection() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4 shrink-0">
-          <Link href="/auth/signup">
+          <Link href="/download">
             <Button size="lg">{t("startFree")}</Button>
           </Link>
           <Link href="/pricing">
