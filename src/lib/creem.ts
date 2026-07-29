@@ -6,8 +6,10 @@ export const creem = new Creem({
 });
 
 export const PLAN_PRODUCT_IDS: Record<string, string> = {
-  pro:   process.env.CREEM_PRODUCT_ID_PRO   ?? "",
-  ultra: process.env.CREEM_PRODUCT_ID_ULTRA ?? "",
+  pro:          process.env.CREEM_PRODUCT_ID_PRO          ?? "",
+  ultra:        process.env.CREEM_PRODUCT_ID_ULTRA        ?? "",
+  pro_annual:   process.env.CREEM_PRODUCT_ID_PRO_ANNUAL   ?? "",
+  ultra_annual: process.env.CREEM_PRODUCT_ID_ULTRA_ANNUAL ?? "",
 };
 
 // Pro product configured in Creem without a trial period, used once a user has

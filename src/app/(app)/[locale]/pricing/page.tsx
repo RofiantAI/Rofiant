@@ -134,7 +134,7 @@ export default function PricingPage() {
                 </button>
               ) : (
                 <a
-                  href={tier.href}
+                  href={annual && tier.href.includes("?") ? `${tier.href}&interval=annual` : tier.href}
                   className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-colors ${
                     tier.highlighted
                       ? "bg-foreground text-background hover:bg-foreground/90"
