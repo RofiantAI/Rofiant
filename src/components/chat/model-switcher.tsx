@@ -116,7 +116,7 @@ function ModelOption({
       type="button"
       onClick={onSelect}
       disabled={locked}
-      className={`w-full flex items-start gap-2.5 px-3 py-2.5 text-left transition-colors ${
+      className={`w-full flex items-start gap-2.5 px-3 py-2.5 rounded-md text-left transition-colors ${
         locked
           ? "opacity-50 cursor-not-allowed"
           : "hover:bg-background-tertiary"

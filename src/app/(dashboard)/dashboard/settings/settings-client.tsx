@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import {
   Bell, Globe, Check, Trash2, Palette,
-  LogOut, Download, Key, Monitor, ShieldCheck,
+  LogOut, Download, Key, Monitor,
   Plus, Copy, X, Lock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -206,6 +205,9 @@ export function SettingsClient({
   backHref,
   backLabel,
   initialTab,
+  tab: controlledTab,
+  onTabChange,
+  hideSidebar,
 }: {
   email: string;
   userId: string;
@@ -217,12 +219,17 @@ export function SettingsClient({
   backHref?: string;
   backLabel?: string;
   initialTab?: Tab;
+  tab?: Tab;
+  onTabChange?: (tab: Tab) => void;
+  hideSidebar?: boolean;
 }) {
   const router = useRouter();
   const t = useTranslations("dashboard.settings");
   const tApi = useTranslations("dashboard.apiKeys");
   const tGate = useTranslations("dashboard.planGate");
-  const [tab, setTab] = useState<Tab>(initialTab ?? "account");
+  const [internalTab, setInternalTab] = useState<Tab>(initialTab ?? "account");
+  const tab = controlledTab ?? internalTab;
+  const setTab = onTabChange ?? setInternalTab;
   const canUseApiKeys = canAccessTool(plan, "apiKeys");
 
   // Account
@@ -291,9 +298,6 @@ export function SettingsClient({
     typeof window !== "undefined"
       ? (localStorage.getItem("pref_timezone") ?? Intl.DateTimeFormat().resolvedOptions().timeZone)
       : "UTC"
-  );
-  const [region, setRegion] = useState(() =>
-    typeof window !== "undefined" ? (localStorage.getItem("data_region") ?? "US East") : "US East"
   );
   const [dateFormat, setDateFormat] = useState(() =>
     typeof window !== "undefined" ? (localStorage.getItem("pref_date_format") ?? "MMM D, YYYY") : "MMM D, YYYY"
@@ -522,7 +526,6 @@ export function SettingsClient({
   function savePreferences() {
     localStorage.setItem("pref_language", language);
     localStorage.setItem("pref_timezone", timezone);
-    localStorage.setItem("data_region", region);
     localStorage.setItem("pref_date_format", dateFormat);
     localStorage.setItem("pref_time_format", timeFormat);
     document.documentElement.lang = language;
@@ -569,7 +572,9 @@ export function SettingsClient({
   return (
     <div className="flex flex-col md:flex-row gap-6 md:gap-8">
       {/* Tab sidebar */}
-      <SettingsTabSidebar tab={tab} setTab={setTab} t={t} backHref={backHref} backLabel={backLabel} />
+      {!hideSidebar && (
+        <SettingsTabSidebar tab={tab} setTab={setTab} t={t} backHref={backHref} backLabel={backLabel} />
+      )}
 
       {/* Panel */}
       <div className="flex-1 min-w-0 space-y-4">
@@ -743,7 +748,7 @@ export function SettingsClient({
                   </p>
                   <button
                     onClick={disableMfa}
-                    className="h-8 px-3 text-xs font-medium border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="h-8 px-3 rounded-lg text-xs font-medium border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
                   >
                     {t("security.disable2fa")}
                   </button>
@@ -754,14 +759,14 @@ export function SettingsClient({
                     {t("security.scanQr")}
                   </p>
                   {mfaQR && (
-                    <div className="w-40 h-40 bg-white p-2 inline-block">
+                    <div className="w-40 h-40 rounded-lg bg-white p-2 inline-block">
                       <img src={mfaQR} alt="2FA QR code" className="w-full h-full" />
                     </div>
                   )}
                   {mfaSecret && (
                     <div>
                       <p className="text-xs text-foreground-muted mb-1">{t("security.manualKey")}</p>
-                      <code className="text-xs font-mono bg-background-tertiary px-2 py-1 text-foreground-secondary break-all block">
+                      <code className="text-xs font-mono bg-background-tertiary rounded-md px-2 py-1 text-foreground-secondary break-all block">
                         {mfaSecret}
                       </code>
                     </div>
@@ -776,7 +781,7 @@ export function SettingsClient({
                         onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                         placeholder="000000"
                         inputMode="numeric"
-                        className="w-36 h-9 px-3 bg-background-secondary border border-border text-sm text-foreground font-mono tracking-widest placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                        className="w-36 h-9 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground font-mono tracking-widest placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                       />
                     </div>
                     {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
@@ -791,7 +796,7 @@ export function SettingsClient({
                       <button
                         type="button"
                         onClick={cancelMfaEnroll}
-                        className="h-8 px-3 text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
+                        className="h-8 px-3 rounded-lg text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                       >
                         {t("security.cancel")}
                       </button>
@@ -811,7 +816,7 @@ export function SettingsClient({
                   <button
                     onClick={startMfaEnroll}
                     disabled={mfaStep === "starting"}
-                    className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
+                    className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
                   >
                     {mfaStep === "starting" ? t("security.loading") : t("security.setup2fa")}
                   </button>
@@ -827,7 +832,7 @@ export function SettingsClient({
               </div>
 
               {/* Current session info */}
-              <div className="mb-5 p-4 bg-background-secondary border border-border">
+              <div className="mb-5 p-4 rounded-lg bg-background-secondary border border-border">
                 <div className="flex items-center gap-2 mb-3">
                   <Monitor className="w-3.5 h-3.5 text-foreground-muted" />
                   <span className="text-xs font-medium text-foreground">{t("security.currentSession")}</span>
@@ -863,27 +868,10 @@ export function SettingsClient({
               <button
                 onClick={signOutOtherSessions}
                 disabled={signingOutOthers}
-                className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
+                className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
               >
                 {signingOutOthers ? t("security.signingOut") : t("security.signOutOthers")}
               </button>
-            </DashboardCard>
-
-            {/* Audit log */}
-            <DashboardCard>
-              <div className="flex items-center gap-3 mb-4">
-                <ShieldCheck className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">{t("security.auditLog.title")}</h2>
-              </div>
-              <p className="text-sm text-foreground-secondary mb-4">
-                {t("security.auditLog.desc")}
-              </p>
-              <Link
-                href="/dashboard/audit-log"
-                className="inline-flex h-8 items-center px-3 text-xs font-medium border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
-              >
-                {t("security.auditLog.view")}
-              </Link>
             </DashboardCard>
           </div>
         )}
@@ -913,7 +901,7 @@ export function SettingsClient({
                       value={newApiKeyName}
                       onChange={(e) => setNewApiKeyName(e.target.value)}
                       placeholder={tApi("newKeyForm.namePlaceholder")}
-                      className="flex-1 min-w-[200px] h-9 px-3 bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+                      className="flex-1 min-w-[200px] h-9 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                     />
                     <DashboardPrimaryButton type="submit" disabled={apiKeyCreating}>
                       {apiKeyCreating ? tApi("newKeyForm.creating") : tApi("newKeyForm.create")}
@@ -928,7 +916,7 @@ export function SettingsClient({
                 )}
 
                 {createdApiKey && (
-                  <div className="mb-5 p-4 border border-accent-primary/30">
+                  <div className="mb-5 p-4 rounded-lg border border-accent-primary/30">
                     <div className="flex items-start justify-between mb-2">
                       <p className="text-sm font-medium text-foreground">{tApi("createdKey.message")}</p>
                       <button onClick={() => setCreatedApiKey(null)}>
@@ -936,7 +924,7 @@ export function SettingsClient({
                       </button>
                     </div>
                     <div className="flex items-center gap-2 mt-3">
-                      <code className="flex-1 text-xs font-mono bg-background-tertiary px-3 py-2 text-foreground break-all">
+                      <code className="flex-1 text-xs font-mono bg-background-tertiary rounded-md px-3 py-2 text-foreground break-all">
                         {createdApiKey.key_value}
                       </code>
                       <DashboardSecondaryButton onClick={() => handleCopyApiKey(createdApiKey.key_value, "new")}>
@@ -963,10 +951,10 @@ export function SettingsClient({
                       <div key={k.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 items-center px-5 py-3.5 border-b border-border last:border-0">
                         <span className="text-sm text-foreground">{k.name}</span>
                         <div className="flex items-center gap-2">
-                          <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary px-2 py-1">
+                          <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary rounded-md px-2 py-1">
                             {k.key_prefix}…
                           </code>
-                          <button onClick={() => handleCopyApiKey(k.key_value, k.id)} className="p-1 hover:bg-background-tertiary">
+                          <button onClick={() => handleCopyApiKey(k.key_value, k.id)} className="p-1 rounded-md hover:bg-background-tertiary">
                             {copiedApiKeyId === k.id ? <Check className="w-3 h-3 text-accent-success" /> : <Copy className="w-3 h-3 text-foreground-muted" />}
                           </button>
                         </div>
@@ -974,7 +962,7 @@ export function SettingsClient({
                         <button
                           onClick={() => handleDeleteApiKey(k.id)}
                           disabled={deletingApiKeyId === k.id}
-                          className="p-1 hover:bg-background-tertiary disabled:opacity-40"
+                          className="p-1 rounded-md hover:bg-background-tertiary disabled:opacity-40"
                         >
                           <Trash2 className="w-3.5 h-3.5 text-foreground-muted" />
                         </button>
@@ -1043,7 +1031,7 @@ export function SettingsClient({
                 id="settings-language"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
+                className="w-full h-10 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
               >
                 {routing.locales.map((l) => (
                   <option key={l} value={l}>
@@ -1062,7 +1050,7 @@ export function SettingsClient({
                 id="settings-timezone"
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
+                className="w-full h-10 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary"
               >
                 {TIMEZONES.map((tz) => (
                   <option key={tz} value={tz}>{tz}</option>
@@ -1104,29 +1092,6 @@ export function SettingsClient({
                   { value: "24h" as const, label: t("preferences.time24h") },
                 ]}
               />
-            </div>
-
-            {/* Data region */}
-            <div className="pt-4 border-t border-border">
-              <label htmlFor="settings-data-region" className="block text-xs font-medium text-foreground-secondary mb-2 uppercase tracking-wider">
-                {t("preferences.dataRegion")}
-              </label>
-              <div className="flex items-center gap-2 mb-1">
-                <Globe className="w-3.5 h-3.5 text-foreground-muted" />
-                <span className="text-xs text-foreground-muted">{t("preferences.dataRegionDesc")}</span>
-              </div>
-              <select
-                id="settings-data-region"
-                value={region}
-                onChange={(e) => setRegion(e.target.value)}
-                className="w-full h-10 px-3 bg-background-secondary border border-border text-sm text-foreground focus:outline-none focus:border-accent-primary mt-2"
-              >
-                <option value="US East">{t("preferences.regions.usEast")}</option>
-                <option value="US West">{t("preferences.regions.usWest")}</option>
-                <option value="EU West">{t("preferences.regions.euWest")}</option>
-                <option value="EU Central">{t("preferences.regions.euCentral")}</option>
-                <option value="Asia Pacific">{t("preferences.regions.asiaPacific")}</option>
-              </select>
             </div>
 
             <div className="pt-2">
@@ -1234,7 +1199,7 @@ export function SettingsClient({
               <button
                 onClick={handleExport}
                 disabled={exportLoading}
-                className="h-8 px-3 text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors disabled:opacity-50 disabled:pointer-events-none"
               >
                 {exportLoading ? t("danger.exporting") : t("danger.requestExport")}
               </button>
@@ -1259,13 +1224,13 @@ export function SettingsClient({
                     value={deleteConfirm}
                     onChange={(e) => setDeleteConfirm(e.target.value)}
                     placeholder={email}
-                    className="w-full h-9 px-3 bg-background-secondary border border-red-500/30 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-red-500/60"
+                    className="w-full h-9 px-3 rounded-lg bg-background-secondary border border-red-500/30 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-red-500/60"
                   />
                 </div>
                 <button
                   onClick={deleteAccount}
                   disabled={deleteConfirm !== email || deleting}
-                  className="h-8 px-3 text-xs font-medium bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="h-8 px-3 rounded-lg text-xs font-medium bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   {deleting ? t("danger.deleting") : t("danger.deleteMyAccount")}
                 </button>

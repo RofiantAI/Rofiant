@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { PageLayout } from "@/components/page-layout";
 import { Card } from "@/components/ui/card";
-import { Lock, Key, FileText, Server, Globe, Bell } from "lucide-react";
+import { Lock, Key, Server, Globe, Bell } from "lucide-react";
 
 export default async function SecurityPage() {
   const t = await getTranslations("company.security");
@@ -9,7 +9,6 @@ export default async function SecurityPage() {
   const areas = [
     { key: "encryption", icon: Lock },
     { key: "accessControl", icon: Key },
-    { key: "auditLogging", icon: FileText },
     { key: "infrastructure", icon: Server },
     { key: "dataResidency", icon: Globe },
     { key: "incidentResponse", icon: Bell },

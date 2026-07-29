@@ -63,12 +63,7 @@
       "signOutOthersDesc": "Déconnectez toutes les autres sessions actives sur vos autres appareils.",
       "allOthersSignedOut": "Toutes les autres sessions ont été déconnectées.",
       "signingOut": "Déconnexion…",
-      "signOutOthers": "Déconnecter les autres sessions",
-      "auditLog": {
-        "title": "Journal d'audit",
-        "desc": "Consultez les actions liées à la sécurité : clés API, webhooks et exportations de données.",
-        "view": "Voir le journal d'audit"
-      }
+      "signOutOthers": "Déconnecter les autres sessions"
     },
     "notifications": {
       "heading": "Notifications",
@@ -106,15 +101,6 @@
       "timeFormat": "Format d'heure",
       "time12h": "12 heures (2:30 PM)",
       "time24h": "24 heures (14:30)",
-      "dataRegion": "Région des données",
-      "dataRegionDesc": "Contrôle l'endroit où vos données sont stockées et traitées.",
-      "regions": {
-        "usEast": "États-Unis Est",
-        "usWest": "États-Unis Ouest",
-        "euWest": "UE Ouest",
-        "euCentral": "UE Centrale",
-        "asiaPacific": "Asie-Pacifique"
-      },
       "savePreferences": "Enregistrer les préférences",
       "saved": "Enregistré"
     },
@@ -184,7 +170,6 @@
       "chatAi": "Chat AI",
       "apiKeys": "Clés API",
       "usage": "Utilisation",
-      "auditLog": "Journal d'audit",
       "siteBroadcast": "Diffusion du site"
     },
     "siteAdmin": "Admin du site",

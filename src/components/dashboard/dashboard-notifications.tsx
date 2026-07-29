@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bell } from "lucide-react";
@@ -192,17 +191,6 @@ export function DashboardNotifications({ align = "right" }: { align?: "left" | "
             ))}
           </div>
 
-          {notifications.length > 0 && (
-            <div className="border-t border-border px-4 py-2">
-              <Link
-                href="/dashboard/audit-log"
-                onClick={() => setOpen(false)}
-                className="text-xs text-foreground-muted hover:text-foreground transition-colors"
-              >
-                {t("viewActivity")}
-              </Link>
-            </div>
-          )}
         </div>
       )}
     </div>

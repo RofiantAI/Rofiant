@@ -56,9 +56,10 @@ export function ChatShell({
           )}
           {!isSettings && (
             <div
-              className="fixed inset-y-0 left-0 z-40 shrink-0 overflow-hidden md:relative md:z-auto"
+              className="fixed inset-y-0 left-0 z-40 shrink-0 md:relative md:z-auto"
               style={{
                 width: open ? 272 : 0,
+                overflow: open ? "visible" : "hidden",
                 transition: "width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
@@ -66,9 +67,9 @@ export function ChatShell({
             </div>
           )}
 
-          <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-            {!isSettings && <BetaBanner />}
+          <main className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden">
             {!isSettings && <ChatTabs conversations={conversations} />}
+            {!isSettings && <BetaBanner />}
             {children}
           </main>
         </div>

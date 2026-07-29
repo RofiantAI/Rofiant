@@ -164,7 +164,7 @@
           "subtitle": "Simple, secure sign-in",
           "description": "One account protects access to your Rofiant settings and sync. No enterprise identity provider required, no complexity."
         },
-        "audit": {
+        "approval": {
           "title": "Approval before anything risky",
           "subtitle": "You're asked, every time",
           "description": "Rofiant asks before it writes, deletes, runs a command, or closes a process. Nothing risky happens without your OK."
@@ -186,7 +186,7 @@
         },
         "observability": {
           "title": "Built-in observability",
-          "desc": "Every API call is recorded with timing and token usage in your account's usage and audit logs, queryable via the API."
+          "desc": "Every API call is recorded with timing and token usage in your account's usage logs, queryable via the API."
         }
       }
     },
@@ -454,10 +454,6 @@
           "title": "Permission gates",
           "desc": "Rofiant asks before touching anything risky. You approve file edits, deletes, commands, and process changes before they happen."
         },
-        "auditLogging": {
-          "title": "Cloud audit log",
-          "desc": "Actions taken through Agents, the API, and other cloud features are recorded in your account's audit log, viewable and exportable via the API. The desktop app doesn't keep a separate local action log today."
-        },
         "infrastructure": {
           "title": "Local tools, optional cloud features",
           "desc": "The desktop app's file, command, and screenshot tools run entirely on your machine. Chat replies use hosted models unless you configure a local Ollama model. Pro and Ultra features — documents, voice, Agents, the API — run on our cloud infrastructure."
@@ -534,9 +530,7 @@
           "desc": "See every step Rofiant takes in the chat. Review its work at any time.",
           "details": [
             "Step-by-step trace with timing",
-            "See every tool call and its result in the conversation",
-            "Cloud Agent runs are also recorded in your account's audit log",
-            "Query your audit log anytime via the API"
+            "See every tool call and its result in the conversation"
           ]
         }
       },
@@ -654,8 +648,7 @@
           "details": [
             "Approve or deny each risky action from the chat",
             "Read-only actions (like reading a file) don't need approval",
-            "Nothing destructive happens without your OK",
-            "Cloud Agent runs are recorded in your account's audit log"
+            "Nothing destructive happens without your OK"
           ]
         },
         "multiLanguage": {
@@ -666,16 +659,6 @@
             "Multiple languages supported out of the box",
             "Understands mixed-language file names and content",
             "Reply language follows your request"
-          ]
-        },
-        "auditTrail": {
-          "title": "Cloud audit log for Agents & API",
-          "desc": "Runs through Agents, the API, and other cloud features are recorded in your account's audit log.",
-          "details": [
-            "Written server-side; only your account can read it",
-            "Query it anytime via the API",
-            "Searchable by API key, event type, and date",
-            "The desktop app's own file/command tools aren't logged here today"
           ]
         }
       },
@@ -689,7 +672,6 @@
         "i3": "No file or screenshot content sent to a cloud feature without your permission",
         "i4": "Approval required before risky actions",
         "i6": "You choose which Pro/Ultra cloud features to use",
-        "i7": "Cloud audit log for Agents, API, and other cloud features, exportable via the API",
         "i8": "Public status page for the sync and account service"
       },
       "useCasesSection": {
@@ -749,7 +731,7 @@
         },
         "security": {
           "title": "Security",
-          "desc": "Permissions, approval gates, and the cloud audit log for Agents and API usage."
+          "desc": "Permissions and approval gates for Agents and API usage."
         }
       }
     },
@@ -760,7 +742,6 @@
         "chatCompletions": "Create a chat completion",
         "models": "List available models",
         "usage": "Get usage statistics",
-        "auditLogs": "Query audit logs",
         "scimListUsers": "List provisioned users (SCIM, Agency/Enterprise)",
         "scimCreateUser": "Provision a user (SCIM, Agency/Enterprise)",
         "scimUpdateUser": "Update a provisioned user (SCIM, Agency/Enterprise)",
@@ -944,7 +925,7 @@
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
             "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
             "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
-            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters, and audit log entries for administrative actions."
+            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
           },
           "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
         },
@@ -1053,7 +1034,7 @@
           "items": {
             "account": "Account and profile data remain while your account is active.",
             "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
-            "logs": "Security, audit, and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
+            "logs": "Security and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
             "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
             "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
           },
@@ -1134,7 +1115,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on a commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {

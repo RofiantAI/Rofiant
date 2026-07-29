@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { X, Plus, MessageSquare } from "lucide-react";
+import { X, Plus, MessageSquare, PanelLeftOpen } from "lucide-react";
 import { useChatTabs } from "@/contexts/chat-tabs-context";
+import { useChatShell } from "@/contexts/chat-shell-context";
 
 type Conversation = {
   id: string;
@@ -41,6 +42,7 @@ export function ChatTabs({ conversations }: { conversations: Conversation[] }) {
   const params = useParams<{ id?: string }>();
   const activeId = params?.id ?? null;
   const { bumpDraft } = useChatTabs();
+  const { sidebarOpen, openSidebar } = useChatShell();
 
   const [tabs, setTabs] = useState<Tab[]>([]);
   const lastActiveKey = useRef<string>("new");
@@ -134,10 +136,20 @@ export function ChatTabs({ conversations }: { conversations: Conversation[] }) {
     router.push("/chat");
   }
 
-  if (tabs.length === 0) return null;
+  if (tabs.length === 0 && sidebarOpen) return null;
 
   return (
     <div className="flex items-center h-11 shrink-0 border-b border-border bg-background pr-2">
+      {!sidebarOpen && (
+        <button
+          type="button"
+          onClick={openSidebar}
+          title="Open sidebar"
+          className="flex items-center justify-center w-5 h-5 ml-2.5 shrink-0 rounded-md text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors"
+        >
+          <PanelLeftOpen className="w-3.5 h-3.5" />
+        </button>
+      )}
       <div className="flex items-center h-full overflow-x-auto min-w-0 px-1 gap-0.5">
         {tabs.map((tab) => {
           const isActive = (activeId ?? "new") === (tab.id ?? "new");

@@ -8,7 +8,7 @@ import {
   Home,
   MessageSquare,
   Settings,
-  Zap,
+  Sparkles,
   LogOut,
   MoreHorizontal,
   Pin,
@@ -17,18 +17,28 @@ import {
   Trash2,
   BookOpen,
   MessageCircle,
+  Download,
   Search,
   X,
   PanelLeftClose,
+  Contrast,
+  CircleHelp,
+  ChevronRight,
+  Check,
+  Sun,
+  Moon,
+  Monitor,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { useTheme } from "next-themes";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { appUrl } from "@/lib/app-url";
 import { routing } from "@/i18n/routing";
 import { UserAvatar } from "@/components/dashboard/user-avatar-button";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
 import { useChatShell } from "@/contexts/chat-shell-context";
+import { useConfirmDialog } from "@/components/chat/confirm-dialog";
 
 type Conversation = {
   id: string;
@@ -301,12 +311,18 @@ export function ChatSidebar({
     ? { Results: displayedConversations }
     : groupByDate(conversations);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [subMenu, setSubMenu] = useState<"appearance" | "help" | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { theme, setTheme } = useTheme();
+  const [themeMounted, setThemeMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setThemeMounted(true), []);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuOpen(false);
+        setSubMenu(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -362,20 +378,30 @@ export function ChatSidebar({
     });
   }, []);
 
+  const { confirm, dialog: confirmDialog } = useConfirmDialog();
+
   const handleDelete = useCallback(
     async (id: string) => {
+      const target = conversations.find((c) => c.id === id);
+      const ok = await confirm({
+        title: target ? `Delete "${target.title}"?` : "Delete this chat?",
+        description: "This can't be undone.",
+        confirmLabel: "Delete",
+        danger: true,
+      });
+      if (!ok) return;
       setConversations((prev) => prev.filter((c) => c.id !== id));
       await fetch(`/api/conversations/${id}`, { method: "DELETE" });
       if (pathname === `/chat/${id}`) router.push("/chat");
     },
-    [pathname, router],
+    [conversations, pathname, router, confirm],
   );
 
   const [searching, setSearching] = useState(false);
   const emailName = user.email?.split("@")[0] ?? displayName;
 
   return (
-    <aside className="w-[272px] shrink-0 flex flex-col border-r border-border bg-background-secondary h-full">
+    <aside className="w-[272px] shrink-0 flex flex-col border-r border-border bg-background h-full">
       <div className="flex items-center gap-1.5 h-11 px-3 shrink-0">
         <button
           type="button"
@@ -492,7 +518,10 @@ export function ChatSidebar({
       >
         <button
           type="button"
-          onClick={() => setMenuOpen((v) => !v)}
+          onClick={() => {
+            setMenuOpen((v) => !v);
+            setSubMenu(null);
+          }}
           className="flex items-center gap-2 flex-1 min-w-0 rounded-md hover:bg-background-tertiary transition-colors -mx-1 px-1 py-0.5"
         >
           <UserAvatar
@@ -509,40 +538,128 @@ export function ChatSidebar({
           </div>
         </button>
         {menuOpen && (
-          <div className="absolute bottom-full left-3 right-3 mb-1.5 rounded-lg bg-card border border-border shadow-lg py-1 px-0.5 overflow-hidden">
-            <a
-              href="https://www.rofiant.ca/resources/documentation"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              Docs
-            </a>
-            <LocaleLink
-              href="/company/contact"
-              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              Contact Us
-            </LocaleLink>
+          <div className="absolute bottom-full left-3 mb-1.5 w-64 rounded-lg bg-card border border-border shadow-lg overflow-visible">
+            <div className="px-3 py-3">
+              <div className="text-sm text-foreground truncate">{emailName}</div>
+              <div className="text-xs text-foreground-muted truncate">{user.email}</div>
+            </div>
             {!isPro && (
-              <LocaleLink
-                href="/pricing"
+              <div className="px-2 pb-2">
+                <LocaleLink
+                  href="/pricing"
+                  className="flex items-center justify-center gap-1.5 w-full px-3 py-1.5 text-sm text-foreground border border-border rounded-md hover:bg-background-tertiary transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Upgrade to Pro
+                </LocaleLink>
+              </div>
+            )}
+            <div className="h-px bg-border" />
+            <div className="py-1 px-0.5">
+              <a
+                href={appUrl("/chat/settings")}
                 className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
               >
-                <Zap className="w-3.5 h-3.5" />
-                Upgrade
+                <Settings className="w-3.5 h-3.5" />
+                Settings
+              </a>
+              <LocaleLink
+                href="/download"
+                className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Download
               </LocaleLink>
-            )}
+
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setSubMenu((v) => (v === "appearance" ? null : "appearance"))}
+                  className={`flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm transition-colors rounded-md ${
+                    subMenu === "appearance"
+                      ? "bg-background-tertiary text-foreground"
+                      : "text-foreground-secondary hover:bg-background-tertiary hover:text-foreground"
+                  }`}
+                >
+                  <Contrast className="w-3.5 h-3.5" />
+                  Appearance
+                  <span className="ml-auto text-xs text-foreground-muted capitalize">
+                    {themeMounted ? (theme ?? "system") : "system"}
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 text-foreground-muted" />
+                </button>
+                {subMenu === "appearance" && (
+                  <div className="absolute left-full top-0 ml-1 w-36 rounded-lg bg-card border border-border shadow-lg py-1 px-0.5">
+                    {(
+                      [
+                        { id: "light", label: "Light", icon: Sun },
+                        { id: "dark", label: "Dark", icon: Moon },
+                        { id: "system", label: "System", icon: Monitor },
+                      ] as const
+                    ).map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setTheme(opt.id)}
+                        className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+                      >
+                        <opt.icon className="w-3.5 h-3.5" />
+                        {opt.label}
+                        {themeMounted && theme === opt.id && (
+                          <Check className="w-3.5 h-3.5 ml-auto text-foreground" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setSubMenu((v) => (v === "help" ? null : "help"))}
+                  className={`flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm transition-colors rounded-md ${
+                    subMenu === "help"
+                      ? "bg-background-tertiary text-foreground"
+                      : "text-foreground-secondary hover:bg-background-tertiary hover:text-foreground"
+                  }`}
+                >
+                  <CircleHelp className="w-3.5 h-3.5" />
+                  Help
+                  <ChevronRight className="w-3.5 h-3.5 text-foreground-muted ml-auto" />
+                </button>
+                {subMenu === "help" && (
+                  <div className="absolute left-full top-0 ml-1 w-40 rounded-lg bg-card border border-border shadow-lg py-1 px-0.5">
+                    <a
+                      href="https://www.rofiant.ca/resources/documentation"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      Docs
+                    </a>
+                    <LocaleLink
+                      href="/company/contact"
+                      className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      Contact Us
+                    </LocaleLink>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="h-px bg-border my-1" />
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              Sign out
-            </button>
+            <div className="pb-1 px-0.5">
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-2.5 w-[calc(100%-2px)] mx-px px-3 py-1.5 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors rounded-md"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Log Out
+              </button>
+            </div>
           </div>
         )}
         <a
@@ -553,6 +670,7 @@ export function ChatSidebar({
           <Settings className="w-3.5 h-3.5" />
         </a>
       </div>
+      {confirmDialog}
     </aside>
   );
 }

@@ -6,7 +6,7 @@ import type { useTranslations } from "next-intl";
 
 export type Tab = "account" | "security" | "api" | "notifications" | "preferences" | "appearance" | "danger";
 
-const TABS: { id: Tab; icon: React.ElementType }[] = [
+export const TABS: { id: Tab; icon: React.ElementType }[] = [
   { id: "account", icon: User },
   { id: "security", icon: Shield },
   { id: "api", icon: Key },

@@ -5,12 +5,10 @@ import { DefaultChatTransport, isTextUIPart } from "ai";
 import { parseAssistantOutput } from "@/lib/chat-reasoning";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PanelLeftOpen } from "lucide-react";
 import { MessageBubble, type MessageAttachment } from "./message-bubble";
 import { ChatEmptyState } from "./chat-empty-state";
 import { Composer } from "./composer";
 import { useChatSettings } from "@/contexts/chat-settings-context";
-import { useChatShell } from "@/contexts/chat-shell-context";
 import { playDoneSound } from "@/lib/chat-settings";
 import { parseSlashCommand } from "@/lib/chat-commands";
 import { loadRules, saveRules, rulesToPrompt, type Rule } from "@/lib/chat-rules";
@@ -74,15 +72,12 @@ function makeId() {
 export function ChatWindow({
   conversationId,
   initialMessages,
-  title,
 }: {
   conversationId?: string;
   initialMessages?: InitialMessage[];
-  title?: string;
 } = {}) {
   const router = useRouter();
   const { settings } = useChatSettings();
-  const { sidebarOpen, openSidebar } = useChatShell();
   const [activeId] = useState(conversationId);
   const [inputValue, setInputValue] = useState("");
   const didAutoSend = useRef(false);
@@ -429,36 +424,6 @@ export function ChatWindow({
   const isEmpty = messages.length === 0 && !pendingMessage;
   const msgFontSize = fontSizeClass[settings.fontSize];
   const msgDensity = densityClass[settings.density];
-  const showTopBar = !sidebarOpen || Boolean(title);
-
-  function renderTopBar() {
-    if (!showTopBar) return null;
-
-    return (
-      <header className="shrink-0 flex items-center h-12 px-3 border-b border-border/60 bg-background/80 backdrop-blur-sm">
-        {!sidebarOpen ? (
-          <button
-            type="button"
-            onClick={openSidebar}
-            className="flex items-center justify-center w-8 h-8 shrink-0 rounded-lg border border-border/60 text-foreground-muted hover:text-foreground hover:bg-background-tertiary hover:border-border transition-colors"
-            title="Open sidebar"
-          >
-            <PanelLeftOpen className="w-4 h-4" />
-          </button>
-        ) : (
-          <div className="w-8 shrink-0" aria-hidden />
-        )}
-        {title ? (
-          <h1 className="flex-1 min-w-0 text-center text-sm font-medium text-foreground truncate px-2">
-            {title}
-          </h1>
-        ) : (
-          <div className="flex-1" />
-        )}
-        <div className="w-8 shrink-0" aria-hidden />
-      </header>
-    );
-  }
 
   function renderComposer(maxWidth = "max-w-3xl") {
     return (
@@ -480,10 +445,8 @@ export function ChatWindow({
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {renderTopBar()}
-
-      <div className="flex-1 overflow-y-auto">
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-y-auto">
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center min-h-full px-4 py-10">
             <div className="w-full max-w-2xl">

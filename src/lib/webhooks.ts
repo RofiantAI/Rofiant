@@ -1,7 +1,7 @@
 import { createHmac } from "crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export type WebhookEvent = "document.processed" | "voice.processed";
+export type WebhookEvent = "document.processed";
 
 export async function dispatchWebhook(
   userId: string,

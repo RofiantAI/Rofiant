@@ -1,8 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { logAudit } from "@/lib/audit";
 import { isMinorUser } from "@/lib/minor-account";
 
-export async function GET(req: Request) {
+export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
@@ -51,9 +50,6 @@ export async function GET(req: Request) {
     agents,
     api_keys: apiKeys,
   };
-
-  const ip = req.headers.get("x-forwarded-for") ?? undefined;
-  logAudit({ userId: user.id, action: "data.exported", detail: {}, ip }).catch(() => {});
 
   return new Response(JSON.stringify(exportPayload, null, 2), {
     headers: {

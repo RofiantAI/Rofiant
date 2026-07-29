@@ -23,6 +23,7 @@ export async function generateMetadata({
     },
   };
 }
+import { DmcAdSection } from "@/components/sections/dmc-ad-section";
 import { UnifySection } from "@/components/sections/unify-section";
 import { DeploySection } from "@/components/sections/deploy-section";
 import { ProtectSection } from "@/components/sections/protect-section";
@@ -35,6 +36,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <DmcAdSection />
       <ScrollReveal>
         <UnifySection />
       </ScrollReveal>

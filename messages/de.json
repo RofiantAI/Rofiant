@@ -164,7 +164,7 @@
           "subtitle": "Einfache, sichere Anmeldung",
           "description": "Ein einziges Konto schützt den Zugriff auf Ihre Rofiant-Einstellungen und die Synchronisierung. Kein Enterprise-Identitätsanbieter nötig, keine Komplexität."
         },
-        "audit": {
+        "approval": {
           "title": "Freigabe vor jeder riskanten Aktion",
           "subtitle": "Sie werden jedes Mal gefragt",
           "description": "Rofiant fragt nach, bevor es etwas schreibt, löscht, einen Befehl ausführt oder einen Prozess beendet. Nichts Riskantes passiert ohne Ihr OK."
@@ -186,7 +186,7 @@
         },
         "observability": {
           "title": "Integrierte Beobachtbarkeit",
-          "desc": "Jeder API-Aufruf wird mit Zeit und Token-Nutzung in den Nutzungs- und Audit-Protokollen Ihres Kontos erfasst, abfragbar über die API."
+          "desc": "Jeder API-Aufruf wird mit Zeit und Token-Nutzung in den Nutzungsprotokollen Ihres Kontos erfasst, abfragbar über die API."
         }
       }
     },
@@ -454,10 +454,6 @@
           "title": "Freigabe-Schranken",
           "desc": "Rofiant fragt nach, bevor es etwas Riskantes anfasst. Sie genehmigen Dateibearbeitungen, Löschungen, Befehle und Prozessänderungen, bevor sie ausgeführt werden."
         },
-        "auditLogging": {
-          "title": "Cloud-Audit-Protokoll",
-          "desc": "Aktionen über Agenten, die API und andere Cloud-Funktionen werden im Audit-Protokoll Ihres Kontos erfasst, einsehbar und exportierbar über die API. Die Desktop-App führt derzeit kein separates lokales Aktivitätsprotokoll."
-        },
         "infrastructure": {
           "title": "Lokale Tools, optionale Cloud-Funktionen",
           "desc": "Die Datei-, Befehls- und Screenshot-Tools der Desktop-App laufen vollständig auf Ihrem Rechner. Chat-Antworten nutzen gehostete Modelle, sofern Sie kein lokales Ollama-Modell konfigurieren. Pro- und Ultra-Funktionen — Dokumente, Sprache, Agenten, die API — laufen auf unserer Cloud-Infrastruktur."
@@ -534,9 +530,7 @@
           "desc": "Sehen Sie jeden Schritt, den Rofiant im Chat unternimmt. Überprüfen Sie seine Arbeit jederzeit.",
           "details": [
             "Schritt-für-Schritt-Ablauf mit Zeitangaben",
-            "Jeden Tool-Aufruf und sein Ergebnis in der Konversation sehen",
-            "Cloud-Agenten-Läufe werden zusätzlich im Audit-Protokoll Ihres Kontos erfasst",
-            "Fragen Sie Ihr Audit-Protokoll jederzeit über die API ab"
+            "Jeden Tool-Aufruf und sein Ergebnis in der Konversation sehen"
           ]
         }
       },
@@ -654,8 +648,7 @@
           "details": [
             "Jede riskante Aktion direkt im Chat genehmigen oder ablehnen",
             "Lesende Aktionen (wie das Lesen einer Datei) benötigen keine Freigabe",
-            "Nichts Destruktives passiert ohne Ihr OK",
-            "Cloud-Agenten-Läufe werden im Audit-Protokoll Ihres Kontos erfasst"
+            "Nichts Destruktives passiert ohne Ihr OK"
           ]
         },
         "multiLanguage": {
@@ -666,16 +659,6 @@
             "Mehrere Sprachen werden von Haus aus unterstützt",
             "Versteht gemischtsprachige Dateinamen und Inhalte",
             "Die Antwortsprache richtet sich nach Ihrer Anfrage"
-          ]
-        },
-        "auditTrail": {
-          "title": "Cloud-Audit-Protokoll für Agenten & API",
-          "desc": "Läufe über Agenten, die API und andere Cloud-Funktionen werden im Audit-Protokoll Ihres Kontos erfasst.",
-          "details": [
-            "Serverseitig geschrieben; nur Ihr Konto kann es lesen",
-            "Jederzeit über die API abfragbar",
-            "Durchsuchbar nach API-Schlüssel, Ereignistyp und Datum",
-            "Die eigenen Datei-/Befehls-Tools der Desktop-App werden hier derzeit nicht protokolliert"
           ]
         }
       },
@@ -689,7 +672,6 @@
         "i3": "Keine Datei- oder Screenshot-Inhalte werden ohne Ihre Erlaubnis an eine Cloud-Funktion gesendet",
         "i4": "Freigabe erforderlich vor riskanten Aktionen",
         "i6": "Sie entscheiden, welche Pro-/Ultra-Cloud-Funktionen Sie nutzen",
-        "i7": "Cloud-Audit-Protokoll für Agenten, API und andere Cloud-Funktionen, exportierbar über die API",
         "i8": "Öffentliche Statusseite für den Sync- und Kontodienst"
       },
       "useCasesSection": {
@@ -744,7 +726,7 @@
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
             "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
             "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
-            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters, and audit log entries for administrative actions."
+            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
           },
           "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
         },
@@ -853,7 +835,7 @@
           "items": {
             "account": "Account and profile data remain while your account is active.",
             "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
-            "logs": "Security, audit, and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
+            "logs": "Security and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
             "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
             "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
           },
@@ -934,7 +916,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {
@@ -1103,7 +1085,7 @@
         },
         "security": {
           "title": "Sicherheit",
-          "desc": "Berechtigungen, Freigabe-Schranken und das Cloud-Audit-Protokoll für Agenten- und API-Nutzung."
+          "desc": "Berechtigungen und Freigabe-Schranken für Agenten- und API-Nutzung."
         }
       }
     },
@@ -1114,7 +1096,6 @@
         "chatCompletions": "Eine Chat-Vervollständigung erstellen",
         "models": "Verfügbare Modelle auflisten",
         "usage": "Nutzungsstatistiken abrufen",
-        "auditLogs": "Audit-Protokolle abfragen",
         "scimListUsers": "Bereitgestellte Benutzer auflisten (SCIM, Agency/Enterprise)",
         "scimCreateUser": "Einen Benutzer bereitstellen (SCIM, Agency/Enterprise)",
         "scimUpdateUser": "Einen bereitgestellten Benutzer aktualisieren (SCIM, Agency/Enterprise)",

@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
 import { sendSecurityAlertEmail } from "@/lib/email";
 import { isNotifEnabled } from "@/lib/notification-prefs";
-import { logAudit } from "@/lib/audit";
 import { planToolDeniedResponse } from "@/lib/plan-guard";
 
 export async function GET() {
@@ -49,13 +48,6 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  logAudit({
-    userId: user.id,
-    action: "api_key.created",
-    detail: { name: name.trim(), keyId: data.id },
-    ip: req.headers.get("x-forwarded-for"),
-  }).catch(() => {});
 
   if (user.email) {
     const admin = createAdminClient();

@@ -144,7 +144,6 @@
     },
     "recentActivity": {
       "title": "Recent activity",
-      "viewAll": "View audit log",
       "empty": "No account activity yet"
     },
     "agentsPanel": {
@@ -296,39 +295,6 @@
       }
     }
   },
-  "auditLog": {
-    "title": "Audit log",
-    "subtitle": "A record of security-relevant actions on your account.",
-    "empty": "No activity recorded yet",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "actions": {
-      "api_key": {
-        "created": "API key created",
-        "deleted": "API key deleted"
-      },
-      "data": {
-        "exported": "Data exported"
-      },
-      "webhook": {
-        "created": "Webhook created",
-        "deleted": "Webhook deleted"
-      },
-      "agent": {
-        "run": "Agent run"
-      }
-    },
-    "detail": {
-      "name": "Name: {value}",
-      "keyId": "Key ID: {value}",
-      "webhookId": "Webhook ID: {value}",
-      "url": "URL: {value}",
-      "agentName": "Agent: {value}",
-      "task": "Task: {value}",
-      "solutionId": "Mission: {value}",
-      "runId": "Run: {value}"
-    }
-  },
   "globalSearch": {
     "placeholder": "Search dashboard",
     "clear": "Clear search",
@@ -346,7 +312,6 @@
     "clearAll": "Clear all",
     "loading": "Loading notifications…",
     "empty": "You're all caught up",
-    "viewActivity": "View activity log",
     "justNow": "Just now",
     "minutesAgo": "{count}m ago",
     "hoursAgo": "{count}h ago",
@@ -385,5 +350,10 @@
     "sentMessage": "Thanks — our team will get back to you shortly.",
     "close": "Close",
     "genericError": "Something went wrong. Please try again."
+  },
+  "chatNotFound": {
+    "title": "Chat not found",
+    "subtitle": "This conversation doesn't exist or you don't have access to it.",
+    "cta": "Back to chats"
   }
 }

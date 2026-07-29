@@ -33,10 +33,6 @@ export default async function ConversationPage({
   }));
 
   return (
-    <ChatWindow
-      conversationId={id}
-      initialMessages={initialMessages}
-      title={conversation.title}
-    />
+    <ChatWindow conversationId={id} initialMessages={initialMessages} />
   );
 }

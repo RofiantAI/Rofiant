@@ -128,14 +128,14 @@ export default function PricingPage() {
                   type="button"
                   disabled
                   aria-disabled="true"
-                  className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium border border-border text-foreground-muted bg-background-tertiary cursor-not-allowed"
+                  className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium border border-border text-foreground-muted bg-background-tertiary cursor-not-allowed"
                 >
                   {t("comingSoon")}
                 </button>
               ) : (
                 <a
                   href={tier.href}
-                  className={`inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium transition-colors ${
+                  className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-colors ${
                     tier.highlighted
                       ? "bg-foreground text-background hover:bg-foreground/90"
                       : "border border-border text-foreground hover:bg-background-tertiary"

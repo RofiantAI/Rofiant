@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { resumeAgentPipeline, startAgentPipeline, type PipelineState } from "@/lib/agent/run-agent";
-import { logAudit } from "@/lib/audit";
 import { isMinorUser, minorDataCollectionBlockedResponse } from "@/lib/minor-account";
 
 async function recordUsage(
@@ -98,18 +97,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
         await recordUsage(supabase, user.id, result.usage.inputTokens, result.usage.outputTokens);
 
-        await logAudit({
-          userId: user.id,
-          action: "agent.run",
-          detail: {
-            agent_id: id,
-            agent_name: agent.name,
-            run_id: runId,
-            decision,
-            status: "completed",
-          },
-        });
-
         return NextResponse.json({
           status: "completed",
           output: result.output,
@@ -127,18 +114,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           output: result.output,
         })
         .eq("id", runId);
-
-      await logAudit({
-        userId: user.id,
-        action: "agent.run",
-        detail: {
-          agent_id: id,
-          agent_name: agent.name,
-          run_id: runId,
-          decision: "denied",
-          status: "denied",
-        },
-      });
 
       return NextResponse.json({
         status: "denied",
@@ -183,17 +158,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .single();
 
     await recordUsage(supabase, user.id, result.usage.inputTokens, result.usage.outputTokens);
-
-    await logAudit({
-      userId: user.id,
-      action: "agent.pipeline",
-      detail: {
-        agent_id: id,
-        agent_name: agent.name,
-        run_id: runRecord?.id,
-        phase: "approval",
-      },
-    });
 
     return NextResponse.json({
       status: "pending_approval",

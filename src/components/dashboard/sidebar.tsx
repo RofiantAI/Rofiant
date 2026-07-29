@@ -10,7 +10,6 @@ import {
   Settings,
   Menu,
   X,
-  ShieldCheck,
   Megaphone,
   Layout,
   ChevronDown,
@@ -34,9 +33,14 @@ const coreNav = [
   { href: "/chat", navKey: "chatAi", tourId: "nav-chat", icon: MessageSquare },
 ];
 
-const developerNav = [
+const developerNav: {
+  href: string;
+  navKey: string;
+  tourId: string;
+  icon: typeof BarChart3;
+  tool?: ProductTool;
+}[] = [
   { href: "/dashboard/usage", navKey: "usage", tourId: "nav-usage", icon: BarChart3 },
-  { href: "/dashboard/audit-log", navKey: "auditLog", icon: ShieldCheck, tool: "security" as const },
 ];
 
 function NavBadge({ label, tone = "count" }: { label: string; tone?: "count" | "new" }) {

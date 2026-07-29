@@ -164,7 +164,7 @@
           "subtitle": "Connexion simple et sécurisée",
           "description": "Un seul compte protège l'accès à vos paramètres Rofiant et à la synchronisation. Aucun fournisseur d'identité d'entreprise requis, aucune complexité."
         },
-        "audit": {
+        "approval": {
           "title": "Approbation avant toute action risquée",
           "subtitle": "On vous demande, à chaque fois",
           "description": "Rofiant demande votre accord avant d'écrire, de supprimer, d'exécuter une commande ou de fermer un processus. Rien de risqué ne se produit sans votre accord."
@@ -186,7 +186,7 @@
         },
         "observability": {
           "title": "Observabilité intégrée",
-          "desc": "Chaque appel API est enregistré avec sa durée et son utilisation de jetons dans les journaux d'utilisation et d'audit de votre compte, interrogeables via l'API."
+          "desc": "Chaque appel API est enregistré avec sa durée et son utilisation de jetons dans les journaux d'utilisation de votre compte, interrogeables via l'API."
         }
       }
     },
@@ -454,10 +454,6 @@
           "title": "Portes de permission",
           "desc": "Rofiant demande votre accord avant de toucher à quoi que ce soit de risqué. Vous approuvez les modifications de fichiers, les suppressions, les commandes et les changements de processus avant qu'ils ne se produisent."
         },
-        "auditLogging": {
-          "title": "Journal d'audit cloud",
-          "desc": "Les actions effectuées via les Agents, l'API et les autres fonctionnalités cloud sont enregistrées dans le journal d'audit de votre compte, consultable et exportable via l'API. L'application de bureau ne tient pas encore de journal d'actions local distinct."
-        },
         "infrastructure": {
           "title": "Outils locaux, fonctionnalités cloud facultatives",
           "desc": "Les outils de fichiers, de commandes et de captures d'écran de l'application de bureau fonctionnent entièrement sur votre machine. Les réponses du chat utilisent des modèles hébergés, sauf si vous configurez un modèle Ollama local. Les fonctionnalités Pro et Ultra — documents, voix, Agents, API — fonctionnent sur notre infrastructure cloud."
@@ -534,9 +530,7 @@
           "desc": "Voyez chaque étape franchie par Rofiant dans le chat. Examinez son travail à tout moment.",
           "details": [
             "Trace étape par étape avec horodatage",
-            "Voyez chaque appel d'outil et son résultat dans la conversation",
-            "Les exécutions d'Agents cloud sont également enregistrées dans le journal d'audit de votre compte",
-            "Interrogez votre journal d'audit à tout moment via l'API"
+            "Voyez chaque appel d'outil et son résultat dans la conversation"
           ]
         }
       },
@@ -654,8 +648,7 @@
           "details": [
             "Approuvez ou refusez chaque action risquée depuis le chat",
             "Les actions en lecture seule (comme lire un fichier) ne nécessitent pas d'approbation",
-            "Rien de destructeur ne se produit sans votre accord",
-            "Les exécutions d'Agents cloud sont enregistrées dans le journal d'audit de votre compte"
+            "Rien de destructeur ne se produit sans votre accord"
           ]
         },
         "multiLanguage": {
@@ -666,16 +659,6 @@
             "Plusieurs langues prises en charge dès l'installation",
             "Comprend les noms de fichiers et contenus en langues mixtes",
             "La langue de réponse suit celle de votre demande"
-          ]
-        },
-        "auditTrail": {
-          "title": "Journal d'audit cloud pour les Agents et l'API",
-          "desc": "Les exécutions via les Agents, l'API et les autres fonctionnalités cloud sont enregistrées dans le journal d'audit de votre compte.",
-          "details": [
-            "Écrit côté serveur ; seul votre compte peut le consulter",
-            "Interrogez-le à tout moment via l'API",
-            "Recherchable par clé API, type d'événement et date",
-            "Les outils de fichiers/commandes de l'application de bureau ne sont pas encore journalisés ici"
           ]
         }
       },
@@ -689,7 +672,6 @@
         "i3": "Aucun contenu de fichier ou de capture d'écran n'est envoyé à une fonctionnalité cloud sans votre permission",
         "i4": "Approbation requise avant les actions risquées",
         "i6": "Vous choisissez quelles fonctionnalités cloud Pro/Ultra utiliser",
-        "i7": "Journal d'audit cloud pour les Agents, l'API et les autres fonctionnalités cloud, exportable via l'API",
         "i8": "Page de statut publique pour le service de synchronisation et de compte"
       },
       "useCasesSection": {
@@ -744,7 +726,7 @@
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
             "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
             "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
-            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters, and audit log entries for administrative actions."
+            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
           },
           "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
         },
@@ -853,7 +835,7 @@
           "items": {
             "account": "Account and profile data remain while your account is active.",
             "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
-            "logs": "Security, audit, and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
+            "logs": "Security and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
             "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
             "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
           },
@@ -934,7 +916,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {
@@ -1103,7 +1085,7 @@
         },
         "security": {
           "title": "Sécurité",
-          "desc": "Permissions, portes d'approbation et journal d'audit cloud pour l'utilisation des Agents et de l'API."
+          "desc": "Permissions et portes d'approbation pour l'utilisation des Agents et de l'API."
         }
       }
     },
@@ -1114,7 +1096,6 @@
         "chatCompletions": "Créer une complétion de chat",
         "models": "Lister les modèles disponibles",
         "usage": "Obtenir les statistiques d'utilisation",
-        "auditLogs": "Interroger les journaux d'audit",
         "scimListUsers": "Lister les utilisateurs provisionnés (SCIM, Agency/Enterprise)",
         "scimCreateUser": "Provisionner un utilisateur (SCIM, Agency/Enterprise)",
         "scimUpdateUser": "Mettre à jour un utilisateur provisionné (SCIM, Agency/Enterprise)",

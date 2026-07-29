@@ -6,7 +6,7 @@ import { PageLayout, PageSection } from "@/components/page-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  Send, Database, Shield, Globe, Clock, CheckCircle,
+  Send, Database, Shield, Globe, CheckCircle,
   FileText, Zap, MessageSquare, Lock, ChevronRight,
   Users
 } from "lucide-react";
@@ -76,7 +76,6 @@ export default function ChatAIPage() {
     { key: "knowledgeBase", icon: Database, color: "text-accent-primary" },
     { key: "roleBasedAccess", icon: Shield, color: "text-accent-secondary" },
     { key: "multiLanguage", icon: Globe, color: "text-accent-success" },
-    { key: "auditTrail", icon: Clock, color: "text-accent-warning" },
   ] as const;
 
   const howItWorks = ["upload", "configure", "chat", "monitor"] as const;
@@ -91,7 +90,7 @@ export default function ChatAIPage() {
 
   const sampleQuestions = ["q1", "q2", "q3", "q4"] as const;
 
-  const securityItems = ["i1", "i2", "i3", "i4", "i6", "i7", "i8"] as const;
+  const securityItems = ["i1", "i2", "i3", "i4", "i6", "i8"] as const;
 
   const useCases = [
     { key: "hr", icon: Users },

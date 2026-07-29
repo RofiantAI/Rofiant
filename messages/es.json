@@ -164,7 +164,7 @@
           "subtitle": "Inicio de sesión simple y seguro",
           "description": "Una sola cuenta protege el acceso a tu configuración y sincronización de Rofiant. Sin proveedores de identidad empresariales, sin complicaciones."
         },
-        "audit": {
+        "approval": {
           "title": "Aprobación antes de cualquier cosa riesgosa",
           "subtitle": "Se te pregunta, cada vez",
           "description": "Rofiant pregunta antes de escribir, eliminar, ejecutar un comando o cerrar un proceso. Nada riesgoso ocurre sin tu aprobación."
@@ -186,7 +186,7 @@
         },
         "observability": {
           "title": "Observabilidad integrada",
-          "desc": "Cada llamada a la API queda registrada con tiempos y uso de tokens en los registros de uso y auditoría de tu cuenta, consultables a través de la API."
+          "desc": "Cada llamada a la API queda registrada con tiempos y uso de tokens en los registros de uso de tu cuenta, consultables a través de la API."
         }
       }
     },
@@ -454,10 +454,6 @@
           "title": "Puertas de permiso",
           "desc": "Rofiant pregunta antes de tocar cualquier cosa riesgosa. Apruebas las ediciones de archivos, eliminaciones, comandos y cambios de proceso antes de que ocurran."
         },
-        "auditLogging": {
-          "title": "Registro de auditoría en la nube",
-          "desc": "Las acciones realizadas a través de Agents, la API y otras funciones en la nube se registran en el registro de auditoría de tu cuenta, visible y exportable mediante la API. La app de escritorio no mantiene hoy un registro local de acciones independiente."
-        },
         "infrastructure": {
           "title": "Herramientas locales, funciones opcionales en la nube",
           "desc": "Las herramientas de archivos, comandos y capturas de pantalla de la app de escritorio se ejecutan totalmente en tu equipo. Las respuestas del chat usan modelos alojados a menos que configures un modelo local de Ollama. Las funciones de Pro y Ultra (documentos, voz, Agents, la API) se ejecutan en nuestra infraestructura en la nube."
@@ -534,9 +530,7 @@
           "desc": "Ve cada paso que da Rofiant en el chat. Revisa su trabajo en cualquier momento.",
           "details": [
             "Traza paso a paso con tiempos",
-            "Ve cada llamada a herramienta y su resultado en la conversación",
-            "Las ejecuciones de Agents en la nube también se registran en el registro de auditoría de tu cuenta",
-            "Consulta tu registro de auditoría en cualquier momento mediante la API"
+            "Ve cada llamada a herramienta y su resultado en la conversación"
           ]
         }
       },
@@ -654,8 +648,7 @@
           "details": [
             "Aprueba o rechaza cada acción riesgosa desde el chat",
             "Las acciones de solo lectura (como leer un archivo) no requieren aprobación",
-            "Nada destructivo ocurre sin tu aprobación",
-            "Las ejecuciones de Agents en la nube se registran en el registro de auditoría de tu cuenta"
+            "Nada destructivo ocurre sin tu aprobación"
           ]
         },
         "multiLanguage": {
@@ -666,16 +659,6 @@
             "Múltiples idiomas compatibles de forma nativa",
             "Entiende nombres de archivo y contenido en varios idiomas mezclados",
             "El idioma de la respuesta sigue el de tu solicitud"
-          ]
-        },
-        "auditTrail": {
-          "title": "Registro de auditoría en la nube para Agents y la API",
-          "desc": "Las ejecuciones mediante Agents, la API y otras funciones en la nube se registran en el registro de auditoría de tu cuenta.",
-          "details": [
-            "Se escribe del lado del servidor; solo tu cuenta puede leerlo",
-            "Consúltalo en cualquier momento mediante la API",
-            "Buscable por clave de API, tipo de evento y fecha",
-            "Las propias herramientas de archivos/comandos de la app de escritorio no se registran aquí hoy"
           ]
         }
       },
@@ -689,7 +672,6 @@
         "i3": "Ningún contenido de archivo o captura de pantalla se envía a una función en la nube sin tu permiso",
         "i4": "Se requiere aprobación antes de acciones delicadas",
         "i6": "Tú eliges qué funciones en la nube de Pro/Ultra usar",
-        "i7": "Registro de auditoría en la nube para Agents, la API y otras funciones en la nube, exportable mediante la API",
         "i8": "Página de estado pública para el servicio de sincronización y cuentas"
       },
       "useCasesSection": {
@@ -744,7 +726,7 @@
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
             "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
             "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
-            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters, and audit log entries for administrative actions."
+            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
           },
           "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
         },
@@ -853,7 +835,7 @@
           "items": {
             "account": "Account and profile data remain while your account is active.",
             "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
-            "logs": "Security, audit, and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
+            "logs": "Security and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
             "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
             "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
           },
@@ -934,7 +916,7 @@
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, audit logging, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, and related enterprise controls.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {
@@ -1103,7 +1085,7 @@
         },
         "security": {
           "title": "Seguridad",
-          "desc": "Permisos, puertas de aprobación y el registro de auditoría en la nube para el uso de Agents y la API."
+          "desc": "Permisos y puertas de aprobación para el uso de Agents y la API."
         }
       }
     },
@@ -1114,7 +1096,6 @@
         "chatCompletions": "Crear una finalización de chat",
         "models": "Listar modelos disponibles",
         "usage": "Obtener estadísticas de uso",
-        "auditLogs": "Consultar registros de auditoría",
         "scimListUsers": "Listar usuarios aprovisionados (SCIM, Agency/Enterprise)",
         "scimCreateUser": "Aprovisionar un usuario (SCIM, Agency/Enterprise)",
         "scimUpdateUser": "Actualizar un usuario aprovisionado (SCIM, Agency/Enterprise)",

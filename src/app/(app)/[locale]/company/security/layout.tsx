@@ -8,8 +8,8 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
   title: "Security",
-  description: "Rofiant's security architecture: encryption in transit, permission gates, and cloud audit logging for Agents and API usage.",
-  openGraph: { title: "Security — Rofiant", description: "Rofiant's security architecture: encryption in transit, permission gates, and cloud audit logging for Agents and API usage." },
+  description: "Rofiant's security architecture: encryption in transit, permission gates, and approval workflows for Agents and API usage.",
+  openGraph: { title: "Security — Rofiant", description: "Rofiant's security architecture: encryption in transit, permission gates, and approval workflows for Agents and API usage." },
   alternates: localeAlternates(locale, "/company/security"),
   };
 }

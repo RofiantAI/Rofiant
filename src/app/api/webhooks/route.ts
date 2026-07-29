@@ -1,9 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
-import { logAudit } from "@/lib/audit";
 
-const ALLOWED_EVENTS = ["document.processed", "voice.processed"];
+const ALLOWED_EVENTS = ["document.processed"];
 
 export async function GET() {
   const supabase = await createClient();
@@ -44,13 +43,6 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  logAudit({
-    userId: user.id,
-    action: "webhook.created",
-    detail: { webhookId: data.id, url: data.url },
-    ip: req.headers.get("x-forwarded-for"),
-  }).catch(() => {});
 
   return NextResponse.json(data);
 }

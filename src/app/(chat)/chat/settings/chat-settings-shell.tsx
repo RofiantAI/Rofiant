@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   ArrowLeft, Home, Settings2, Sparkles, MoreHorizontal, LogOut,
-  CreditCard, ExternalLink, Gift, Check, Copy,
+  CreditCard, ExternalLink, Gift, Check, Copy, Building2, Zap, Crown,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { routing } from "@/i18n/routing";
@@ -19,17 +20,43 @@ import {
   type ModelUsageRow,
 } from "@/app/(dashboard)/dashboard/usage/usage-charts";
 import { SettingsClient } from "@/app/(dashboard)/dashboard/settings/settings-client";
+import { TABS as SETTINGS_TABS, type Tab as SettingsSectionTab } from "@/app/(dashboard)/dashboard/settings/settings-tab-sidebar";
 
 type Tab = "overview" | "plan" | "settings";
 
 const PLAN_META: Record<string, { label: string; tagline: string; price: number }> = {
   free: { label: "Free", tagline: "Start automating today", price: 0 },
   pro: { label: "Pro", tagline: "For power users", price: 15 },
-  ultra: { label: "Ultra", tagline: "For your heaviest workloads", price: 60 },
+  ultra: { label: "Ultra", tagline: "For your heaviest workloads", price: 30 },
 };
 
 const PLAN_RANK: Record<string, number> = { free: 0, pro: 1, ultra: 2 };
 const TIER_ORDER = ["free", "pro", "ultra"] as const;
+const TIER_ICON: Record<string, typeof Building2> = { free: Building2, pro: Zap, ultra: Crown };
+
+const TIER_FEATURES: Record<string, { intro?: string; items: string[] }> = {
+  free: {
+    items: [
+      "Local file, command & app tools",
+      "Chat with hosted or local models",
+      "MCP server support",
+      "Unlimited tasks",
+    ],
+  },
+  pro: {
+    intro: "Everything in Free and:",
+    items: ["Our most capable models", "Multi-step Agents", "Full API access"],
+  },
+  ultra: {
+    intro: "Everything in Pro, plus:",
+    items: [
+      "5x higher usage limits",
+      "First access to new models",
+      "Priority support",
+      "Early access to new features",
+    ],
+  },
+};
 
 const MARKETING_ORIGIN =
   process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://www.rofiant.ca";
@@ -81,6 +108,7 @@ function ManagePlanTab({ plan }: { plan: string }) {
   const [portalLoading, setPortalLoading] = useState(false);
   const [portalError, setPortalError] = useState("");
   const currentRank = PLAN_RANK[plan] ?? 0;
+  const currentMeta = PLAN_META[plan] ?? PLAN_META.free;
 
   async function openBillingPortal() {
     setPortalError("");
@@ -101,21 +129,29 @@ function ManagePlanTab({ plan }: { plan: string }) {
   }
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-6xl">
+      <div>
+        <h1 className="text-xl font-semibold text-foreground">Manage plan</h1>
+        <p className="text-sm text-foreground-secondary mt-1">
+          Compare plans, upgrade for higher limits, or manage your existing subscription.
+        </p>
+      </div>
+
       <DashboardCard>
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
             <p className="text-xs text-foreground-muted uppercase tracking-wider mb-1">Current plan</p>
             <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold text-foreground">
-                {(PLAN_META[plan] ?? PLAN_META.free).label}
-              </span>
+              <span className="text-lg font-semibold text-foreground">{currentMeta.label}</span>
               <span className="text-sm text-foreground-muted">
-                {(PLAN_META[plan] ?? PLAN_META.free).price === 0
-                  ? "Free"
-                  : `$${(PLAN_META[plan] ?? PLAN_META.free).price}/mo`}
+                {currentMeta.price === 0 ? "Free" : `$${currentMeta.price}/mo`}
               </span>
             </div>
+            {portalError && (
+              <p role="alert" className="text-xs text-red-400 mt-2">
+                {portalError}
+              </p>
+            )}
           </div>
           {currentRank > 0 && (
             <button
@@ -130,54 +166,84 @@ function ManagePlanTab({ plan }: { plan: string }) {
             </button>
           )}
         </div>
-        {portalError && (
-          <p className="text-xs text-red-400 mt-3">{portalError}</p>
-        )}
       </DashboardCard>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 items-start">
         {TIER_ORDER.map((tier) => {
           const rank = PLAN_RANK[tier];
           const isCurrent = tier === plan;
+          const isUpgrade = rank > currentRank;
+          const Icon = TIER_ICON[tier];
+          const { intro: featuresIntro, items: features } = TIER_FEATURES[tier];
+
           return (
             <div
               key={tier}
-              className={`flex flex-col p-5 border rounded-xl ${
-                isCurrent ? "border-accent-primary/40 bg-accent-primary/5" : "border-border bg-card"
+              className={`flex flex-col p-8 rounded-2xl border ${
+                isCurrent
+                  ? "border-accent-primary/40 bg-accent-primary/5 ring-1 ring-accent-primary/20"
+                  : "border-border bg-card"
               }`}
             >
-              <p className="text-sm font-medium text-foreground">{PLAN_META[tier].label}</p>
-              <p className="text-xs text-foreground-secondary mt-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
+                <Icon className="w-5 h-5 text-foreground-muted" />
+                <h2 className="text-xl font-normal text-foreground">{PLAN_META[tier].label}</h2>
+                {isCurrent && (
+                  <Badge variant="success" className="ml-auto">
+                    Current
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm font-medium text-foreground mb-1">
                 {PLAN_META[tier].tagline}
               </p>
-              <p className="text-2xl font-semibold text-foreground mb-5">
+              <div className="mb-8 mt-5">
                 {PLAN_META[tier].price === 0 ? (
-                  "Free"
+                  <div className="text-4xl font-normal text-foreground">Free</div>
                 ) : (
-                  <>
-                    ${PLAN_META[tier].price}
-                    <span className="text-xs text-foreground-muted font-normal"> /mo</span>
-                  </>
+                  <div className="flex items-end gap-1">
+                    <span className="text-4xl font-normal text-foreground">
+                      ${PLAN_META[tier].price}
+                    </span>
+                    <span className="text-sm text-foreground-muted mb-1.5">/mo</span>
+                  </div>
                 )}
-              </p>
+              </div>
+
+              <div className="mb-10 flex-1">
+                {featuresIntro && (
+                  <p className="text-sm text-foreground-secondary mb-3">{featuresIntro}</p>
+                )}
+                <ul className="space-y-2.5">
+                  {features.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-foreground-secondary">
+                      <Check className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <div className="mt-auto">
                 {isCurrent ? (
-                  <Badge variant="success">Current plan</Badge>
-                ) : rank > currentRank ? (
+                  <div className="h-10 flex items-center justify-center text-sm text-foreground-muted border border-dashed border-border rounded-lg">
+                    Your current plan
+                  </div>
+                ) : isUpgrade ? (
                   <Link
                     href={`/api/checkout?plan=${tier}`}
-                    className="inline-flex items-center justify-center w-full h-9 px-3 text-sm font-medium bg-foreground text-background hover:opacity-90 rounded-lg transition-colors"
+                    className="inline-flex items-center justify-center w-full h-10 px-5 text-sm font-medium bg-foreground text-background hover:opacity-90 rounded-lg transition-colors"
                   >
-                    Upgrade
+                    Upgrade to {PLAN_META[tier].label}
                   </Link>
                 ) : (
                   <button
                     type="button"
                     onClick={openBillingPortal}
                     disabled={portalLoading}
-                    className="inline-flex items-center justify-center w-full h-9 px-3 text-sm font-medium border border-border rounded-lg text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center justify-center w-full h-10 px-5 text-sm font-medium border border-border rounded-lg text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
                   >
-                    Manage
+                    Downgrade
                   </button>
                 )}
               </div>
@@ -220,6 +286,8 @@ export function ChatSettingsShell({
 }) {
   const planMeta = PLAN_META[plan] ?? PLAN_META.free;
   const [tab, setTab] = useState<Tab>("overview");
+  const [settingsTab, setSettingsTab] = useState<SettingsSectionTab>("account");
+  const tSettings = useTranslations("dashboard.settings");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -288,6 +356,34 @@ export function ChatSettingsShell({
               <Settings2 className="w-3.5 h-3.5" />
               Settings
             </button>
+            {tab === "settings" && (
+              <div className="ml-[1.1rem] pl-3 border-l border-border space-y-0.5 py-1">
+                {SETTINGS_TABS.map(({ id, icon: Icon }) => (
+                  <button
+                    key={id}
+                    onClick={() => setSettingsTab(id)}
+                    className={`flex items-center gap-2 w-full px-2.5 py-1.5 text-xs rounded-md transition-colors text-left ${
+                      settingsTab === id
+                        ? "bg-background-tertiary text-foreground font-medium"
+                        : "text-foreground-secondary hover:text-foreground hover:bg-background-tertiary/60"
+                    }`}
+                  >
+                    <Icon
+                      className={`w-3.5 h-3.5 shrink-0 ${
+                        id === "danger" && settingsTab !== "danger"
+                          ? "text-red-400/60"
+                          : settingsTab === id
+                            ? "text-accent-primary"
+                            : "text-foreground-muted"
+                      }`}
+                    />
+                    <span className={id === "danger" ? "text-red-400/80" : ""}>
+                      {tSettings(`tabs.${id}`)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
           </nav>
         </div>
 
@@ -307,7 +403,7 @@ export function ChatSettingsShell({
               <div className="absolute bottom-full left-0 right-0 mb-1.5 rounded-lg bg-card border border-border shadow-xl py-1 overflow-hidden">
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-3 w-full px-3 py-2 text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
+                  className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm text-foreground-secondary hover:bg-background-tertiary hover:text-foreground transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   Sign out
@@ -379,7 +475,12 @@ export function ChatSettingsShell({
         ) : tab === "plan" ? (
           <ManagePlanTab plan={plan} />
         ) : (
-          <SettingsClient {...settingsProps} />
+          <SettingsClient
+            {...settingsProps}
+            tab={settingsTab}
+            onTabChange={setSettingsTab}
+            hideSidebar
+          />
         )}
       </div>
     </div>

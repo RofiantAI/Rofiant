@@ -22,7 +22,7 @@ type WebhookSub = {
 
 type CreatedWebhook = WebhookSub & { secret: string };
 
-const EVENT_OPTIONS = ["document.processed", "voice.processed"];
+const EVENT_OPTIONS = ["document.processed"];
 
 export function WebhooksSection() {
   const t = useTranslations("dashboard.apiKeys.webhooks");

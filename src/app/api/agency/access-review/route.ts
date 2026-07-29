@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { logAudit } from "@/lib/audit";
 import { getOrgAgencyForUser, isOrgPlan } from "@/lib/agency-org";
 
 export async function POST(req: NextRequest) {
@@ -36,15 +35,6 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  const ip = req.headers.get("x-forwarded-for");
-  await logAudit({
-    userId: user.id,
-    agencyId: agency.id,
-    action: "access_review.completed",
-    detail: { notes: notes || null },
-    ip,
-  });
 
   return NextResponse.json(data);
 }

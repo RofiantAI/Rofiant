@@ -5,7 +5,6 @@ import {
   Rocket,
   MessageSquare,
   BarChart3,
-  ScrollText,
   Webhook,
   Users,
   AlertTriangle,
@@ -22,7 +21,6 @@ const NAV = [
   { id: "chat-completions", label: "Chat Completions", icon: MessageSquare },
   { id: "models", label: "Models", icon: BarChart3 },
   { id: "usage", label: "Usage", icon: BarChart3 },
-  { id: "audit-logs", label: "Audit Logs", icon: ScrollText },
   { id: "webhooks", label: "Webhooks", icon: Webhook },
   { id: "scim", label: "SCIM Provisioning", icon: Users },
   { id: "errors", label: "Errors & Rate Limits", icon: AlertTriangle },
@@ -253,28 +251,6 @@ curl https://api.rofiant.ca/v1/chat/completions \\
             `}</CodeBlock>
           </DocSection>
 
-          <DocSection id="audit-logs" title="Audit Logs" icon={ScrollText}>
-            <p>
-              <code>GET /v1/audit/logs?limit=50</code> &mdash; recent audit events for the
-              account (API key creation, webhook changes, etc). <code>limit</code> is optional
-              (default 50, max 200).
-            </p>
-            <CodeBlock lang="json">{`
-{
-  "object": "list",
-  "data": [
-    {
-      "id": "...",
-      "action": "api_key.created",
-      "detail": { "name": "prod-key", "keyId": "..." },
-      "ip": "203.0.113.10",
-      "created_at": "2026-06-30T18:12:00.000Z"
-    }
-  ]
-}
-            `}</CodeBlock>
-          </DocSection>
-
           <DocSection id="webhooks" title="Webhooks" icon={Webhook}>
             <p>
               Register an <code>https://</code> endpoint from{" "}
@@ -283,7 +259,6 @@ curl https://api.rofiant.ca/v1/chat/completions \\
             </p>
             <ul>
               <li><code>document.processed</code> &mdash; a document finished processing</li>
-              <li><code>voice.processed</code> &mdash; a voice recording finished processing</li>
             </ul>
             <p>
               Each delivery is a <code>POST</code> with a JSON body of{" "}

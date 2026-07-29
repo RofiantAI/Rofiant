@@ -39,23 +39,6 @@ export function mergeDismissedNotificationKeys(
   return [...new Set(merged)].slice(-MAX_DISMISSED_KEYS);
 }
 
-function formatAuditTitle(action: string) {
-  const dot = action.indexOf(".");
-  if (dot === -1) return action;
-  const resource = action.slice(0, dot).replace(/_/g, " ");
-  const verb = action.slice(dot + 1).replace(/_/g, " ");
-  return `${resource} ${verb}`;
-}
-
-function formatAuditBody(detail: Record<string, unknown>) {
-  const parts: string[] = [];
-  for (const key of ["name", "task", "url", "agent_name"]) {
-    const value = detail[key];
-    if (typeof value === "string" && value.trim()) parts.push(value.trim());
-  }
-  return parts.join(" · ");
-}
-
 export async function syncUserNotifications(
   supabase: SupabaseClient,
   userId: string,
@@ -63,27 +46,6 @@ export async function syncUserNotifications(
   dismissedKeys: Set<string> = new Set(),
 ) {
   const rows: NotificationInsert[] = [];
-  const since = new Date(Date.now() - 14 * 86400000).toISOString();
-
-  const { data: audits } = await supabase
-    .from("audit_logs")
-    .select("id, action, detail, created_at")
-    .eq("user_id", userId)
-    .gte("created_at", since)
-    .order("created_at", { ascending: false })
-    .limit(20);
-
-  for (const audit of audits ?? []) {
-    const detail = (audit.detail ?? {}) as Record<string, unknown>;
-    rows.push({
-      user_id: userId,
-      source_key: `audit:${audit.id}`,
-      title: formatAuditTitle(audit.action),
-      body: formatAuditBody(detail),
-      href: "/dashboard/audit-log",
-      created_at: audit.created_at,
-    });
-  }
 
   const inviteClient = admin ?? supabase;
   const { data: pendingInvites } = await inviteClient

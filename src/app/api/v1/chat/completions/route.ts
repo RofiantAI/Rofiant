@@ -59,7 +59,7 @@ export async function POST(req: Request) {
   const systemMessages = messages.filter((m) => m.role === "system").map((m) => m.content);
   const chatMessages = messages.filter((m) => m.role !== "system") as { role: "user" | "assistant"; content: string }[];
   const systemPrompt = [
-    "You are Rofiant AI, a secure AI assistant for government agencies and enterprises.",
+    "You are Rofiant AI, an AI agent for your files and desktop. Only answer from information the user actually provides or that you can access — never invent specifics (numbers, names, dates) you don't have.",
     system,
     ...systemMessages,
   ]

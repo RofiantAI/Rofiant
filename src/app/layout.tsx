@@ -25,14 +25,11 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "AI platform",
-    "government AI",
-    "enterprise AI",
-    "secure AI",
-    "FedRAMP",
-    "ITAR",
+    "AI desktop agent",
+    "AI file assistant",
     "document intelligence",
-    "voice AI",
+    "AI automation",
+    "secure AI",
   ],
   authors: [{ name: "Rofiant", url: "https://www.rofiant.ca" }],
   creator: "Rofiant",
@@ -73,8 +70,7 @@ export default async function RootLayout({
     name: "Rofiant",
     url: "https://www.rofiant.ca",
     logo: "https://www.rofiant.ca/logo.svg",
-    description:
-      "AI platform for government, enterprise, and everyone. Secure, compliant, and ready for mission-critical workloads.",
+    description: SITE_DESCRIPTION,
     sameAs: [],
   };
 
@@ -90,7 +86,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

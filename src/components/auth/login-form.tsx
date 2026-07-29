@@ -175,7 +175,7 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={resetLoading || !turnstileToken}
-            className="w-full h-10 flex items-center justify-center gap-2 bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full h-10 flex items-center justify-center gap-2 rounded-lg bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none"
           >
             {resetLoading && <Spinner size="sm" />}
             {resetLoading ? "Sending..." : "Send reset link"}
@@ -249,7 +249,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading || !turnstileToken}
-          className="w-full h-10 flex items-center justify-center gap-2 bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+          className="w-full h-10 flex items-center justify-center gap-2 rounded-lg bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none"
         >
           {loading && <Spinner size="sm" />}
           {loading ? "Signing in..." : "Sign in"}
@@ -266,7 +266,7 @@ export function LoginForm() {
         type="button"
         onClick={handleGoogleLogin}
         disabled={googleLoading || loading || ssoLoading}
-        className="mt-4 w-full h-10 flex items-center justify-center gap-2 border border-border bg-background-secondary text-sm text-foreground font-medium hover:bg-background-secondary/80 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        className="mt-4 w-full h-10 flex items-center justify-center gap-2 rounded-lg border border-border bg-background-secondary text-sm text-foreground font-medium hover:bg-background-secondary/80 transition-colors disabled:opacity-50 disabled:pointer-events-none"
       >
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -283,7 +283,7 @@ export function LoginForm() {
           type="button"
           onClick={handleSsoLogin}
           disabled={ssoLoading || loading || googleLoading}
-          className="mt-3 w-full h-10 flex items-center justify-center gap-2 border border-border bg-background-secondary text-sm text-foreground font-medium hover:bg-background-secondary/80 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+          className="mt-3 w-full h-10 flex items-center justify-center gap-2 rounded-lg border border-border bg-background-secondary text-sm text-foreground font-medium hover:bg-background-secondary/80 transition-colors disabled:opacity-50 disabled:pointer-events-none"
         >
           {ssoLoading && <Spinner size="sm" />}
           {ssoLoading ? "Redirecting..." : `Continue with organization SSO (${ssoDomain})`}

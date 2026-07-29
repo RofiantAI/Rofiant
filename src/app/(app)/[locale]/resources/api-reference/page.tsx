@@ -13,7 +13,6 @@ export default async function APIReferencePage() {
     },
     { method: "GET", path: "/v1/models", desc: t("endpoints.models") },
     { method: "GET", path: "/v1/usage", desc: t("endpoints.usage") },
-    { method: "GET", path: "/v1/audit/logs", desc: t("endpoints.auditLogs") },
     { method: "GET", path: "/v1/scim/v2/Users", desc: t("endpoints.scimListUsers") },
     { method: "POST", path: "/v1/scim/v2/Users", desc: t("endpoints.scimCreateUser") },
     { method: "PATCH", path: "/v1/scim/v2/Users/{id}", desc: t("endpoints.scimUpdateUser") },

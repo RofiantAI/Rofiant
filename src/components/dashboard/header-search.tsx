@@ -13,7 +13,6 @@ import {
   Settings,
   Megaphone,
   Layout,
-  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -47,7 +46,6 @@ function useSearchablePages(
     const pages: { href: string; label: string; icon: LucideIcon }[] = [
       { href: "/chat", label: t("nav.chatAi"), icon: MessageSquare },
       { href: "/dashboard/usage", label: t("nav.usage"), icon: BarChart3 },
-      { href: "/dashboard/audit-log", label: t("nav.auditLog"), icon: ShieldCheck },
     ];
 
     if (canAccessTool(plan, "apiKeys")) {

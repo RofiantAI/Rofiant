@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { runContradictionScan } from "@/lib/tools/contradiction-scan";
-import { logAudit } from "@/lib/audit";
 import { chatRatelimit, enforceRatelimit } from "@/lib/ratelimit";
 import { isMinorUser, minorDataCollectionBlockedResponse } from "@/lib/minor-account";
 
@@ -38,17 +37,6 @@ export async function POST(req: Request) {
       model: "llama-3.3-70b-versatile",
       input_tokens: usage.inputTokens,
       output_tokens: usage.outputTokens,
-    });
-
-    await logAudit({
-      userId: user.id,
-      action: "contradiction_scan.run",
-      detail: {
-        document_count: documentIds.length,
-        contradiction_count: output.contradictions.length,
-        overall_risk: output.overallRisk,
-      },
-      ip: req.headers.get("x-forwarded-for"),
     });
 
     return NextResponse.json({ output, usage });

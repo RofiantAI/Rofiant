@@ -63,12 +63,7 @@
       "signOutOthersDesc": "Cierra la sesión en todos tus otros dispositivos activos.",
       "allOthersSignedOut": "Se cerraron todas las demás sesiones.",
       "signingOut": "Cerrando sesión…",
-      "signOutOthers": "Cerrar otras sesiones",
-      "auditLog": {
-        "title": "Registro de auditoría",
-        "desc": "Revisa acciones relevantes para la seguridad, como cambios en claves de API, webhooks y exportaciones de datos.",
-        "view": "Ver registro de auditoría"
-      }
+      "signOutOthers": "Cerrar otras sesiones"
     },
     "notifications": {
       "heading": "Notificaciones",
@@ -106,15 +101,6 @@
       "timeFormat": "Formato de hora",
       "time12h": "12 horas (2:30 PM)",
       "time24h": "24 horas (14:30)",
-      "dataRegion": "Región de datos",
-      "dataRegionDesc": "Controla dónde se almacenan y procesan tus datos.",
-      "regions": {
-        "usEast": "EE. UU. Este",
-        "usWest": "EE. UU. Oeste",
-        "euWest": "UE Oeste",
-        "euCentral": "UE Central",
-        "asiaPacific": "Asia Pacífico"
-      },
       "savePreferences": "Guardar preferencias",
       "saved": "Guardado"
     },
@@ -184,7 +170,6 @@
       "chatAi": "Chat AI",
       "apiKeys": "Claves API",
       "usage": "Uso",
-      "auditLog": "Registro de auditoría",
       "siteBroadcast": "Difusión del sitio"
     },
     "siteAdmin": "Admin del sitio",

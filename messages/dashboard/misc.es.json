@@ -144,7 +144,6 @@
     },
     "recentActivity": {
       "title": "Actividad reciente",
-      "viewAll": "Ver registro de auditoría",
       "empty": "Aún no hay actividad en la cuenta"
     },
     "agentsPanel": {
@@ -296,39 +295,6 @@
       }
     }
   },
-  "auditLog": {
-    "title": "Registro de auditoría",
-    "subtitle": "Un registro de las acciones relevantes para la seguridad en tu cuenta.",
-    "empty": "Aún no hay actividad registrada",
-    "today": "Hoy",
-    "yesterday": "Ayer",
-    "actions": {
-      "api_key": {
-        "created": "Clave de API creada",
-        "deleted": "Clave de API eliminada"
-      },
-      "data": {
-        "exported": "Datos exportados"
-      },
-      "webhook": {
-        "created": "Webhook creado",
-        "deleted": "Webhook eliminado"
-      },
-      "agent": {
-        "run": "Ejecución de agente"
-      }
-    },
-    "detail": {
-      "name": "Nombre: {value}",
-      "keyId": "ID de clave: {value}",
-      "webhookId": "ID de webhook: {value}",
-      "url": "URL: {value}",
-      "agentName": "Agente: {value}",
-      "task": "Tarea: {value}",
-      "solutionId": "Misión: {value}",
-      "runId": "Ejecución: {value}"
-    }
-  },
   "globalSearch": {
     "placeholder": "Buscar en el panel, chats, documentos, agentes…",
     "clear": "Borrar búsqueda",
@@ -346,7 +312,6 @@
     "clearAll": "Borrar todo",
     "loading": "Cargando notificaciones…",
     "empty": "Estás al día",
-    "viewActivity": "Ver registro de actividad",
     "justNow": "Ahora mismo",
     "minutesAgo": "hace {count} min",
     "hoursAgo": "hace {count} h",
@@ -385,5 +350,10 @@
     "sentMessage": "Gracias — nuestro equipo te responderá en breve.",
     "close": "Cerrar",
     "genericError": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "chatNotFound": {
+    "title": "Chat no encontrado",
+    "subtitle": "Esta conversación no existe o no tienes acceso a ella.",
+    "cta": "Volver a los chats"
   }
 }

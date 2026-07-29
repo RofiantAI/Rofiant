@@ -144,7 +144,6 @@
     },
     "recentActivity": {
       "title": "Letzte Aktivität",
-      "viewAll": "Audit-Protokoll anzeigen",
       "empty": "Noch keine Kontoaktivität"
     },
     "agentsPanel": {
@@ -296,39 +295,6 @@
       }
     }
   },
-  "auditLog": {
-    "title": "Audit-Protokoll",
-    "subtitle": "Eine Aufzeichnung sicherheitsrelevanter Aktionen in Ihrem Konto.",
-    "empty": "Noch keine Aktivität erfasst",
-    "today": "Heute",
-    "yesterday": "Gestern",
-    "actions": {
-      "api_key": {
-        "created": "API-Schlüssel erstellt",
-        "deleted": "API-Schlüssel gelöscht"
-      },
-      "data": {
-        "exported": "Daten exportiert"
-      },
-      "webhook": {
-        "created": "Webhook erstellt",
-        "deleted": "Webhook gelöscht"
-      },
-      "agent": {
-        "run": "Agent ausgeführt"
-      }
-    },
-    "detail": {
-      "name": "Name: {value}",
-      "keyId": "Schlüssel-ID: {value}",
-      "webhookId": "Webhook-ID: {value}",
-      "url": "URL: {value}",
-      "agentName": "Agent: {value}",
-      "task": "Aufgabe: {value}",
-      "solutionId": "Mission: {value}",
-      "runId": "Lauf: {value}"
-    }
-  },
   "globalSearch": {
     "placeholder": "Dashboard, Chats, Dokumente, Agenten suchen…",
     "clear": "Suche löschen",
@@ -346,7 +312,6 @@
     "clearAll": "Alle löschen",
     "loading": "Benachrichtigungen werden geladen…",
     "empty": "Alles erledigt",
-    "viewActivity": "Aktivitätsprotokoll anzeigen",
     "justNow": "Gerade eben",
     "minutesAgo": "vor {count} Min.",
     "hoursAgo": "vor {count} Std.",
@@ -385,5 +350,10 @@
     "sentMessage": "Danke — unser Team meldet sich in Kürze bei Ihnen.",
     "close": "Schließen",
     "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "chatNotFound": {
+    "title": "Chat nicht gefunden",
+    "subtitle": "Diese Unterhaltung existiert nicht oder du hast keinen Zugriff darauf.",
+    "cta": "Zurück zu den Chats"
   }
 }

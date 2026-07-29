@@ -144,7 +144,6 @@
     },
     "recentActivity": {
       "title": "Activité récente",
-      "viewAll": "Voir le journal d'audit",
       "empty": "Aucune activité de compte pour l'instant"
     },
     "agentsPanel": {
@@ -296,39 +295,6 @@
       }
     }
   },
-  "auditLog": {
-    "title": "Journal d'audit",
-    "subtitle": "Un enregistrement des actions liées à la sécurité sur votre compte.",
-    "empty": "Aucune activité enregistrée pour l'instant",
-    "today": "Aujourd'hui",
-    "yesterday": "Hier",
-    "actions": {
-      "api_key": {
-        "created": "Clé API créée",
-        "deleted": "Clé API supprimée"
-      },
-      "data": {
-        "exported": "Données exportées"
-      },
-      "webhook": {
-        "created": "Webhook créé",
-        "deleted": "Webhook supprimé"
-      },
-      "agent": {
-        "run": "Exécution d'agent"
-      }
-    },
-    "detail": {
-      "name": "Nom : {value}",
-      "keyId": "ID de clé : {value}",
-      "webhookId": "ID de webhook : {value}",
-      "url": "URL : {value}",
-      "agentName": "Agent : {value}",
-      "task": "Tâche : {value}",
-      "solutionId": "Mission : {value}",
-      "runId": "Exécution : {value}"
-    }
-  },
   "globalSearch": {
     "placeholder": "Rechercher dans le tableau de bord, chats, documents, agents…",
     "clear": "Effacer la recherche",
@@ -346,7 +312,6 @@
     "clearAll": "Tout effacer",
     "loading": "Chargement des notifications…",
     "empty": "Vous êtes à jour",
-    "viewActivity": "Voir le journal d'activité",
     "justNow": "À l'instant",
     "minutesAgo": "il y a {count} min",
     "hoursAgo": "il y a {count} h",
@@ -385,5 +350,10 @@
     "sentMessage": "Merci — notre équipe vous répondra sous peu.",
     "close": "Fermer",
     "genericError": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "chatNotFound": {
+    "title": "Conversation introuvable",
+    "subtitle": "Cette conversation n'existe pas ou vous n'y avez pas accès.",
+    "cta": "Retour aux discussions"
   }
 }

@@ -61,12 +61,7 @@
       "signOutOthersDesc": "Sign out all other active sessions across your other devices.",
       "allOthersSignedOut": "All other sessions signed out.",
       "signingOut": "Signing out…",
-      "signOutOthers": "Sign out other sessions",
-      "auditLog": {
-        "title": "Audit log",
-        "desc": "Review security-relevant actions such as API key changes, webhooks, and data exports.",
-        "view": "View audit log"
-      }
+      "signOutOthers": "Sign out other sessions"
     },
     "notifications": {
       "heading": "Notifications",
@@ -104,15 +99,6 @@
       "timeFormat": "Time format",
       "time12h": "12-hour (2:30 PM)",
       "time24h": "24-hour (14:30)",
-      "dataRegion": "Data region",
-      "dataRegionDesc": "Controls where your data is stored and processed.",
-      "regions": {
-        "usEast": "US East",
-        "usWest": "US West",
-        "euWest": "EU West",
-        "euCentral": "EU Central",
-        "asiaPacific": "Asia Pacific"
-      },
       "savePreferences": "Save preferences",
       "saved": "Saved"
     },
@@ -182,7 +168,6 @@
       "chatAi": "Chat AI",
       "apiKeys": "API Keys",
       "usage": "Usage",
-      "auditLog": "Audit log",
       "siteBroadcast": "Site broadcast"
     },
     "siteAdmin": "Site admin",

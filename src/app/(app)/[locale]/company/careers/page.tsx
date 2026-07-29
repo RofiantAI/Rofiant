@@ -72,7 +72,7 @@ export default function CareersPage() {
             <button
               type="submit"
               disabled={status === "loading" || !turnstileToken}
-              className="h-10 px-5 flex items-center justify-center gap-2 bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
+              className="h-10 px-5 flex items-center justify-center gap-2 rounded-lg bg-button-primary text-button-primary-foreground font-medium text-sm hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap"
             >
               {status === "loading" && <Spinner size="sm" />}
               {status === "loading" ? t("comingSoon.submitting") : t("comingSoon.submit")}

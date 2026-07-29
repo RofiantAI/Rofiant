@@ -2,13 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Key, FileText, ChevronRight, Lock, Eye } from "lucide-react";
+import { Key, FileText, ChevronRight, Lock, Eye, ShieldQuestion, Check, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 const features = [
   { id: "identity", icon: Key, panel: <IdentityPanel /> },
-  { id: "audit", icon: FileText, panel: <AuditPanel /> },
+  { id: "approval", icon: ShieldQuestion, panel: <ApprovalPanel /> },
 ] as const;
 
 function IdentityPanel() {
@@ -49,36 +49,38 @@ function IdentityPanel() {
   );
 }
 
-function AuditPanel() {
-  const logs = [
-    { time: "14:32:01", user: "jane.doe", action: "Query: Q3 revenue summary" },
-    {
-      time: "14:31:45",
-      user: "john.smith",
-      action: "Document upload: report.pdf",
-    },
-    { time: "14:31:22", user: "system", action: "Agent workflow completed" },
-    { time: "14:30:58", user: "api", action: "Voice session initiated" },
+function ApprovalPanel() {
+  const requests = [
+    { action: "Delete 3 files in Downloads/", risk: "Destructive" },
+    { action: "Run: rm -rf build/", risk: "Destructive" },
+    { action: "Send email to finance@acme.com", risk: "External" },
+    { action: "Close process: node server.js", risk: "Disruptive" },
   ];
 
   return (
     <Card variant="elevated" className="bg-background-secondary border-border">
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-          <Eye className="w-4 h-4 text-foreground-muted" />
-          Audit Trail
+          <ShieldQuestion className="w-4 h-4 text-foreground-muted" />
+          Approval Needed
         </h4>
-        <Badge variant="default">Live</Badge>
+        <Badge variant="default">Waiting on you</Badge>
       </div>
       <div className="divide-y divide-border">
-        {logs.map((log) => (
-          <div key={log.time} className="p-3">
-            <div className="flex items-center gap-2 text-xs text-foreground-muted mb-1">
-              <span className="font-mono">{log.time}</span>
-              <span>·</span>
-              <span className="text-accent-secondary">{log.user}</span>
+        {requests.map((req) => (
+          <div key={req.action} className="p-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm text-foreground">{req.action}</p>
+              <span className="text-xs text-foreground-muted">{req.risk}</span>
             </div>
-            <p className="text-sm text-foreground">{log.action}</p>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-accent-success/10 text-accent-success">
+                <Check className="w-3.5 h-3.5" />
+              </span>
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-red-500/10 text-red-400">
+                <X className="w-3.5 h-3.5" />
+              </span>
+            </div>
           </div>
         ))}
       </div>
