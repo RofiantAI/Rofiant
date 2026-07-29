@@ -141,7 +141,7 @@ export default function PricingPage() {
                       : "border border-border text-foreground hover:bg-background-tertiary"
                   }`}
                 >
-                  {tier.key === "pro" && trialUsed
+                  {tier.key === "pro" && (trialUsed || annual)
                     ? t("consumerTiers.pro.ctaReturning")
                     : t(`consumerTiers.${tier.key}.cta`)}
                 </a>
