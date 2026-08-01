@@ -4,9 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { SettingsClient } from "./settings-client";
 import type { Tab } from "./settings-tab-sidebar";
 import { getUserAvatarUrl, hasCustomAvatar } from "@/lib/user-avatar";
-import { DashboardPage, DashboardHeader } from "@/components/dashboard/ui/page-shell";
+import { DashboardPage, ConsoleHeader } from "@/components/dashboard/ui/page-shell";
 
-const VALID_TABS: Tab[] = ["account", "security", "api", "notifications", "preferences", "appearance", "danger"];
+const VALID_TABS: Tab[] = ["account", "security", "notifications", "preferences", "appearance", "danger"];
 
 export default async function SettingsPage({
   searchParams,
@@ -17,12 +17,14 @@ export default async function SettingsPage({
   const { data: { user } } = await supabase.auth.getUser();
   const locale = await getDashboardLocale();
   const t = await getTranslations({ locale, namespace: "dashboard.settings" });
+  const tTopbar = await getTranslations({ locale, namespace: "dashboard.topbar" });
   const { tab } = await searchParams;
   const initialTab = VALID_TABS.find((v) => v === tab);
+  const plan = (user?.user_metadata?.plan ?? "free").toLowerCase();
 
   return (
     <DashboardPage>
-      <DashboardHeader title={t("title")} description={t("subtitle")} />
+      <ConsoleHeader title={t("title")} description={t("subtitle")} breadcrumb={[tTopbar("home"), t("title")]} />
       <div className="max-w-4xl">
         <SettingsClient
           email={user?.email ?? ""}
@@ -31,7 +33,7 @@ export default async function SettingsPage({
           bio={user?.user_metadata?.bio ?? ""}
           avatarUrl={user ? getUserAvatarUrl(user) : null}
           hasCustomAvatar={user ? hasCustomAvatar(user) : false}
-          plan={(user?.user_metadata?.plan ?? "free").toLowerCase()}
+          plan={plan}
           initialTab={initialTab}
         />
       </div>

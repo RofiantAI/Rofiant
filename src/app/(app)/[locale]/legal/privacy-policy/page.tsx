@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 const emailLink = (chunks: React.ReactNode) => (
   <a
-    href="mailto:privacy@rofiant.ca"
+    href="mailto:support@rofiant.ca"
     className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors"
   >
     {chunks}

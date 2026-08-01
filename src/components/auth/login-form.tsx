@@ -44,7 +44,7 @@ export function LoginForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
       },
     });
     if (error) {
@@ -61,7 +61,7 @@ export function LoginForm() {
     const { data, error } = await supabase.auth.signInWithSSO({
       domain: ssoDomain,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
       },
     });
     if (error) {
@@ -95,7 +95,7 @@ export function LoginForm() {
       return;
     }
 
-    window.location.href = appUrl("/chat");
+    window.location.href = appUrl("/dashboard");
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {

@@ -2,8 +2,7 @@
 
 import {
   Bell, Globe, Check, Trash2, Palette,
-  LogOut, Download, Key, Monitor,
-  Plus, Copy, X, Lock,
+  LogOut, Download, Key, Monitor, User,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -14,27 +13,11 @@ import { routing } from "@/i18n/routing";
 import {
   DashboardCard,
   DashboardPrimaryButton,
-  DashboardSecondaryButton,
-  DashboardList,
-  DashboardUpgradeGate,
 } from "@/components/dashboard/ui/page-shell";
 import { ProfileAvatarUpload } from "@/components/dashboard/profile-avatar-upload";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
-import { SkeletonListRows } from "@/components/ui/skeleton";
-import { formatDate as fmtDate } from "@/lib/user-prefs";
-import { canAccessTool, upgradeTargetForTool } from "@/lib/service-plan-access";
 import { SettingsTabSidebar, type Tab } from "./settings-tab-sidebar";
-import { WebhooksSection } from "../api-keys/webhooks-section";
-
-type ApiKey = {
-  id: string;
-  name: string;
-  key_prefix: string;
-  key_value: string;
-  created_at: string;
-  last_used_at: string | null;
-};
 
 const LOCALE_LABELS: Record<string, string> = {
   en: "English",
@@ -97,10 +80,9 @@ const DENSITIES: { id: Density }[] = [
   { id: "spacious" },
 ];
 
-const THEMES: { id: "light" | "dark" | "system" }[] = [
+const THEMES: { id: "light" | "dark" }[] = [
   { id: "light" },
   { id: "dark" },
-  { id: "system" },
 ];
 
 function applyAccent(value: string) {
@@ -156,6 +138,34 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
         }`}
       />
     </button>
+  );
+}
+
+function PanelHeader({
+  icon: Icon,
+  title,
+  trailing,
+  tone = "default",
+}: {
+  icon: React.ElementType;
+  title: string;
+  trailing?: React.ReactNode;
+  tone?: "default" | "danger";
+}) {
+  return (
+    <div className="flex items-center gap-3 mb-5">
+      <span
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+          tone === "danger" ? "bg-red-500/10" : "bg-background-tertiary"
+        }`}
+      >
+        <Icon className={`w-3.5 h-3.5 ${tone === "danger" ? "text-red-400" : "text-foreground-muted"}`} />
+      </span>
+      <h2 className={`text-sm font-medium ${tone === "danger" ? "text-red-400" : "text-foreground"}`}>
+        {title}
+      </h2>
+      {trailing && <span className="ml-auto">{trailing}</span>}
+    </div>
   );
 }
 
@@ -225,12 +235,9 @@ export function SettingsClient({
 }) {
   const router = useRouter();
   const t = useTranslations("dashboard.settings");
-  const tApi = useTranslations("dashboard.apiKeys");
-  const tGate = useTranslations("dashboard.planGate");
   const [internalTab, setInternalTab] = useState<Tab>(initialTab ?? "account");
   const tab = controlledTab ?? internalTab;
   const setTab = onTabChange ?? setInternalTab;
-  const canUseApiKeys = canAccessTool(plan, "apiKeys");
 
   // Account
   const [displayName, setDisplayName] = useState(initialDisplayName);
@@ -318,16 +325,6 @@ export function SettingsClient({
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  // API keys
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [apiKeysLoading, setApiKeysLoading] = useState(true);
-  const [apiKeyCreating, setApiKeyCreating] = useState(false);
-  const [newApiKeyName, setNewApiKeyName] = useState("");
-  const [showApiKeyForm, setShowApiKeyForm] = useState(false);
-  const [createdApiKey, setCreatedApiKey] = useState<ApiKey | null>(null);
-  const [copiedApiKeyId, setCopiedApiKeyId] = useState<string | null>(null);
-  const [deletingApiKeyId, setDeletingApiKeyId] = useState<string | null>(null);
-
   // Load 2FA status + session info
   useEffect(() => {
     const supabase = createClient();
@@ -356,15 +353,6 @@ export function SettingsClient({
         }
       });
   }, []);
-
-  // Load API keys (only if the plan actually has access)
-  useEffect(() => {
-    if (!canUseApiKeys) return;
-    fetch("/api/api-keys")
-      .then((r) => r.json())
-      .then(setApiKeys)
-      .finally(() => setApiKeysLoading(false));
-  }, [canUseApiKeys]);
 
   // Load appearance from localStorage on mount and apply. Deferred to an
   // effect since localStorage is unavailable during SSR.
@@ -486,43 +474,6 @@ export function SettingsClient({
       .upsert({ user_id: user.id, notification_prefs: next, updated_at: new Date().toISOString() });
   }
 
-  async function handleCreateApiKey(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newApiKeyName.trim()) return;
-    setApiKeyCreating(true);
-    const res = await fetch("/api/api-keys", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newApiKeyName.trim() }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setCreatedApiKey(data);
-      setApiKeys((prev) => [data, ...prev]);
-      setNewApiKeyName("");
-      setShowApiKeyForm(false);
-    }
-    setApiKeyCreating(false);
-  }
-
-  async function handleDeleteApiKey(id: string) {
-    setDeletingApiKeyId(id);
-    await fetch(`/api/api-keys/${id}`, { method: "DELETE" });
-    setApiKeys((prev) => prev.filter((k) => k.id !== id));
-    setDeletingApiKeyId(null);
-  }
-
-  async function handleCopyApiKey(text: string, id: string) {
-    await navigator.clipboard.writeText(text);
-    setCopiedApiKeyId(id);
-    setTimeout(() => setCopiedApiKeyId(null), 2000);
-  }
-
-  function formatApiKeyDate(iso: string | null) {
-    if (!iso) return tApi("table.noDate");
-    return fmtDate(iso);
-  }
-
   function savePreferences() {
     localStorage.setItem("pref_language", language);
     localStorage.setItem("pref_timezone", timezone);
@@ -582,7 +533,7 @@ export function SettingsClient({
         {/* ── ACCOUNT ── */}
         {tab === "account" && (
           <DashboardCard className="space-y-6">
-            <h2 className="text-sm font-medium text-foreground">{t("account.heading")}</h2>
+            <PanelHeader icon={User} title={t("account.heading")} />
 
             {/* Avatar */}
             <ProfileAvatarUpload
@@ -670,12 +621,9 @@ export function SettingsClient({
                   <p className="text-xs text-foreground-muted">{t("account.passwordHint")}</p>
                 </div>
                 {!showPwForm && (
-                  <button
-                    onClick={() => setShowPwForm(true)}
-                    className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
-                  >
+                  <Button variant="outline" size="xs" onClick={() => setShowPwForm(true)}>
                     {t("account.change")}
-                  </button>
+                  </Button>
                 )}
               </div>
               {showPwForm && (
@@ -709,16 +657,17 @@ export function SettingsClient({
                     >
                       {pwStatus === "saving" ? t("account.saving") : t("account.save")}
                     </Button>
-                    <button
+                    <Button
                       type="button"
+                      variant="outline"
+                      size="xs"
                       onClick={() => {
                         setShowPwForm(false);
                         setPw(""); setPwConfirm(""); setPwError(""); setPwStatus("idle");
                       }}
-                      className="h-8 px-3 rounded-lg text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
                     >
                       {t("account.cancel")}
-                    </button>
+                    </Button>
                   </div>
                 </form>
               )}
@@ -731,27 +680,31 @@ export function SettingsClient({
           <div className="space-y-4">
             {/* 2FA */}
             <DashboardCard>
-              <div className="flex items-center gap-3 mb-5">
-                <Key className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">{t("security.twoFactor")}</h2>
-                {mfaEnrolled && (
-                  <span className="ml-auto text-xs text-accent-success flex items-center gap-1">
-                    <Check className="w-3 h-3" /> {t("security.active")}
-                  </span>
-                )}
-              </div>
+              <PanelHeader
+                icon={Key}
+                title={t("security.twoFactor")}
+                trailing={
+                  mfaEnrolled && (
+                    <span className="text-xs text-accent-success flex items-center gap-1">
+                      <Check className="w-3 h-3" /> {t("security.active")}
+                    </span>
+                  )
+                }
+              />
 
               {mfaEnrolled ? (
                 <div className="space-y-4">
                   <p className="text-sm text-foreground-secondary">
                     {t("security.totpProtected")}
                   </p>
-                  <button
+                  <Button
+                    variant="outline"
+                    size="xs"
                     onClick={disableMfa}
-                    className="h-8 px-3 rounded-lg text-xs font-medium border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500/30"
                   >
                     {t("security.disable2fa")}
-                  </button>
+                  </Button>
                 </div>
               ) : mfaStep === "verifying" ? (
                 <div className="space-y-4">
@@ -759,7 +712,7 @@ export function SettingsClient({
                     {t("security.scanQr")}
                   </p>
                   {mfaQR && (
-                    <div className="w-40 h-40 rounded-lg bg-white p-2 inline-block">
+                    <div className="w-40 h-40 rounded-lg bg-white p-2 inline-block border border-border">
                       <img src={mfaQR} alt="2FA QR code" className="w-full h-full" />
                     </div>
                   )}
@@ -793,13 +746,9 @@ export function SettingsClient({
                       >
                         {t("security.verifyAndEnable")}
                       </Button>
-                      <button
-                        type="button"
-                        onClick={cancelMfaEnroll}
-                        className="h-8 px-3 rounded-lg text-xs border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
-                      >
+                      <Button type="button" variant="outline" size="xs" onClick={cancelMfaEnroll}>
                         {t("security.cancel")}
-                      </button>
+                      </Button>
                     </div>
                   </form>
                 </div>
@@ -813,26 +762,19 @@ export function SettingsClient({
                     {t("security.twoFaDesc")}
                   </p>
                   {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
-                  <button
-                    onClick={startMfaEnroll}
-                    disabled={mfaStep === "starting"}
-                    className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
-                  >
+                  <Button variant="outline" size="xs" onClick={startMfaEnroll} disabled={mfaStep === "starting"}>
                     {mfaStep === "starting" ? t("security.loading") : t("security.setup2fa")}
-                  </button>
+                  </Button>
                 </div>
               )}
             </DashboardCard>
 
             {/* Sessions */}
             <DashboardCard>
-              <div className="flex items-center gap-3 mb-5">
-                <LogOut className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">{t("security.sessions")}</h2>
-              </div>
+              <PanelHeader icon={LogOut} title={t("security.sessions")} />
 
               {/* Current session info */}
-              <div className="mb-5 p-4 rounded-lg bg-background-secondary border border-border">
+              <div className="mb-5 p-4 rounded-xl bg-background-secondary border border-border">
                 <div className="flex items-center gap-2 mb-3">
                   <Monitor className="w-3.5 h-3.5 text-foreground-muted" />
                   <span className="text-xs font-medium text-foreground">{t("security.currentSession")}</span>
@@ -844,7 +786,7 @@ export function SettingsClient({
                 <div className="space-y-1 text-xs text-foreground-muted">
                   <div className="flex justify-between">
                     <span>{t("security.signedIn")}</span>
-                    <span className="text-foreground-secondary">
+                    <span className="font-mono text-foreground-secondary">
                       {sessionInfo.signedInAt
                         ? new Date(sessionInfo.signedInAt).toLocaleString()
                         : "—"}
@@ -865,135 +807,17 @@ export function SettingsClient({
                   <Check className="w-3 h-3" /> {t("security.allOthersSignedOut")}
                 </p>
               )}
-              <button
-                onClick={signOutOtherSessions}
-                disabled={signingOutOthers}
-                className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
-              >
+              <Button variant="outline" size="xs" onClick={signOutOtherSessions} disabled={signingOutOthers}>
                 {signingOutOthers ? t("security.signingOut") : t("security.signOutOthers")}
-              </button>
+              </Button>
             </DashboardCard>
           </div>
-        )}
-
-        {/* ── API ── */}
-        {tab === "api" && (
-          canUseApiKeys ? (
-            <div className="space-y-4">
-              <DashboardCard>
-                <div className="flex items-center justify-between gap-4 mb-1">
-                  <div className="flex items-center gap-3">
-                    <Key className="w-4 h-4 text-foreground-muted" />
-                    <h2 className="text-sm font-medium text-foreground">{tApi("title")}</h2>
-                  </div>
-                  <DashboardPrimaryButton onClick={() => setShowApiKeyForm(true)}>
-                    <Plus className="w-4 h-4" />
-                    {tApi("createKey")}
-                  </DashboardPrimaryButton>
-                </div>
-                <p className="text-sm text-foreground-secondary mb-5">{tApi("subtitle")}</p>
-
-                {showApiKeyForm && (
-                  <form onSubmit={handleCreateApiKey} className="flex flex-wrap items-center gap-3 mb-5 pb-5 border-b border-border">
-                    <input
-                      autoFocus
-                      type="text"
-                      value={newApiKeyName}
-                      onChange={(e) => setNewApiKeyName(e.target.value)}
-                      placeholder={tApi("newKeyForm.namePlaceholder")}
-                      className="flex-1 min-w-[200px] h-9 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
-                    />
-                    <DashboardPrimaryButton type="submit" disabled={apiKeyCreating}>
-                      {apiKeyCreating ? tApi("newKeyForm.creating") : tApi("newKeyForm.create")}
-                    </DashboardPrimaryButton>
-                    <DashboardSecondaryButton
-                      type="button"
-                      onClick={() => { setShowApiKeyForm(false); setNewApiKeyName(""); }}
-                    >
-                      {tApi("newKeyForm.cancel")}
-                    </DashboardSecondaryButton>
-                  </form>
-                )}
-
-                {createdApiKey && (
-                  <div className="mb-5 p-4 rounded-lg border border-accent-primary/30">
-                    <div className="flex items-start justify-between mb-2">
-                      <p className="text-sm font-medium text-foreground">{tApi("createdKey.message")}</p>
-                      <button onClick={() => setCreatedApiKey(null)}>
-                        <X className="w-4 h-4 text-foreground-muted hover:text-foreground" />
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-2 mt-3">
-                      <code className="flex-1 text-xs font-mono bg-background-tertiary rounded-md px-3 py-2 text-foreground break-all">
-                        {createdApiKey.key_value}
-                      </code>
-                      <DashboardSecondaryButton onClick={() => handleCopyApiKey(createdApiKey.key_value, "new")}>
-                        {copiedApiKeyId === "new" ? <Check className="w-3 h-3 text-accent-success" /> : <Copy className="w-3 h-3" />}
-                        {copiedApiKeyId === "new" ? tApi("createdKey.copied") : tApi("createdKey.copy")}
-                      </DashboardSecondaryButton>
-                    </div>
-                  </div>
-                )}
-
-                <DashboardList>
-                  <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 px-5 py-3 border-b border-border text-xs font-medium text-foreground-muted">
-                    <span>{tApi("table.name")}</span>
-                    <span>{tApi("table.keyPrefix")}</span>
-                    <span>{tApi("table.created")}</span>
-                    <span />
-                  </div>
-                  {apiKeysLoading ? (
-                    <SkeletonListRows rows={4} />
-                  ) : apiKeys.length === 0 ? (
-                    <div className="px-5 py-8 text-center text-sm text-foreground-secondary">{tApi("table.empty")}</div>
-                  ) : (
-                    apiKeys.map((k) => (
-                      <div key={k.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-4 items-center px-5 py-3.5 border-b border-border last:border-0">
-                        <span className="text-sm text-foreground">{k.name}</span>
-                        <div className="flex items-center gap-2">
-                          <code className="text-xs font-mono text-foreground-secondary bg-background-tertiary rounded-md px-2 py-1">
-                            {k.key_prefix}…
-                          </code>
-                          <button onClick={() => handleCopyApiKey(k.key_value, k.id)} className="p-1 rounded-md hover:bg-background-tertiary">
-                            {copiedApiKeyId === k.id ? <Check className="w-3 h-3 text-accent-success" /> : <Copy className="w-3 h-3 text-foreground-muted" />}
-                          </button>
-                        </div>
-                        <span className="text-xs text-foreground-muted">{formatApiKeyDate(k.created_at)}</span>
-                        <button
-                          onClick={() => handleDeleteApiKey(k.id)}
-                          disabled={deletingApiKeyId === k.id}
-                          className="p-1 rounded-md hover:bg-background-tertiary disabled:opacity-40"
-                        >
-                          <Trash2 className="w-3.5 h-3.5 text-foreground-muted" />
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </DashboardList>
-              </DashboardCard>
-
-              <WebhooksSection />
-            </div>
-          ) : (
-            <DashboardCard>
-              <DashboardUpgradeGate
-                icon={Lock}
-                title={tGate("title", { plan: tGate(`plans.${upgradeTargetForTool("apiKeys").plan}`) })}
-                description={tGate("description", { tool: tGate("tools.apiKeys") })}
-                ctaHref="/pricing"
-                ctaLabel={tGate("cta", { plan: tGate(`plans.${upgradeTargetForTool("apiKeys").plan}`) })}
-              />
-            </DashboardCard>
-          )
         )}
 
         {/* ── NOTIFICATIONS ── */}
         {tab === "notifications" && (
           <DashboardCard>
-            <div className="flex items-center gap-3 mb-6">
-              <Bell className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">{t("notifications.heading")}</h2>
-            </div>
+            <PanelHeader icon={Bell} title={t("notifications.heading")} />
             <div className="space-y-0">
               {NOTIF_KEYS.map((key) => {
                 const msgKey = NOTIF_MSG_KEY[key];
@@ -1017,10 +841,7 @@ export function SettingsClient({
         {/* ── PREFERENCES ── */}
         {tab === "preferences" && (
           <DashboardCard className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Globe className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">{t("preferences.heading")}</h2>
-            </div>
+            <PanelHeader icon={Globe} title={t("preferences.heading")} />
 
             {/* Language */}
             <div>
@@ -1105,10 +926,7 @@ export function SettingsClient({
         {/* ── APPEARANCE ── */}
         {tab === "appearance" && (
           <DashboardCard className="space-y-4 max-w-md">
-            <div className="flex items-center gap-3">
-              <Palette className="w-4 h-4 text-foreground-muted" />
-              <h2 className="text-sm font-medium text-foreground">{t("appearance.heading")}</h2>
-            </div>
+            <PanelHeader icon={Palette} title={t("appearance.heading")} />
 
             {/* Theme */}
             <div>
@@ -1117,7 +935,7 @@ export function SettingsClient({
               </label>
               <SegmentedControl
                 labelledBy="settings-theme-label"
-                value={theme ?? "system"}
+                value={theme ?? "dark"}
                 onChange={setTheme}
                 options={THEMES.map(({ id }) => ({
                   value: id,
@@ -1125,7 +943,7 @@ export function SettingsClient({
                 }))}
               />
               <p className="text-xs text-foreground-muted mt-1.5">
-                {t(`appearance.themes.${theme ?? "system"}.desc`)}
+                {t(`appearance.themes.${theme ?? "dark"}.desc`)}
               </p>
             </div>
 
@@ -1189,28 +1007,18 @@ export function SettingsClient({
           <div className="space-y-4">
             {/* Export */}
             <DashboardCard>
-              <div className="flex items-center gap-3 mb-4">
-                <Download className="w-4 h-4 text-foreground-muted" />
-                <h2 className="text-sm font-medium text-foreground">{t("danger.exportData")}</h2>
-              </div>
+              <PanelHeader icon={Download} title={t("danger.exportData")} />
               <p className="text-sm text-foreground-secondary mb-4">
                 {t("danger.exportDesc")}
               </p>
-              <button
-                onClick={handleExport}
-                disabled={exportLoading}
-                className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors disabled:opacity-50 disabled:pointer-events-none"
-              >
+              <Button variant="outline" size="xs" onClick={handleExport} disabled={exportLoading}>
                 {exportLoading ? t("danger.exporting") : t("danger.requestExport")}
-              </button>
+              </Button>
             </DashboardCard>
 
             {/* Delete */}
             <DashboardCard className="border-red-500/20">
-              <div className="flex items-center gap-3 mb-4">
-                <Trash2 className="w-4 h-4 text-red-400" />
-                <h2 className="text-sm font-medium text-red-400">{t("danger.deleteAccount")}</h2>
-              </div>
+              <PanelHeader icon={Trash2} title={t("danger.deleteAccount")} tone="danger" />
               <p className="text-sm text-foreground-secondary mb-5">
                 {t("danger.deleteDesc")}
               </p>
@@ -1227,13 +1035,15 @@ export function SettingsClient({
                     className="w-full h-9 px-3 rounded-lg bg-background-secondary border border-red-500/30 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-red-500/60"
                   />
                 </div>
-                <button
+                <Button
+                  variant="outline"
+                  size="xs"
                   onClick={deleteAccount}
                   disabled={deleteConfirm !== email || deleting}
-                  className="h-8 px-3 rounded-lg text-xs font-medium bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40"
                 >
                   {deleting ? t("danger.deleting") : t("danger.deleteMyAccount")}
-                </button>
+                </Button>
               </div>
             </DashboardCard>
           </div>

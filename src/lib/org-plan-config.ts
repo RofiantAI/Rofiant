@@ -4,7 +4,7 @@ export type OrgPlanSupport = {
   dataResidency: string;
 };
 
-const DEFAULT_CSM = "success@rofiant.ca";
+const DEFAULT_CSM = "support@rofiant.ca";
 const DEFAULT_SLA = "99.9% uptime · 4-hour P1 response · custom escalation path";
 const DEFAULT_RESIDENCY = "United States (US-only cloud region)";
 

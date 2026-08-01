@@ -6,7 +6,6 @@ import { ErrorState } from "@/components/error-console";
 const helpfulLinks = [
   { key: "platform", href: "/platform/chat-ai" },
   { key: "pricing", href: "/pricing" },
-  { key: "docs", href: "/resources/documentation" },
   { key: "company", href: "/company/about" },
 ] as const;
 

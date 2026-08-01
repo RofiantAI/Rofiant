@@ -215,7 +215,7 @@ async function sendNotificationEmail({
   }
 }
 
-const CONTACT_TO = process.env.CONTACT_TO_EMAIL ?? "contact@rofiant.ca";
+const CONTACT_TO = process.env.CONTACT_TO_EMAIL ?? "support@rofiant.ca";
 
 export async function sendContactEmail({
   name,
@@ -253,26 +253,6 @@ export async function sendContactEmail({
   }
 }
 
-export async function sendCareersNotifyEmail({ email }: { email: string }) {
-  const resend = getResend();
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to: TEST_TO ?? CONTACT_TO,
-    replyTo: email,
-    subject: "[Careers] New notify-me signup",
-    html: `
-      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#0a0a0a;color:#fff">
-        <h1 style="font-size:20px;font-weight:400;margin:0 0 12px">New careers notify signup</h1>
-        <p style="font-size:14px;color:#a1a1aa;margin:0"><strong style="color:#fff">Email:</strong> ${email}</p>
-      </div>
-    `,
-  });
-
-  if (error) {
-    console.error("[email] Resend error:", error);
-    throw new Error(`Resend error: ${error.message}`);
-  }
-}
 
 export async function sendSecurityAlertEmail({
   to,

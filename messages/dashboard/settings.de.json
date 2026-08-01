@@ -5,7 +5,6 @@
     "tabs": {
       "account": "Konto",
       "security": "Sicherheit",
-      "api": "API",
       "notifications": "Benachrichtigungen",
       "preferences": "Einstellungen",
       "appearance": "Erscheinungsbild",
@@ -115,10 +114,6 @@
         "dark": {
           "label": "Dunkel",
           "desc": "Dunkler Hintergrund, heller Text"
-        },
-        "system": {
-          "label": "System",
-          "desc": "Entspricht der Geräteeinstellung"
         }
       },
       "accentColor": "Akzentfarbe",
@@ -168,9 +163,9 @@
     "nav": {
       "overview": "Übersicht",
       "chatAi": "Chat AI",
-      "apiKeys": "API-Schlüssel",
       "usage": "Nutzung",
-      "siteBroadcast": "Site-Broadcast"
+      "billing": "Abrechnung",
+      "managePages": "Seiten verwalten"
     },
     "siteAdmin": "Site-Admin",
     "sitePages": "Site-Seiten",
@@ -189,10 +184,9 @@
       "ultra": "Ultra",
       "pro": "Pro",
       "free": "Free"
-    }
-  },
-  "announcementBanner": {
-    "dismiss": "Ankündigung schließen"
+    },
+    "mainMenu": "Hauptmenü",
+    "others": "Weitere"
   },
   "inviteBanner": {
     "invitedTo": "Du wurdest eingeladen, beizutreten zu",

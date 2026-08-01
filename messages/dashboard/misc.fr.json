@@ -63,8 +63,7 @@
       "documents": "Documents",
       "voice": "Voice AI",
       "agents": "Agents",
-      "usage": "Utilisation",
-      "apiKeys": "Clés API"
+      "usage": "Utilisation"
     },
     "dailyUsage": {
       "title": "Messages aujourd'hui",
@@ -116,10 +115,6 @@
             "title": "Utilisation",
             "description": "Suivez les tokens, requêtes API et limites du forfait."
           },
-          "apiKeys": {
-            "title": "Clés API",
-            "description": "Créez des clés pour connecter vos apps à l'API Rofiant."
-          },
           "account": {
             "title": "Votre compte",
             "description": "Gérez profil, forfait, paramètres et déconnexion."
@@ -153,11 +148,80 @@
       "createFirst": "Créer un agent",
       "summary": "{active} sur {total} actifs",
       "runs": "{count} exécutions"
+    }
+  },
+  "home": {
+    "title": "Vue d'ensemble",
+    "subtitle": "Voici ce qui se passe sur votre compte.",
+    "trend": {
+      "title": "Tendance d'utilisation",
+      "subtitle": "Tokens consommés au cours des {days} derniers jours"
     },
-    "apiKeysPanel": {
-      "title": "Clés API",
-      "sub": "Clés actives sur votre compte",
-      "manage": "Gérer les clés"
+    "plan": {
+      "title": "Votre forfait",
+      "freeDescription": "Vous êtes sur le forfait Gratuit.",
+      "paidDescription": "Vous êtes sur le forfait {plan}.",
+      "perMonth": "/mois",
+      "manageBilling": "Gérer la facturation",
+      "openingPortal": "Ouverture du portail de facturation…",
+      "upgrade": "Mettre à niveau",
+      "viewBilling": "Voir la facturation"
+    },
+    "quickLinks": {
+      "title": "Liens rapides",
+      "usage": "Utilisation",
+      "usageDesc": "Suivez les tokens, requêtes et coûts",
+      "billing": "Facturation",
+      "billingDesc": "Gérez votre forfait et vos paiements",
+      "settings": "Paramètres",
+      "settingsDesc": "Mettez à jour votre profil et préférences"
+    },
+    "recentActivity": {
+      "title": "Activité récente",
+      "tokens": "{count} tokens",
+      "emptyTitle": "Aucune activité pour le moment",
+      "emptyDescription": "L'utilisation apparaîtra ici dès que vous commencerez à faire des requêtes."
+    },
+    "delta": {
+      "vsLastPeriod": "vs période précédente"
+    }
+  },
+  "billing": {
+    "title": "Facturation",
+    "subtitle": "Gérez votre forfait, votre moyen de paiement et vos factures.",
+    "currentPlan": {
+      "title": "Forfait actuel",
+      "manageBilling": "Gérer la facturation",
+      "openingPortal": "Ouverture du portail de facturation…",
+      "noBillingAccount": "Aucun compte de facturation pour le moment. Passez à un forfait payant pour le gérer.",
+      "free": "Gratuit"
+    },
+    "usageThisCycle": {
+      "title": "Utilisation de ce cycle",
+      "viewFullUsage": "Voir l'utilisation complète"
+    },
+    "plans": {
+      "title": "Forfaits",
+      "subtitle": "Passez à un autre forfait à tout moment.",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "currentBadge": "Forfait actuel",
+      "upgrade": "Passer à niveau supérieur",
+      "downgrade": "Changer de forfait",
+      "manage": "Gérer",
+      "free": {
+        "name": "Gratuit",
+        "tagline": "Démarrez sans frais."
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Pour un usage régulier au quotidien."
+      },
+      "ultra": {
+        "name": "Ultra",
+        "tagline": "Pour les utilisateurs avancés et les équipes."
+      },
+      "perMonth": "/mois"
     }
   },
   "usage": {
@@ -188,7 +252,8 @@
         "label": "Requêtes API",
         "period": "Ce mois-ci"
       },
-      "todayDelta": "+{count} aujourd'hui"
+      "todayDelta": "+{count} aujourd'hui",
+      "vsLastPeriod": "vs période précédente"
     },
     "summary": {
       "avgTokens": "Moy. tokens / requête",
@@ -252,46 +317,28 @@
     }
   },
   "siteAdmin": {
-    "broadcast": {
-      "title": "Site broadcast",
-      "subtitle": "Publish announcements and custom pages for all Rofiant users",
-      "tabs": {
-        "announcements": "Announcements",
-        "screens": "Custom pages"
-      },
-      "saving": "Saving…",
-      "inactive": "inactive",
-      "draft": "draft",
-      "delete": "Delete",
+    "pages": {
+      "title": "Pages du site",
+      "subtitle": "Publiez et gérez des pages personnalisées pour tous les utilisateurs",
+      "saving": "Enregistrement…",
+      "draft": "brouillon",
+      "delete": "Supprimer",
       "errors": {
-        "createFailed": "Failed to create"
-      },
-      "announcements": {
-        "createTitle": "New site announcement",
-        "titlePlaceholder": "Announcement title",
-        "bodyPlaceholder": "Message for all users…",
-        "variantInfo": "Info",
-        "variantWarning": "Warning",
-        "variantCritical": "Critical",
-        "publish": "Publish announcement",
-        "listTitle": "Site announcements",
-        "empty": "No announcements yet",
-        "deactivate": "Hide",
-        "activate": "Show"
+        "createFailed": "Échec de la création"
       },
       "screens": {
-        "createTitle": "New site page",
-        "titlePlaceholder": "Page title",
-        "slugPlaceholder": "url-slug (optional)",
-        "navLabelPlaceholder": "Sidebar label (optional)",
-        "contentPlaceholder": "Page content…",
-        "publish": "Create page",
-        "listTitle": "Site pages",
-        "empty": "No site pages yet",
-        "navLabel": "Nav label",
-        "preview": "Preview",
-        "unpublish": "Unpublish",
-        "publishAction": "Publish"
+        "createTitle": "Nouvelle page du site",
+        "titlePlaceholder": "Titre de la page",
+        "slugPlaceholder": "slug-url (facultatif)",
+        "navLabelPlaceholder": "Libellé de la barre latérale (facultatif)",
+        "contentPlaceholder": "Contenu de la page…",
+        "publish": "Créer la page",
+        "listTitle": "Pages du site",
+        "empty": "Aucune page du site pour le moment",
+        "navLabel": "Libellé de navigation",
+        "preview": "Aperçu",
+        "unpublish": "Dépublier",
+        "publishAction": "Publier"
       }
     }
   },
@@ -304,18 +351,6 @@
       "pages": "Pages",
       "conversations": "Chats"
     }
-  },
-  "notifications": {
-    "title": "Notifications",
-    "ariaLabel": "Notifications",
-    "readAll": "Tout marquer comme lu",
-    "clearAll": "Tout effacer",
-    "loading": "Chargement des notifications…",
-    "empty": "Vous êtes à jour",
-    "justNow": "À l'instant",
-    "minutesAgo": "il y a {count} min",
-    "hoursAgo": "il y a {count} h",
-    "daysAgo": "il y a {count} j"
   },
   "planGate": {
     "title": "Upgrade to {plan}",
@@ -333,7 +368,6 @@
       "agents": "Agents",
       "workflows": "Workflows",
       "security": "Security",
-      "apiKeys": "API keys",
       "orgHub": "Organization hub"
     }
   },
@@ -355,5 +389,9 @@
     "title": "Conversation introuvable",
     "subtitle": "Cette conversation n'existe pas ou vous n'y avez pas accès.",
     "cta": "Retour aux discussions"
+  },
+  "topbar": {
+    "greeting": "Content de vous revoir, {name} !",
+    "home": "Accueil"
   }
 }

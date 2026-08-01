@@ -54,7 +54,7 @@ export function WorkspaceMenu({
         onClick={() => setOpen((v) => !v)}
         aria-label={t("accountMenu")}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors hover:bg-background-tertiary/60"
+        className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors hover:bg-background-tertiary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
       >
         <div className="relative shrink-0">
           <UserAvatar avatarUrl={avatarUrl} className="w-9 h-9" />
@@ -62,7 +62,7 @@ export function WorkspaceMenu({
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">{title}</p>
-          {email && <p className="truncate text-xs text-foreground-muted">{email}</p>}
+          {email && <p className="truncate font-mono text-xs text-foreground-muted">{email}</p>}
         </div>
         <ChevronsUpDown className="w-4 h-4 shrink-0 text-foreground-muted" />
       </button>
@@ -74,7 +74,7 @@ export function WorkspaceMenu({
               <Link
                 href={`/${locale}/pricing`}
                 onClick={() => setOpen(false)}
-                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary hover:text-foreground"
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary"
               >
                 <ArrowUpRight className="w-4 h-4" />
                 {t("upgrade")}
@@ -83,7 +83,7 @@ export function WorkspaceMenu({
             <Link
               href="/dashboard/settings"
               onClick={() => setOpen(false)}
-              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary hover:text-foreground"
+              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-secondary transition-colors hover:bg-background-tertiary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary"
             >
               <Settings className="w-4 h-4" />
               {t("accountSettings")}
@@ -91,7 +91,7 @@ export function WorkspaceMenu({
             <button
               type="button"
               onClick={() => void handleSignOut()}
-              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
+              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary"
             >
               <LogOut className="w-4 h-4" />
               {t("signOut")}

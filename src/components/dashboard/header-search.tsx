@@ -7,17 +7,13 @@ import {
   Search,
   X,
   LayoutDashboard,
-  MessageSquare,
-  Key,
   BarChart3,
+  CreditCard,
   Settings,
-  Megaphone,
   Layout,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { DashboardSearchResult } from "@/app/api/dashboard/search/route";
-import { canAccessTool } from "@/lib/service-plan-access";
 
 type PageResult = {
   type: "page";
@@ -25,16 +21,10 @@ type PageResult = {
   title: string;
   href: string;
   subtitle?: string;
+  icon: LucideIcon;
 };
-
-type SearchResult = DashboardSearchResult | PageResult;
 
 type SiteScreen = { slug: string; label: string };
-
-const TYPE_ICONS: Record<SearchResult["type"], LucideIcon> = {
-  page: LayoutDashboard,
-  conversation: MessageSquare,
-};
 
 function useSearchablePages(
   plan: string,
@@ -44,21 +34,17 @@ function useSearchablePages(
 ) {
   return useMemo(() => {
     const pages: { href: string; label: string; icon: LucideIcon }[] = [
-      { href: "/chat", label: t("nav.chatAi"), icon: MessageSquare },
+      { href: "/dashboard", label: t("nav.overview"), icon: LayoutDashboard },
       { href: "/dashboard/usage", label: t("nav.usage"), icon: BarChart3 },
+      { href: "/dashboard/billing", label: t("nav.billing"), icon: CreditCard },
+      { href: "/dashboard/settings", label: t("accountSettings"), icon: Settings },
     ];
-
-    if (canAccessTool(plan, "apiKeys")) {
-      pages.push({ href: "/dashboard/settings?tab=api", label: t("nav.apiKeys"), icon: Key });
-    }
-
-    pages.push({ href: "/dashboard/settings", label: t("accountSettings"), icon: Settings });
 
     if (isSiteOwner) {
       pages.push({
-        href: "/dashboard/admin/broadcast",
-        label: t("nav.siteBroadcast"),
-        icon: Megaphone,
+        href: "/dashboard/admin/pages",
+        label: t("nav.managePages"),
+        icon: Layout,
       });
     }
 
@@ -90,8 +76,6 @@ export function DashboardHeaderSearch({
 
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [apiResults, setApiResults] = useState<DashboardSearchResult[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -99,7 +83,7 @@ export function DashboardHeaderSearch({
   const trimmed = query.trim();
   const isActive = trimmed.length > 0;
 
-  const pageResults = useMemo<PageResult[]>(() => {
+  const results = useMemo<PageResult[]>(() => {
     if (!isActive) return [];
     const q = trimmed.toLowerCase();
     return pages
@@ -110,50 +94,11 @@ export function DashboardHeaderSearch({
         id: p.href,
         title: p.label,
         href: p.href,
+        icon: p.icon,
       }));
   }, [isActive, pages, trimmed]);
 
-  const [prevIsActive, setPrevIsActive] = useState(isActive);
-  if (isActive !== prevIsActive) {
-    setPrevIsActive(isActive);
-    if (!isActive) {
-      setApiResults([]);
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (!isActive) return;
-
-    const controller = new AbortController();
-    const timer = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/api/dashboard/search?q=${encodeURIComponent(trimmed)}`,
-          { signal: controller.signal },
-        );
-        if (!res.ok) throw new Error("Search failed");
-        setApiResults((await res.json()) as DashboardSearchResult[]);
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") setApiResults([]);
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
-      controller.abort();
-    };
-  }, [trimmed, isActive]);
-
-  const allResults = useMemo(
-    () => (isActive ? [...pageResults, ...apiResults] : []),
-    [isActive, pageResults, apiResults],
-  );
-
-  const activeIndexKey = `${trimmed}:${allResults.length}`;
+  const activeIndexKey = `${trimmed}:${results.length}`;
   const [prevActiveIndexKey, setPrevActiveIndexKey] = useState(activeIndexKey);
   if (activeIndexKey !== prevActiveIndexKey) {
     setPrevActiveIndexKey(activeIndexKey);
@@ -186,7 +131,7 @@ export function DashboardHeaderSearch({
   }, []);
 
   const navigate = useCallback(
-    (result: SearchResult) => {
+    (result: PageResult) => {
       setQuery("");
       setOpen(false);
       router.push(result.href);
@@ -201,36 +146,19 @@ export function DashboardHeaderSearch({
       inputRef.current?.blur();
       return;
     }
-    if (!open || allResults.length === 0) return;
+    if (!open || results.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActiveIndex((i) => (i + 1) % allResults.length);
+      setActiveIndex((i) => (i + 1) % results.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setActiveIndex((i) => (i - 1 + allResults.length) % allResults.length);
+      setActiveIndex((i) => (i - 1 + results.length) % results.length);
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const result = allResults[activeIndex];
+      const result = results[activeIndex];
       if (result) navigate(result);
     }
   }
-
-  const grouped = useMemo(() => {
-    const groups: { key: SearchResult["type"]; label: string; items: SearchResult[] }[] = [];
-    const order: SearchResult["type"][] = ["page", "conversation"];
-    const labels: Record<SearchResult["type"], string> = {
-      page: t("groups.pages"),
-      conversation: t("groups.conversations"),
-    };
-
-    for (const type of order) {
-      const items = allResults.filter((r) => r.type === type);
-      if (items.length) groups.push({ key: type, label: labels[type], items });
-    }
-    return groups;
-  }, [allResults, t]);
-
-  let resultOffset = 0;
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -247,9 +175,10 @@ export function DashboardHeaderSearch({
         onKeyDown={handleKeyDown}
         placeholder={t("placeholder")}
         aria-label={t("placeholder")}
+        role="combobox"
         aria-expanded={open && isActive}
         aria-controls="dashboard-search-results"
-        className="w-full h-9 pl-9 pr-14 rounded-xl bg-background border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
+        className="w-full h-9 pl-9 pr-14 rounded-xl bg-background border border-border text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none focus:border-accent-primary focus:ring-2 focus:ring-accent-primary/20"
       />
       <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
         {query ? (
@@ -259,7 +188,7 @@ export function DashboardHeaderSearch({
               setQuery("");
               inputRef.current?.focus();
             }}
-            className="p-1 text-foreground-muted hover:text-foreground transition-colors"
+            className="rounded p-1 text-foreground-muted transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
             aria-label={t("clear")}
           >
             <X className="w-3.5 h-3.5" />
@@ -277,26 +206,21 @@ export function DashboardHeaderSearch({
           role="listbox"
           className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[min(420px,60vh)] overflow-y-auto rounded-xl border border-border bg-background-secondary shadow-xl"
         >
-          {loading && allResults.length === 0 && (
-            <p className="px-4 py-3 text-sm text-foreground-muted">{t("searching")}</p>
-          )}
-          {!loading && allResults.length === 0 && (
+          {results.length === 0 && (
             <p className="px-4 py-3 text-sm text-foreground-muted">
               {t("noResults", { query: trimmed })}
             </p>
           )}
-          {grouped.map((group) => (
-            <div key={group.key}>
+          {results.length > 0 && (
+            <div>
               <p className="px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-foreground-muted sticky top-0 bg-background-secondary border-b border-border">
-                {group.label}
+                {t("groups.pages")}
               </p>
-              {group.items.map((result) => {
-                const index = resultOffset++;
-                const Icon = TYPE_ICONS[result.type];
+              {results.map((result, index) => {
                 const isSelected = index === activeIndex;
                 return (
                   <Link
-                    key={`${result.type}-${result.id}`}
+                    key={result.id}
                     href={result.href}
                     role="option"
                     aria-selected={isSelected}
@@ -305,13 +229,13 @@ export function DashboardHeaderSearch({
                       e.preventDefault();
                       navigate(result);
                     }}
-                    className={`flex items-start gap-3 px-4 py-3 text-sm transition-colors ${
+                    className={`flex items-start gap-3 px-4 py-3 text-sm transition-colors focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary ${
                       isSelected
                         ? "bg-background-tertiary text-foreground"
                         : "text-foreground-secondary hover:bg-background-tertiary hover:text-foreground"
                     }`}
                   >
-                    <Icon className="w-4 h-4 shrink-0 mt-0.5 text-foreground-muted" />
+                    <result.icon className="w-4 h-4 shrink-0 mt-0.5 text-foreground-muted" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-medium">{result.title}</span>
                       {result.subtitle && (
@@ -324,7 +248,7 @@ export function DashboardHeaderSearch({
                 );
               })}
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>

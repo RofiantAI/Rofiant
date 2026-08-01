@@ -1,9 +1,10 @@
 {
   "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account, security, and preferences",
     "tabs": {
       "account": "Account",
       "security": "Security",
-      "api": "API",
       "notifications": "Notifications",
       "preferences": "Preferences",
       "appearance": "Appearance",
@@ -113,10 +114,6 @@
         "dark": {
           "label": "Dark",
           "desc": "Dark background, light text"
-        },
-        "system": {
-          "label": "System",
-          "desc": "Match your device setting"
         }
       },
       "accentColor": "Accent color",
@@ -166,9 +163,9 @@
     "nav": {
       "overview": "Overview",
       "chatAi": "Chat AI",
-      "apiKeys": "API Keys",
       "usage": "Usage",
-      "siteBroadcast": "Site broadcast"
+      "billing": "Billing",
+      "managePages": "Manage pages"
     },
     "siteAdmin": "Site admin",
     "sitePages": "Site pages",
@@ -187,10 +184,9 @@
       "ultra": "Ultra",
       "pro": "Pro",
       "free": "Free"
-    }
-  },
-  "announcementBanner": {
-    "dismiss": "Dismiss announcement"
+    },
+    "mainMenu": "Main menu",
+    "others": "Others"
   },
   "inviteBanner": {
     "invitedTo": "You've been invited to join",

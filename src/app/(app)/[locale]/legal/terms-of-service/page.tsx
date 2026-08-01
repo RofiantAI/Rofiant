@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 const legalLink = (chunks: React.ReactNode) => (
   <a
-    href="mailto:legal@rofiant.ca"
+    href="mailto:support@rofiant.ca"
     className="text-foreground underline underline-offset-2 hover:text-foreground-secondary transition-colors"
   >
     {chunks}
@@ -60,7 +60,6 @@ const sections = [
   { key: "s11", kind: "paragraphs" as const, paragraphs: ["para1", "para2"] },
   { key: "s12", kind: "body" as const },
   { key: "s13", kind: "paragraphs" as const, paragraphs: ["para1", "para2"] },
-  { key: "s14", kind: "paragraphs" as const, paragraphs: ["para1", "para2"] },
   { key: "s15", kind: "paragraphs" as const, paragraphs: ["para1", "para2"] },
   { key: "s16", kind: "paragraphs" as const, paragraphs: ["para1", "para2", "para3"] },
   { key: "s17", kind: "paragraphs" as const, paragraphs: ["para1", "para2"] },

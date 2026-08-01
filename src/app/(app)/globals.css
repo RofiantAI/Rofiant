@@ -28,8 +28,8 @@
   --border-light: #3f3f46;
 
   /* Card colors */
-  --card: #141414;
-  --card-hover: #1e1e1e;
+  --card: #1c1c1e;
+  --card-hover: #232326;
 
   /* Badge colors */
   --badge-bg: #1c1c1e;
@@ -154,7 +154,7 @@
   --color-button-outline: var(--button-outline);
   --color-button-outline-foreground: var(--button-outline-foreground);
   --font-sans: var(--font-geist);
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 html {
@@ -199,5 +199,61 @@ body {
 
   @keyframes modalIn {
     from { opacity: 0; transform: translateY(4px) scale(0.98); }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-page-enter > * {
+    animation: hero-card-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  }
+  .dashboard-page-enter > *:nth-child(1) { animation-delay: 0ms; }
+  .dashboard-page-enter > *:nth-child(2) { animation-delay: 60ms; }
+  .dashboard-page-enter > *:nth-child(3) { animation-delay: 120ms; }
+  .dashboard-page-enter > *:nth-child(4) { animation-delay: 180ms; }
+  .dashboard-page-enter > *:nth-child(n + 5) { animation-delay: 220ms; }
+}
+
+/* Dashboard: quiet surfaces; interaction state supplies depth only when useful. */
+.dashboard-surface {
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.dashboard-readout {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.025);
+}
+
+.dashboard-action-card {
+  transition: border-color var(--transition-base), background-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.dashboard-action-card:hover {
+  border-color: var(--border-light);
+  background: var(--card-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.dashboard-chart-tooltip {
+  border-color: var(--border-light);
+  background: var(--background-secondary);
+  color: var(--foreground);
+}
+
+.dashboard-sidebar nav {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+}
+
+.light .dashboard-readout {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-surface {
+    transition: none;
+  }
+
+  .dashboard-action-card {
+    transition: none;
   }
 }

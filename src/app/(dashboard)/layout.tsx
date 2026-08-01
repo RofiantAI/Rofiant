@@ -2,10 +2,10 @@ import { NextIntlClientProvider } from "next-intl";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
-import { AnnouncementBanner } from "@/components/dashboard/announcement-banner";
+import { DashboardTopbar } from "@/components/dashboard/dashboard-topbar";
 import { routing } from "@/i18n/routing";
 import { getDashboardLocale, getDashboardMessages } from "@/i18n/dashboard-locale";
-import { getActiveSiteAnnouncements, getSiteNavScreens } from "@/lib/site-broadcast";
+import { getSiteNavScreens } from "@/lib/site-pages";
 import { isSiteOwner } from "@/lib/site-owner";
 import { DashboardOnboarding } from "@/components/dashboard/onboarding/dashboard-onboarding";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
@@ -26,10 +26,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const plan: string = (user.user_metadata?.plan ?? "free" as string).toLowerCase();
 
-  const [announcements, siteScreens] = await Promise.all([
-    getActiveSiteAnnouncements(supabase),
-    getSiteNavScreens(supabase),
-  ]);
+  const siteScreens = await getSiteNavScreens(supabase);
 
   const displayName =
     user.user_metadata?.full_name?.trim() || user.email?.split("@")[0] || "there";
@@ -47,10 +44,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <DashboardSidebar
           email={user.email}
           name={user.user_metadata?.full_name}
-          avatarUrl={avatarUrl}
-          isPaid={isPaid}
           plan={plan}
-          locale={locale}
           isSiteOwner={isSiteOwner(user.email)}
           siteScreens={siteScreens.map((s) => ({
             slug: s.slug,
@@ -58,16 +52,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
           }))}
         />
         <main className="flex-1 min-w-0 flex flex-col">
-          <AnnouncementBanner
-            dismissLabel={messages.dashboard?.announcementBanner?.dismiss ?? "Dismiss"}
-            announcements={announcements.map((a) => ({
-              id: a.id,
-              title: a.title,
-              body: a.body,
-              variant: a.variant,
-            }))}
+          <DashboardTopbar
+            displayName={displayName}
+            email={user.email}
+            avatarUrl={avatarUrl}
+            locale={locale}
+            isPaid={isPaid}
           />
-          <div className="flex-1 p-4 sm:p-6 md:p-8" data-tour="main-content">
+          <div className="flex-1 bg-background p-4 sm:p-6 md:p-8" data-tour="main-content">
             <div className="max-w-6xl mx-auto min-h-[min(50vh,420px)]" data-tour="workspace">
               {children}
             </div>

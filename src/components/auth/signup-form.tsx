@@ -16,7 +16,7 @@ const MINOR_AGE = 18;
 // Signup opened from the desktop app (see ROFIANT_SIGNUP_URL in
 // rofiant-desktop's src/lib/auth-redirect.ts) carries this marker so the
 // post-confirmation redirect hands the session back to the app's custom URL
-// scheme instead of landing in the web chat.
+// scheme instead of landing in the web dashboard.
 const DESKTOP_REDIRECT = "rofiant://auth-callback";
 
 export function SignupForm() {
@@ -42,7 +42,7 @@ export function SignupForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/chat"))}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard"))}`,
       },
     });
     if (error) {
@@ -80,7 +80,7 @@ export function SignupForm() {
 
     setLoading(true);
 
-    const next = isDesktopClient ? DESKTOP_REDIRECT : appUrl("/chat");
+    const next = isDesktopClient ? DESKTOP_REDIRECT : appUrl("/dashboard");
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const res = await fetch("/api/auth/signup", {

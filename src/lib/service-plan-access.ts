@@ -8,7 +8,6 @@ export const PRODUCT_TOOLS = [
   "agents",
   "workflows",
   "security",
-  "apiKeys",
   "orgHub",
   "intelFeed",
 ] as const;
@@ -21,7 +20,6 @@ const PRO_TOOLS: ProductTool[] = [
   "documents",
   "voice",
   "agents",
-  "apiKeys",
 ];
 
 const ULTRA_TOOLS: ProductTool[] = [
@@ -45,7 +43,6 @@ export const TOOL_MIN_PLAN: Record<ProductTool, PlanId> = {
   documents: "pro",
   voice: "pro",
   agents: "pro",
-  apiKeys: "pro",
   workflows: "ultra",
   orgHub: "ultra",
   intelFeed: "ultra",

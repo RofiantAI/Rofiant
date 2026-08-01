@@ -12,17 +12,12 @@ const footerColumns = [
   },
   {
     key: "resources",
-    links: [
-      { key: "documentation", href: "/resources/documentation" },
-      { key: "apiReference", href: "/resources/api-reference" },
-      { key: "changelog", href: "/resources/changelog" },
-    ],
+    links: [],
   },
   {
     key: "company",
     links: [
       { key: "about", href: "/company/about" },
-      { key: "careers", href: "/company/careers" },
       { key: "security", href: "/company/security" },
       { key: "contact", href: "/company/contact" },
     ],

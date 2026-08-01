@@ -116,7 +116,7 @@ export default function ContactPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                 <Mail className="w-4 h-4 text-foreground-muted" />
-                contact@rofiant.ca
+                support@rofiant.ca
               </div>
             </div>
           </div>

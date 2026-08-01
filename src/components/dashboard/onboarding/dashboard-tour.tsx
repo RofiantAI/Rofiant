@@ -7,7 +7,6 @@ import {
   ArrowRight,
   BarChart3,
   LayoutDashboard,
-  MessageSquare,
   Sparkles,
   User,
   X,
@@ -35,8 +34,6 @@ type TourStepDef = {
 
 const BASE_STEPS: TourStepDef[] = [
   { id: "welcome", target: '[data-tour="sidebar"]', placement: "right", icon: Sparkles },
-  { id: "overview", target: '[data-tour="nav-overview"]', placement: "right", icon: LayoutDashboard },
-  { id: "chat", target: '[data-tour="nav-chat"]', placement: "right", icon: MessageSquare },
   { id: "usage", target: '[data-tour="nav-usage"]', placement: "right", icon: BarChart3 },
   { id: "account", target: '[data-tour="user-menu"]', placement: "top", icon: User },
   {

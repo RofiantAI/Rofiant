@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { isSiteOwner } from "@/lib/site-owner";
-import { DashboardPage, DashboardCard } from "@/components/dashboard/ui/page-shell";
+import { DashboardPage, DashboardCard, ConsoleHeader } from "@/components/dashboard/ui/page-shell";
 
 export default async function SiteScreenDashboardPage({
   params,
@@ -26,7 +26,7 @@ export default async function SiteScreenDashboardPage({
 
   return (
     <DashboardPage>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">{screen.title}</h1>
+      <ConsoleHeader title={screen.title} />
       <DashboardCard>
         <div className="text-sm text-foreground-secondary whitespace-pre-wrap">
           {screen.content || "—"}

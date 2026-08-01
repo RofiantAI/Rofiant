@@ -94,13 +94,13 @@ function ChatMockup() {
             U
           </div>
           <div className="bg-background-tertiary  px-3 py-2 text-sm text-foreground max-w-[80%]">
-            What were our Q3 revenue numbers?
+            Clean up my Downloads folder and group everything by type.
           </div>
         </div>
         <div className="flex gap-3 justify-end">
           <div className="bg-accent-secondary/20  px-3 py-2 text-sm text-foreground max-w-[80%]">
-            Q3 revenue was $4.2M, up 18% from Q2. Key growth drivers were
-            enterprise subscriptions and API usage.
+            Sorted 214 files into Images, Documents, and Archives, and
+            removed 12 duplicates. Review the changes before I apply them?
           </div>
           <div className="w-6 h-6  bg-accent-secondary flex items-center justify-center text-xs text-white shrink-0">
             R

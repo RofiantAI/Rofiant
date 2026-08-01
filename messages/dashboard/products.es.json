@@ -67,62 +67,6 @@
       "executing": "Ejecutando…"
     }
   },
-  "apiKeys": {
-    "title": "Claves de API",
-    "subtitle": "Administra claves para el acceso programático a Rofiant",
-    "upgrade": {
-      "heading": "El acceso a la API requiere un plan de pago",
-      "description": "Actualiza a Pro o Team para crear claves de API e integrar Rofiant en tus propias aplicaciones.",
-      "cta": "Ver planes"
-    },
-    "createKey": "Crear clave",
-    "newKeyForm": {
-      "heading": "Nueva clave de API",
-      "namePlaceholder": "Nombre de la clave (p. ej., Producción)",
-      "creating": "Creando…",
-      "create": "Crear",
-      "cancel": "Cancelar"
-    },
-    "createdKey": {
-      "message": "Clave creada; cópiala ahora. No volverá a mostrarse.",
-      "copy": "Copiar",
-      "copied": "Copiado"
-    },
-    "table": {
-      "name": "Nombre",
-      "keyPrefix": "Prefijo de clave",
-      "created": "Creada",
-      "loading": "Cargando…",
-      "empty": "Aún no tienes claves de API. Crea una arriba.",
-      "noDate": "—"
-    },
-    "authentication": {
-      "heading": "Autenticación",
-      "description": "Incluye tu clave de API en el encabezado Authorization:",
-      "viewApiReference": "Ver referencia de la API"
-    },
-    "webhooks": {
-      "title": "Webhooks",
-      "subtitle": "Recibe notificaciones cuando finalice el procesamiento de documentos, agentes o trabajos de voz.",
-      "addWebhook": "Añadir webhook",
-      "form": {
-        "urlPlaceholder": "https://ejemplo.com/webhooks/rofiant",
-        "creating": "Creando…",
-        "create": "Crear",
-        "cancel": "Cancelar",
-        "error": "No se pudo crear el webhook"
-      },
-      "created": {
-        "message": "Webhook creado: copia el secreto de firma ahora. No se volverá a mostrar.",
-        "copy": "Copiar",
-        "copied": "Copiado"
-      },
-      "table": {
-        "loading": "Cargando…",
-        "empty": "Aún no hay webhooks. Añade uno arriba."
-      }
-    }
-  },
   "chatAi": {
     "title": "Chat AI",
     "subtitle": "IA conversacional entrenada con tus documentos",

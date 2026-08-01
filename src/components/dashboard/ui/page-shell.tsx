@@ -1,9 +1,46 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 export function DashboardPage({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-8">{children}</div>;
+  return <div className="space-y-8 dashboard-page-enter">{children}</div>;
+}
+
+export function ConsoleHeader({
+  title,
+  description,
+  action,
+  breadcrumb,
+}: {
+  title: string;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  /** Trail of labels shown top-right, e.g. ["Home", "Billing"]. */
+  breadcrumb?: string[];
+}) {
+  return (
+    <div className="flex flex-col gap-2 border-b border-border pb-5">
+      {breadcrumb && breadcrumb.length > 0 && (
+        <p className="font-mono text-xs text-foreground-muted sm:text-right">
+          {breadcrumb.map((segment, i) => (
+            <span key={i}>
+              {i > 0 && <span className="mx-1.5 text-border-light">/</span>}
+              {segment}
+            </span>
+          ))}
+        </p>
+      )}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
+          {description && (
+            <p className="mt-1.5 text-sm text-foreground-secondary">{description}</p>
+          )}
+        </div>
+        {action && <div className="shrink-0">{action}</div>}
+      </div>
+    </div>
+  );
 }
 
 export function DashboardHeader({
@@ -39,7 +76,7 @@ export function DashboardCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-border bg-card shadow-sm ${padding ? "p-5" : ""} ${className}`}
+      className={`dashboard-surface rounded-2xl border border-border bg-card shadow-sm ${padding ? "p-5" : ""} ${className}`}
     >
       {children}
     </div>
@@ -74,6 +111,68 @@ export function DashboardList({ children }: { children: React.ReactNode }) {
   );
 }
 
+// "Readout" surfaces are for machine-reported data (usage, model lists, ledgers) —
+// tighter hairline borders and mono type, distinct from the soft "control"
+// surfaces above (DashboardCard/DashboardList) used for things a human configures.
+export function ReadoutPanel({
+  title,
+  subtitle,
+  action,
+  children,
+  className = "",
+}: {
+  title?: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`dashboard-readout rounded-md border border-border bg-card p-4 ${className}`}>
+      {(title || action) && (
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            {title && <p className="text-sm font-medium text-foreground">{title}</p>}
+            {subtitle && (
+              <p className="mt-0.5 font-mono text-xs text-foreground-muted">{subtitle}</p>
+            )}
+          </div>
+          {action}
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+export function ReadoutList({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="dashboard-readout rounded-md border border-border bg-card divide-y divide-border overflow-hidden">
+      {children}
+    </div>
+  );
+}
+
+export function ReadoutRow({
+  children,
+  className = "",
+  href,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  href?: string;
+}) {
+  const rowClass = `grid items-center gap-2 sm:gap-4 px-5 py-3.5 font-mono text-sm ${className}`;
+  if (href) {
+    return (
+      <Link href={href} className={`${rowClass} transition-colors hover:bg-background-tertiary/60 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary`}>
+        {children}
+      </Link>
+    );
+  }
+  return <div className={rowClass}>{children}</div>;
+}
+
 export function DashboardEmptyState({
   icon: Icon,
   title,
@@ -105,44 +204,58 @@ export function DashboardMetricGrid({ children }: { children: React.ReactNode })
   );
 }
 
+const METRIC_TONE_STYLES = {
+  purple: "bg-violet-500",
+  blue: "bg-blue-500",
+  green: "bg-emerald-500",
+  orange: "bg-amber-500",
+} as const;
+
 export function DashboardMetric({
   label,
   value,
   sub,
   href,
   icon: Icon,
-  trend,
-  trendLabel,
+  tone = "purple",
+  delta,
 }: {
   label: string;
   value: string;
   sub?: string;
   href?: string;
   icon?: LucideIcon;
-  trend?: number | null;
-  trendLabel?: string;
+  tone?: keyof typeof METRIC_TONE_STYLES;
+  /** Percent change vs. the prior period; pass null/omit when there's no baseline to compare against. */
+  delta?: { value: number; label: string } | null;
 }) {
+  const DeltaIcon = delta && delta.value > 0 ? TrendingUp : delta && delta.value < 0 ? TrendingDown : Minus;
+  const deltaColor =
+    delta && delta.value > 0
+      ? "text-accent-success"
+      : delta && delta.value < 0
+        ? "text-red-400"
+        : "text-foreground-muted";
+
   const inner = (
     <>
-      <div className="flex items-center justify-between mb-5">
-        <span className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
-          {label}
-        </span>
-        {Icon && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-primary/10">
-            <Icon className="w-3.5 h-3.5 text-accent-primary" />
-          </div>
-        )}
-      </div>
-      <p className="text-3xl font-semibold tabular-nums text-foreground">{value}</p>
-      {(sub || trend != null) && (
-        <div className="mt-1.5 flex items-center gap-2 text-xs text-foreground-muted">
-          {sub && <span>{sub}</span>}
-          {trend != null && trend > 0 && trendLabel && (
-            <span className="text-accent-success">{trendLabel}</span>
-          )}
+      {Icon && (
+        <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-full ${METRIC_TONE_STYLES[tone]}`}>
+          <Icon className="w-5 h-5 text-white" />
         </div>
       )}
+      <p className="font-mono text-3xl font-bold tabular-nums text-foreground">{value}</p>
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span className="text-xs text-foreground-muted">{label}</span>
+        {delta && (
+          <span className={`inline-flex items-center gap-0.5 font-mono text-xs font-medium ${deltaColor}`}>
+            <DeltaIcon className="w-3 h-3" />
+            {delta.value > 0 ? "+" : ""}
+            {delta.value}%
+          </span>
+        )}
+      </div>
+      {sub && <p className="mt-0.5 font-mono text-[11px] text-foreground-muted">{sub}</p>}
     </>
   );
 
@@ -150,7 +263,7 @@ export function DashboardMetric({
     return (
       <Link
         href={href}
-        className="rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-border-light"
+        className="dashboard-surface rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-border-light focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {inner}
       </Link>

@@ -3,11 +3,12 @@ import { getTranslations } from "next-intl/server";
 import { getDashboardLocale } from "@/i18n/dashboard-locale";
 import { getUsageAnalyticsData } from "@/lib/usage-analytics";
 import { UsageAnalytics } from "./usage-charts";
-import { DashboardPage, DashboardHeader } from "@/components/dashboard/ui/page-shell";
+import { DashboardPage, ConsoleHeader } from "@/components/dashboard/ui/page-shell";
 
 export default async function UsagePage() {
   const locale = await getDashboardLocale();
   const t = await getTranslations({ locale, namespace: "dashboard.usage" });
+  const tTopbar = await getTranslations({ locale, namespace: "dashboard.topbar" });
   const supabase = await createClient();
   const {
     data: { user },
@@ -15,7 +16,7 @@ export default async function UsagePage() {
 
   if (!user) return null;
 
-  const { chartData, sourceBreakdown, modelRows } = await getUsageAnalyticsData(
+  const { chartData, sourceBreakdown, modelRows, previousPeriod } = await getUsageAnalyticsData(
     supabase,
     user.id,
     locale,
@@ -23,12 +24,13 @@ export default async function UsagePage() {
 
   return (
     <DashboardPage>
-      <DashboardHeader title={t("title")} description={t("subtitle")} />
+      <ConsoleHeader title={t("title")} description={t("subtitle")} breadcrumb={[tTopbar("home"), t("title")]} />
 
       <UsageAnalytics
-        chartData={chartData}
+        chartData={chartData.slice(-30)}
         sourceBreakdown={sourceBreakdown}
         modelRows={modelRows}
+        previousPeriod={previousPeriod}
       />
     </DashboardPage>
   );

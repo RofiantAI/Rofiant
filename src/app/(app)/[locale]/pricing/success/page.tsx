@@ -28,14 +28,14 @@ export default async function PricingSuccessPage({
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href="/chat"
+            href="/download"
             className="inline-flex items-center justify-center gap-2 h-10 px-6 text-sm font-medium bg-foreground text-background hover:bg-foreground/90 transition-colors"
           >
             {t("openChat")}
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            href="/chat/settings"
+            href="/dashboard"
             className="inline-flex items-center justify-center h-10 px-6 text-sm font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
           >
             {t("goToDashboard")}

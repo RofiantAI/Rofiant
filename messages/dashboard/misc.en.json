@@ -63,8 +63,7 @@
       "documents": "Documents",
       "voice": "Voice AI",
       "agents": "Agents",
-      "usage": "Usage",
-      "apiKeys": "API keys"
+      "usage": "Usage"
     },
     "dailyUsage": {
       "title": "Today's messages",
@@ -116,10 +115,6 @@
             "title": "Usage",
             "description": "Track tokens, API requests, and plan limits over time."
           },
-          "apiKeys": {
-            "title": "API keys",
-            "description": "Create keys to connect your apps and services to the Rofiant API."
-          },
           "account": {
             "title": "Your account",
             "description": "Manage profile, plan, settings, and sign out from here."
@@ -153,11 +148,80 @@
       "createFirst": "Create an agent",
       "summary": "{active} of {total} active",
       "runs": "{count} runs"
+    }
+  },
+  "home": {
+    "title": "Overview",
+    "subtitle": "Here's what's happening with your account.",
+    "trend": {
+      "title": "Usage trend",
+      "subtitle": "Tokens consumed over the last {days} days"
     },
-    "apiKeysPanel": {
-      "title": "API keys",
-      "sub": "Active keys on your account",
-      "manage": "Manage keys"
+    "plan": {
+      "title": "Your plan",
+      "freeDescription": "You're on the Free plan.",
+      "paidDescription": "You're on the {plan} plan.",
+      "perMonth": "/mo",
+      "manageBilling": "Manage billing",
+      "openingPortal": "Opening billing portal…",
+      "upgrade": "Upgrade plan",
+      "viewBilling": "View billing"
+    },
+    "quickLinks": {
+      "title": "Quick links",
+      "usage": "Usage",
+      "usageDesc": "Track tokens, requests, and cost",
+      "billing": "Billing",
+      "billingDesc": "Manage your plan and payment details",
+      "settings": "Settings",
+      "settingsDesc": "Update your profile and preferences"
+    },
+    "recentActivity": {
+      "title": "Recent activity",
+      "tokens": "{count} tokens",
+      "emptyTitle": "No activity yet",
+      "emptyDescription": "Usage will show up here once you start making requests."
+    },
+    "delta": {
+      "vsLastPeriod": "vs last period"
+    }
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Manage your plan, payment method, and invoices.",
+    "currentPlan": {
+      "title": "Current plan",
+      "manageBilling": "Manage billing",
+      "openingPortal": "Opening billing portal…",
+      "noBillingAccount": "No billing account found yet. Upgrade to a paid plan to manage billing.",
+      "free": "Free"
+    },
+    "usageThisCycle": {
+      "title": "Usage this cycle",
+      "viewFullUsage": "View full usage"
+    },
+    "plans": {
+      "title": "Plans",
+      "subtitle": "Upgrade or switch plans at any time.",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "currentBadge": "Current plan",
+      "upgrade": "Upgrade",
+      "downgrade": "Switch plan",
+      "manage": "Manage",
+      "free": {
+        "name": "Free",
+        "tagline": "Get started at no cost."
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "For regular, everyday use."
+      },
+      "ultra": {
+        "name": "Ultra",
+        "tagline": "For power users and teams."
+      },
+      "perMonth": "/mo"
     }
   },
   "usage": {
@@ -188,7 +252,8 @@
         "label": "API requests",
         "period": "This month"
       },
-      "todayDelta": "+{count} today"
+      "todayDelta": "+{count} today",
+      "vsLastPeriod": "vs last period"
     },
     "summary": {
       "avgTokens": "Avg tokens / request",
@@ -252,32 +317,14 @@
     }
   },
   "siteAdmin": {
-    "broadcast": {
-      "title": "Site broadcast",
-      "subtitle": "Publish announcements and custom pages for all Rofiant users",
-      "tabs": {
-        "announcements": "Announcements",
-        "screens": "Custom pages"
-      },
+    "pages": {
+      "title": "Site pages",
+      "subtitle": "Publish and manage custom pages for all users",
       "saving": "Saving…",
-      "inactive": "inactive",
       "draft": "draft",
       "delete": "Delete",
       "errors": {
         "createFailed": "Failed to create"
-      },
-      "announcements": {
-        "createTitle": "New site announcement",
-        "titlePlaceholder": "Announcement title",
-        "bodyPlaceholder": "Message for all users…",
-        "variantInfo": "Info",
-        "variantWarning": "Warning",
-        "variantCritical": "Critical",
-        "publish": "Publish announcement",
-        "listTitle": "Site announcements",
-        "empty": "No announcements yet",
-        "deactivate": "Hide",
-        "activate": "Show"
       },
       "screens": {
         "createTitle": "New site page",
@@ -305,18 +352,6 @@
       "conversations": "Chats"
     }
   },
-  "notifications": {
-    "title": "Notifications",
-    "ariaLabel": "Notifications",
-    "readAll": "Read all",
-    "clearAll": "Clear all",
-    "loading": "Loading notifications…",
-    "empty": "You're all caught up",
-    "justNow": "Just now",
-    "minutesAgo": "{count}m ago",
-    "hoursAgo": "{count}h ago",
-    "daysAgo": "{count}d ago"
-  },
   "planGate": {
     "title": "Upgrade to {plan}",
     "description": "{tool} is not included on your current plan.",
@@ -333,7 +368,6 @@
       "agents": "Agents",
       "workflows": "Workflows",
       "security": "Security",
-      "apiKeys": "API keys",
       "orgHub": "Organization hub"
     }
   },
@@ -355,5 +389,9 @@
     "title": "Chat not found",
     "subtitle": "This conversation doesn't exist or you don't have access to it.",
     "cta": "Back to chats"
+  },
+  "topbar": {
+    "greeting": "Welcome back, {name}!",
+    "home": "Home"
   }
 }

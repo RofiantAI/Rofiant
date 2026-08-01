@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sun, Moon, Monitor } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 
-const ORDER = ["light", "dark", "system"] as const;
-
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const { theme, resolvedTheme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // next-themes only knows the real theme client-side; this avoids a
@@ -16,17 +14,10 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   useEffect(() => setMounted(true), []);
 
   function cycle() {
-    const current = theme && (ORDER as readonly string[]).includes(theme) ? theme : "system";
-    const next = ORDER[(ORDER.indexOf(current as (typeof ORDER)[number]) + 1) % ORDER.length];
-    setTheme(next);
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
 
-  const label =
-    !mounted || theme === "system"
-      ? "System theme"
-      : resolvedTheme === "dark"
-        ? "Dark theme"
-        : "Light theme";
+  const label = mounted && resolvedTheme === "dark" ? "Dark theme" : "Light theme";
 
   return (
     <button
@@ -34,13 +25,9 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       onClick={cycle}
       aria-label={`Toggle theme (currently ${label})`}
       title={`${label} — click to change`}
-      className={`flex items-center justify-center w-8 h-8 hover:rounded-md hover:bg-background-tertiary transition-colors ${className}`}
+      className={`flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-background-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary ${className}`}
     >
-      {!mounted ? (
-        <Monitor className="w-4 h-4 text-foreground-muted" />
-      ) : theme === "system" ? (
-        <Monitor className="w-4 h-4 text-foreground-muted" />
-      ) : resolvedTheme === "dark" ? (
+      {mounted && resolvedTheme === "dark" ? (
         <Moon className="w-4 h-4 text-foreground-muted" />
       ) : (
         <Sun className="w-4 h-4 text-foreground-muted" />

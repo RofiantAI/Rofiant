@@ -22,7 +22,7 @@ export async function FooterCtaSection() {
             <Link href="/auth/signup">
               <Button size="lg">{t("startFree")}</Button>
             </Link>
-            <Link href="/company/contact">
+            <Link href="/pricing">
               <Button variant="outline" size="lg">
                 {t("talkToSales")}
               </Button>

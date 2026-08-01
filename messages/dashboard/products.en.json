@@ -67,62 +67,6 @@
       "executing": "Executing…"
     }
   },
-  "apiKeys": {
-    "title": "API Keys",
-    "subtitle": "Manage keys for programmatic access to Rofiant",
-    "upgrade": {
-      "heading": "API access requires a paid plan",
-      "description": "Upgrade to Pro or Team to create API keys and integrate Rofiant into your own applications.",
-      "cta": "View plans"
-    },
-    "createKey": "Create key",
-    "newKeyForm": {
-      "heading": "New API key",
-      "namePlaceholder": "Key name (e.g. Production)",
-      "creating": "Creating…",
-      "create": "Create",
-      "cancel": "Cancel"
-    },
-    "createdKey": {
-      "message": "Key created — copy it now. It won't be shown again.",
-      "copy": "Copy",
-      "copied": "Copied"
-    },
-    "table": {
-      "name": "Name",
-      "keyPrefix": "Key prefix",
-      "created": "Created",
-      "loading": "Loading…",
-      "empty": "No API keys yet. Create one above.",
-      "noDate": "—"
-    },
-    "authentication": {
-      "heading": "Authentication",
-      "description": "Include your API key in the Authorization header:",
-      "viewApiReference": "View API reference"
-    },
-    "webhooks": {
-      "title": "Webhooks",
-      "subtitle": "Get notified when documents, agents, or voice jobs finish processing.",
-      "addWebhook": "Add webhook",
-      "form": {
-        "urlPlaceholder": "https://example.com/webhooks/rofiant",
-        "creating": "Creating…",
-        "create": "Create",
-        "cancel": "Cancel",
-        "error": "Failed to create webhook"
-      },
-      "created": {
-        "message": "Webhook created — copy the signing secret now. It won't be shown again.",
-        "copy": "Copy",
-        "copied": "Copied"
-      },
-      "table": {
-        "loading": "Loading…",
-        "empty": "No webhooks yet. Add one above."
-      }
-    }
-  },
   "chatAi": {
     "title": "Chat AI",
     "subtitle": "Conversational AI trained on your documents",

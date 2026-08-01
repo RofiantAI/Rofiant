@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/chat", "/api/"],
+        disallow: ["/dashboard", "/api/"],
       },
     ],
     sitemap: "https://www.rofiant.ca/sitemap.xml",

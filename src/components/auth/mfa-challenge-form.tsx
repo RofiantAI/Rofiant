@@ -22,7 +22,7 @@ export function MfaChallengeForm() {
       }
       const verified = data?.totp?.find((f) => f.status === "verified");
       if (!verified) {
-        window.location.href = appUrl("/chat");
+        window.location.href = appUrl("/dashboard");
         return;
       }
       setFactorId(verified.id);
@@ -48,7 +48,7 @@ export function MfaChallengeForm() {
       return;
     }
 
-    window.location.href = appUrl("/chat");
+    window.location.href = appUrl("/dashboard");
   };
 
   if (checking) {

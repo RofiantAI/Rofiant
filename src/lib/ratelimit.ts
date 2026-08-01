@@ -6,13 +6,6 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-// AI chat: 30 req / 10 s per user
-export const chatRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(30, "10 s"),
-  prefix: "rl:chat",
-});
-
 // Public/external API (v1): 60 req / 60 s per API key
 export const apiRatelimit = new Ratelimit({
   redis,

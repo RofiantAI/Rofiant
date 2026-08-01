@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSiteOwner } from "@/lib/site-owner";
-import { slugify } from "@/lib/site-broadcast";
+import { slugify } from "@/lib/site-pages";
 
 export async function GET() {
   const supabase = await createClient();

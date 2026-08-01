@@ -128,7 +128,7 @@ export function ProfileAvatarUpload({
       <UserAvatar avatarUrl={avatarUrl} className="w-14 h-14" />
       <div className="min-w-0 flex-1">
         <p className="text-sm text-foreground">{displayName || email}</p>
-        <p className="text-xs text-foreground-muted mt-0.5">{email}</p>
+        <p className="font-mono text-xs text-foreground-muted mt-0.5">{email}</p>
         <div className="flex flex-wrap items-center gap-2 mt-3">
           <input
             ref={inputRef}

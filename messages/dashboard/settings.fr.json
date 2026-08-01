@@ -5,7 +5,6 @@
     "tabs": {
       "account": "Compte",
       "security": "Sécurité",
-      "api": "API",
       "notifications": "Notifications",
       "preferences": "Préférences",
       "appearance": "Apparence",
@@ -115,10 +114,6 @@
         "dark": {
           "label": "Sombre",
           "desc": "Fond foncé, texte clair"
-        },
-        "system": {
-          "label": "Système",
-          "desc": "Suit le réglage de votre appareil"
         }
       },
       "accentColor": "Couleur d'accent",
@@ -168,9 +163,9 @@
     "nav": {
       "overview": "Vue d'ensemble",
       "chatAi": "Chat AI",
-      "apiKeys": "Clés API",
       "usage": "Utilisation",
-      "siteBroadcast": "Diffusion du site"
+      "billing": "Facturation",
+      "managePages": "Gérer les pages"
     },
     "siteAdmin": "Admin du site",
     "sitePages": "Pages du site",
@@ -189,10 +184,9 @@
       "ultra": "Ultra",
       "pro": "Pro",
       "free": "Free"
-    }
-  },
-  "announcementBanner": {
-    "dismiss": "Fermer l'annonce"
+    },
+    "mainMenu": "Menu principal",
+    "others": "Autres"
   },
   "inviteBanner": {
     "invitedTo": "Vous avez été invité(e) à rejoindre",

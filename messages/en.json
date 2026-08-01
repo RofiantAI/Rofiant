@@ -10,7 +10,6 @@
     "platform": "Platform",
     "company": "Company",
     "pricing": "Pricing",
-    "docs": "Docs",
     "download": "Download",
     "dashboard": "Dashboard",
     "login": "Log in",
@@ -31,9 +30,6 @@
       "resources": {
         "title": "Resources",
         "links": {
-          "documentation": "Documentation",
-          "apiReference": "API Reference",
-          "changelog": "Changelog",
           "status": "Status"
         }
       },
@@ -41,7 +37,6 @@
         "title": "Company",
         "links": {
           "about": "About",
-          "careers": "Careers",
           "security": "Security",
           "contact": "Contact"
         }
@@ -171,31 +166,12 @@
         }
       }
     },
-    "developer": {
-      "badge": "DEVELOPER API",
-      "titlePrefix": "Built for developers who automate fast.",
-      "titleMuted": "Simple API. Powerful automation.",
-      "features": {
-        "cloud": {
-          "title": "Hosted API, OpenAI-compatible",
-          "desc": "A hosted, OpenAI-compatible chat completions API. No servers to deploy, no infrastructure to manage."
-        },
-        "multiModel": {
-          "title": "Multi-model support",
-          "desc": "Swap the underlying model for chat completions without changing your automation scripts."
-        },
-        "observability": {
-          "title": "Built-in observability",
-          "desc": "Every API call is recorded with timing and token usage in your account's usage logs, queryable via the API."
-        }
-      }
-    },
     "footerCta": {
       "eyebrow": "Get started today",
       "title": "Stop doing it by hand.",
       "subtitle": "Tell Rofiant what you need done, in plain English. Start for free, upgrade when you need more.",
       "startFree": "Start for free",
-      "talkToSales": "Talk to sales",
+      "talkToSales": "Pricing",
       "fineprint": "No credit card required · Available for Linux, macOS, and Windows"
     }
   },
@@ -297,8 +273,8 @@
     "success": {
       "title": "Payment successful",
       "welcomeTitle": "Welcome to {plan}",
-      "subtitle": "Your subscription is active. Head to chat to give Rofiant its first task.",
-      "openChat": "Open chat",
+      "subtitle": "Your subscription is active.",
+      "openChat": "Download the app",
       "goToDashboard": "Go to dashboard",
       "planPro": "Pro",
       "planUltra": "Ultra"
@@ -344,68 +320,7 @@
       "subtitle": "We're building an AI agent that actually gets things done.",
       "intro1": "Rofiant is an AI agent: it organizes files, edits them, and runs repetitive tasks on your computer, plus optional cloud features like Agents, controlled entirely in plain English.",
       "intro2": "Privacy and reliability matter for a tool that touches your personal files. Rofiant's file, command, and screenshot tools run on your machine. Chat replies use hosted models unless you configure a local Ollama model, and Pro/Ultra cloud features (documents, voice, Agents, API) sync to your account so you can use them from the web dashboard too.",
-      "intro3": "Rofiant runs today on Linux, macOS, and Windows, with dev-environment setup coming next.",
-      "values": {
-        "missionFirst": {
-          "title": "Transparent by default",
-          "desc": "We're upfront about what runs on your machine and what touches the cloud, and we never train on your data."
-        },
-        "developerFirst": {
-          "title": "Developer-first",
-          "desc": "Simple APIs, clear docs, SDKs that just work."
-        },
-        "transparent": {
-          "title": "Transparent",
-          "desc": "Open pricing, an honest roadmap, and no invented metrics."
-        }
-      }
-    },
-    "careers": {
-      "title": "Careers",
-      "badge": "COMPANY",
-      "subtitle": "Help us build an AI agent that works where your files live.",
-      "intro": "We are a remote-first team building an AI agent for your files and desktop. If you care about developer experience, privacy, and building tools that respect your machine, we want to hear from you.",
-      "roles": {
-        "seniorBackend": {
-          "title": "Senior Backend Engineer",
-          "team": "Platform",
-          "location": "Remote",
-          "type": "Full-time"
-        },
-        "mlEngineer": {
-          "title": "ML Engineer",
-          "team": "AI",
-          "location": "Remote",
-          "type": "Full-time"
-        },
-        "frontendEngineer": {
-          "title": "Frontend Engineer",
-          "team": "Product",
-          "location": "Remote",
-          "type": "Full-time"
-        },
-        "securityEngineer": {
-          "title": "Security Engineer",
-          "team": "Security",
-          "location": "Remote",
-          "type": "Full-time"
-        },
-        "solutionsEngineer": {
-          "title": "Solutions Engineer",
-          "team": "Sales",
-          "location": "Remote",
-          "type": "Full-time"
-        }
-      },
-      "comingSoon": {
-        "title": "We're not hiring right now",
-        "description": "There are no open positions at the moment, but we're growing fast. Leave your email and we'll reach out when a role opens up.",
-        "emailPlaceholder": "you@example.com",
-        "submit": "Notify me",
-        "submitting": "Submitting...",
-        "success": "Thanks! We'll email you when a position opens.",
-        "error": "Something went wrong. Please try again."
-      }
+      "intro3": "Rofiant runs today on Linux, macOS, and Windows, with dev-environment setup coming next."
     },
     "contact": {
       "title": "Contact",
@@ -700,98 +615,6 @@
       }
     }
   },
-  "resources": {
-    "documentation": {
-      "title": "Documentation",
-      "subtitle": "Everything you need to build with Rofiant. Guides, tutorials, and reference docs.",
-      "sections": {
-        "gettingStarted": {
-          "title": "Getting Started",
-          "desc": "Quick start guides, authentication, and your first API call."
-        },
-        "chatAi": {
-          "title": "Chat",
-          "desc": "Ask Rofiant to open apps, run commands, or manage your files in plain language."
-        },
-        "voiceAi": {
-          "title": "File Search",
-          "desc": "How Rofiant finds files by what's inside them, not just names, by reading their contents when you ask."
-        },
-        "documentIntelligence": {
-          "title": "File Organization",
-          "desc": "How Rofiant reads, classifies, and organizes files on your machine."
-        },
-        "agents": {
-          "title": "Agents",
-          "desc": "Deploy task agents with multi-step reasoning, local tool execution, and an approval gate before anything risky."
-        },
-        "integrations": {
-          "title": "Integrations",
-          "desc": "Connect Rofiant to your own scripts and tools via API, or extra tools via MCP servers."
-        },
-        "security": {
-          "title": "Security",
-          "desc": "Permissions and approval gates for Agents and API usage."
-        }
-      }
-    },
-    "apiReference": {
-      "title": "API Reference",
-      "subtitle": "Reference for the Rofiant API — available endpoints and what they do.",
-      "endpoints": {
-        "chatCompletions": "Create a chat completion",
-        "models": "List available models",
-        "usage": "Get usage statistics",
-        "scimListUsers": "List provisioned users (SCIM, Agency/Enterprise)",
-        "scimCreateUser": "Provision a user (SCIM, Agency/Enterprise)",
-        "scimUpdateUser": "Update a provisioned user (SCIM, Agency/Enterprise)",
-        "scimDeactivateUser": "Deprovision a user (SCIM, Agency/Enterprise)"
-      }
-    },
-    "changelog": {
-      "title": "Changelog",
-      "subtitle": "Latest updates, features, and improvements to Rofiant.",
-      "types": {
-        "feature": "feature",
-        "improvement": "improvement",
-        "fix": "fix"
-      },
-      "entries": {
-        "v250": {
-          "date": "July 3, 2026",
-          "changes": [
-            "Natural-language file search across your files",
-            "In-flow file preview on agent task runs",
-            "Tool-call approval flow for agent task runs"
-          ]
-        },
-        "v240": {
-          "date": "January 15, 2026",
-          "changes": [
-            "Agent task planning — multi-step reasoning with approval gates",
-            "Chat latency improvements",
-            "Early file-organization workflows"
-          ]
-        },
-        "v230": {
-          "date": "December 20, 2025",
-          "changes": [
-            "Document search with natural-language queries",
-            "Webhook support for real-time task events",
-            "Fixed token counting for non-Latin scripts"
-          ]
-        },
-        "v220": {
-          "date": "November 30, 2025",
-          "changes": [
-            "Chat interface improvements",
-            "Chat streaming performance improvements",
-            "Fixed MFA session handling for dashboard access"
-          ]
-        }
-      }
-    }
-  },
   "auth": {
     "login": {
       "title": "Log in",
@@ -866,8 +689,6 @@
     "services": {
       "chatAi": "Chat AI",
       "voiceAi": "Voice AI",
-      "documentIntelligence": "Document Intelligence",
-      "publicApi": "Public API",
       "dashboard": "Dashboard"
     },
     "noHistory": "Collecting uptime history — check back soon.",
@@ -908,7 +729,7 @@
           "title": "Introduction",
           "para1": "This Privacy Policy describes how Rofiant (\"Rofiant,\" \"we,\" \"us,\" or \"our\") collects, uses, stores, shares, and protects personal information when you visit rofiant.ca, use our web application, APIs, dashboards, or related services (collectively, the \"Services\").",
           "para2": "We wrote this policy to match what our platform actually does. If you do not agree with this policy, do not use the Services.",
-          "para3": "This policy applies to visitors, registered users, agency administrators, billing contacts, and anyone who submits information through our contact or careers forms."
+          "para3": "This policy applies to visitors, registered users, organization administrators, billing contacts, and anyone who submits information through our contact forms."
         },
         "s2": {
           "title": "Who Controls Your Data",
@@ -918,13 +739,13 @@
           "title": "Information We Collect",
           "intro": "We collect the categories of information below depending on how you use the Services:",
           "items": {
-            "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization or agency membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
+            "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
             "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
             "documents": "Screen and file data: documents, PDFs, files, and on-screen content Rofiant accesses on your machine to complete tasks, including extracted text and indexing metadata.",
             "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
             "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
             "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
-            "communications": "Communications: messages you send through contact forms, support requests, careers notifications, and email correspondence with our team.",
+            "communications": "Communications: messages you send through contact forms, support requests, and email correspondence with our team.",
             "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
           },
           "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
@@ -935,7 +756,7 @@
           "items": {
             "direct": "Directly from you when you register, configure an account, submit content, upload files, complete forms, or contact us.",
             "automatic": "Automatically when you use the Services, including through cookies, server logs, application telemetry, and error monitoring tools.",
-            "thirdParty": "From third parties when you authenticate through OAuth or SSO providers, when your organization provisions access through SCIM, or when our payment processor sends billing event webhooks."
+            "thirdParty": "From third parties when you authenticate through OAuth or SSO providers, or when our payment processor sends billing event webhooks."
           }
         },
         "s5": {
@@ -1026,7 +847,7 @@
         "s10": {
           "title": "International Data Transfers",
           "para1": "Rofiant operates from Canada and uses service providers that may process data in Canada, the United States, and other countries where they maintain facilities.",
-          "para2": "When we transfer personal information across borders, we rely on appropriate safeguards where required, including contractual clauses, provider security commitments, and organizational access controls. If you need information about transfer mechanisms for your jurisdiction, contact us at privacy@rofiant.ca."
+          "para2": "When we transfer personal information across borders, we rely on appropriate safeguards where required, including contractual clauses, provider security commitments, and organizational access controls. If you need information about transfer mechanisms for your jurisdiction, contact us at support@rofiant.ca."
         },
         "s11": {
           "title": "Data Retention",
@@ -1064,7 +885,7 @@
             "withdraw": "Withdraw consent where processing is based on consent, without affecting prior lawful processing.",
             "complaint": "Lodge a complaint with a supervisory authority. Canadian residents may contact the Office of the Privacy Commissioner of Canada. Quebec residents may also contact the Commission d'accès à l'information du Québec."
           },
-          "outro": "To exercise these rights, email <link>privacy@rofiant.ca</link> with enough detail for us to verify your identity and locate your account. We respond within 30 days unless applicable law permits an extension."
+          "outro": "To exercise these rights, email <link>support@rofiant.ca</link> with enough detail for us to verify your identity and locate your account. We respond within 30 days unless applicable law permits an extension."
         },
         "s14": {
           "title": "Cookies and Similar Technologies",
@@ -1078,7 +899,7 @@
         },
         "s15": {
           "title": "Children",
-          "body": "Users under 18 may create accounts in limited minor mode. For those accounts, Rofiant does not collect or retain name, age, chat history, uploads, analytics events, or usage records beyond the email and credentials required to operate the account. If you believe a child under 13 has provided us personal information, contact privacy@rofiant.ca and we will delete it."
+          "body": "Users under 18 may create accounts in limited minor mode. For those accounts, Rofiant does not collect or retain name, age, chat history, uploads, analytics events, or usage records beyond the email and credentials required to operate the account. If you believe a child under 13 has provided us personal information, contact support@rofiant.ca and we will delete it."
         },
         "s16": {
           "title": "Automated Processing",
@@ -1090,7 +911,7 @@
         },
         "s18": {
           "title": "Contact",
-          "body": "Privacy questions, rights requests, or complaints: <link>privacy@rofiant.ca</link>. Security incidents: security@rofiant.ca."
+          "body": "Privacy questions, rights requests, or complaints: <link>support@rofiant.ca</link>. Security incidents: support@rofiant.ca."
         }
       }
     },
@@ -1110,12 +931,12 @@
             "age": "If you are under 18, you may create an account in limited minor mode. Rofiant does not collect or store personal profile or usage data for minor accounts beyond what is required to operate the account. Users 18 and older must have legal capacity to enter a binding contract.",
             "authority": "If you register on behalf of an organization, agency, or other entity, you represent that you have authority to bind that entity to these Terms.",
             "accuracy": "You provide accurate registration information and keep it current.",
-            "security": "You maintain the confidentiality of your credentials and notify us promptly at security@rofiant.ca if you suspect unauthorized access."
+            "security": "You maintain the confidentiality of your credentials and notify us promptly at support@rofiant.ca if you suspect unauthorized access."
           }
         },
         "s3": {
           "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, workflow automation, API access, agency administration, and related enterprise controls.",
+          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, and workflow automation.",
           "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on a commercially reasonable efforts basis unless a separate signed agreement states otherwise."
         },
         "s4": {
@@ -1142,7 +963,7 @@
             "overload": "Overload, disrupt, or impair the Services or connected networks, including through denial-of-service activity or excessive automated requests.",
             "impersonate": "Impersonate Rofiant, another user, or misrepresent your affiliation.",
             "spam": "Send unsolicited communications or use the Services primarily as a messaging relay.",
-            "export": "Upload, process, or export ITAR-controlled, classified, or other regulated data without authorization from your organization and compliance with applicable export and security laws.",
+            "export": "Upload, process, or export export-controlled, classified, or other legally restricted data without the authorization and compliance required by applicable export and security laws.",
             "circumvent": "Circumvent usage limits, billing restrictions, access controls, or security measures."
           },
           "outro": "We may investigate violations, remove content, suspend accounts, and report activity to law enforcement when we believe it is necessary."
@@ -1187,17 +1008,12 @@
         },
         "s12": {
           "title": "Privacy and Data Processing",
-          "body": "Our Privacy Policy explains how we collect and process personal information. If you require a data processing agreement, business associate agreement, or other compliance addendum, contact legal@rofiant.ca. In the event of conflict between these Terms and a signed enterprise agreement, the signed agreement controls for that customer."
+          "body": "Our Privacy Policy explains how we collect and process personal information. If you require a data processing agreement, business associate agreement, or other compliance addendum, contact support@rofiant.ca. In the event of conflict between these Terms and a signed enterprise agreement, the signed agreement controls for that customer."
         },
         "s13": {
           "title": "Export Controls and Sanctions",
           "para1": "You may not use or export the Services in violation of Canadian export laws, U.S. export control laws, sanctions regulations, or other applicable trade restrictions.",
           "para2": "You represent that you are not located in, organized under the laws of, or ordinarily resident in a jurisdiction subject to comprehensive sanctions, and that you are not a prohibited party under applicable sanctions lists."
-        },
-        "s14": {
-          "title": "Government and Regulated Use",
-          "para1": "If you are a government agency or regulated entity, you are responsible for determining whether the Services meet your authorization, accreditation, data residency, and records-management requirements before production use.",
-          "para2": "References on our website to FedRAMP, ITAR, or similar frameworks describe our compliance roadmap and available controls unless explicitly identified as a completed certification in a signed agreement."
         },
         "s15": {
           "title": "Disclaimer of Warranties",
@@ -1228,7 +1044,7 @@
         "s19": {
           "title": "Governing Law and Disputes",
           "para1": "These Terms are governed by the laws of the Province of Ontario and the federal laws of Canada applicable therein, without regard to conflict-of-law rules.",
-          "para2": "Before filing a claim, you agree to contact legal@rofiant.ca and attempt to resolve the dispute informally for at least 30 days.",
+          "para2": "Before filing a claim, you agree to contact support@rofiant.ca and attempt to resolve the dispute informally for at least 30 days.",
           "para3": "Except where prohibited by applicable law, you agree that the courts located in Ontario, Canada have exclusive jurisdiction over disputes arising out of or relating to these Terms or the Services, and you consent to personal jurisdiction in those courts."
         },
         "s20": {
@@ -1248,7 +1064,7 @@
         },
         "s22": {
           "title": "Contact",
-          "body": "Legal notices and questions about these Terms: <link>legal@rofiant.ca</link>."
+          "body": "Legal notices and questions about these Terms: <link>support@rofiant.ca</link>."
         }
       }
     }

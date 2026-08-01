@@ -24,7 +24,6 @@ export async function HeaderSection() {
     { href: "/platform/agents", label: t("platform") },
     { href: "/company/about", label: t("company") },
     { href: "/pricing", label: t("pricing") },
-    { href: "/resources/documentation", label: t("docs") },
     { href: "/download", label: t("download") },
   ];
 
@@ -69,12 +68,6 @@ export async function HeaderSection() {
                 <Link href="/pricing" className={`${linkBase} ${linkIdle}`}>
                   {t("pricing")}
                 </Link>
-                <Link
-                  href="/resources/documentation"
-                  className={`${linkBase} ${linkIdle}`}
-                >
-                  {t("docs")}
-                </Link>
                 <Link href="/download" className={`${linkBase} ${linkIdle}`}>
                   {t("download")}
                 </Link>
@@ -91,7 +84,7 @@ export async function HeaderSection() {
             </div>
             {user ? (
               <a
-                href={appUrl("/chat")}
+                href={appUrl("/dashboard")}
                 className="inline-flex items-center justify-center h-12 px-3 sm:px-4 text-sm font-medium bg-white text-black transition-colors whitespace-nowrap"
               >
                 {t("dashboard")}

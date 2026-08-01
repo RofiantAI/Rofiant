@@ -184,9 +184,6 @@ export default function AgentsPage() {
           <Link href="/auth/signup">
             <Button size="lg">{t("cta.startTrial")}</Button>
           </Link>
-          <Link href="/resources/api-reference">
-            <Button variant="outline" size="lg">{t("cta.readDocs")}</Button>
-          </Link>
         </div>
       </div>
     </PageLayout>

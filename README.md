@@ -11,18 +11,16 @@ this repo is the surrounding web product.
 
 - **Marketing site** (`src/app/(app)`) — localized (EN/ES/FR/DE) pages for
   the product, pricing, company/legal info, and app downloads.
-- **Dashboard** (`src/app/(dashboard)`) — account settings, API keys, usage,
-  audit log, and admin views for signed-in users.
-- **Web chat** (`src/app/(chat)`) — browser-based chat client.
-- **API routes** (`src/app/api`) — chat/agents, documents, voice, billing
-  (Creem checkout + webhooks), auth, and other backend endpoints.
+- **Dashboard** (`src/app/(dashboard)`) — account settings, usage, and
+  admin views for signed-in users.
+- **API routes** (`src/app/api`) — documents, billing (Creem checkout +
+  webhooks), auth, and other backend endpoints.
 
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + TypeScript + Tailwind CSS
 - [Supabase](https://supabase.com) for auth and data
 - [next-intl](https://next-intl.dev) for i18n (`en`, `es`, `fr`, `de`)
-- [Vercel AI SDK](https://ai-sdk.dev) for chat/agent completions
 
 ## Getting started
 
