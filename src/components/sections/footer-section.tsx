@@ -60,6 +60,15 @@ export async function FooterSection() {
               <i className="fa-brands fa-x-twitter text-lg" aria-hidden="true"></i>
               <span className="sr-only">X (Twitter)</span>
             </a>
+            <a
+              href="https://github.com/RofiantAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-foreground-secondary transition-colors hover:text-foreground"
+            >
+              <i className="fa-brands fa-github text-lg" aria-hidden="true"></i>
+              <span className="sr-only">GitHub</span>
+            </a>
           </div>
 
           {footerColumns.map((column) => (
