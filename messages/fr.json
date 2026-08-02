@@ -199,11 +199,11 @@
         "description": "L'application de bureau complète, aucune carte de crédit requise.",
         "cta": "Commencer gratuitement",
         "features": [
-          "Outils locaux de fichiers, de commandes et d'applications",
-          "Discutez avec des modèles hébergés ou locaux",
-          "Prise en charge des serveurs MCP",
-          "Transcription vocale",
-          "Tâches illimitées"
+          { "title": "Outils locaux de fichiers, de commandes et d'applications", "description": "Automatisez les tâches du quotidien directement sur votre machine, sans passer par le cloud." },
+          { "title": "Discutez avec des modèles hébergés ou locaux", "description": "Discutez avec des modèles hébergés ou utilisez votre propre modèle local." },
+          { "title": "Prise en charge des serveurs MCP", "description": "Connectez n'importe quel serveur MCP pour étendre les capacités de Rofiant." },
+          { "title": "Transcription vocale", "description": "Dictez vos tâches et notes grâce à la transcription vocale intégrée." },
+          { "title": "Tâches illimitées", "description": "Exécutez autant de tâches que nécessaire, jour et nuit." }
         ]
       },
       "pro": {
@@ -213,22 +213,23 @@
         "cta": "Essai gratuit de 7 jours",
         "ctaReturning": "Passer à Pro",
         "features": [
-          "Nos modèles les plus performants",
-          "Agents multi-étapes",
-          "Accès API complet"
+          { "title": "Limites d'utilisation 2 fois plus élevées", "description": "Des limites d'utilisation 2 fois plus élevées que le plan Gratuit." },
+          { "title": "Accès à nos meilleurs modèles cloud", "description": "Accédez à nos modèles cloud les plus performants pour les tâches complexes en plusieurs étapes." },
+          { "title": "Accès API complet", "description": "Accès programmatique complet via notre API." },
+          { "title": "Recherche web", "description": "Laissez Rofiant chercher sur le web des réponses à jour." }
         ],
-        "featuresIntro": "Tout dans Gratuit et :"
+        "featuresIntro": "Inclus :"
       },
       "ultra": {
         "name": "Ultra",
         "tagline": "Pour vos charges de travail les plus exigeantes",
-        "description": "Les limites d'utilisation les plus élevées, un accès prioritaire aux nouveaux modèles et un support prioritaire pour ceux qui utilisent Rofiant au quotidien.",
+        "description": "Les limites d'utilisation les plus élevées et un accès prioritaire aux nouveaux modèles pour ceux qui utilisent Rofiant au quotidien.",
         "cta": "Démarrer avec Ultra",
         "features": [
-          "Limites d'utilisation 5 fois plus élevées",
-          "Premier accès aux nouveaux modèles",
-          "Support prioritaire",
-          "Accès anticipé aux nouvelles fonctionnalités"
+          { "title": "Limites d'utilisation 4 fois plus élevées", "description": "Des limites d'utilisation 4 fois plus élevées que le plan Gratuit, pour un usage quotidien intensif." },
+          { "title": "Recherche web", "description": "Laissez Rofiant chercher sur le web des réponses à jour." },
+          { "title": "Premier accès aux nouveaux modèles", "description": "Essayez nos derniers modèles avant tout le monde." },
+          { "title": "Agents multi-étapes", "description": "Laissez les Agents planifier et exécuter des tâches en plusieurs étapes dans le cloud." }
         ],
         "featuresIntro": "Tout dans Pro, plus :"
       }
@@ -617,349 +618,349 @@
   },
   "legal": {
     "privacyPolicy": {
-      "title": "Privacy Policy",
-      "subtitle": "Last updated July 5, 2026",
+      "title": "Politique de confidentialité",
+      "subtitle": "Dernière mise à jour : 5 juillet 2026",
       "sections": {
         "s1": {
           "title": "Introduction",
-          "para1": "This Privacy Policy describes how Rofiant (\"Rofiant,\" \"we,\" \"us,\" or \"our\") collects, uses, stores, shares, and protects personal information when you visit rofiant.ca, use our web application, APIs, dashboards, or related services (collectively, the \"Services\").",
-          "para2": "We wrote this policy to match what our platform actually does. If you do not agree with this policy, do not use the Services.",
-          "para3": "This policy applies to visitors, registered users, organization administrators, billing contacts, and anyone who submits information through our contact forms."
+          "para1": "La présente Politique de confidentialité décrit la manière dont Rofiant (« Rofiant », « nous » ou « notre ») recueille, utilise, conserve, partage et protège les renseignements personnels lorsque vous visitez rofiant.ca, utilisez notre application Web, nos API, nos tableaux de bord ou nos services connexes (collectivement, les « Services »).",
+          "para2": "Nous avons rédigé cette politique de manière à ce qu'elle reflète fidèlement le fonctionnement réel de notre plateforme. Si vous n'acceptez pas cette politique, veuillez ne pas utiliser les Services.",
+          "para3": "La présente politique s'applique aux visiteurs, aux utilisateurs inscrits, aux administrateurs d'organisation, aux responsables de la facturation et à toute personne qui soumet des renseignements par l'entremise de nos formulaires de contact."
         },
         "s2": {
-          "title": "Who Controls Your Data",
-          "body": "Rofiant is the data controller for personal information processed through the Services, except where we process data solely on behalf of a customer organization under a separate data processing agreement. In those cases, the customer organization is the controller and Rofiant acts as a processor."
+          "title": "Qui contrôle vos données",
+          "body": "Rofiant est le responsable du traitement des renseignements personnels traités par l'entremise des Services, sauf lorsque nous traitons des données uniquement pour le compte d'une organisation cliente en vertu d'une entente de traitement des données distincte. Dans ces cas, l'organisation cliente agit à titre de responsable du traitement et Rofiant agit à titre de sous-traitant."
         },
         "s3": {
-          "title": "Information We Collect",
-          "intro": "We collect the categories of information below depending on how you use the Services:",
+          "title": "Renseignements que nous recueillons",
+          "intro": "Nous recueillons les catégories de renseignements ci-dessous selon la manière dont vous utilisez les Services :",
           "items": {
-            "account": "Account information: name, email address, hashed password, authentication tokens, multi-factor authentication enrollment status, organization membership, role assignments, and SSO identifiers when your organization uses single sign-on.",
-            "content": "Platform content: chat messages, prompts, agent instructions, workflow inputs and outputs, API requests and responses, and metadata associated with those records (timestamps, model identifiers, token counts).",
-            "documents": "Données d'écran et de fichiers : documents, PDF, fichiers et contenu affiché à l'écran auxquels Rofiant accède sur votre machine pour accomplir des tâches, y compris le texte extrait et les métadonnées d'indexation.",
-            "voice": "Audio data: voice recordings or audio files you submit for transcription or voice AI features, plus generated transcripts and summaries.",
-            "usage": "Usage and diagnostic data: feature interactions, page views (when analytics cookies are accepted), session identifiers, IP address, browser type, device information, error reports, stack traces, and performance logs.",
-            "billing": "Billing information: subscription plan, payment status, invoice history, and limited payment metadata processed by our payment provider. We do not store full payment card numbers on our servers.",
-            "communications": "Communications: messages you send through contact forms, support requests, and email correspondence with our team.",
-            "support": "Security and fraud-prevention signals: bot verification results from Cloudflare Turnstile, rate-limit counters."
+            "account": "Renseignements de compte : nom, adresse courriel, mot de passe haché, jetons d'authentification, statut d'inscription à l'authentification multifacteur, appartenance à une organisation, attribution de rôles et identifiants d'authentification unique (SSO) lorsque votre organisation utilise l'authentification unique.",
+            "content": "Contenu de la plateforme : messages de clavardage, invites, instructions destinées aux agents, entrées et sorties de flux de travail, requêtes et réponses d'API, ainsi que les métadonnées associées à ces enregistrements (horodatages, identifiants de modèle, nombre de jetons).",
+            "documents": "Données d'écran et de fichiers : documents, fichiers PDF, fichiers et contenu affiché à l'écran auxquels Rofiant accède sur votre appareil pour accomplir des tâches, y compris le texte extrait et les métadonnées d'indexation.",
+            "voice": "Données audio : enregistrements vocaux ou fichiers audio que vous soumettez pour la transcription ou les fonctionnalités d'IA vocale, ainsi que les transcriptions et résumés générés.",
+            "usage": "Données d'utilisation et de diagnostic : interactions avec les fonctionnalités, pages consultées (lorsque les témoins analytiques sont acceptés), identifiants de session, adresse IP, type de navigateur, renseignements sur l'appareil, rapports d'erreurs, traces de pile et journaux de performance.",
+            "billing": "Renseignements de facturation : type d'abonnement, statut de paiement, historique de facturation et métadonnées de paiement limitées traitées par notre fournisseur de services de paiement. Nous ne conservons pas les numéros complets de cartes de paiement sur nos serveurs.",
+            "communications": "Communications : messages que vous envoyez par l'entremise des formulaires de contact, demandes de soutien et correspondance par courriel avec notre équipe.",
+            "support": "Signaux de sécurité et de prévention de la fraude : résultats de vérification anti-robot de Cloudflare Turnstile, compteurs de limitation de débit."
           },
-          "outro": "We do not intentionally collect sensitive categories of personal information unless you choose to include them in content you submit to the platform. You are responsible for the data you upload, prompt, or transmit through the Services."
+          "outro": "Nous ne recueillons pas intentionnellement de catégories sensibles de renseignements personnels, à moins que vous ne choisissiez de les inclure dans le contenu que vous soumettez à la plateforme. Vous êtes responsable des données que vous téléversez, saisissez dans une invite ou transmettez par l'entremise des Services."
         },
         "s4": {
-          "title": "How We Collect Information",
-          "intro": "We collect information in three ways:",
+          "title": "Comment nous recueillons les renseignements",
+          "intro": "Nous recueillons des renseignements de trois façons :",
           "items": {
-            "direct": "Directly from you when you register, configure an account, submit content, upload files, complete forms, or contact us.",
-            "automatic": "Automatically when you use the Services, including through cookies, server logs, application telemetry, and error monitoring tools.",
-            "thirdParty": "From third parties when you authenticate through OAuth or SSO providers, or when our payment processor sends billing event webhooks."
+            "direct": "Directement de vous, lorsque vous vous inscrivez, configurez un compte, soumettez du contenu, téléversez des fichiers, remplissez des formulaires ou communiquez avec nous.",
+            "automatic": "Automatiquement lorsque vous utilisez les Services, notamment au moyen de témoins, de journaux serveur, de la télémétrie applicative et des outils de surveillance des erreurs.",
+            "thirdParty": "De tiers, lorsque vous vous authentifiez par l'entremise de fournisseurs OAuth ou SSO, ou lorsque notre processeur de paiement envoie des webhooks d'événements de facturation."
           }
         },
         "s5": {
-          "title": "How We Use Information",
-          "intro": "We use personal information only for legitimate business purposes connected to the Services, including to:",
+          "title": "Comment nous utilisons les renseignements",
+          "intro": "Nous utilisons les renseignements personnels uniquement à des fins commerciales légitimes liées aux Services, notamment pour :",
           "items": {
-            "provide": "Create and manage accounts, authenticate users, deliver chat, voice, document, agent, and workflow features, and respond to API requests.",
-            "secure": "Detect abuse, enforce rate limits, verify form submissions, investigate security incidents, and protect the integrity of the platform.",
-            "support": "Provide customer support, troubleshoot errors, and respond to your requests.",
-            "billing": "Process subscriptions, send billing notices, and manage payment-related records.",
-            "improve": "Monitor reliability, analyze aggregated usage patterns, and improve product performance. We do not use customer content to train generalized AI models unless you explicitly opt in under a separate written agreement.",
-            "comply": "Meet legal obligations, respond to lawful requests, and enforce our Terms of Service.",
-            "communicate": "Send service announcements, security alerts, product updates, and administrative messages."
+            "provide": "Créer et gérer les comptes, authentifier les utilisateurs, fournir les fonctionnalités de clavardage, de voix, de documents, d'agents et de flux de travail, et répondre aux requêtes d'API.",
+            "secure": "Détecter les abus, appliquer les limites de débit, vérifier les soumissions de formulaires, enquêter sur les incidents de sécurité et protéger l'intégrité de la plateforme.",
+            "support": "Fournir le soutien à la clientèle, résoudre les erreurs et répondre à vos demandes.",
+            "billing": "Traiter les abonnements, envoyer les avis de facturation et gérer les dossiers liés aux paiements.",
+            "improve": "Surveiller la fiabilité, analyser les tendances d'utilisation agrégées et améliorer la performance du produit. Nous n'utilisons pas le contenu de la clientèle pour entraîner des modèles d'IA généralistes, à moins que vous n'y consentiez expressément en vertu d'une entente écrite distincte.",
+            "comply": "Respecter les obligations légales, répondre aux demandes légitimes et faire appliquer nos Conditions d'utilisation.",
+            "communicate": "Envoyer des avis de service, des alertes de sécurité, des mises à jour de produit et des messages administratifs."
           },
-          "outro": "We do not sell personal information. We do not share personal information with third parties for their independent marketing purposes."
+          "outro": "Nous ne vendons pas de renseignements personnels. Nous ne partageons pas de renseignements personnels avec des tiers à des fins de marketing indépendantes."
         },
         "s6": {
-          "title": "Legal Bases for Processing",
-          "intro": "If you are located in the European Economic Area, the United Kingdom, or another jurisdiction that requires a legal basis for processing, we rely on the following bases:",
+          "title": "Fondements juridiques du traitement",
+          "intro": "Si vous êtes situé dans l'Espace économique européen, au Royaume-Uni ou dans une autre juridiction exigeant un fondement juridique pour le traitement des données, nous nous appuyons sur les fondements suivants :",
           "items": {
-            "contract": "Performance of a contract when processing is necessary to provide the Services you requested.",
-            "legitimate": "Legitimate interests when we secure the platform, prevent fraud, improve reliability, and communicate about the Services, balanced against your rights.",
-            "consent": "Consent when you accept analytics cookies, subscribe to optional communications, or otherwise opt in to a specific processing activity.",
-            "legal": "Compliance with legal obligations when we must retain, disclose, or process information under applicable law."
+            "contract": "L'exécution d'un contrat, lorsque le traitement est nécessaire pour fournir les Services que vous avez demandés.",
+            "legitimate": "Nos intérêts légitimes, lorsque nous assurons la sécurité de la plateforme, prévenons la fraude, améliorons la fiabilité et communiquons au sujet des Services, en tenant compte de vos droits.",
+            "consent": "Votre consentement, lorsque vous acceptez les témoins analytiques, vous abonnez à des communications facultatives ou consentez autrement à une activité de traitement particulière.",
+            "legal": "Le respect d'obligations légales, lorsque nous devons conserver, divulguer ou traiter des renseignements en vertu du droit applicable."
           }
         },
         "s7": {
-          "title": "AI Processing",
-          "para1": "Several Rofiant features send user content to third-party AI inference providers to generate responses, summaries, transcriptions, or workflow outputs. Today we use Groq for model inference. When you submit a prompt, document, or audio file, the relevant content and necessary metadata are transmitted to that provider for processing.",
-          "para2": "AI providers process data under their own terms and privacy policies. We configure our integrations to support our contractual commitments, but you should assume that content sent for inference leaves our direct execution environment for the duration of processing.",
-          "para3": "AI outputs may be inaccurate, incomplete, or inappropriate. Do not submit export-controlled, classified, attorney-client privileged, or other regulated data to the Services unless your organization has approved that use under its own compliance review."
+          "title": "Traitement par l'IA",
+          "para1": "Plusieurs fonctionnalités de Rofiant transmettent le contenu des utilisateurs à des fournisseurs tiers d'inférence en IA afin de générer des réponses, des résumés, des transcriptions ou des résultats de flux de travail. Nous utilisons actuellement Groq pour l'inférence des modèles. Lorsque vous soumettez une invite, un document ou un fichier audio, le contenu pertinent et les métadonnées nécessaires sont transmis à ce fournisseur aux fins de traitement.",
+          "para2": "Les fournisseurs d'IA traitent les données conformément à leurs propres conditions et politiques de confidentialité. Nous configurons nos intégrations de manière à respecter nos engagements contractuels, mais vous devez présumer que le contenu envoyé aux fins d'inférence quitte notre environnement d'exécution direct pendant la durée du traitement.",
+          "para3": "Les résultats générés par l'IA peuvent être inexacts, incomplets ou inappropriés. Ne soumettez pas de données soumises au contrôle des exportations, classifiées, protégées par le secret professionnel de l'avocat ou autrement réglementées aux Services, à moins que votre organisation n'ait approuvé cet usage dans le cadre de son propre processus de conformité."
         },
         "s8": {
-          "title": "Service Providers",
-          "intro": "We use the following categories of subprocessors and infrastructure providers to operate the Services:",
+          "title": "Fournisseurs de services",
+          "intro": "Nous faisons appel aux catégories suivantes de sous-traitants et de fournisseurs d'infrastructure pour exploiter les Services :",
           "providers": {
             "supabase": {
               "name": "Supabase",
-              "role": "Authentication, PostgreSQL database, file storage, and row-level security for application data."
+              "role": "Authentification, base de données PostgreSQL, stockage de fichiers et sécurité au niveau des lignes pour les données de l'application."
             },
             "groq": {
               "name": "Groq",
-              "role": "AI inference for chat, voice, document, and workflow features."
+              "role": "Inférence en IA pour les fonctionnalités de clavardage, de voix, de documents et de flux de travail."
             },
             "posthog": {
               "name": "PostHog",
-              "role": "Product analytics when you accept analytics cookies. Page views and usage events are not captured for analytics before consent."
+              "role": "Analytique de produit lorsque vous acceptez les témoins analytiques. Les pages consultées et les événements d'utilisation ne sont pas saisis à des fins analytiques avant l'obtention du consentement."
             },
             "sentry": {
               "name": "Sentry",
-              "role": "Error monitoring, performance tracing, and limited session replay for debugging production issues."
+              "role": "Surveillance des erreurs, traçage de performance et reproduction limitée des sessions aux fins de débogage des problèmes en production."
             },
             "creem": {
               "name": "Creem",
-              "role": "Subscription billing, checkout, and payment event processing."
+              "role": "Facturation des abonnements, paiement et traitement des événements de paiement."
             },
             "resend": {
               "name": "Resend",
-              "role": "Transactional email delivery for account, billing, and notification messages."
+              "role": "Livraison des courriels transactionnels liés aux comptes, à la facturation et aux notifications."
             },
             "upstash": {
               "name": "Upstash",
-              "role": "Redis-backed rate limiting and abuse prevention."
+              "role": "Limitation de débit adossée à Redis et prévention des abus."
             },
             "cloudflare": {
               "name": "Cloudflare",
-              "role": "Turnstile bot verification on public forms such as contact and signup flows."
+              "role": "Vérification anti-robot Turnstile sur les formulaires publics, tels que les formulaires de contact et d'inscription."
             },
             "vercel": {
               "name": "Vercel",
-              "role": "Application hosting and edge delivery for the Rofiant web platform."
+              "role": "Hébergement de l'application et livraison en périphérie (edge) pour la plateforme Web de Rofiant."
             }
           },
-          "outro": "Each provider processes data under its own privacy policy and, where applicable, a data processing agreement. We limit the information we share to what is reasonably necessary for each provider to perform its function."
+          "outro": "Chaque fournisseur traite les données conformément à sa propre politique de confidentialité et, le cas échéant, à une entente de traitement des données. Nous limitons les renseignements que nous partageons à ce qui est raisonnablement nécessaire à l'exécution de la fonction de chaque fournisseur."
         },
         "s9": {
-          "title": "When We Disclose Information",
-          "intro": "We may disclose personal information in the following circumstances:",
+          "title": "Quand nous divulguons des renseignements",
+          "intro": "Nous pouvons divulguer des renseignements personnels dans les circonstances suivantes :",
           "items": {
-            "processors": "To service providers listed in this policy who process data on our behalf under contractual confidentiality and security obligations.",
-            "legal": "To comply with applicable law, regulation, legal process, or enforceable governmental request.",
-            "protection": "To protect the rights, property, or safety of Rofiant, our users, or the public, including to investigate suspected fraud, abuse, or security incidents.",
-            "consent": "With your direction or consent, including when you connect third-party integrations approved by your organization.",
-            "business": "In connection with a merger, acquisition, financing, reorganization, or sale of assets, subject to confidentiality obligations and notice where required by law."
+            "processors": "Aux fournisseurs de services mentionnés dans la présente politique qui traitent les données pour notre compte, sous réserve d'obligations contractuelles de confidentialité et de sécurité.",
+            "legal": "Pour nous conformer au droit applicable, à un règlement, à une procédure judiciaire ou à une demande gouvernementale exécutoire.",
+            "protection": "Pour protéger les droits, les biens ou la sécurité de Rofiant, de nos utilisateurs ou du public, notamment pour enquêter sur une fraude, un abus ou un incident de sécurité soupçonnés.",
+            "consent": "Sur vos instructions ou avec votre consentement, notamment lorsque vous connectez des intégrations tierces approuvées par votre organisation.",
+            "business": "Dans le cadre d'une fusion, d'une acquisition, d'un financement, d'une réorganisation ou d'une vente d'actifs, sous réserve d'obligations de confidentialité et d'un avis lorsque la loi l'exige."
           },
-          "outro": "We do not disclose customer content to third parties for advertising or unrelated commercial purposes."
+          "outro": "Nous ne divulguons pas le contenu de la clientèle à des tiers à des fins publicitaires ou à des fins commerciales sans rapport avec les Services."
         },
         "s10": {
-          "title": "International Data Transfers",
-          "para1": "Rofiant operates from Canada and uses service providers that may process data in Canada, the United States, and other countries where they maintain facilities.",
-          "para2": "When we transfer personal information across borders, we rely on appropriate safeguards where required, including contractual clauses, provider security commitments, and organizational access controls. If you need information about transfer mechanisms for your jurisdiction, contact us at support@rofiant.ca."
+          "title": "Transferts internationaux de données",
+          "para1": "Rofiant exerce ses activités à partir du Canada et fait appel à des fournisseurs de services susceptibles de traiter des données au Canada, aux États-Unis et dans d'autres pays où ils exploitent des installations.",
+          "para2": "Lorsque nous transférons des renseignements personnels au-delà des frontières, nous nous appuyons sur des garanties appropriées lorsque cela est requis, notamment des clauses contractuelles, les engagements de sécurité des fournisseurs et des contrôles d'accès organisationnels. Si vous avez besoin de renseignements sur les mécanismes de transfert applicables à votre juridiction, communiquez avec nous à support@rofiant.ca."
         },
         "s11": {
-          "title": "Data Retention",
-          "intro": "We retain personal information only as long as necessary for the purposes described in this policy:",
+          "title": "Conservation des données",
+          "intro": "Nous ne conservons les renseignements personnels que le temps nécessaire aux fins décrites dans la présente politique :",
           "items": {
-            "account": "Account and profile data remain while your account is active.",
-            "content": "Platform content remains until you delete it, your administrator removes it, or your account is deleted, subject to backup retention described below.",
-            "logs": "Security and diagnostic logs are retained for a limited period appropriate to investigation and compliance needs. Aggregated or de-identified analytics may be kept longer.",
-            "billing": "Billing and tax records are retained as required by applicable accounting and tax laws.",
-            "legal": "We may retain information longer when required by law, to resolve disputes, or to enforce our agreements."
+            "account": "Les données de compte et de profil sont conservées tant que votre compte est actif.",
+            "content": "Le contenu de la plateforme est conservé jusqu'à ce que vous le supprimiez, que votre administrateur le supprime ou que votre compte soit supprimé, sous réserve de la conservation des copies de sauvegarde décrite ci-dessous.",
+            "logs": "Les journaux de sécurité et de diagnostic sont conservés pendant une période limitée, adaptée aux besoins d'enquête et de conformité. Les données analytiques agrégées ou dépersonnalisées peuvent être conservées plus longtemps.",
+            "billing": "Les dossiers de facturation et fiscaux sont conservés conformément aux lois comptables et fiscales applicables.",
+            "legal": "Nous pouvons conserver des renseignements plus longtemps lorsque la loi l'exige, pour régler un différend ou pour faire respecter nos ententes."
           },
-          "outro": "When you delete your account or submit a verified deletion request, we delete or de-identify personal information within 30 days except where retention is legally required or where encrypted backups expire on their normal cycle."
+          "outro": "Lorsque vous supprimez votre compte ou soumettez une demande de suppression vérifiée, nous supprimons ou dépersonnalisons les renseignements personnels dans un délai de 30 jours, sauf lorsque la conservation est exigée par la loi ou lorsque des copies de sauvegarde chiffrées expirent selon leur cycle normal."
         },
         "s12": {
-          "title": "Security",
-          "intro": "We apply administrative, technical, and organizational measures designed to protect personal information, including:",
+          "title": "Sécurité",
+          "intro": "Nous appliquons des mesures administratives, techniques et organisationnelles conçues pour protéger les renseignements personnels, notamment :",
           "items": {
-            "encryption": "Encryption in transit using TLS and encryption at rest through our infrastructure providers.",
-            "access": "Role-based access controls, least-privilege policies for production systems, and multi-factor authentication for administrative access.",
-            "monitoring": "Logging, alerting, and error monitoring to detect anomalous activity.",
-            "infrastructure": "Managed cloud infrastructure with vendor security programs and independent audits performed by those vendors.",
-            "incident": "An incident response process to investigate and notify affected parties when required by law."
+            "encryption": "Le chiffrement en transit au moyen du protocole TLS et le chiffrement au repos par l'entremise de nos fournisseurs d'infrastructure.",
+            "access": "Des contrôles d'accès fondés sur les rôles, des politiques du moindre privilège pour les systèmes de production et l'authentification multifacteur pour l'accès administratif.",
+            "monitoring": "La journalisation, les alertes et la surveillance des erreurs afin de détecter toute activité anormale.",
+            "infrastructure": "Une infrastructure infonuagique gérée, assortie de programmes de sécurité des fournisseurs et d'audits indépendants réalisés par ces fournisseurs.",
+            "incident": "Un processus de réponse aux incidents visant à enquêter sur les incidents et à aviser les personnes touchées lorsque la loi l'exige."
           },
-          "outro": "No online service can guarantee absolute security. You are responsible for maintaining the confidentiality of your credentials and for configuring organization-level controls appropriate to your data classification requirements."
+          "outro": "Aucun service en ligne ne peut garantir une sécurité absolue. Vous êtes responsable de préserver la confidentialité de vos identifiants et de configurer les contrôles au niveau de l'organisation adaptés à vos exigences de classification des données."
         },
         "s13": {
-          "title": "Your Privacy Rights",
-          "intro": "Depending on your location, you may have some or all of the following rights:",
+          "title": "Vos droits en matière de vie privée",
+          "intro": "Selon votre lieu de résidence, vous pourriez disposer de tout ou partie des droits suivants :",
           "items": {
-            "access": "Request access to the personal information we hold about you.",
-            "correct": "Request correction of inaccurate or incomplete information.",
-            "delete": "Request deletion of personal information, subject to legal exceptions.",
-            "export": "Request a portable copy of certain information associated with your account.",
-            "restrict": "Request restriction of processing in specific circumstances under applicable law.",
-            "withdraw": "Withdraw consent where processing is based on consent, without affecting prior lawful processing.",
-            "complaint": "Lodge a complaint with a supervisory authority. Canadian residents may contact the Office of the Privacy Commissioner of Canada. Quebec residents may also contact the Commission d'accès à l'information du Québec."
+            "access": "Demander l'accès aux renseignements personnels que nous détenons à votre sujet.",
+            "correct": "Demander la correction de renseignements inexacts ou incomplets.",
+            "delete": "Demander la suppression de renseignements personnels, sous réserve des exceptions légales.",
+            "export": "Demander une copie transférable de certains renseignements associés à votre compte.",
+            "restrict": "Demander la limitation du traitement dans des circonstances particulières prévues par le droit applicable.",
+            "withdraw": "Retirer votre consentement lorsque le traitement est fondé sur celui-ci, sans porter atteinte à la licéité du traitement effectué antérieurement.",
+            "complaint": "Déposer une plainte auprès d'une autorité de surveillance. Les résidents canadiens peuvent communiquer avec le Commissariat à la protection de la vie privée du Canada. Les résidents du Québec peuvent également communiquer avec la Commission d'accès à l'information du Québec."
           },
-          "outro": "To exercise these rights, email <link>support@rofiant.ca</link> with enough detail for us to verify your identity and locate your account. We respond within 30 days unless applicable law permits an extension."
+          "outro": "Pour exercer ces droits, écrivez à <link>support@rofiant.ca</link> en fournissant suffisamment de détails pour nous permettre de vérifier votre identité et de repérer votre compte. Nous répondons dans un délai de 30 jours, sauf lorsque le droit applicable permet une prolongation."
         },
         "s14": {
-          "title": "Cookies and Similar Technologies",
-          "intro": "We use cookies and similar storage technologies for the following purposes:",
+          "title": "Témoins et technologies similaires",
+          "intro": "Nous utilisons des témoins et des technologies de stockage similaires aux fins suivantes :",
           "items": {
-            "essential": "Essential cookies and local storage entries required for authentication, session continuity, security, and remembering your cookie preference.",
-            "consent": "A consent record stored in local storage and a cookie so we can honor your analytics preference across sessions.",
-            "analytics": "Analytics cookies and event capture through PostHog only after you click Accept on our cookie banner. If you decline, analytics capture remains disabled by default."
+            "essential": "Témoins essentiels et entrées de stockage local nécessaires à l'authentification, à la continuité des sessions, à la sécurité et à la mémorisation de vos préférences en matière de témoins.",
+            "consent": "Un enregistrement de consentement conservé dans le stockage local et dans un témoin afin de respecter votre préférence en matière d'analytique d'une session à l'autre.",
+            "analytics": "Témoins analytiques et saisie d'événements par l'entremise de PostHog uniquement après que vous ayez cliqué sur « Accepter » dans notre bandeau de témoins. Si vous refusez, la saisie analytique demeure désactivée par défaut."
           },
-          "outro": "You can change your browser settings to block cookies, but some features may not function without essential cookies. Our cookie banner lets you accept or decline analytics cookies at any time on first visit."
+          "outro": "Vous pouvez modifier les paramètres de votre navigateur pour bloquer les témoins, mais certaines fonctionnalités pourraient ne pas fonctionner sans les témoins essentiels. Notre bandeau de témoins vous permet d'accepter ou de refuser les témoins analytiques en tout temps lors de votre première visite."
         },
         "s15": {
-          "title": "Children",
-          "body": "The Services are not directed to individuals under 18, and we do not knowingly collect personal information from children. If you believe a child has provided us personal information, contact support@rofiant.ca and we will delete it."
+          "title": "Enfants",
+          "body": "Les utilisateurs de moins de 18 ans peuvent créer un compte en mode mineur restreint. Pour ces comptes, Rofiant ne recueille ni ne conserve le nom, l'âge, l'historique des clavardages, les téléversements, les événements analytiques ou les dossiers d'utilisation, au-delà du courriel et des identifiants nécessaires au fonctionnement du compte. Si vous croyez qu'un enfant de moins de 13 ans nous a communiqué des renseignements personnels, veuillez communiquer avec support@rofiant.ca et nous les supprimerons."
         },
         "s16": {
-          "title": "Automated Processing",
-          "body": "Our AI features generate outputs using automated processing. We do not use automated decision-making that produces legal or similarly significant effects about you without human review unless your organization explicitly configures such a workflow outside our default product behavior."
+          "title": "Traitement automatisé",
+          "body": "Nos fonctionnalités d'IA génèrent des résultats au moyen d'un traitement automatisé. Nous n'utilisons pas de prise de décision automatisée produisant des effets juridiques ou vous touchant de façon significative sans intervention humaine, à moins que votre organisation ne configure expressément un tel flux de travail en dehors du comportement par défaut de notre produit."
         },
         "s17": {
-          "title": "Changes to This Policy",
-          "body": "We may update this Privacy Policy to reflect product changes, legal requirements, or provider updates. We will revise the date at the top of this page when we make material changes. Continued use of the Services after an update means you accept the revised policy."
+          "title": "Modifications de la présente politique",
+          "body": "Nous pouvons mettre à jour la présente Politique de confidentialité afin de refléter les changements apportés au produit, les exigences légales ou les mises à jour des fournisseurs. Nous mettrons à jour la date figurant en haut de cette page lorsque nous apporterons des changements importants. La poursuite de l'utilisation des Services après une mise à jour signifie que vous acceptez la politique révisée."
         },
         "s18": {
           "title": "Contact",
-          "body": "Privacy questions, rights requests, or complaints: <link>support@rofiant.ca</link>. Security incidents: support@rofiant.ca."
+          "body": "Questions relatives à la vie privée, demandes d'exercice de droits ou plaintes : <link>support@rofiant.ca</link>. Incidents de sécurité : support@rofiant.ca."
         }
       }
     },
     "termsOfService": {
-      "title": "Terms of Service",
-      "subtitle": "Last updated July 5, 2026",
+      "title": "Conditions d'utilisation",
+      "subtitle": "Dernière mise à jour : 5 juillet 2026",
       "sections": {
         "s1": {
-          "title": "Agreement",
-          "para1": "These Terms of Service (\"Terms\") govern access to and use of the Rofiant website, application, APIs, dashboards, and related services (collectively, the \"Services\") operated by Rofiant (\"Rofiant,\" \"we,\" \"us,\" or \"our\").",
-          "para2": "By creating an account, accessing the Services, or clicking to accept these Terms, you agree to be bound by them and by our Privacy Policy. If you do not agree, do not use the Services."
+          "title": "Entente",
+          "para1": "Les présentes Conditions d'utilisation (les « Conditions ») régissent l'accès au site Web, à l'application, aux API, aux tableaux de bord et aux services connexes de Rofiant (collectivement, les « Services »), exploités par Rofiant (« Rofiant », « nous » ou « notre »), ainsi que leur utilisation.",
+          "para2": "En créant un compte, en accédant aux Services ou en cliquant pour accepter les présentes Conditions, vous acceptez d'être lié par celles-ci ainsi que par notre Politique de confidentialité. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser les Services."
         },
         "s2": {
-          "title": "Eligibility and Registration",
-          "intro": "You may use the Services only if you meet the requirements below:",
+          "title": "Admissibilité et inscription",
+          "intro": "Vous ne pouvez utiliser les Services que si vous répondez aux exigences ci-dessous :",
           "items": {
-            "age": "You are at least 18 years old and have legal capacity to enter a binding contract.",
-            "authority": "If you register on behalf of an organization, agency, or other entity, you represent that you have authority to bind that entity to these Terms.",
-            "accuracy": "You provide accurate registration information and keep it current.",
-            "security": "You maintain the confidentiality of your credentials and notify us promptly at support@rofiant.ca if you suspect unauthorized access."
+            "age": "Si vous avez moins de 18 ans, vous pouvez créer un compte en mode mineur restreint. Rofiant ne recueille ni ne conserve de données personnelles de profil ou d'utilisation pour les comptes de mineurs au-delà de ce qui est nécessaire au fonctionnement du compte. Les utilisateurs de 18 ans et plus doivent avoir la capacité juridique de conclure un contrat qui les lie.",
+            "authority": "Si vous vous inscrivez au nom d'une organisation, d'une agence ou d'une autre entité, vous déclarez avoir le pouvoir de lier cette entité aux présentes Conditions.",
+            "accuracy": "Vous fournissez des renseignements d'inscription exacts et les tenez à jour.",
+            "security": "Vous préservez la confidentialité de vos identifiants et nous avisez sans délai à support@rofiant.ca si vous soupçonnez un accès non autorisé."
           }
         },
         "s3": {
-          "title": "The Services",
-          "para1": "Rofiant provides AI platform services including conversational chat, voice transcription and analysis, document intelligence, autonomous agents, and workflow automation.",
-          "para2": "We may add, modify, suspend, or remove features at any time. We provide the Services on an commercially reasonable efforts basis unless a separate signed agreement states otherwise."
+          "title": "Les Services",
+          "para1": "Rofiant fournit des services de plateforme d'IA, notamment le clavardage conversationnel, la transcription et l'analyse vocales, l'intelligence documentaire, des agents autonomes et l'automatisation des flux de travail.",
+          "para2": "Nous pouvons ajouter, modifier, suspendre ou retirer des fonctionnalités en tout temps. Nous fournissons les Services suivant une norme d'efforts commercialement raisonnables, sauf entente signée distincte prévoyant autrement."
         },
         "s4": {
-          "title": "Account Security and Organization Controls",
-          "intro": "You are responsible for activity under your account and for how members of your organization use the Services. This includes:",
+          "title": "Sécurité du compte et contrôles organisationnels",
+          "intro": "Vous êtes responsable de l'activité liée à votre compte et de la manière dont les membres de votre organisation utilisent les Services. Cela comprend :",
           "items": {
-            "credentials": "Protecting passwords, API keys, webhooks, and session tokens.",
-            "mfa": "Enabling multi-factor authentication where available, especially for administrative roles.",
-            "activity": "Monitoring use of your workspace, agency, or organization account.",
-            "agency": "Configuring role-based access, export controls, and data handling rules required by your organization."
+            "credentials": "La protection des mots de passe, des clés d'API, des webhooks et des jetons de session.",
+            "mfa": "L'activation de l'authentification multifacteur lorsqu'elle est offerte, en particulier pour les rôles administratifs.",
+            "activity": "La surveillance de l'utilisation de votre espace de travail, de votre agence ou de votre compte d'organisation.",
+            "agency": "La configuration de l'accès fondé sur les rôles, des contrôles d'exportation et des règles de traitement des données exigées par votre organisation."
           }
         },
         "s5": {
-          "title": "Acceptable Use",
-          "intro": "You will not use the Services, or assist anyone else to use the Services, to:",
+          "title": "Utilisation acceptable",
+          "intro": "Vous ne devez pas utiliser les Services, ni aider quiconque à les utiliser, pour :",
           "items": {
-            "unlawful": "Violate any applicable law, regulation, court order, or contractual obligation.",
-            "harmful": "Generate, store, or transmit content that is illegal, exploitative, threatening, harassing, defamatory, hateful, or that promotes violence.",
-            "infringe": "Infringe intellectual property, privacy, publicity, or other rights of any person or entity.",
-            "malware": "Upload malware, attempt unauthorized access, probe or scan systems without authorization, or interfere with service operation.",
-            "access": "Access another user's account or data without permission.",
-            "scrape": "Scrape, crawl, harvest, or collect data from the Services through automated means except through documented APIs and within published rate limits.",
-            "reverse": "Reverse engineer, decompile, or attempt to derive source code or underlying models except where applicable law expressly permits it.",
-            "overload": "Overload, disrupt, or impair the Services or connected networks, including through denial-of-service activity or excessive automated requests.",
-            "impersonate": "Impersonate Rofiant, another user, or misrepresent your affiliation.",
-            "spam": "Send unsolicited communications or use the Services primarily as a messaging relay.",
-            "export": "Upload, process, or export export-controlled, classified, or other legally restricted data without the authorization and compliance required by applicable export and security laws.",
-            "circumvent": "Circumvent usage limits, billing restrictions, access controls, or security measures."
+            "unlawful": "Enfreindre une loi, un règlement, une ordonnance judiciaire ou une obligation contractuelle applicable.",
+            "harmful": "Générer, stocker ou transmettre du contenu illégal, exploitant, menaçant, harcelant, diffamatoire, haineux ou faisant la promotion de la violence.",
+            "infringe": "Porter atteinte à la propriété intellectuelle, à la vie privée, au droit à l'image ou à d'autres droits d'une personne ou d'une entité.",
+            "malware": "Téléverser des logiciels malveillants, tenter un accès non autorisé, sonder ou analyser des systèmes sans autorisation, ou nuire au fonctionnement des Services.",
+            "access": "Accéder au compte ou aux données d'un autre utilisateur sans autorisation.",
+            "scrape": "Extraire, explorer, moissonner ou collecter des données des Services par des moyens automatisés, sauf par l'entremise des API documentées et dans les limites de débit publiées.",
+            "reverse": "Effectuer de la rétro-ingénierie, décompiler ou tenter d'obtenir le code source ou les modèles sous-jacents, sauf lorsque le droit applicable le permet expressément.",
+            "overload": "Surcharger, perturber ou nuire aux Services ou aux réseaux connectés, notamment par des activités de déni de service ou des requêtes automatisées excessives.",
+            "impersonate": "Se faire passer pour Rofiant ou pour un autre utilisateur, ou dénaturer votre affiliation.",
+            "spam": "Envoyer des communications non sollicitées ou utiliser les Services principalement comme relais de messagerie.",
+            "export": "Téléverser, traiter ou exporter des données soumises au contrôle des exportations, classifiées ou autrement soumises à des restrictions légales, sans l'autorisation et la conformité exigées par les lois applicables en matière d'exportation et de sécurité.",
+            "circumvent": "Contourner les limites d'utilisation, les restrictions de facturation, les contrôles d'accès ou les mesures de sécurité."
           },
-          "outro": "We may investigate violations, remove content, suspend accounts, and report activity to law enforcement when we believe it is necessary."
+          "outro": "Nous pouvons enquêter sur les violations, retirer du contenu, suspendre des comptes et signaler des activités aux autorités chargées de l'application de la loi lorsque nous estimons cela nécessaire."
         },
         "s6": {
-          "title": "AI Output Disclaimer",
-          "para1": "The Services use machine learning models that generate probabilistic outputs. AI responses, summaries, transcriptions, classifications, and workflow results may be wrong, incomplete, biased, or outdated.",
-          "para2": "You must review outputs before relying on them for legal, medical, financial, safety-critical, operational, or compliance decisions. Rofiant does not provide professional advice of any kind through the Services.",
-          "para3": "You remain solely responsible for how you use AI outputs and for verifying accuracy, suitability, and legality before acting on them or distributing them inside or outside your organization."
+          "title": "Avis de non-responsabilité relatif aux résultats de l'IA",
+          "para1": "Les Services utilisent des modèles d'apprentissage automatique qui génèrent des résultats probabilistes. Les réponses, résumés, transcriptions, classifications et résultats de flux de travail générés par l'IA peuvent être erronés, incomplets, biaisés ou périmés.",
+          "para2": "Vous devez examiner les résultats avant de vous y fier pour des décisions d'ordre juridique, médical, financier, opérationnel, liées à la conformité ou essentielles à la sécurité. Rofiant ne fournit aucun avis professionnel, de quelque nature que ce soit, par l'entremise des Services.",
+          "para3": "Vous demeurez seul responsable de l'usage que vous faites des résultats générés par l'IA et de la vérification de leur exactitude, de leur pertinence et de leur légalité avant d'agir en fonction de ceux-ci ou de les distribuer à l'intérieur ou à l'extérieur de votre organisation."
         },
         "s7": {
-          "title": "Your Content",
-          "para1": "You retain ownership of content, files, prompts, and data you submit to the Services (\"Customer Content\"). You grant Rofiant a worldwide, non-exclusive license to host, store, reproduce, process, transmit, and display Customer Content only as necessary to provide, secure, and support the Services and as otherwise permitted by these Terms or a signed order form.",
-          "para2": "You represent that you have all rights necessary to submit Customer Content and that your submission and our processing under these Terms do not violate law or third-party rights.",
-          "para3": "We may remove Customer Content that violates these Terms, creates risk for Rofiant or other users, or when required by law."
+          "title": "Votre contenu",
+          "para1": "Vous conservez la propriété du contenu, des fichiers, des invites et des données que vous soumettez aux Services (le « Contenu client »). Vous accordez à Rofiant une licence mondiale et non exclusive pour héberger, stocker, reproduire, traiter, transmettre et afficher le Contenu client, uniquement dans la mesure nécessaire pour fournir, sécuriser et soutenir les Services, et tel qu'autrement permis par les présentes Conditions ou par un bon de commande signé.",
+          "para2": "Vous déclarez détenir tous les droits nécessaires pour soumettre le Contenu client et que votre soumission ainsi que notre traitement de celui-ci en vertu des présentes Conditions ne violent ni la loi ni les droits de tiers.",
+          "para3": "Nous pouvons retirer tout Contenu client qui viole les présentes Conditions, qui crée un risque pour Rofiant ou pour d'autres utilisateurs, ou lorsque la loi l'exige."
         },
         "s8": {
-          "title": "Rofiant Intellectual Property",
-          "body": "Rofiant and its licensors own the Services, software, documentation, branding, and all related intellectual property. Except for the limited rights expressly granted in these Terms, no rights are transferred to you. You may not use Rofiant trademarks without prior written consent."
+          "title": "Propriété intellectuelle de Rofiant",
+          "body": "Rofiant et ses concédants de licence sont propriétaires des Services, des logiciels, de la documentation, de l'image de marque et de toute la propriété intellectuelle connexe. À l'exception des droits limités expressément accordés par les présentes Conditions, aucun droit ne vous est transféré. Vous ne pouvez utiliser les marques de commerce de Rofiant sans son consentement écrit préalable."
         },
         "s9": {
-          "title": "Third-Party Services",
-          "body": "The Services integrate with third-party providers such as AI inference, payment, email, analytics, and infrastructure vendors. Your use of those providers may be subject to separate terms. Rofiant is not responsible for third-party services we do not control."
+          "title": "Services de tiers",
+          "body": "Les Services s'intègrent à des fournisseurs tiers, tels que des fournisseurs d'inférence en IA, de paiement, de courriel, d'analytique et d'infrastructure. Votre utilisation de ces fournisseurs peut être assujettie à des conditions distinctes. Rofiant n'est pas responsable des services de tiers que nous ne contrôlons pas."
         },
         "s10": {
-          "title": "Subscriptions, Billing, and Payment",
-          "intro": "Paid plans are billed through our payment processor, Creem, unless otherwise stated in a signed order form:",
+          "title": "Abonnements, facturation et paiement",
+          "intro": "Les forfaits payants sont facturés par l'entremise de notre processeur de paiement, Creem, sauf indication contraire dans un bon de commande signé :",
           "items": {
-            "plans": "Fees depend on the plan you select and any usage-based charges disclosed at purchase.",
-            "payment": "You authorize us and our payment processor to charge your selected payment method on a recurring basis until you cancel.",
-            "renewal": "Subscriptions renew automatically at the end of each billing period unless canceled before renewal.",
-            "taxes": "Fees exclude applicable taxes, duties, and levies unless stated otherwise. You are responsible for taxes associated with your purchase except for taxes based on Rofiant's net income.",
-            "refunds": "Except where required by law or expressly stated in a signed agreement, fees are non-refundable.",
-            "changes": "We may change pricing for renewal terms with reasonable advance notice. Price changes apply to subsequent billing periods."
+            "plans": "Les frais dépendent du forfait que vous choisissez et de tout frais fondé sur l'utilisation divulgué au moment de l'achat.",
+            "payment": "Vous nous autorisez, ainsi que notre processeur de paiement, à facturer le mode de paiement que vous avez sélectionné de façon récurrente jusqu'à ce que vous annuliez.",
+            "renewal": "Les abonnements se renouvellent automatiquement à la fin de chaque période de facturation, sauf annulation avant le renouvellement.",
+            "taxes": "Les frais excluent les taxes, droits et prélèvements applicables, sauf indication contraire. Vous êtes responsable des taxes associées à votre achat, à l'exception des taxes fondées sur le revenu net de Rofiant.",
+            "refunds": "Sauf lorsque la loi l'exige ou qu'une entente signée le prévoit expressément, les frais ne sont pas remboursables.",
+            "changes": "Nous pouvons modifier les prix applicables aux périodes de renouvellement moyennant un préavis raisonnable. Les changements de prix s'appliquent aux périodes de facturation subséquentes."
           },
-          "outro": "Failure to pay may result in suspension or termination of paid features."
+          "outro": "Le défaut de paiement peut entraîner la suspension ou la résiliation des fonctionnalités payantes."
         },
         "s11": {
-          "title": "Service Availability and Changes",
-          "para1": "We strive to keep the Services available, but downtime, maintenance, model outages, and third-party failures can occur. We do not guarantee uninterrupted or error-free operation.",
-          "para2": "We may change, deprecate, or replace features, API endpoints, and model providers. Where a change materially reduces core functionality for paid customers, we will use commercially reasonable efforts to provide advance notice."
+          "title": "Disponibilité et modification des Services",
+          "para1": "Nous nous efforçons de maintenir la disponibilité des Services, mais des interruptions, des travaux de maintenance, des pannes de modèles et des défaillances de tiers peuvent survenir. Nous ne garantissons pas un fonctionnement ininterrompu ou exempt d'erreurs.",
+          "para2": "Nous pouvons modifier, retirer graduellement ou remplacer des fonctionnalités, des points de terminaison d'API et des fournisseurs de modèles. Lorsqu'un changement réduit de façon importante une fonctionnalité essentielle pour les clients payants, nous déploierons des efforts commercialement raisonnables pour fournir un préavis."
         },
         "s12": {
-          "title": "Privacy and Data Processing",
-          "body": "Our Privacy Policy explains how we collect and process personal information. If you require a data processing agreement, business associate agreement, or other compliance addendum, contact support@rofiant.ca. In the event of conflict between these Terms and a signed enterprise agreement, the signed agreement controls for that customer."
+          "title": "Confidentialité et traitement des données",
+          "body": "Notre Politique de confidentialité explique la manière dont nous recueillons et traitons les renseignements personnels. Si vous avez besoin d'une entente de traitement des données, d'une entente d'associé d'affaires ou de tout autre addenda de conformité, communiquez avec support@rofiant.ca. En cas de conflit entre les présentes Conditions et une entente d'entreprise signée, l'entente signée prévaut pour ce client."
         },
         "s13": {
-          "title": "Export Controls and Sanctions",
-          "para1": "You may not use or export the Services in violation of Canadian export laws, U.S. export control laws, sanctions regulations, or other applicable trade restrictions.",
-          "para2": "You represent that you are not located in, organized under the laws of, or ordinarily resident in a jurisdiction subject to comprehensive sanctions, and that you are not a prohibited party under applicable sanctions lists."
+          "title": "Contrôles des exportations et sanctions",
+          "para1": "Vous ne pouvez utiliser ou exporter les Services en violation des lois canadiennes sur le contrôle des exportations, des lois américaines sur le contrôle des exportations, des règlements sur les sanctions ou d'autres restrictions commerciales applicables.",
+          "para2": "Vous déclarez ne pas être situé, constitué en vertu des lois, ou habituellement résident, dans une juridiction faisant l'objet de sanctions généralisées, et ne pas figurer comme partie interdite en vertu des listes de sanctions applicables."
         },
         "s15": {
-          "title": "Disclaimer of Warranties",
-          "para1": "THE SERVICES ARE PROVIDED \"AS IS\" AND \"AS AVAILABLE.\" TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.",
-          "para2": "ROFIANT DOES NOT WARRANT THAT AI OUTPUTS WILL BE ACCURATE, COMPLETE, CURRENT, OR SUITABLE FOR ANY PURPOSE, OR THAT THE SERVICES WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE."
+          "title": "Exclusion de garanties",
+          "para1": "LES SERVICES SONT FOURNIS « TELS QUELS » ET « SELON LEUR DISPONIBILITÉ ». DANS TOUTE LA MESURE PERMISE PAR LA LOI, ROFIANT EXCLUT TOUTE GARANTIE, EXPRESSE OU IMPLICITE, Y COMPRIS LES GARANTIES IMPLICITES DE QUALITÉ MARCHANDE, D'ADÉQUATION À UN USAGE PARTICULIER, DE TITRE DE PROPRIÉTÉ ET D'ABSENCE DE CONTREFAÇON.",
+          "para2": "ROFIANT NE GARANTIT PAS QUE LES RÉSULTATS GÉNÉRÉS PAR L'IA SERONT EXACTS, COMPLETS, À JOUR OU ADAPTÉS À UN USAGE QUELCONQUE, NI QUE LES SERVICES SERONT ININTERROMPUS, SÉCURISÉS OU EXEMPTS D'ERREURS."
         },
         "s16": {
-          "title": "Limitation of Liability",
-          "para1": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT AND ITS OFFICERS, DIRECTORS, EMPLOYEES, CONTRACTORS, AND SUPPLIERS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, GOODWILL, BUSINESS INTERRUPTION, OR PROCUREMENT OF SUBSTITUTE SERVICES, EVEN IF ROFIANT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.",
-          "para2": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROFIANT'S TOTAL LIABILITY FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THE SERVICES OR THESE TERMS WILL NOT EXCEED THE GREATER OF (A) THE AMOUNTS YOU PAID TO ROFIANT FOR THE SERVICES IN THE TWELVE MONTHS BEFORE THE EVENT GIVING RISE TO LIABILITY, OR (B) ONE HUNDRED CANADIAN DOLLARS (CAD $100).",
-          "para3": "Some jurisdictions do not allow certain limitations. In those jurisdictions, Rofiant's liability is limited to the fullest extent permitted by law."
+          "title": "Limitation de responsabilité",
+          "para1": "DANS TOUTE LA MESURE PERMISE PAR LA LOI, ROFIANT AINSI QUE SES DIRIGEANTS, ADMINISTRATEURS, EMPLOYÉS, ENTREPRENEURS ET FOURNISSEURS NE POURRONT ÊTRE TENUS RESPONSABLES DE TOUT DOMMAGE INDIRECT, ACCESSOIRE, SPÉCIAL, CONSÉCUTIF, EXEMPLAIRE OU PUNITIF, NI DE TOUTE PERTE DE PROFITS, DE REVENUS, DE DONNÉES, D'ACHALANDAGE, D'INTERRUPTION DES ACTIVITÉS OU D'APPROVISIONNEMENT EN SERVICES DE REMPLACEMENT, MÊME SI ROFIANT A ÉTÉ AVISÉE DE LA POSSIBILITÉ DE TELS DOMMAGES.",
+          "para2": "DANS TOUTE LA MESURE PERMISE PAR LA LOI, LA RESPONSABILITÉ TOTALE DE ROFIANT POUR TOUTE RÉCLAMATION DÉCOULANT DES SERVICES OU DES PRÉSENTES CONDITIONS, OU S'Y RAPPORTANT, NE POURRA EXCÉDER LE PLUS ÉLEVÉ DES MONTANTS SUIVANTS : (A) LES SOMMES QUE VOUS AVEZ VERSÉES À ROFIANT POUR LES SERVICES AU COURS DES DOUZE MOIS PRÉCÉDANT L'ÉVÉNEMENT AYANT DONNÉ LIEU À LA RESPONSABILITÉ, OU (B) CENT DOLLARS CANADIENS (100 $ CA).",
+          "para3": "Certaines juridictions n'autorisent pas certaines limitations. Dans ces juridictions, la responsabilité de Rofiant est limitée dans toute la mesure permise par la loi."
         },
         "s17": {
-          "title": "Indemnification",
-          "para1": "You will defend, indemnify, and hold harmless Rofiant and its officers, directors, employees, contractors, and agents from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising out of or related to your Customer Content, your use of the Services, your violation of these Terms, or your violation of applicable law or third-party rights.",
-          "para2": "Rofiant will notify you of a claim subject to indemnification and give you reasonable control of the defense, provided that Rofiant may participate with its own counsel at its expense."
+          "title": "Indemnisation",
+          "para1": "Vous défendrez, indemniserez et tiendrez à couvert Rofiant ainsi que ses dirigeants, administrateurs, employés, entrepreneurs et mandataires contre toute réclamation, dommage, perte, responsabilité, coût et dépense (y compris les frais juridiques raisonnables) découlant de votre Contenu client, de votre utilisation des Services, de votre violation des présentes Conditions ou de votre violation du droit applicable ou des droits de tiers, ou s'y rapportant.",
+          "para2": "Rofiant vous avisera de toute réclamation faisant l'objet d'une indemnisation et vous accordera un contrôle raisonnable de la défense, étant entendu que Rofiant peut participer à ses propres frais par l'entremise de son propre avocat."
         },
         "s18": {
-          "title": "Suspension and Termination",
-          "intro": "Either party may end the relationship as follows:",
+          "title": "Suspension et résiliation",
+          "intro": "Chaque partie peut mettre fin à la relation de la manière suivante :",
           "items": {
-            "byYou": "You may stop using the Services and cancel your subscription at any time through account settings or by contacting support.",
-            "byUs": "We may suspend or terminate access immediately if you violate these Terms, create security or legal risk, fail to pay fees, or if we discontinue the Services.",
-            "effect": "Upon termination, your right to access the Services ends. Provisions that by their nature should survive will survive, including ownership provisions, warranty disclaimers, indemnities, limitations of liability, and dispute terms."
+            "byYou": "Vous pouvez cesser d'utiliser les Services et annuler votre abonnement en tout temps par l'entremise des paramètres de votre compte ou en communiquant avec le soutien.",
+            "byUs": "Nous pouvons suspendre ou résilier l'accès immédiatement si vous violez les présentes Conditions, créez un risque de sécurité ou un risque juridique, omettez de payer les frais dus, ou si nous cessons d'offrir les Services.",
+            "effect": "À la résiliation, votre droit d'accès aux Services prend fin. Les dispositions qui, de par leur nature, doivent survivre à la résiliation continueront de s'appliquer, notamment les dispositions relatives à la propriété, les exclusions de garanties, les indemnisations, les limitations de responsabilité et les dispositions relatives au règlement des différends."
           },
-          "outro": "We may retain and use information as described in our Privacy Policy after termination."
+          "outro": "Nous pouvons conserver et utiliser les renseignements comme le décrit notre Politique de confidentialité après la résiliation."
         },
         "s19": {
-          "title": "Governing Law and Disputes",
-          "para1": "These Terms are governed by the laws of the Province of Ontario and the federal laws of Canada applicable therein, without regard to conflict-of-law rules.",
-          "para2": "Before filing a claim, you agree to contact support@rofiant.ca and attempt to resolve the dispute informally for at least 30 days.",
-          "para3": "Except where prohibited by applicable law, you agree that the courts located in Ontario, Canada have exclusive jurisdiction over disputes arising out of or relating to these Terms or the Services, and you consent to personal jurisdiction in those courts."
+          "title": "Droit applicable et différends",
+          "para1": "Les présentes Conditions sont régies par les lois de la province de l'Ontario et les lois fédérales du Canada qui s'y appliquent, sans égard aux règles de conflit de lois.",
+          "para2": "Avant de déposer une réclamation, vous acceptez de communiquer avec support@rofiant.ca et de tenter de résoudre le différend à l'amiable pendant au moins 30 jours.",
+          "para3": "Sauf lorsque le droit applicable l'interdit, vous convenez que les tribunaux situés en Ontario, au Canada, ont compétence exclusive sur les différends découlant des présentes Conditions ou des Services, ou s'y rapportant, et vous consentez à la compétence personnelle de ces tribunaux."
         },
         "s20": {
-          "title": "General Terms",
-          "intro": "The following general terms apply to these Terms:",
+          "title": "Dispositions générales",
+          "intro": "Les dispositions générales suivantes s'appliquent aux présentes Conditions :",
           "items": {
-            "assignment": "You may not assign these Terms without Rofiant's prior written consent. Rofiant may assign these Terms in connection with a merger, acquisition, or sale of assets.",
-            "severability": "If any provision is unenforceable, the remaining provisions remain in effect.",
-            "waiver": "Failure to enforce a provision is not a waiver of future enforcement.",
-            "entire": "These Terms and the Privacy Policy constitute the entire agreement between you and Rofiant regarding the Services unless superseded by a signed enterprise agreement.",
-            "updates": "We may update these Terms by posting a revised version and updating the date above. Material changes take effect no sooner than 30 days after notice unless required sooner by law or for security reasons. Continued use after the effective date constitutes acceptance."
+            "assignment": "Vous ne pouvez céder les présentes Conditions sans le consentement écrit préalable de Rofiant. Rofiant peut céder les présentes Conditions dans le cadre d'une fusion, d'une acquisition ou d'une vente d'actifs.",
+            "severability": "Si une disposition est inapplicable, les autres dispositions demeurent en vigueur.",
+            "waiver": "Le défaut d'appliquer une disposition ne constitue pas une renonciation à son application future.",
+            "entire": "Les présentes Conditions et la Politique de confidentialité constituent l'entente complète entre vous et Rofiant à l'égard des Services, à moins qu'elles ne soient remplacées par une entente d'entreprise signée.",
+            "updates": "Nous pouvons mettre à jour les présentes Conditions en publiant une version révisée et en mettant à jour la date ci-dessus. Les changements importants entrent en vigueur au plus tôt 30 jours après l'avis, sauf si la loi ou des raisons de sécurité exigent une entrée en vigueur plus rapide. La poursuite de l'utilisation après la date d'entrée en vigueur constitue une acceptation."
           }
         },
         "s21": {
-          "title": "Enterprise Orders",
-          "body": "If you enter a signed order form, statement of work, or master services agreement with Rofiant, that document controls for the subject matter it covers. In case of conflict, the signed enterprise document prevails over these Terms."
+          "title": "Commandes d'entreprise",
+          "body": "Si vous concluez un bon de commande signé, un énoncé de travaux ou une entente-cadre de services avec Rofiant, ce document prévaut pour les questions qu'il couvre. En cas de conflit, le document d'entreprise signé prévaut sur les présentes Conditions."
         },
         "s22": {
           "title": "Contact",
-          "body": "Legal notices and questions about these Terms: <link>support@rofiant.ca</link>."
+          "body": "Avis juridiques et questions concernant les présentes Conditions : <link>support@rofiant.ca</link>."
         }
       }
     }

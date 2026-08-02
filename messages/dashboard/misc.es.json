@@ -224,6 +224,28 @@
       "perMonth": "/mes"
     }
   },
+  "referrals": {
+    "title": "Referidos",
+    "subtitle": "Invita a otras personas y mira quién se unió a través de tu enlace.",
+    "shareCard": {
+      "title": "Tu enlace de referido",
+      "description": "Comparte este enlace: cualquiera que se registre a través de él se te atribuye.",
+      "copy": "Copiar",
+      "copied": "Copiado"
+    },
+    "metrics": {
+      "total": {
+        "label": "Total de referidos"
+      }
+    },
+    "empty": {
+      "title": "Aún no hay referidos",
+      "description": "Comparte tu enlace para empezar a invitar personas."
+    },
+    "list": {
+      "unknownUser": "Usuario desconocido"
+    }
+  },
   "usage": {
     "title": "Analítica",
     "subtitle": "Uso, costos y rendimiento en chat y API",

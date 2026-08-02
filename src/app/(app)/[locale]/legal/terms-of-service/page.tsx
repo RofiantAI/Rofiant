@@ -86,7 +86,7 @@ export default async function TermsOfServicePage() {
 
   return (
     <PageLayout title={t("title")} subtitle={t("subtitle")}>
-      <div className="mt-16 max-w-3xl">
+      <div className="mt-16 max-w-6xl">
         <LegalSections namespace="legal.termsOfService" sections={sections} link={legalLink} />
       </div>
     </PageLayout>

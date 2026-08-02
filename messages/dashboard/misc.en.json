@@ -224,6 +224,28 @@
       "perMonth": "/mo"
     }
   },
+  "referrals": {
+    "title": "Referrals",
+    "subtitle": "Invite others and see who's joined through your link.",
+    "shareCard": {
+      "title": "Your referral link",
+      "description": "Share this link — anyone who signs up through it is credited to you.",
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "metrics": {
+      "total": {
+        "label": "Total referrals"
+      }
+    },
+    "empty": {
+      "title": "No referrals yet",
+      "description": "Share your link to start inviting people."
+    },
+    "list": {
+      "unknownUser": "Unknown user"
+    }
+  },
   "usage": {
     "title": "Analytics",
     "subtitle": "Usage, costs, and performance across chat and API",

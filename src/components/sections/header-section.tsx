@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { ChevronDown, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
@@ -21,7 +21,6 @@ export async function HeaderSection() {
   const linkIdle = "text-black hover:text-black";
 
   const mobileLinks = [
-    { href: "/platform/agents", label: t("platform") },
     { href: "/company/about", label: t("company") },
     { href: "/pricing", label: t("pricing") },
     { href: "/download", label: t("download") },
@@ -39,31 +38,9 @@ export async function HeaderSection() {
               </Link>
 
               <nav className="hidden md:flex items-center gap-7">
-                {/* Resources dropdown */}
-                <div className="relative group">
-                  <button
-                    className={`${linkBase} ${linkIdle} inline-flex items-center gap-1`}
-                  >
-                    {t("resources")}
-                    <ChevronDown className="w-3 h-3" />
-                  </button>
-                  <div className="absolute left-0 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50">
-                    <div className="bg-foreground border border-border shadow-lg py-1 min-w-[180px]">
-                      <Link
-                        href="/platform/agents"
-                        className="block px-4 py-2 text-sm text-black hover:bg-black/5"
-                      >
-                        {t("platform")}
-                      </Link>
-                      <Link
-                        href="/company/about"
-                        className="block px-4 py-2 text-sm text-black hover:bg-black/5"
-                      >
-                        {t("company")}
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                <Link href="/company/about" className={`${linkBase} ${linkIdle}`}>
+                  {t("company")}
+                </Link>
 
                 <Link href="/pricing" className={`${linkBase} ${linkIdle}`}>
                   {t("pricing")}

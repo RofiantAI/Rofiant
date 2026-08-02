@@ -41,10 +41,21 @@ export async function POST(req: NextRequest) {
       const checkout = event.object;
       const userId: string | undefined = checkout.metadata?.userId;
       const plan: string | undefined = checkout.metadata?.plan;
+      const isTrial = checkout.metadata?.isTrial === "true";
+      const deviceId: string | undefined = checkout.metadata?.deviceId || undefined;
+      const ipHash: string | undefined = checkout.metadata?.ipHash || undefined;
       if (userId && plan) {
         await supabase.auth.admin.updateUserById(userId, {
           user_metadata: { plan, ...(plan === "pro" ? { trial_used: true } : {}) },
         });
+        // Record the device/IP that consumed this trial so a different
+        // account on the same device/IP is denied a second trial.
+        if (isTrial && (deviceId || ipHash)) {
+          await supabase.from("trial_claims").upsert(
+            { user_id: userId, device_id: deviceId ?? null, ip_hash: ipHash ?? null },
+            { onConflict: "user_id" },
+          );
+        }
       }
       break;
     }

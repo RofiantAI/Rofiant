@@ -2,13 +2,12 @@
 
 import { PageLayout } from "@/components/page-layout";
 import { Badge } from "@/components/ui/badge";
-import { Check, Zap, Crown, Building2 } from "lucide-react";
+import { Check, Zap, Crown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 const consumerTierMeta = [
-  { key: "free", icon: Building2, price: { monthly: 0, annual: 0 }, href: "/auth/signup", highlighted: false, comingSoon: false },
   { key: "pro", icon: Zap, price: { monthly: 15, annual: 12 }, href: "/api/checkout?plan=pro", highlighted: true, comingSoon: false },
   { key: "ultra", icon: Crown, price: { monthly: 30, annual: 25 }, href: "/api/checkout?plan=ultra", highlighted: false, comingSoon: false },
 ] as const;
@@ -63,13 +62,12 @@ export default function PricingPage() {
       </div>
 
       {/* Consumer tiers */}
-      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {consumerTierMeta.map((tier) => {
           const Icon = tier.icon;
           const price = annual ? tier.price.annual : tier.price.monthly;
-          const features = t.raw(`consumerTiers.${tier.key}.features`) as string[];
-          const featuresIntro =
-            tier.key === "free" ? null : t(`consumerTiers.${tier.key}.featuresIntro`);
+          const features = t.raw(`consumerTiers.${tier.key}.features`) as { title: string; description: string }[];
+          const featuresIntro = t(`consumerTiers.${tier.key}.featuresIntro`);
           return (
             <div
               key={tier.key}
@@ -96,15 +94,11 @@ export default function PricingPage() {
               <p className="text-sm font-medium text-foreground mb-1">{t(`consumerTiers.${tier.key}.tagline`)}</p>
               <p className="text-sm text-foreground-secondary mb-6">{t(`consumerTiers.${tier.key}.description`)}</p>
               <div className="mb-8">
-                {price === 0 ? (
-                  <div className="text-4xl font-normal text-foreground">{t("free")}</div>
-                ) : (
-                  <div className="flex items-end gap-1">
-                    <span className="text-4xl font-normal text-foreground">${price}</span>
-                    <span className="text-sm text-foreground-muted mb-1.5">{t("perMonth")}</span>
-                  </div>
-                )}
-                {annual && price > 0 && (
+                <div className="flex items-end gap-1">
+                  <span className="text-4xl font-normal text-foreground">${price}</span>
+                  <span className="text-sm text-foreground-muted mb-1.5">{t("perMonth")}</span>
+                </div>
+                {annual && (
                   <p className="text-xs text-foreground-muted mt-1">
                     {t("billedAnnually", { price: price * 12 })}
                   </p>
@@ -114,11 +108,14 @@ export default function PricingPage() {
                 {featuresIntro && (
                   <p className="text-sm text-foreground-secondary mb-3">{featuresIntro}</p>
                 )}
-                <ul className="space-y-2.5">
+                <ul className="space-y-4">
                   {features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-foreground-secondary">
-                      <Check className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
-                      {f}
+                    <li key={f.title} className="flex items-start gap-2.5">
+                      <Check className="w-3.5 h-3.5 text-foreground-muted shrink-0 mt-1" />
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{f.title}</p>
+                        <p className="text-sm text-foreground-secondary">{f.description}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>

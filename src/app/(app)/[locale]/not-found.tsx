@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-console";
 
 const helpfulLinks = [
-  { key: "platform", href: "/platform/chat-ai" },
   { key: "pricing", href: "/pricing" },
   { key: "company", href: "/company/about" },
 ] as const;

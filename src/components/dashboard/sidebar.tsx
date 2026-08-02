@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   BarChart3,
   CreditCard,
+  UserPlus,
   Settings,
   Menu,
   X,
@@ -37,6 +38,7 @@ const developerNav: {
   { href: "/dashboard", navKey: "overview", tourId: "nav-overview", icon: LayoutDashboard, exact: true },
   { href: "/dashboard/usage", navKey: "usage", tourId: "nav-usage", icon: BarChart3 },
   { href: "/dashboard/billing", navKey: "billing", tourId: "nav-billing", icon: CreditCard },
+  { href: "/dashboard/referrals", navKey: "referrals", tourId: "nav-referrals", icon: UserPlus },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {

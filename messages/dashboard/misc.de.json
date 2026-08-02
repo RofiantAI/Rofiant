@@ -224,6 +224,28 @@
       "perMonth": "/Monat"
     }
   },
+  "referrals": {
+    "title": "Empfehlungen",
+    "subtitle": "Lade andere ein und sieh, wer sich über deinen Link angemeldet hat.",
+    "shareCard": {
+      "title": "Dein Empfehlungslink",
+      "description": "Teile diesen Link – jeder, der sich darüber anmeldet, wird dir gutgeschrieben.",
+      "copy": "Kopieren",
+      "copied": "Kopiert"
+    },
+    "metrics": {
+      "total": {
+        "label": "Empfehlungen gesamt"
+      }
+    },
+    "empty": {
+      "title": "Noch keine Empfehlungen",
+      "description": "Teile deinen Link, um Leute einzuladen."
+    },
+    "list": {
+      "unknownUser": "Unbekannter Nutzer"
+    }
+  },
   "usage": {
     "title": "Analysen",
     "subtitle": "Nutzung, Kosten und Leistung für Chat und API",

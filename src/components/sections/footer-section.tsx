@@ -4,11 +4,7 @@ import { Link } from "@/i18n/navigation";
 const footerColumns = [
   {
     key: "platform",
-    links: [
-      { key: "pricing", href: "/pricing" },
-      { key: "chatAi", href: "/platform/chat-ai" },
-      { key: "agents", href: "/platform/agents" },
-    ],
+    links: [{ key: "pricing", href: "/pricing" }],
   },
   {
     key: "resources",

@@ -165,7 +165,8 @@
       "chatAi": "Chat AI",
       "usage": "Usage",
       "billing": "Billing",
-      "managePages": "Manage pages"
+      "managePages": "Manage pages",
+      "referrals": "Referrals"
     },
     "siteAdmin": "Site admin",
     "sitePages": "Site pages",

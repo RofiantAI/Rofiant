@@ -199,11 +199,11 @@
         "description": "The full desktop app, no credit card required.",
         "cta": "Get started free",
         "features": [
-          "Local file, command & app tools",
-          "Chat with hosted or local models",
-          "MCP server support",
-          "Voice transcription",
-          "Unlimited tasks"
+          { "title": "Local file, command & app tools", "description": "Automate everyday tasks right on your machine, no cloud required." },
+          { "title": "Chat with hosted or local models", "description": "Talk to hosted models or bring your own local model." },
+          { "title": "MCP server support", "description": "Connect any MCP server to extend what Rofiant can do." },
+          { "title": "Voice transcription", "description": "Dictate tasks and notes with built-in voice-to-text." },
+          { "title": "Unlimited tasks", "description": "Run as many tasks as you need, day or night." }
         ]
       },
       "pro": {
@@ -213,22 +213,22 @@
         "cta": "Start 7-day free trial",
         "ctaReturning": "Get Pro",
         "features": [
-          "Our most capable models",
-          "Multi-step Agents",
-          "Full API access"
+          { "title": "2x higher usage limits", "description": "Get usage limits that are 2x higher than the Free plan." },
+          { "title": "Access to our best cloud models", "description": "Get access to our most capable cloud models for complex, multi-step work." },
+          { "title": "Web search", "description": "Let Rofiant search the web for up-to-date answers." }
         ],
-        "featuresIntro": "Everything in Free and:"
+        "featuresIntro": "What's included:"
       },
       "ultra": {
         "name": "Ultra",
         "tagline": "For your heaviest workloads",
-        "description": "The highest usage limits, first access to new models, and priority support for individuals and teams who rely on Rofiant every day.",
+        "description": "The highest usage limits and first access to new models for individuals and teams who rely on Rofiant every day.",
         "cta": "Get Ultra",
         "features": [
-          "5x higher usage limits",
-          "First access to new models",
-          "Priority support",
-          "Early access to new features"
+          { "title": "4x higher usage limits", "description": "Usage limits 4x higher than Free, built for heavy daily use." },
+          { "title": "Web search", "description": "Let Rofiant search the web for up-to-date answers." },
+          { "title": "First access to new models", "description": "Try our newest models before anyone else." },
+          { "title": "Multi-step Agents", "description": "Let Agents plan and execute multi-step jobs in the cloud on your behalf." }
         ],
         "featuresIntro": "Everything in Pro, plus:"
       }

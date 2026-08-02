@@ -6,8 +6,6 @@ const BASE_URL = "https://www.rofiant.ca";
 const PAGES: { path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }[] = [
   { path: "", changeFrequency: "monthly", priority: 1 },
   { path: "/pricing", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/platform/chat-ai", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/platform/agents", changeFrequency: "monthly", priority: 0.8 },
   { path: "/company/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/company/contact", changeFrequency: "monthly", priority: 0.5 },
   { path: "/company/security", changeFrequency: "monthly", priority: 0.6 },

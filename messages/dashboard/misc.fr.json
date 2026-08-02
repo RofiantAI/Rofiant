@@ -224,6 +224,28 @@
       "perMonth": "/mois"
     }
   },
+  "referrals": {
+    "title": "Parrainages",
+    "subtitle": "Invitez d'autres personnes et voyez qui a rejoint via votre lien.",
+    "shareCard": {
+      "title": "Votre lien de parrainage",
+      "description": "Partagez ce lien : toute personne qui s'inscrit via celui-ci vous est attribuée.",
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "metrics": {
+      "total": {
+        "label": "Total des parrainages"
+      }
+    },
+    "empty": {
+      "title": "Aucun parrainage pour l'instant",
+      "description": "Partagez votre lien pour commencer à inviter des personnes."
+    },
+    "list": {
+      "unknownUser": "Utilisateur inconnu"
+    }
+  },
   "usage": {
     "title": "Analytique",
     "subtitle": "Utilisation, coûts et performances du chat et de l'API",
