@@ -64,8 +64,8 @@ export function SettingsTabSidebar({
         onClick={() => setTab(DANGER_TAB.id)}
         className={`shrink-0 md:w-full flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors text-left ${
           tab === DANGER_TAB.id
-            ? "bg-red-500/10 text-red-400 font-medium"
-            : "text-red-400/70 hover:text-red-400 hover:bg-red-500/5"
+            ? "bg-accent-error/10 text-accent-error font-medium"
+            : "text-accent-error/70 hover:text-accent-error hover:bg-accent-error/5"
         }`}
       >
         <DANGER_TAB.icon className="w-3.5 h-3.5 flex-shrink-0" />

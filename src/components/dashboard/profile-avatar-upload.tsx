@@ -154,14 +154,14 @@ export function ProfileAvatarUpload({
               type="button"
               disabled={uploading}
               onClick={() => void handleRemove()}
-              className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground-secondary hover:text-foreground hover:bg-background-tertiary disabled:opacity-50 transition-colors"
+              className="btn-clay-secondary h-8 px-3 rounded-xl text-xs font-medium hover:text-foreground"
             >
               {t("photoRemove")}
             </button>
           )}
         </div>
         <p className="text-xs text-foreground-muted mt-2">{t("photoHint")}</p>
-        {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
+        {error && <p className="text-xs text-accent-error mt-1">{error}</p>}
       </div>
     </div>
   );

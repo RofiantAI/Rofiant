@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { ErrorBanner } from "@/components/ui/error-banner";
 import { Spinner } from "@/components/ui/spinner";
 import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
@@ -167,11 +168,7 @@ export function SignupForm() {
               autoFocus
             />
 
-            {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-                {error}
-              </div>
-            )}
+            {error && <ErrorBanner>{error}</ErrorBanner>}
 
             <button
               type="submit"
@@ -258,11 +255,7 @@ export function SignupForm() {
 
           <TurnstileWidget onVerify={setTurnstileToken} />
 
-          {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-              {error}
-            </div>
-          )}
+          {error && <ErrorBanner>{error}</ErrorBanner>}
 
           <p className="text-xs text-foreground-muted leading-relaxed">
             {t.rich("agreement", { terms: termsLink, privacy: privacyLink })}

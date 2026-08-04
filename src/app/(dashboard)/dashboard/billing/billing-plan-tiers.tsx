@@ -95,12 +95,12 @@ export function BillingPlanTiers({ plan, isPaid }: { plan: string; isPaid: boole
                 <ManageBillingButton
                   label={t("plans.manage")}
                   loadingLabel={t("currentPlan.openingPortal")}
-                  className="h-8 px-3 rounded-lg text-xs font-medium border border-border text-foreground hover:bg-background-tertiary transition-colors"
+                  className="btn-clay-secondary h-8 px-3 rounded-xl text-xs font-medium text-foreground"
                 />
               ) : (
                 <a
                   href={href}
-                  className="inline-flex items-center justify-center h-8 px-3 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors"
+                  className="btn-clay-primary inline-flex items-center justify-center h-8 px-3 rounded-2xl text-xs font-medium"
                 >
                   {t("plans.upgrade")}
                 </a>

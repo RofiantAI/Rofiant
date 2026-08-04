@@ -125,12 +125,12 @@ export default async function DashboardOverviewPage() {
               <ManageBillingButton
                 label={t("plan.manageBilling")}
                 loadingLabel={t("plan.openingPortal")}
-                className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-60 transition-colors"
+                className="btn-clay-primary inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium"
               />
             ) : (
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors"
+                className="btn-clay-primary inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium"
               >
                 {t("plan.upgrade")}
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -138,7 +138,7 @@ export default async function DashboardOverviewPage() {
             )}
             <Link
               href="/dashboard/billing"
-              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
+              className="btn-clay-secondary inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium"
             >
               {t("plan.viewBilling")}
             </Link>

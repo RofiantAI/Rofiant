@@ -114,6 +114,10 @@
         "dark": {
           "label": "Dark",
           "desc": "Dark background, light text"
+        },
+        "dark-classic": {
+          "label": "Dark Classic",
+          "desc": "The original cool dark theme"
         }
       },
       "accentColor": "Accent color",

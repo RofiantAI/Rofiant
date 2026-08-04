@@ -61,7 +61,7 @@ export default async function BillingPage() {
               <ManageBillingButton
                 label={t("currentPlan.manageBilling")}
                 loadingLabel={t("currentPlan.openingPortal")}
-                className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-60 transition-colors w-full"
+                className="btn-clay-primary inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium w-full"
               />
             ) : (
               <p className="text-xs text-foreground-muted">{t("currentPlan.noBillingAccount")}</p>

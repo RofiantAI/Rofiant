@@ -39,7 +39,7 @@ export function ReferralLinkCard({
         <button
           type="button"
           onClick={handleCopy}
-          className="inline-flex items-center justify-center gap-1.5 h-9 px-3 shrink-0 rounded-lg text-xs font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors"
+          className="btn-clay-primary inline-flex items-center justify-center gap-1.5 h-9 px-3 shrink-0 rounded-2xl text-xs font-medium"
         >
           {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
           {copied ? copiedLabel : copyLabel}

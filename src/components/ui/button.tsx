@@ -19,11 +19,11 @@ const spinnerSize: Record<ButtonSize, "sm" | "md"> = {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-button-primary text-button-primary-foreground hover:bg-foreground/90",
+    "bg-button-primary text-button-primary-foreground shadow-clay-sm hover:brightness-95 active:shadow-clay-inset active:brightness-90",
   secondary:
-    "bg-button-secondary text-button-secondary-foreground hover:bg-background-tertiary",
+    "bg-button-secondary text-button-secondary-foreground shadow-clay-sm hover:brightness-95 active:shadow-clay-inset active:brightness-90",
   outline:
-    "bg-button-outline text-button-outline-foreground border border-border hover:bg-background-tertiary hover:border-border-light",
+    "bg-button-outline text-button-outline-foreground border border-border shadow-clay-sm hover:bg-background-tertiary hover:border-border-light active:shadow-clay-inset",
   ghost:
     "bg-transparent text-foreground hover:bg-background-tertiary",
 };
@@ -52,7 +52,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled || isLoading}
-        className={`inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed font-medium rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:pointer-events-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={`inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed font-medium rounded-2xl transition-[filter,box-shadow,background-color,border-color] duration-200 disabled:opacity-50 disabled:pointer-events-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
         {...props}
       >
         {isLoading && <Spinner size={spinnerSize[size]} />}

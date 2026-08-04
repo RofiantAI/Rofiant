@@ -114,6 +114,10 @@
         "dark": {
           "label": "Oscuro",
           "desc": "Fondo oscuro, texto claro"
+        },
+        "dark-classic": {
+          "label": "Oscuro clásico",
+          "desc": "El tema oscuro frío original"
         }
       },
       "accentColor": "Color de acento",

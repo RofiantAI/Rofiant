@@ -6,14 +6,14 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<string, string> = {
-  default: "bg-card",
-  bordered: "bg-card border border-border",
-  elevated: "bg-card border border-border shadow-lg",
+  default: "bg-card shadow-clay-sm",
+  bordered: "bg-card border border-border/60 shadow-clay-sm",
+  elevated: "bg-card shadow-clay",
 };
 
 const hoverStyles: Record<string, string> = {
   default: "",
-  bordered: "",
+  bordered: "hover:border-border-light",
   elevated: "",
 };
 
@@ -22,7 +22,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     return (
       <div
         ref={ref}
-        className={`rounded-xl overflow-hidden ${variantStyles[variant]} ${noHover ? "" : hoverStyles[variant]} ${className}`}
+        className={`rounded-2xl overflow-hidden transition-[border-color,box-shadow] ${variantStyles[variant]} ${noHover ? "" : hoverStyles[variant]} ${className}`}
         {...props}
       >
         {children}

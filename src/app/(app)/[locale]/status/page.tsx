@@ -131,13 +131,13 @@ export default async function StatusPage() {
     <PageLayout badge={t("badge")} title={t("title")} subtitle={t("subtitle")}>
       <div
         className={`flex items-center gap-3 p-4 border mb-6 ${
-          allHealthy ? "border-accent-success/30 bg-accent-success/5" : "border-red-500/30 bg-red-500/5"
+          allHealthy ? "border-accent-success/30 bg-accent-success/5" : "border-accent-error/30 bg-accent-error/5"
         }`}
       >
         {allHealthy ? (
           <CheckCircle2 className="w-5 h-5 text-accent-success shrink-0" />
         ) : (
-          <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />
+          <AlertTriangle className="w-5 h-5 text-accent-error shrink-0" />
         )}
         <p className="text-sm text-foreground">{allHealthy ? t("allOperational") : t("someIssues")}</p>
       </div>
@@ -167,10 +167,10 @@ export default async function StatusPage() {
                 )}
                 <span
                   className={`inline-flex items-center gap-1.5 text-xs font-medium ${
-                    s.healthy ? "text-accent-success" : "text-red-400"
+                    s.healthy ? "text-accent-success" : "text-accent-error"
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${s.healthy ? "bg-accent-success" : "bg-red-400"}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full ${s.healthy ? "bg-accent-success" : "bg-accent-error"}`} />
                   {s.healthy ? t("operational") : t("degraded")}
                 </span>
               </div>
@@ -199,7 +199,7 @@ export default async function StatusPage() {
                 <div key={i} className="flex items-center justify-between px-5 py-3.5">
                   <div className="flex items-center gap-3 min-w-0">
                     {inc.ongoing ? (
-                      <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                      <AlertTriangle className="w-3.5 h-3.5 text-accent-error shrink-0" />
                     ) : (
                       <MinusCircle className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
                     )}
@@ -213,7 +213,7 @@ export default async function StatusPage() {
                   <span
                     className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 border shrink-0 ${
                       inc.ongoing
-                        ? "text-red-400 border-red-400/30 bg-red-400/10"
+                        ? "text-accent-error border-accent-error/30 bg-accent-error/10"
                         : "text-foreground-muted border-border bg-background-tertiary"
                     }`}
                   >

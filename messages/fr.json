@@ -27,18 +27,13 @@
           "agents": "Agents"
         }
       },
-      "resources": {
-        "title": "Ressources",
-        "links": {
-          "status": "Statut"
-        }
-      },
       "company": {
         "title": "Entreprise",
         "links": {
           "about": "À propos",
           "security": "Sécurité",
-          "contact": "Contact"
+          "contact": "Contact",
+          "status": "Statut"
         }
       },
       "legal": {

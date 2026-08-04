@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Key, FileText, ChevronRight, Lock, Eye, ShieldQuestion, Check, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { SectionHeader } from "./section-header";
 
 const features = [
   { id: "identity", icon: Key, panel: <IdentityPanel /> },
@@ -77,7 +78,7 @@ function ApprovalPanel() {
               <span className="flex items-center justify-center w-6 h-6 rounded-md bg-accent-success/10 text-accent-success">
                 <Check className="w-3.5 h-3.5" />
               </span>
-              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-red-500/10 text-red-400">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-accent-error/10 text-accent-error">
                 <X className="w-3.5 h-3.5" />
               </span>
             </div>
@@ -96,18 +97,22 @@ export function ProtectSection() {
     <section className="py-24 border-t border-border">
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <Badge variant="success" dot className="mb-4">
-            {t("badge")}
-          </Badge>
-          <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl">
-            {t("titlePrefix")}{" "}
-            <span className="text-foreground-secondary">
-              {t("titleHighlight")}
-            </span>
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-foreground-secondary">
-            {t("subtitle")}
-          </p>
+          <SectionHeader
+            badge={
+              <Badge variant="success" dot className="mb-4">
+                {t("badge")}
+              </Badge>
+            }
+            title={
+              <>
+                {t("titlePrefix")}{" "}
+                <span className="text-foreground-secondary">
+                  {t("titleHighlight")}
+                </span>
+              </>
+            }
+            subtitle={t("subtitle")}
+          />
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]">

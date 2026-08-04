@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
         className="h-12 bg-transparent px-1 text-sm font-medium text-foreground"
       >
         {routing.locales.map((l) => (
-          <option key={l} value={l} className="text-black bg-white">
+          <option key={l} value={l} className="text-foreground bg-background">
             {LOCALE_LABELS[l]}
           </option>
         ))}

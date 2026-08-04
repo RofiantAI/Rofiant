@@ -166,7 +166,7 @@ export function SitePagesClient({
                   <Link
                     href={`/${locale}/pages/${s.slug}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1.5 h-9 px-3 text-sm border border-border text-foreground-secondary hover:bg-background-tertiary transition-colors"
+                    className="btn-clay-secondary inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-sm"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     {t("screens.preview")}
@@ -177,7 +177,7 @@ export function SitePagesClient({
                   </DashboardSecondaryButton>
                   <button
                     onClick={() => deleteScreen(s.id)}
-                    className="inline-flex items-center justify-center w-9 h-9 border border-border text-foreground-muted hover:text-red-400 hover:border-red-500/30 transition-colors"
+                    className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-border text-foreground-muted shadow-clay-sm hover:text-accent-error hover:border-accent-error/30 active:shadow-clay-inset transition-[color,border-color,box-shadow]"
                     aria-label={t("delete")}
                   >
                     <Trash2 className="w-4 h-4" />

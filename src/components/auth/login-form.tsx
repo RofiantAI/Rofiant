@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { appUrl } from "@/lib/app-url";
 import { Link } from "@/i18n/navigation";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { ErrorBanner } from "@/components/ui/error-banner";
 import { Spinner } from "@/components/ui/spinner";
 import { TurnstileWidget } from "@/components/ui/turnstile-widget";
 
@@ -103,7 +104,7 @@ export function LoginForm() {
     setError(null);
     setResetLoading(true);
 
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/dashboard/settings"))}`;
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(appUrl("/auth/reset-password"))}`;
 
     const res = await fetch("/api/auth/reset-password", {
       method: "POST",
@@ -166,11 +167,7 @@ export function LoginForm() {
 
           <TurnstileWidget onVerify={setTurnstileToken} />
 
-          {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-              {error}
-            </div>
-          )}
+          {error && <ErrorBanner>{error}</ErrorBanner>}
 
           <button
             type="submit"
@@ -240,11 +237,7 @@ export function LoginForm() {
 
         <TurnstileWidget onVerify={setTurnstileToken} />
 
-        {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-            {error}
-          </div>
-        )}
+        {error && <ErrorBanner>{error}</ErrorBanner>}
 
         <button
           type="submit"

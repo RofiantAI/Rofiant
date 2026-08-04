@@ -50,7 +50,7 @@ export function OfflineToast() {
         animation: "toast-in 0.3s ease-out",
       }}
     >
-      <span className={`h-2 w-2 rounded-full shrink-0 ${isOffline ? "bg-red-500" : "bg-green-500"}`} />
+      <span className={`h-2 w-2 rounded-full shrink-0 ${isOffline ? "bg-accent-error" : "bg-accent-success"}`} />
       <p className="text-sm font-medium text-foreground">
         {isOffline ? "You're not connected to the internet" : "You're back online"}
       </p>

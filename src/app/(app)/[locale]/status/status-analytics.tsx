@@ -129,13 +129,13 @@ export function StatusAnalytics({ checks }: { checks: Check[] }) {
         <LineChart data={data} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
           <XAxis
             dataKey="time"
-            tick={{ fontSize: 9, fill: "#6b7280" }}
+            tick={{ fontSize: 9, fill: "var(--foreground-muted)" }}
             tickLine={false}
             axisLine={false}
             interval={5}
           />
           <YAxis
-            tick={{ fontSize: 9, fill: "#6b7280" }}
+            tick={{ fontSize: 9, fill: "var(--foreground-muted)" }}
             tickLine={false}
             axisLine={false}
             allowDecimals={false}

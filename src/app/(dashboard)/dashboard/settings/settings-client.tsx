@@ -80,9 +80,10 @@ const DENSITIES: { id: Density }[] = [
   { id: "spacious" },
 ];
 
-const THEMES: { id: "light" | "dark" }[] = [
+const THEMES: { id: "light" | "dark" | "dark-classic" }[] = [
   { id: "light" },
   { id: "dark" },
+  { id: "dark-classic" },
 ];
 
 function applyAccent(value: string) {
@@ -156,12 +157,12 @@ function PanelHeader({
     <div className="flex items-center gap-3 mb-5">
       <span
         className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
-          tone === "danger" ? "bg-red-500/10" : "bg-background-tertiary"
+          tone === "danger" ? "bg-accent-error/10" : "bg-background-tertiary"
         }`}
       >
-        <Icon className={`w-3.5 h-3.5 ${tone === "danger" ? "text-red-400" : "text-foreground-muted"}`} />
+        <Icon className={`w-3.5 h-3.5 ${tone === "danger" ? "text-accent-error" : "text-foreground-muted"}`} />
       </span>
-      <h2 className={`text-sm font-medium ${tone === "danger" ? "text-red-400" : "text-foreground"}`}>
+      <h2 className={`text-sm font-medium ${tone === "danger" ? "text-accent-error" : "text-foreground"}`}>
         {title}
       </h2>
       {trailing && <span className="ml-auto">{trailing}</span>}
@@ -643,7 +644,7 @@ export function SettingsClient({
                     autoComplete="new-password"
                     className="w-full h-9 px-3 rounded-lg bg-card border border-border text-sm text-foreground placeholder:text-foreground-muted outline-none focus:border-border-light"
                   />
-                  {pwError && <p className="text-xs text-red-400">{pwError}</p>}
+                  {pwError && <p className="text-xs text-accent-error">{pwError}</p>}
                   {pwStatus === "done" && (
                     <p className="text-xs text-accent-success flex items-center gap-1">
                       <Check className="w-3 h-3" /> {t("account.passwordUpdated")}
@@ -701,7 +702,7 @@ export function SettingsClient({
                     variant="outline"
                     size="xs"
                     onClick={disableMfa}
-                    className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500/30"
+                    className="border-accent-error/30 text-accent-error hover:bg-accent-error/10 hover:border-accent-error/30"
                   >
                     {t("security.disable2fa")}
                   </Button>
@@ -737,7 +738,7 @@ export function SettingsClient({
                         className="w-36 h-9 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground font-mono tracking-widest placeholder:text-foreground-muted focus:outline-none focus:border-accent-primary"
                       />
                     </div>
-                    {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
+                    {mfaError && <p className="text-xs text-accent-error">{mfaError}</p>}
                     <div className="flex gap-2">
                       <Button
                         type="submit"
@@ -761,7 +762,7 @@ export function SettingsClient({
                   <p className="text-sm text-foreground-secondary">
                     {t("security.twoFaDesc")}
                   </p>
-                  {mfaError && <p className="text-xs text-red-400">{mfaError}</p>}
+                  {mfaError && <p className="text-xs text-accent-error">{mfaError}</p>}
                   <Button variant="outline" size="xs" onClick={startMfaEnroll} disabled={mfaStep === "starting"}>
                     {mfaStep === "starting" ? t("security.loading") : t("security.setup2fa")}
                   </Button>
@@ -1017,7 +1018,7 @@ export function SettingsClient({
             </DashboardCard>
 
             {/* Delete */}
-            <DashboardCard className="border-red-500/20">
+            <DashboardCard className="border-accent-error/20">
               <PanelHeader icon={Trash2} title={t("danger.deleteAccount")} tone="danger" />
               <p className="text-sm text-foreground-secondary mb-5">
                 {t("danger.deleteDesc")}
@@ -1032,7 +1033,7 @@ export function SettingsClient({
                     value={deleteConfirm}
                     onChange={(e) => setDeleteConfirm(e.target.value)}
                     placeholder={email}
-                    className="w-full h-9 px-3 rounded-lg bg-background-secondary border border-red-500/30 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-red-500/60"
+                    className="w-full h-9 px-3 rounded-lg bg-background-secondary border border-accent-error/30 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent-error/60"
                   />
                 </div>
                 <Button
@@ -1040,7 +1041,7 @@ export function SettingsClient({
                   size="xs"
                   onClick={deleteAccount}
                   disabled={deleteConfirm !== email || deleting}
-                  className="bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30 disabled:opacity-40"
+                  className="bg-accent-error/20 border-accent-error/30 text-accent-error hover:bg-accent-error/30 disabled:opacity-40"
                 >
                   {deleting ? t("danger.deleting") : t("danger.deleteMyAccount")}
                 </Button>

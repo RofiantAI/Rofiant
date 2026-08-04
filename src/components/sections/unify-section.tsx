@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { getTranslations } from "next-intl/server";
+import { SectionHeader } from "./section-header";
 
 function AskVisualization() {
   return (
@@ -11,19 +12,19 @@ function AskVisualization() {
           width="130"
           height="22"
           rx="4"
-          fill="#18181b"
-          stroke="#3f3f46"
+          fill="var(--background-tertiary)"
+          stroke="var(--border-light)"
           strokeWidth="1"
         />
-        <text x="20" y="30" fill="#a1a1aa" fontSize="7">
+        <text x="20" y="30" fill="var(--foreground-muted)" fontSize="7">
           &quot;clean up my downloads&quot;
         </text>
-        <line x1="75" y1="37" x2="75" y2="48" stroke="#3f3f46" strokeWidth="1" />
-        <rect x="55" y="49" width="40" height="22" rx="4" fill="#3b82f6" />
-        <text x="75" y="63" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="bold">
+        <line x1="75" y1="37" x2="75" y2="48" stroke="var(--border-light)" strokeWidth="1" />
+        <rect x="55" y="49" width="40" height="22" rx="4" fill="var(--accent-primary)" />
+        <text x="75" y="63" textAnchor="middle" fill="var(--background)" fontSize="7" fontWeight="bold">
           Rofiant
         </text>
-        <line x1="75" y1="71" x2="75" y2="83" stroke="#3f3f46" strokeWidth="1" />
+        <line x1="75" y1="71" x2="75" y2="83" stroke="var(--border-light)" strokeWidth="1" />
         {[0, 1, 2].map((i) => (
           <g key={i}>
             <rect
@@ -32,16 +33,16 @@ function AskVisualization() {
               width="35"
               height="20"
               rx="3"
-              fill="#18181b"
-              stroke="#3f3f46"
+              fill="var(--background-tertiary)"
+              stroke="var(--border-light)"
               strokeWidth="1"
             />
-            <text x={37 + i * 45} y="97" textAnchor="middle" fill="#a1a1aa" fontSize="6">
+            <text x={37 + i * 45} y="97" textAnchor="middle" fill="var(--foreground-muted)" fontSize="6">
               {["Screenshots", "Invoices", "Old files"][i]}
             </text>
             <path
               d={`M${37 + i * 45} 84 l-3 -6 l6 0 z`}
-              fill="#22c55e"
+              fill="var(--accent-success)"
             />
           </g>
         ))}
@@ -90,11 +91,11 @@ function MemoryVisualization() {
               width="40"
               height="20"
               rx="3"
-              fill="#18181b"
-              stroke="#3f3f46"
+              fill="var(--background-tertiary)"
+              stroke="var(--border-light)"
               strokeWidth="1"
             />
-            <text x={40 + i * 55} y="28" textAnchor="middle" fill="#a1a1aa" fontSize="6">
+            <text x={40 + i * 55} y="28" textAnchor="middle" fill="var(--foreground-muted)" fontSize="6">
               {label}
             </text>
             <line
@@ -102,17 +103,17 @@ function MemoryVisualization() {
               y1="35"
               x2="100"
               y2="48"
-              stroke="#3f3f46"
+              stroke="var(--border-light)"
               strokeWidth="1"
             />
           </g>
         ))}
-        <rect x="70" y="49" width="60" height="26" rx="4" fill="#3b82f6" />
-        <text x="100" y="65" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="bold">
+        <rect x="70" y="49" width="60" height="26" rx="4" fill="var(--accent-primary)" />
+        <text x="100" y="65" textAnchor="middle" fill="var(--background)" fontSize="7" fontWeight="bold">
           Memory
         </text>
-        <line x1="100" y1="75" x2="100" y2="90" stroke="#3f3f46" strokeWidth="1" strokeDasharray="2,2" />
-        <text x="100" y="102" textAnchor="middle" fill="#71717a" fontSize="6">
+        <line x1="100" y1="75" x2="100" y2="90" stroke="var(--border-light)" strokeWidth="1" strokeDasharray="2,2" />
+        <text x="100" y="102" textAnchor="middle" fill="var(--foreground-muted)" fontSize="6">
           gets better over time
         </text>
       </svg>
@@ -151,15 +152,17 @@ export async function UnifySection() {
     <section className="py-24">
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <h2 className="text-3xl font-normal tracking-tight text-foreground sm:text-5xl leading-[1.15]">
-            {t("titlePrefix")}{" "}
-            <span className="bg-accent-primary px-1 text-background">
-              {t("titleHighlight")}
-            </span>
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-foreground-secondary">
-            {t("subtitle")}
-          </p>
+          <SectionHeader
+            title={
+              <>
+                {t("titlePrefix")}{" "}
+                <span className="bg-accent-primary px-1 text-background">
+                  {t("titleHighlight")}
+                </span>
+              </>
+            }
+            subtitle={t("subtitle")}
+          />
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

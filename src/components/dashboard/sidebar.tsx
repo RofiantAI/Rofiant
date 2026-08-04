@@ -52,7 +52,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function NavBadge({ label, tone = "count" }: { label: string; tone?: "count" | "new" }) {
   const styles =
     tone === "new"
-      ? "bg-emerald-500/15 text-emerald-400"
+      ? "bg-accent-success/15 text-accent-success"
       : "bg-background-tertiary text-foreground-muted";
   return (
     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${styles}`}>

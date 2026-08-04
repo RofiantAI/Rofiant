@@ -4,9 +4,9 @@ import { forwardRef, useState, type InputHTMLAttributes } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 const inputBase =
-  "peer w-full h-10 px-3 rounded-lg bg-background-secondary border border-border text-sm text-foreground " +
-  "placeholder:text-transparent focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary " +
-  "transition-[border-color,box-shadow] duration-300 ease-out";
+  "peer w-full h-10 px-3 rounded-2xl bg-background-secondary shadow-clay-inset text-sm text-foreground " +
+  "placeholder:text-transparent focus:outline-none focus:ring-2 focus:ring-accent-primary/50 " +
+  "transition-[box-shadow] duration-300 ease-out";
 
 const labelBase =
   "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground-muted " +

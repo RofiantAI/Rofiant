@@ -7,10 +7,6 @@ const footerColumns = [
     links: [{ key: "pricing", href: "/pricing" }],
   },
   {
-    key: "resources",
-    links: [],
-  },
-  {
     key: "company",
     links: [
       { key: "about", href: "/company/about" },
@@ -88,13 +84,13 @@ export async function FooterSection() {
                     </Link>
                   </li>
                 ))}
-                {column.key === "resources" && (
+                {column.key === "company" && (
                   <li>
                     <a
                       href="https://status.rofiant.ca"
                       className="text-sm text-foreground-secondary transition-colors hover:text-foreground"
                     >
-                      {t("columns.resources.links.status")}
+                      {t("columns.company.links.status")}
                     </a>
                   </li>
                 )}

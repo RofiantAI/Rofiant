@@ -114,6 +114,10 @@
         "dark": {
           "label": "Dunkel",
           "desc": "Dunkler Hintergrund, heller Text"
+        },
+        "dark-classic": {
+          "label": "Dunkel Klassisch",
+          "desc": "Das ursprüngliche kühle Dunkelthema"
         }
       },
       "accentColor": "Akzentfarbe",

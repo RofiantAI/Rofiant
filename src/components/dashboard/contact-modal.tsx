@@ -87,7 +87,7 @@ export function ContactModal({
               <button
                 type="button"
                 onClick={handleClose}
-                className="mt-5 inline-flex h-9 items-center justify-center rounded-full border border-border px-4 text-sm text-foreground-secondary hover:bg-background-tertiary transition-colors"
+                className="btn-clay-secondary mt-5 inline-flex h-9 items-center justify-center rounded-full px-4 text-sm"
               >
                 {t("close")}
               </button>
@@ -118,11 +118,11 @@ export function ContactModal({
                 />
               </div>
               <TurnstileWidget onVerify={setTurnstileToken} />
-              {error && <p className="text-sm text-red-400">{error}</p>}
+              {error && <p className="text-sm text-accent-error">{error}</p>}
               <button
                 type="submit"
                 disabled={status === "sending" || !turnstileToken}
-                className="inline-flex w-full h-9 items-center justify-center gap-2 rounded-full bg-button-primary text-button-primary-foreground text-sm font-medium hover:bg-foreground/90 disabled:opacity-60 transition-colors"
+                className="btn-clay-primary inline-flex w-full h-9 items-center justify-center gap-2 rounded-full text-sm font-medium"
               >
                 <Send className="w-4 h-4" />
                 {status === "sending" ? t("sending") : t("send")}

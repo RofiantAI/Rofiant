@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { appUrl } from "@/lib/app-url";
 import { Spinner } from "@/components/ui/spinner";
+import { ErrorBanner } from "@/components/ui/error-banner";
 
 export function MfaChallengeForm() {
   const [factorId, setFactorId] = useState<string | null>(null);
@@ -91,11 +92,7 @@ export function MfaChallengeForm() {
           />
         </div>
 
-        {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-            {error}
-          </div>
-        )}
+        {error && <ErrorBanner>{error}</ErrorBanner>}
 
         <button
           type="submit"

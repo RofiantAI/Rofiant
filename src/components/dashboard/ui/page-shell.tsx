@@ -234,7 +234,7 @@ export function DashboardMetric({
     delta && delta.value > 0
       ? "text-accent-success"
       : delta && delta.value < 0
-        ? "text-red-400"
+        ? "text-accent-error"
         : "text-foreground-muted";
 
   const inner = (
@@ -282,8 +282,8 @@ export function DashboardAlert({
 }) {
   const styles =
     variant === "error"
-      ? "bg-red-500/10 border-red-500/30 text-red-400"
-      : "bg-orange-500/10 border-orange-500/30 text-orange-400";
+      ? "bg-accent-error/10 border-accent-error/30 text-accent-error"
+      : "bg-accent-warning/10 border-accent-warning/30 text-accent-warning";
   return (
     <div className={`rounded-xl border px-4 py-3 text-sm ${styles}`}>{children}</div>
   );
@@ -327,7 +327,7 @@ export function DashboardUpgradeGate({
       action={
         <Link
           href={ctaHref}
-          className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 transition-colors"
+          className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground shadow-clay-sm hover:brightness-95 active:shadow-clay-inset active:brightness-90 transition-[filter,box-shadow]"
         >
           {ctaLabel}
           <ArrowRight className="w-4 h-4" />
@@ -353,7 +353,7 @@ export function DashboardPrimaryButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground hover:bg-foreground/90 disabled:opacity-60 transition-colors"
+      className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium bg-button-primary text-button-primary-foreground shadow-clay-sm hover:brightness-95 active:shadow-clay-inset active:brightness-90 disabled:opacity-60 transition-[filter,box-shadow]"
     >
       {children}
     </button>
@@ -376,7 +376,7 @@ export function DashboardSecondaryButton({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium border border-border text-foreground-secondary hover:bg-background-tertiary disabled:opacity-60 transition-colors"
+      className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-full text-sm font-medium border border-border text-foreground-secondary shadow-clay-sm hover:bg-background-tertiary active:shadow-clay-inset disabled:opacity-60 transition-[background-color,border-color,box-shadow]"
     >
       {children}
     </button>
