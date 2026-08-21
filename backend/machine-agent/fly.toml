@@ -1,0 +1,8 @@
+# Used only to build + push the VM image (`fly deploy --build-only --push`).
+# Machines themselves are created via the Machines API (app/services/fly.py),
+# not by `fly deploy` running this as a service -- so there's no [[services]]
+# section here on purpose.
+app = "kirobots-machines"
+
+[build]
+  dockerfile = "Dockerfile"

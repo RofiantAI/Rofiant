@@ -1,0 +1,20 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "KiroBots FastAPI backend"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic-settings>=2.6",
+    "supabase>=2.9",
+    "pyjwt>=2.9",
+    "anthropic>=0.125.0",
+    "httpx>=0.28.1",
+    "e2b>=2.42.0",
+    "python-multipart>=0.0.12",
+    "pyright>=1.1.411",
+]
+
+[tool.uv]
+package = false
