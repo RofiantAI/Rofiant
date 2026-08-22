@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "desktop",
+  "productName": "KiroBots",
   "version": "0.1.0",
-  "identifier": "com.stormz.desktop",
+  "identifier": "com.rofiant.kirobots",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "desktop",
+        "title": "Kiro",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -33,6 +33,15 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/RofiantAI/KiroBots/releases/latest/download/latest.json"
+      ],
+      "pubkey": "TODO_RUN_pnpm_tauri_signer_generate"
+    }
   }
 }

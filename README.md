@@ -208,6 +208,7 @@ too.
 VITE_SUPABASE_URL=
 VITE_SUPABASE_ANON_KEY=
 VITE_API_URL=http://localhost:8000
+VITE_WEB3FORMS_ACCESS_KEY=
 ```
 
 `backend/.env` (server-only secrets, never shipped to the desktop app):
