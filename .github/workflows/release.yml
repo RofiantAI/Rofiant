@@ -36,6 +36,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          cache-dependency-path: apps/desktop/pnpm-lock.yaml
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -46,6 +47,7 @@ jobs:
           workspaces: apps/desktop/src-tauri
 
       - run: pnpm install --frozen-lockfile
+        working-directory: apps/desktop
 
       - uses: tauri-apps/tauri-action@v0
         env:
