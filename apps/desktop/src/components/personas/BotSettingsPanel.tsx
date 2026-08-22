@@ -16,7 +16,6 @@ export function BotSettingsPanel({
   const [name, setName] = useState(conversation.title);
   const [subtitle, setSubtitle] = useState(conversation.subtitle ?? "");
   const [description, setDescription] = useState(conversation.description ?? "");
-  const [pickingAvatar, setPickingAvatar] = useState(false);
   const [addingBot, setAddingBot] = useState(false);
 
   const isGroup = (conversation.personas?.length ?? 0) > 1;
@@ -93,39 +92,8 @@ export function BotSettingsPanel({
             <p className="text-sm font-medium text-foreground">{roster.length} bots</p>
           </div>
         ) : (
-          <div className="relative flex flex-col items-center py-4">
-            <button
-              onClick={() => setPickingAvatar((v) => !v)}
-              className="rounded-full ring-offset-2 ring-offset-sidebar transition-shadow hover:ring-2 hover:ring-ring"
-            >
-              <PersonaFace persona={conversation.persona} size={64} />
-            </button>
-
-            {pickingAvatar && (
-              <div className="absolute top-full z-10 mt-2 grid grid-cols-5 gap-2 rounded-xl border border-border bg-popover p-2 shadow-lg">
-                {PERSONAS.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => {
-                      const hasDefaultName = PERSONAS.some((persona) => persona.name === name.trim());
-                      updateConversation.mutate({
-                        id: conversation.id,
-                        persona: p.id,
-                        ...(hasDefaultName ? { title: p.name } : {}),
-                      });
-                      if (hasDefaultName) setName(p.name);
-                      setPickingAvatar(false);
-                    }}
-                    title={p.name}
-                    className={`rounded-full p-1 transition-colors hover:bg-accent ${
-                      p.id === conversation.persona ? "ring-2 ring-ring" : ""
-                    }`}
-                  >
-                    <PersonaFace persona={p.id} size={36} />
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="flex flex-col items-center py-4">
+            <PersonaFace persona={conversation.persona} size={64} />
           </div>
         )}
 

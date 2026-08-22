@@ -114,6 +114,7 @@ export function FilesPanel() {
   const [deleteTarget, setDeleteTarget] = useState<{ entry: FileEntry; dirKey: string } | null>(null);
   const confirmBeforeDelete = useUIStore((s) => s.confirmBeforeDelete);
   const editHighlightRef = useRef<HTMLPreElement>(null);
+  const readRequestRef = useRef(0);
 
   const loadDir = useCallback(
     async (path: string) => {
@@ -130,6 +131,7 @@ export function FilesPanel() {
   );
 
   useEffect(() => {
+    readRequestRef.current += 1;
     setChildrenByPath({});
     setExpanded(new Set());
     setSelected(null);
@@ -152,13 +154,20 @@ export function FilesPanel() {
   }
 
   async function selectFile(path: string) {
+    const request = ++readRequestRef.current;
+    const conversationId = activeConversationId;
     setSelected(path);
     setMode("view");
-    if (!activeConversationId) return;
+    if (!conversationId) return;
     try {
-      setSelectedContent(await readFile(activeConversationId, path));
+      const content = await readFile(conversationId, path);
+      if (request === readRequestRef.current && useUIStore.getState().activeConversationId === conversationId) {
+        setSelectedContent(content);
+      }
     } catch (err) {
-      setSelectedContent(`// failed to load file\n// ${err instanceof Error ? err.message : String(err)}`);
+      if (request === readRequestRef.current && useUIStore.getState().activeConversationId === conversationId) {
+        setSelectedContent(`// failed to load file\n// ${err instanceof Error ? err.message : String(err)}`);
+      }
     }
   }
 

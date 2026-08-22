@@ -4,6 +4,7 @@ target/
 .env
 .env.local
 *.log
+.signing/
 .codegraph/
 __pycache__/
 *.pyc

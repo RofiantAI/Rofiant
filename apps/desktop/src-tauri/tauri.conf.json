@@ -41,7 +41,7 @@
       "endpoints": [
         "https://github.com/RofiantAI/KiroBots/releases/latest/download/latest.json"
       ],
-      "pubkey": "TODO_RUN_pnpm_tauri_signer_generate"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZGRkUzRDc3QzBEQzIzQUYKUldTdkk5ekFkejMrYjZydGNPZWRtZmtIZHZFMklONE9BeWxITmhuOEVHMDlzK0Rsb2dLbWJySG8K"
     }
   }
 }

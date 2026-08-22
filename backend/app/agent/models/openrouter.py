@@ -138,3 +138,6 @@ class OpenRouterProvider(ModelProvider):
                 "output_tokens": raw_usage.get("completion_tokens", 0),
             },
         )
+
+    async def close(self) -> None:
+        await self._client.aclose()

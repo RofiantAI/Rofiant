@@ -189,13 +189,20 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             )
         _active_runs.add(conversation_id)
 
-    claim = admin.rpc(
-        "claim_conversation_run",
-        {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
-    ).execute()
+    try:
+        claim = admin.rpc(
+            "claim_conversation_run",
+            {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
+        ).execute()
+    except Exception:
+        async with _active_runs_guard:
+            _active_runs.discard(conversation_id)
+        await provider.close()
+        raise
     if not claim.data:
         async with _active_runs_guard:
             _active_runs.discard(conversation_id)
+        await provider.close()
         raise HTTPException(status_code=409, detail="An agent run is already active for this conversation")
 
     async def event_stream() -> AsyncIterator[str]:
@@ -279,8 +286,6 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                             if event.type in ("assistant.delta", "assistant.completed")
                             else event.data
                         )
-                        yield _sse(event.type, data)
-
                         if event.type == "assistant.completed":
                             duration_ms = round(
                                 (asyncio.get_running_loop().time() - bot_started) * 1000
@@ -317,6 +322,7 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                                     "status": "completed" if event.type == "tool.completed" else "failed",
                                 }
                             ).execute()
+                        yield _sse(event.type, data)
             except Exception as exc:
                 yield _sse("agent.failed", {"error": str(exc)})
                 return
@@ -337,12 +343,15 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             if active_task and not active_task.done():
                 active_task.cancel()
             try:
-                admin.rpc(
-                    "release_conversation_run",
-                    {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
-                ).execute()
+                await provider.close()
             finally:
-                async with _active_runs_guard:
-                    _active_runs.discard(conversation_id)
+                try:
+                    admin.rpc(
+                        "release_conversation_run",
+                        {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
+                    ).execute()
+                finally:
+                    async with _active_runs_guard:
+                        _active_runs.discard(conversation_id)
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
@@ -21,6 +21,9 @@ export function ContactModal({ email = "", onClose }: ContactModalProps) {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
+  const previousFocus = useRef(document.activeElement as HTMLElement | null);
+
+  useEffect(() => () => previousFocus.current?.focus(), []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -70,6 +73,16 @@ export function ContactModal({ email = "", onClose }: ContactModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-title"
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+          ));
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+        }}
         className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-xl"
         onClick={(event) => event.stopPropagation()}
       >

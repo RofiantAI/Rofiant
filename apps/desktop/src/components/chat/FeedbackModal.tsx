@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,9 @@ export function FeedbackModal({
   const [details, setDetails] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
+  const previousFocus = useRef(document.activeElement as HTMLElement | null);
+
+  useEffect(() => () => previousFocus.current?.focus(), []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -86,6 +89,16 @@ export function FeedbackModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="feedback-title"
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+          ));
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+        }}
         className="w-full max-w-xl rounded-2xl border border-border bg-card p-5 shadow-xl"
         onClick={(event) => event.stopPropagation()}
       >
@@ -104,7 +117,7 @@ export function FeedbackModal({
         {status === "sent" ? (
           <div className="mt-5 space-y-4">
             <p role="status" className="text-sm text-foreground">Thanks. Your feedback was sent.</p>
-            <div className="flex justify-end"><Button onClick={onClose}>Done</Button></div>
+            <div className="flex justify-end"><Button autoFocus onClick={onClose}>Done</Button></div>
           </div>
         ) : (
           <form onSubmit={submit} className="mt-5 space-y-4">
@@ -125,6 +138,7 @@ export function FeedbackModal({
               ))}
             </div>
             <textarea
+              autoFocus
               value={details}
               onChange={(event) => setDetails(event.target.value)}
               rows={6}

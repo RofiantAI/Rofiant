@@ -80,3 +80,6 @@ class AnthropicProvider(ModelProvider):
             raw_content=final.content,
             usage={"input_tokens": final.usage.input_tokens, "output_tokens": final.usage.output_tokens},
         )
+
+    async def close(self) -> None:
+        await self._client.close()

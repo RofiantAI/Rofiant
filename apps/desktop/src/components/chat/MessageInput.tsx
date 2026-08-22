@@ -101,9 +101,9 @@ function EffortSlider({ index, onChange }: { index: number; onChange: (index: nu
       className="relative h-10 w-full shrink-0"
       title={`Effort: ${EFFORT_LABELS[index]}`}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-1 h-8 overflow-hidden rounded-full bg-[#505050]">
+      <div className="pointer-events-none absolute inset-x-0 top-1 h-8 overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full bg-[#1493f5] transition-[width] duration-200 ease-out"
+          className="h-full bg-primary transition-[width] duration-200 ease-out"
           style={{ width: position }}
         />
       </div>
@@ -113,7 +113,7 @@ function EffortSlider({ index, onChange }: { index: number; onChange: (index: nu
         ))}
       </div>
       <span
-        className="pointer-events-none absolute top-0 h-10 w-10 -translate-x-1/2 rounded-full bg-[#f5f5f5] shadow-md transition-[left] duration-200 ease-out"
+        className="pointer-events-none absolute top-0 h-10 w-10 -translate-x-1/2 rounded-full bg-foreground shadow-md transition-[left] duration-200 ease-out"
         style={{ left: position }}
       />
       <input
@@ -156,15 +156,15 @@ function EffortPopover() {
         aria-label="Agent effort settings"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-8 shrink-0 items-center gap-1 rounded-full bg-[#303030] pl-2.5 pr-2 text-xs font-medium text-[#8a8a8a] transition-colors hover:bg-[#383838] hover:text-foreground"
+        className="flex h-8 shrink-0 items-center gap-1 rounded-full bg-secondary pl-2.5 pr-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
       >
         {EFFORT_LABELS[index]}
         <ChevronRight className="h-3 w-3" />
       </button>
 
       {open && (
-        <div className="absolute bottom-full right-0 z-40 mb-2 w-[296px] rounded-[28px] border border-white/5 bg-[#353535] px-5 pb-[22px] pt-[19px] shadow-lg">
-          <p className="mb-3 flex items-center text-lg text-[#b6b6b6]">
+        <div className="absolute bottom-full right-0 z-40 mb-2 w-[296px] rounded-[28px] border border-border bg-popover px-5 pb-[22px] pt-[19px] shadow-lg">
+          <p className="mb-3 flex items-center text-lg text-foreground">
             {EFFORT_LABELS[index]}
           </p>
           <EffortSlider index={index} onChange={(i) => setMaxSteps(EFFORT_STEPS[i])} />
@@ -220,6 +220,12 @@ export function MessageInput({
   const autoSendOnDictation = useUIStore((s) => s.autoSendOnDictation);
   const isEmpty = !value.trim() && images.length === 0;
   currentConversationRef.current = activeConversationId;
+
+  useEffect(() => {
+    if (providerStatus && !providerStatus.anthropic_oauth && selectedModel.startsWith("claude-")) {
+      setSelectedModel(FREE_MODELS[0].id);
+    }
+  }, [providerStatus, selectedModel, setSelectedModel]);
 
   useEffect(() => {
     const focus = () => textareaRef.current?.focus();
@@ -488,7 +494,7 @@ export function MessageInput({
         </div>
       )}
       <form
-        className="rounded-[28px] border border-[#3a3a3a] bg-[#222222] px-2 py-2 transition-colors focus-within:border-[#4a4a4a]"
+        className="rounded-[28px] border border-border bg-card px-2 py-2 transition-colors focus-within:border-ring"
         onSubmit={(e) => {
           e.preventDefault();
           submit();
@@ -534,7 +540,7 @@ export function MessageInput({
             onClick={() => fileInputRef.current?.click()}
             aria-label="Attach images"
             disabled={!activeConversationId || agentRunning}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#303030] text-[#8a8a8a] transition-colors hover:bg-[#383838] hover:text-foreground disabled:opacity-40"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -586,7 +592,7 @@ export function MessageInput({
             value={selectedModel}
             onChange={setSelectedModel}
             ariaLabel="Model"
-            className="h-8 shrink-0 rounded-full border-none bg-[#303030] pl-2.5 pr-6 text-xs font-medium text-[#8a8a8a] transition-colors hover:bg-[#383838] hover:text-foreground"
+            className="h-8 shrink-0 rounded-full border-none bg-secondary pl-2.5 pr-6 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             chevronClassName="right-1.5 h-3 w-3"
           >
             {models.map((m) => (

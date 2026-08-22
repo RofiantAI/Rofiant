@@ -53,3 +53,6 @@ class ModelProvider(ABC):
         tools: list[dict[str, Any]] | None = None,
     ) -> AsyncIterator[ModelEvent]:
         ...
+
+    async def close(self) -> None:
+        """Release provider-owned network resources, if any."""
