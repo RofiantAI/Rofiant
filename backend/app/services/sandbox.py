@@ -57,28 +57,35 @@ class SandboxProvider(ABC):
 
 class E2BSandboxProvider(SandboxProvider):
     async def create(self) -> str:
-        sandbox = await AsyncSandbox.create(api_key=settings.e2b_api_key)
+        sandbox = await AsyncSandbox.create(
+            api_key=settings.e2b_api_key, timeout=settings.sandbox_timeout_seconds
+        )
         return sandbox.sandbox_id
+
+    async def _connect(self, sandbox_id: str) -> AsyncSandbox:
+        return await AsyncSandbox.connect(
+            sandbox_id, api_key=settings.e2b_api_key, timeout=settings.sandbox_timeout_seconds
+        )
 
     async def execute(
         self, sandbox_id: str, command: str, cwd: str | None = None, timeout: int = 30
     ) -> CommandResult:
-        sandbox = await AsyncSandbox.connect(sandbox_id, api_key=settings.e2b_api_key)
+        sandbox = await self._connect(sandbox_id)
         result = await sandbox.commands.run(command, cwd=cwd, timeout=timeout)
         return CommandResult(
             stdout=result.stdout, stderr=result.stderr, exit_code=result.exit_code
         )
 
     async def read_file(self, sandbox_id: str, path: str) -> str:
-        sandbox = await AsyncSandbox.connect(sandbox_id, api_key=settings.e2b_api_key)
+        sandbox = await self._connect(sandbox_id)
         return await sandbox.files.read(path, format="text")
 
     async def write_file(self, sandbox_id: str, path: str, content: str) -> None:
-        sandbox = await AsyncSandbox.connect(sandbox_id, api_key=settings.e2b_api_key)
+        sandbox = await self._connect(sandbox_id)
         await sandbox.files.write(path, content)
 
     async def list_files(self, sandbox_id: str, path: str) -> list[FileEntry]:
-        sandbox = await AsyncSandbox.connect(sandbox_id, api_key=settings.e2b_api_key)
+        sandbox = await self._connect(sandbox_id)
         entries = await sandbox.files.list(path)
         return [
             FileEntry(name=e.name, path=e.path, is_dir=e.type == "dir") for e in entries

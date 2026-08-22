@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     sandbox_memory: str = "2g"
     sandbox_cpus: str = "2"
     sandbox_network: str = "bridge"
+    # e2b kills a sandbox 5min after last activity by default, which wipes its
+    # files — bump this so a closed-then-reopened app still finds them.
+    sandbox_timeout_seconds: int = 3600
 
     sentry_dsn: str | None = None
 
