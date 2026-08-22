@@ -8,9 +8,11 @@ import { useUIStore } from "@/stores/useUIStore";
 export function NewChatMenu({
   buttonClassName,
   className,
+  placement = "below",
 }: {
   buttonClassName: string;
   className?: string;
+  placement?: "below" | "below-left" | "right";
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const setBotGalleryOpen = useUIStore((s) => s.setBotGalleryOpen);
@@ -34,12 +36,21 @@ export function NewChatMenu({
 
   return (
     <div ref={ref} className={cn("relative", className)}>
-      <button onClick={() => setMenuOpen((v) => !v)} className={buttonClassName}>
+      <button aria-label="Create a chat" aria-expanded={menuOpen} onClick={() => setMenuOpen((v) => !v)} className={buttonClassName}>
         <Plus className="h-4 w-4" />
       </button>
 
       {menuOpen && (
-        <div className="absolute right-0 top-full z-20 mt-1 w-44 overflow-hidden rounded-lg border border-border bg-popover py-1 shadow-lg">
+        <div
+          className={cn(
+            "absolute z-40 w-44 overflow-hidden rounded-lg border border-border bg-popover py-1 shadow-lg",
+            placement === "right"
+              ? "bottom-0 left-full ml-2"
+              : placement === "below-left"
+                ? "left-0 top-full mt-1"
+                : "right-0 top-full mt-1",
+          )}
+        >
           <button
             onClick={() => open("solo")}
             className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-foreground hover:bg-accent"

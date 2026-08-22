@@ -107,7 +107,13 @@ export function BotSettingsPanel({
                   <button
                     key={p.id}
                     onClick={() => {
-                      updateConversation.mutate({ id: conversation.id, persona: p.id });
+                      const hasDefaultName = PERSONAS.some((persona) => persona.name === name.trim());
+                      updateConversation.mutate({
+                        id: conversation.id,
+                        persona: p.id,
+                        ...(hasDefaultName ? { title: p.name } : {}),
+                      });
+                      if (hasDefaultName) setName(p.name);
                       setPickingAvatar(false);
                     }}
                     title={p.name}

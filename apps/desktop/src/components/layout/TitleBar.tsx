@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { X, Minus, Expand, PanelLeft, PanelRight } from "lucide-react";
+import { X, Minus, Square, PanelLeft, PanelRight, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/useUIStore";
 import { useConversations } from "@/hooks/useConversations";
@@ -12,10 +12,10 @@ import { NewChatMenu } from "@/components/sidebar/NewChatMenu";
 
 const appWindow = getCurrentWindow();
 
-const DOTS = [
-  { key: "close", color: "#ff5f57", inactiveColor: "#3a3a3a", Icon: X, action: () => appWindow.close() },
-  { key: "minimize", color: "#febc2e", inactiveColor: "#3a3a3a", Icon: Minus, action: () => appWindow.minimize() },
-  { key: "maximize", color: "#28c840", inactiveColor: "#3a3a3a", Icon: Expand, action: () => appWindow.toggleMaximize() },
+const WINDOW_CONTROLS = [
+  { key: "minimize", Icon: Minus, action: () => appWindow.minimize(), danger: false },
+  { key: "maximize", Icon: Square, action: () => appWindow.toggleMaximize(), danger: false },
+  { key: "close", Icon: X, action: () => appWindow.close(), danger: true },
 ] as const;
 
 export function TitleBar() {
@@ -44,11 +44,24 @@ export function TitleBar() {
   }, []);
 
   return (
-    <div data-tauri-drag-region className="flex h-11 w-full shrink-0 items-stretch bg-background">
+    <div data-tauri-drag-region className="relative flex h-11 w-full shrink-0 items-stretch bg-background">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-0 border-b border-border transition-[left] duration-200 ease-out"
+        style={{
+          left: isChatPage
+            ? sidebarOpen
+              ? sidebarWidth
+              : SIDEBAR_COLLAPSED_WIDTH
+            : isSettingsPage
+              ? "14rem"
+              : 0,
+        }}
+      />
       <div
         data-tauri-drag-region
         className={cn(
-          "flex shrink-0 flex-row items-center gap-3 px-3 justify-start",
+          "flex shrink-0 flex-row items-center justify-start gap-3 px-3 transition-[width] duration-200 ease-out",
           (isChatPage || isSettingsPage) && "border-r border-border bg-sidebar",
         )}
         style={
@@ -59,39 +72,31 @@ export function TitleBar() {
               : undefined
         }
       >
-        <div className="group flex items-center gap-2">
-          {DOTS.map(({ key, color, inactiveColor, Icon, action }) => (
-            <button
-              key={key}
-              aria-label={key}
-              onClick={action}
-              className="flex h-3.5 w-3.5 items-center justify-center rounded-full"
-              style={{ backgroundColor: focused ? color : inactiveColor }}
-            >
-              <Icon
-                className={cn(
-                  "h-2 w-2 text-black/60 opacity-0 transition-opacity",
-                  focused && "group-hover:opacity-100",
-                )}
-                strokeWidth={3}
-              />
-            </button>
-          ))}
-        </div>
-
-        {isChatPage && sidebarOpen && (
+        {isChatPage && (
           <button
             onClick={toggleSidebar}
-            className="flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+            className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
             <PanelLeft className="h-3.5 w-3.5" />
           </button>
         )}
 
-        {isChatPage && sidebarOpen && (
+        {isSettingsPage && (
+          <Link
+            to="/"
+            aria-label="Back"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        )}
+        
+        {isChatPage && (
           <NewChatMenu
             className="ml-auto"
             buttonClassName="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground active:scale-90 disabled:opacity-50"
+            placement={sidebarOpen ? "below" : "below-left"}
           />
         )}
       </div>
@@ -99,7 +104,7 @@ export function TitleBar() {
       {isChatPage && (
         <div
           data-tauri-drag-region
-          className="flex min-w-0 flex-1 items-center justify-between border-b border-border px-4"
+          className="flex min-w-0 flex-1 items-center justify-between px-4"
         >
           <div className="flex min-w-0 items-center gap-3">
             {activeConversation && (
@@ -125,6 +130,23 @@ export function TitleBar() {
           </button>
         </div>
       )}
+
+      <div className="ml-auto flex shrink-0 items-stretch">
+        {WINDOW_CONTROLS.map(({ key, Icon, action, danger }) => (
+          <button
+            key={key}
+            aria-label={key}
+            onClick={action}
+            className={cn(
+              "flex h-11 w-12 items-center justify-center transition-colors",
+              focused ? "text-foreground/80" : "text-muted-foreground",
+              danger ? "hover:bg-destructive hover:text-destructive-foreground" : "hover:bg-accent hover:text-foreground",
+            )}
+          >
+            <Icon className={key === "close" ? "h-4 w-4" : "h-3.5 w-3.5"} strokeWidth={1.25} />
+          </button>
+        ))}
+      </div>
 
       {botSettingsOpen && activeConversation && (
         <BotSettingsPanel conversation={activeConversation} onClose={() => setBotSettingsOpen(false)} />

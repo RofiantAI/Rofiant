@@ -69,12 +69,29 @@ export function BotGallery() {
       onClick={() => setOpen(false)}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bot-gallery-title"
+        onKeyDown={(e) => {
+          if (e.key !== "Tab") return;
+          const controls = Array.from(e.currentTarget.querySelectorAll<HTMLElement>("button:not(:disabled)"));
+          if (controls.length === 0) return;
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }}
         className="w-full max-w-2xl rounded-2xl border border-border bg-card p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 id="bot-gallery-title" className="text-lg font-semibold text-foreground">
               {groupMode ? "Pick 2 or more bots" : "Pick a bot"}
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -84,6 +101,7 @@ export function BotGallery() {
             </p>
           </div>
           <button
+            autoFocus
             onClick={() => {
               setGroupMode((v) => !v);
               setPicked([]);

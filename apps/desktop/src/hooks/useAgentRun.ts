@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
 import { useUIStore } from "@/stores/useUIStore";
-import { useRunningStore } from "@/stores/useRunningStore";
-import type { ConversationWithLastMessage, ToolCall } from "@/types/chat";
+import { EMPTY_AGENT_RUN, useRunningStore } from "@/stores/useRunningStore";
+import type { ConversationWithLastMessage } from "@/types/chat";
 
 // Only worth interrupting the user if they've looked away, and only for
 // bots they opted in to (BotSettingsPanel's Notifications toggle).
@@ -19,14 +19,6 @@ function notifyIfEnabled(queryClient: ReturnType<typeof useQueryClient>, convers
   else Notification.requestPermission().then((p) => p === "granted" && fire());
 }
 
-interface AgentRunState {
-  running: boolean;
-  draft: string;
-  draftPersona: string | null;
-  error: string | null;
-  liveToolCalls: ToolCall[];
-}
-
 /** Parses one `event: ...\ndata: ...\n\n` SSE frame into its parts. */
 function parseSseFrame(frame: string): { event: string; data: string } {
   let event = "message";
@@ -38,35 +30,48 @@ function parseSseFrame(frame: string): { event: string; data: string } {
   return { event, data };
 }
 
-const INITIAL_STATE: AgentRunState = {
-  running: false,
-  draft: "",
-  draftPersona: null,
-  error: null,
-  liveToolCalls: [],
-};
+// Keyed by conversation id rather than held in the hook instance, so a
+// stop button elsewhere in the tree can abort a run without prop-drilling
+// the controller through every component between it and the composer.
+const controllers = new Map<string, AbortController>();
+
+export function stopAgentRun(conversationId: string) {
+  controllers.get(conversationId)?.abort();
+}
 
 export function useAgentRun(conversationId: string | null) {
   const queryClient = useQueryClient();
-  const [state, setState] = useState<AgentRunState>(INITIAL_STATE);
+  const state = useRunningStore((s) =>
+    conversationId ? (s.runs[conversationId] ?? EMPTY_AGENT_RUN) : EMPTY_AGENT_RUN,
+  );
   const selectedModel = useUIStore((s) => s.selectedModel);
   const maxSteps = useUIStore((s) => s.maxSteps);
+  const maxRunMinutes = useUIStore((s) => s.maxRunMinutes);
+  const toolApprovalPolicy = useUIStore((s) => s.toolApprovalPolicy);
   const setRunning = useRunningStore((s) => s.setRunning);
+  const setRun = useRunningStore((s) => s.setRun);
+  const updateRun = useRunningStore((s) => s.updateRun);
 
   const run = useCallback(
     async (mentionedPersonas?: string[]) => {
     if (!conversationId) return;
-    setState({ ...INITIAL_STATE, running: true });
+    if (useRunningStore.getState().runs[conversationId]?.running) return;
+    setRun(conversationId, { ...EMPTY_AGENT_RUN, running: true });
     setRunning(conversationId, true);
     let failed = false;
+    const controller = new AbortController();
+    controllers.set(conversationId, controller);
 
     try {
       const res = await apiFetch("/api/messages/stream", {
         method: "POST",
+        signal: controller.signal,
         body: JSON.stringify({
           conversation_id: conversationId,
           model: selectedModel,
           max_steps: maxSteps,
+          max_run_minutes: maxRunMinutes,
+          tool_approval_policy: toolApprovalPolicy,
           mentioned_personas: mentionedPersonas?.length ? mentionedPersonas : undefined,
         }),
       });
@@ -89,13 +94,22 @@ export function useAgentRun(conversationId: string | null) {
           const payload = JSON.parse(data);
 
           if (event === "assistant.delta") {
-            setState((s) => ({ ...s, draft: s.draft + payload.text, draftPersona: payload.persona ?? null }));
+            updateRun(conversationId, (s) => ({ ...s, draft: s.draft + payload.text, draftPersona: payload.persona ?? null }));
           } else if (event === "assistant.completed") {
             // Group chat: next bot's turn starts a fresh draft, not this
             // bot's leftover text.
-            setState((s) => ({ ...s, draft: "", draftPersona: null }));
+            updateRun(conversationId, (s) => ({ ...s, draft: "", draftPersona: null }));
+          } else if (event === "tool.approval_required") {
+            const detail = payload.tool === "terminal"
+              ? String(payload.arguments?.command ?? JSON.stringify(payload.arguments))
+              : JSON.stringify(payload.arguments, null, 2);
+            const approved = window.confirm(`Allow ${payload.tool} to run?\n\n${detail}`);
+            await apiFetch(`/api/messages/approvals/${payload.approval_id}`, {
+              method: "POST",
+              body: JSON.stringify({ approved }),
+            });
           } else if (event === "tool.started") {
-            setState((s) => ({
+            updateRun(conversationId, (s) => ({
               ...s,
               liveToolCalls: [
                 ...s.liveToolCalls,
@@ -112,7 +126,7 @@ export function useAgentRun(conversationId: string | null) {
             }));
           } else if (event === "tool.completed" || event === "tool.failed") {
             const status = event === "tool.completed" ? "completed" : "failed";
-            setState((s) => ({
+            updateRun(conversationId, (s) => ({
               ...s,
               liveToolCalls: s.liveToolCalls.map((t) =>
                 t.id === payload.id
@@ -127,7 +141,7 @@ export function useAgentRun(conversationId: string | null) {
             queryClient.invalidateQueries({ queryKey: ["workspace-files", conversationId] });
           } else if (event === "agent.failed") {
             failed = true;
-            setState((s) => ({ ...s, error: payload.error ?? "Agent run failed" }));
+            updateRun(conversationId, (s) => ({ ...s, error: payload.error ?? "Agent run failed" }));
             notifyIfEnabled(queryClient, conversationId, payload.error ?? "Needs your input");
           }
         }
@@ -136,12 +150,17 @@ export function useAgentRun(conversationId: string | null) {
       queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
       if (!failed) notifyIfEnabled(queryClient, conversationId, "Finished responding");
     } catch (err) {
-      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Agent run failed" }));
+      const stopped = err instanceof DOMException && err.name === "AbortError";
+      if (!stopped) {
+        updateRun(conversationId, (s) => ({ ...s, error: err instanceof Error ? err.message : "Agent run failed" }));
+      }
+      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
     } finally {
-      setState((s) => ({ ...s, running: false, draft: "" }));
+      controllers.delete(conversationId);
+      updateRun(conversationId, (s) => ({ ...s, running: false, draft: "" }));
       setRunning(conversationId, false);
     }
-  }, [conversationId, queryClient, selectedModel, maxSteps, setRunning]);
+  }, [conversationId, queryClient, selectedModel, maxSteps, maxRunMinutes, toolApprovalPolicy, setRunning, setRun, updateRun]);
 
   return { ...state, run };
 }

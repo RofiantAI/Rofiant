@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageInput } from "@/components/chat/MessageInput";
@@ -11,6 +11,7 @@ import { useConversations } from "@/hooks/useConversations";
 import { DEFAULT_PERSONA, personaFor } from "@/lib/personas";
 import { PersonaFace } from "@/components/personas/PersonaFace";
 import { useAgentRun } from "@/hooks/useAgentRun";
+import type { Conversation } from "@/types/chat";
 
 function MessageSkeleton() {
   return (
@@ -23,8 +24,29 @@ function MessageSkeleton() {
 
 // Bot's opening card, shown until the first message lands. Cheaper than
 // seeding a greeting row: no fake history for the model to answer to.
-function BotGreeting({ persona }: { persona: string }) {
-  const bot = personaFor(persona);
+function BotGreeting({ conversation }: { conversation?: Conversation }) {
+  const roster = conversation?.personas?.length ? conversation.personas : null;
+  const bot = personaFor(conversation?.persona ?? DEFAULT_PERSONA);
+
+  if (roster && roster.length > 1) {
+    const bots = roster.map(personaFor);
+    return (
+      <div className="flex flex-col items-center py-10 text-center">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {bots.map((member) => (
+            <PersonaFace key={member.id} persona={member.id} size={56} />
+          ))}
+        </div>
+        <p className="mt-4 text-base font-medium text-foreground">
+          {bots.map((member) => member.name).join(", ")}
+        </p>
+        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+          Send a message to start the group chat.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center py-10 text-center">
       <PersonaFace persona={bot.id} size={72} />
@@ -36,9 +58,14 @@ function BotGreeting({ persona }: { persona: string }) {
 
 export function ChatView() {
   const activeConversationId = useUIStore((s) => s.activeConversationId);
-  const { data: messages = [], isLoading: messagesLoading } = useMessages(activeConversationId);
-  const { data: conversations = [] } = useConversations();
+  const { data: messages = [], isLoading: messagesLoading, error: messagesError } = useMessages(activeConversationId);
+  const { data: conversations = [], error: conversationsError } = useConversations();
   const agentRun = useAgentRun(activeConversationId);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ block: "end" });
+  }, [activeConversationId, messages.length, agentRun.draft, agentRun.running]);
 
   const density = useUIStore((s) => s.density);
   const chatWidth = useUIStore((s) => s.chatWidth);
@@ -66,7 +93,11 @@ export function ChatView() {
             density === "compact" ? "space-y-2 py-4" : "space-y-5 py-8",
           )}
         >
-          {!activeConversationId ? (
+          {conversationsError || messagesError ? (
+            <p className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+              Couldn't load chat data. Check your connection and try again.
+            </p>
+          ) : !activeConversationId ? (
             conversations.length === 0 ? (
               <OnboardingScreen />
             ) : (
@@ -79,7 +110,7 @@ export function ChatView() {
               <MessageSkeleton />
             </>
           ) : messages.length === 0 && !agentRun.running ? (
-            <BotGreeting persona={activeConversation?.persona ?? DEFAULT_PERSONA} />
+            <BotGreeting conversation={activeConversation} />
           ) : (
             <>
               {messages.map((m) => (
@@ -106,6 +137,7 @@ export function ChatView() {
           {agentRun.error && (
             <p className="text-sm text-destructive">Agent failed: {agentRun.error}</p>
           )}
+          <div ref={bottomRef} />
         </div>
       </div>
       <MessageInput

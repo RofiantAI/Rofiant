@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { DEFAULT_SHORTCUTS, type ShortcutBindings, type ShortcutId } from "@/lib/shortcuts";
 
 type WorkspaceTab = "files" | "terminal" | "agent" | "cloud";
 type Theme = "system" | "light" | "dark";
 type FontSize = "small" | "medium" | "large";
 type Density = "comfortable" | "compact";
 type ChatWidth = "narrow" | "wide";
+export type ToolApprovalPolicy = "risky" | "always" | "automatic";
 
 export const FONT_SIZE_PX: Record<FontSize, number> = { small: 14, medium: 16, large: 18 };
 
@@ -21,7 +23,6 @@ interface UIState {
   sidebarWidth: number;
   workspacePanelWidth: number;
   theme: Theme;
-  sendOnEnter: boolean;
   selectedModel: string;
   fontSize: FontSize;
   density: Density;
@@ -33,6 +34,10 @@ interface UIState {
   clipboardAutoFill: boolean;
   confirmBeforeDelete: boolean;
   maxSteps: number;
+  maxRunMinutes: number;
+  toolApprovalPolicy: ToolApprovalPolicy;
+  autoCheckUpdates: boolean;
+  shortcuts: ShortcutBindings;
   botGalleryOpen: boolean;
   botGalleryMode: "solo" | "group";
   setBotGalleryOpen: (open: boolean) => void;
@@ -47,6 +52,11 @@ interface UIState {
   setClipboardAutoFill: (value: boolean) => void;
   setConfirmBeforeDelete: (value: boolean) => void;
   setMaxSteps: (steps: number) => void;
+  setMaxRunMinutes: (minutes: number) => void;
+  setToolApprovalPolicy: (policy: ToolApprovalPolicy) => void;
+  setAutoCheckUpdates: (value: boolean) => void;
+  setShortcut: (id: ShortcutId, binding: string) => void;
+  resetShortcuts: () => void;
   setWorkspaceTab: (tab: WorkspaceTab) => void;
   toggleWorkspacePanel: () => void;
   setWorkspacePanelOpen: (open: boolean) => void;
@@ -54,7 +64,6 @@ interface UIState {
   setSidebarWidth: (width: number) => void;
   setWorkspacePanelWidth: (width: number) => void;
   setTheme: (theme: Theme) => void;
-  setSendOnEnter: (value: boolean) => void;
   setSelectedModel: (model: string) => void;
   selectConversation: (id: string) => void;
   clearActiveConversation: () => void;
@@ -70,7 +79,6 @@ export const useUIStore = create<UIState>()(
       sidebarWidth: 340,
       workspacePanelWidth: 380,
       theme: "dark",
-      sendOnEnter: true,
       selectedModel: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       fontSize: "medium",
       density: "comfortable",
@@ -81,7 +89,11 @@ export const useUIStore = create<UIState>()(
       autoOpenPanelOnTool: false,
       clipboardAutoFill: true,
       confirmBeforeDelete: true,
-      maxSteps: 8,
+      maxSteps: 4,
+      maxRunMinutes: 10,
+      toolApprovalPolicy: "risky",
+      autoCheckUpdates: true,
+      shortcuts: { ...DEFAULT_SHORTCUTS },
       botGalleryOpen: false,
       botGalleryMode: "solo",
       setBotGalleryOpen: (botGalleryOpen) => set({ botGalleryOpen }),
@@ -97,6 +109,11 @@ export const useUIStore = create<UIState>()(
       setConfirmBeforeDelete: (confirmBeforeDelete) => set({ confirmBeforeDelete }),
       setMaxSteps: (steps) =>
         set({ maxSteps: Math.min(MAX_STEPS_RANGE.max, Math.max(MAX_STEPS_RANGE.min, Math.round(steps))) }),
+      setMaxRunMinutes: (minutes) => set({ maxRunMinutes: Math.min(30, Math.max(1, Math.round(minutes))) }),
+      setToolApprovalPolicy: (toolApprovalPolicy) => set({ toolApprovalPolicy }),
+      setAutoCheckUpdates: (autoCheckUpdates) => set({ autoCheckUpdates }),
+      setShortcut: (id, binding) => set((state) => ({ shortcuts: { ...state.shortcuts, [id]: binding } })),
+      resetShortcuts: () => set({ shortcuts: { ...DEFAULT_SHORTCUTS } }),
       setWorkspaceTab: (tab) => set({ workspaceTab: tab }),
       toggleWorkspacePanel: () => set((s) => ({ workspacePanelOpen: !s.workspacePanelOpen })),
       setWorkspacePanelOpen: (workspacePanelOpen) => set({ workspacePanelOpen }),
@@ -104,13 +121,20 @@ export const useUIStore = create<UIState>()(
       setSidebarWidth: (width) => set({ sidebarWidth: width }),
       setWorkspacePanelWidth: (width) => set({ workspacePanelWidth: width }),
       setTheme: (theme) => set({ theme }),
-      setSendOnEnter: (value) => set({ sendOnEnter: value }),
       setSelectedModel: (model) => set({ selectedModel: model }),
       selectConversation: (id) => set({ activeConversationId: id }),
       clearActiveConversation: () => set({ activeConversationId: null }),
     }),
     {
       name: "ui-prefs",
+      merge: (persisted, current) => {
+        const saved = persisted as Partial<UIState>;
+        return {
+          ...current,
+          ...saved,
+          shortcuts: { ...DEFAULT_SHORTCUTS, ...saved.shortcuts },
+        };
+      },
       // Only persist layout preferences, never the active conversation,
       // that's per-session and already cleared on account switch.
       partialize: (s) => ({
@@ -120,7 +144,6 @@ export const useUIStore = create<UIState>()(
         sidebarWidth: s.sidebarWidth,
         workspacePanelWidth: s.workspacePanelWidth,
         theme: s.theme,
-        sendOnEnter: s.sendOnEnter,
         selectedModel: s.selectedModel,
         fontSize: s.fontSize,
         density: s.density,
@@ -132,6 +155,10 @@ export const useUIStore = create<UIState>()(
         clipboardAutoFill: s.clipboardAutoFill,
         confirmBeforeDelete: s.confirmBeforeDelete,
         maxSteps: s.maxSteps,
+        maxRunMinutes: s.maxRunMinutes,
+        toolApprovalPolicy: s.toolApprovalPolicy,
+        autoCheckUpdates: s.autoCheckUpdates,
+        shortcuts: s.shortcuts,
       }),
     },
   ),

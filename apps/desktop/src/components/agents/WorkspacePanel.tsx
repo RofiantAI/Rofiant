@@ -25,11 +25,13 @@ export function WorkspacePanel() {
     <Tabs
       value={workspaceTab}
       onValueChange={(v) => setWorkspaceTab(v as "files" | "terminal" | "agent")}
-      className="relative flex h-full shrink-0 animate-in slide-in-from-right flex-col border-l border-border bg-sidebar duration-200 ease-out"
+      className="workspace-panel relative flex h-full max-w-[55vw] shrink-0 animate-in slide-in-from-right flex-col border-l border-border bg-sidebar duration-200 ease-out"
       style={{ width: workspacePanelWidth }}
     >
       <div
         onMouseDown={onResizeStart}
+        role="separator"
+        aria-label="Resize workspace panel"
         className="absolute left-0 top-0 z-30 h-full w-1 cursor-col-resize hover:bg-ring/50"
       />
       <TabsList>

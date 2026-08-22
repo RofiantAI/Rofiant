@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 import type { Message } from "@/types/chat";
 
 export function useMessages(conversationId: string | null) {
@@ -23,13 +24,11 @@ export function useSendMessage(conversationId: string | null) {
   return useMutation({
     mutationFn: async (content: string) => {
       if (!conversationId) throw new Error("No active conversation");
-      const { data, error } = await supabase
-        .from("messages")
-        .insert({ conversation_id: conversationId, role: "user", content })
-        .select()
-        .single();
-      if (error) throw error;
-      return data as Message;
+      const response = await apiFetch("/api/messages", {
+        method: "POST",
+        body: JSON.stringify({ conversation_id: conversationId, content }),
+      });
+      return (await response.json()) as Message;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });

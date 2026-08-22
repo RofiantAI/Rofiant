@@ -11,16 +11,19 @@ export function Select({
   onChange,
   className,
   chevronClassName,
+  ariaLabel,
   children,
 }: {
   value: string;
   onChange: (value: string) => void;
   className?: string;
   chevronClassName?: string;
+  ariaLabel?: string;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const [openUp, setOpenUp] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,11 +50,37 @@ export function Select({
   );
   const current = options.find((o) => o.props.value === value);
 
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") {
+      setOpen(false);
+      return;
+    }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!open) setOpen(true);
+      setActiveIndex((i) => (i + (e.key === "ArrowDown" ? 1 : -1) + options.length) % options.length);
+      return;
+    }
+    if ((e.key === "Enter" || e.key === " ") && open) {
+      e.preventDefault();
+      const option = options[activeIndex];
+      if (option) onChange(option.props.value);
+      setOpen(false);
+    }
+  }
+
   return (
     <div ref={ref} className="relative inline-flex">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setActiveIndex(Math.max(0, options.findIndex((o) => o.props.value === value)));
+          setOpen((v) => !v);
+        }}
+        onKeyDown={onKeyDown}
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
         className={cn(
           "flex items-center whitespace-nowrap rounded-md border border-input bg-secondary py-1 pl-2 pr-7 text-left text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
           className,
@@ -69,6 +98,7 @@ export function Select({
 
       {open && (
         <div
+          role="listbox"
           className={cn(
             "absolute left-0 z-30 min-w-[10rem] origin-top animate-in fade-in-0 zoom-in-95 space-y-0.5 overflow-hidden rounded-xl border border-border bg-popover p-1.5 shadow-xl shadow-black/20",
             openUp ? "bottom-full mb-1.5 origin-bottom" : "top-full mt-1.5",
@@ -84,9 +114,13 @@ export function Select({
                   onChange(o.props.value);
                   setOpen(false);
                 }}
+                onMouseEnter={() => setActiveIndex(options.indexOf(o))}
+                role="option"
+                aria-selected={selected}
                 className={cn(
                   "flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-left text-sm text-foreground transition-colors hover:bg-accent",
-                  selected && "bg-accent/70 font-medium",
+                  selected && "font-medium",
+                  options[activeIndex] === o && "bg-accent/70",
                 )}
               >
                 {o.props.children}

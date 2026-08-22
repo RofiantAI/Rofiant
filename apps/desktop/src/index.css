@@ -130,6 +130,25 @@ button {
   outline: none;
 }
 
+@keyframes sidebar-expand {
+  from { width: 100px; overflow: hidden; }
+  99% { overflow: hidden; }
+  to { width: var(--sidebar-expanded-width); overflow: visible; }
+}
+
+@keyframes sidebar-collapse {
+  from { width: var(--sidebar-expanded-width); overflow: hidden; }
+  to { width: 100px; overflow: hidden; }
+}
+
+.app-sidebar-expanding {
+  animation: sidebar-expand 200ms ease-out;
+}
+
+.app-sidebar-collapsing {
+  animation: sidebar-collapse 200ms ease-out;
+}
+
 button:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
@@ -199,4 +218,18 @@ button:focus-visible {
 :root[data-reduce-motion="true"] *::after {
   animation: none !important;
   transition: none !important;
+}
+
+@media (max-width: 800px) {
+  .workspace-panel {
+    position: fixed !important;
+    inset: 2.5rem 0 0 auto;
+    z-index: 40;
+    max-width: calc(100vw - 6.25rem);
+    box-shadow: -12px 0 30px rgb(0 0 0 / 0.3);
+  }
+
+  .app-sidebar {
+    max-width: 42vw;
+  }
 }

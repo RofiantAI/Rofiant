@@ -336,15 +336,24 @@ export function FilesPanel() {
       </div>
 
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="w-80 rounded-xl border border-border bg-card p-4">
-            <p className="text-sm font-medium text-foreground">Delete "{deleteTarget.entry.name}"?</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onKeyDown={(e) => {
+          if (e.key === "Escape") setDeleteTarget(null);
+          if (e.key !== "Tab") return;
+          const controls = Array.from(e.currentTarget.querySelectorAll<HTMLElement>("button"));
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+        }}>
+          <div role="dialog" aria-modal="true" aria-labelledby="delete-file-title" className="w-80 rounded-xl border border-border bg-card p-4">
+            <p id="delete-file-title" className="text-sm font-medium text-foreground">Delete "{deleteTarget.entry.name}"?</p>
             <p className="mt-1 text-xs text-muted-foreground">
               {deleteTarget.entry.is_dir ? "The folder and everything in it. " : ""}This can't be undone.
             </p>
             <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setDeleteTarget(null)}
+                autoFocus
                 className="rounded-lg px-3 py-1.5 text-sm text-foreground hover:bg-accent"
               >
                 Cancel
@@ -405,6 +414,7 @@ function FileTreeNodes({
           <li key={entry.path} className="group/row relative">
             <button
               onClick={() => (entry.is_dir ? onToggleFolder(entry.path) : onSelectFile(entry.path))}
+              aria-expanded={entry.is_dir ? isOpen : undefined}
               style={{ paddingLeft: `${depth * 14 + 8}px` }}
               className={cn(
                 "flex w-full items-center gap-1.5 rounded-md py-1 pr-2 text-left hover:bg-accent",
@@ -443,7 +453,8 @@ function FileTreeNodes({
                 e.stopPropagation();
                 setMenuOpenPath(menuOpenPath === entry.path ? null : entry.path);
               }}
-              className="absolute right-1 top-0.5 hidden items-center justify-center rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground group-hover/row:flex"
+              aria-label={`Actions for ${entry.name}`}
+              className="absolute right-1 top-0.5 flex items-center justify-center rounded-md p-1 text-muted-foreground opacity-0 hover:bg-secondary hover:text-foreground focus:opacity-100 group-hover/row:opacity-100 group-focus-within/row:opacity-100"
             >
               <MoreHorizontal className="h-3.5 w-3.5" />
             </button>

@@ -24,6 +24,7 @@ export interface Message {
   role: MessageRole;
   content: string;
   persona: string | null;
+  duration_ms?: number | null;
   created_at: string;
 }
 

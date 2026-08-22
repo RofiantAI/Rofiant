@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
+import { check, type Update } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
+import { getVersion } from "@tauri-apps/api/app";
 import {
-  ArrowLeft,
   LogOut,
   SlidersHorizontal,
   Plug,
@@ -31,22 +32,52 @@ import { useConversations, useDeleteConversation } from "@/hooks/useConversation
 import { queryClient } from "@/lib/queryClient";
 import { cn } from "@/lib/utils";
 import { CLAUDE_MODELS, FREE_MODELS } from "@/lib/models";
+import { supabase } from "@/lib/supabase";
+import {
+  DEFAULT_SHORTCUTS,
+  SHORTCUT_DEFINITIONS,
+  bindingFromEvent,
+  formatShortcut,
+  type ShortcutId,
+} from "@/lib/shortcuts";
 
 // Anthropic's code is "<code>#<state>", both halves base64url.
 const CODE_PATTERN = /^[\w-]+#[\w-]+$/;
 
 type Section = "general" | "providers" | "agent" | "appearance" | "shortcuts" | "account" | "data";
 
-const NAV: { id: Section; label: string; icon: typeof SlidersHorizontal }[] = [
-  { id: "general", label: "General", icon: SlidersHorizontal },
-  { id: "providers", label: "Providers", icon: Plug },
-  { id: "agent", label: "Agent", icon: Bot },
-  // { id: "cloud", label: "Cloud Computer", icon: Cloud }, -- VM feature disabled for now
-  { id: "appearance", label: "Appearance", icon: Palette },
-  { id: "shortcuts", label: "Shortcuts", icon: Keyboard },
-  { id: "account", label: "Account", icon: User },
-  { id: "data", label: "Data", icon: Database },
+// Grouped so the list reads as three kinds of thing — the app itself, the
+// assistant behind it, and the user's own data — instead of seven equal rows.
+const NAV_GROUPS: {
+  label: string;
+  items: { id: Section; label: string; icon: typeof SlidersHorizontal }[];
+}[] = [
+  {
+    label: "App",
+    items: [
+      { id: "general", label: "General", icon: SlidersHorizontal },
+      { id: "appearance", label: "Appearance", icon: Palette },
+      { id: "shortcuts", label: "Shortcuts", icon: Keyboard },
+    ],
+  },
+  {
+    label: "Assistant",
+    items: [
+      { id: "providers", label: "Providers", icon: Plug },
+      { id: "agent", label: "Agent", icon: Bot },
+      // { id: "cloud", label: "Cloud Computer", icon: Cloud }, -- VM feature disabled for now
+    ],
+  },
+  {
+    label: "Your data",
+    items: [
+      { id: "account", label: "Account", icon: User },
+      { id: "data", label: "Data", icon: Database },
+    ],
+  },
 ];
+
+const NAV = NAV_GROUPS.flatMap((g) => g.items);
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -110,6 +141,91 @@ function Segmented<T extends string>({
   );
 }
 
+function ShortcutEditor() {
+  const shortcuts = useUIStore((s) => s.shortcuts);
+  const setShortcut = useUIStore((s) => s.setShortcut);
+  const resetShortcuts = useUIStore((s) => s.resetShortcuts);
+  const [recording, setRecording] = useState<ShortcutId | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!recording) return;
+    const recordingId = recording;
+    function capture(event: KeyboardEvent) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (event.key === "Escape") {
+        setRecording(null);
+        setError(null);
+        return;
+      }
+      const binding = bindingFromEvent(event);
+      if (!binding) {
+        setError("Use Ctrl/Cmd, Alt, Shift, or a function key.");
+        return;
+      }
+      if (binding === "Enter" && recordingId !== "sendMessage") {
+        setError("Enter can only be assigned to Send message.");
+        return;
+      }
+      const conflict = SHORTCUT_DEFINITIONS.find(
+        ({ id }) => id !== recordingId && shortcuts[id] === binding,
+      );
+      if (conflict) {
+        setError(`Already used by “${conflict.label}”.`);
+        return;
+      }
+      setShortcut(recordingId, binding);
+      setRecording(null);
+      setError(null);
+    }
+    document.addEventListener("keydown", capture, true);
+    return () => document.removeEventListener("keydown", capture, true);
+  }, [recording, setShortcut, shortcuts]);
+
+  return (
+    <div className="space-y-3">
+      <section className="divide-y divide-border rounded-lg border border-border bg-card">
+        {SHORTCUT_DEFINITIONS.map(({ id, label }) => (
+          <div key={id} className="flex items-center justify-between gap-4 p-4">
+            <span className="text-sm text-foreground/90">{label}</span>
+            <div className="flex items-center gap-2">
+              {shortcuts[id] !== DEFAULT_SHORTCUTS[id] && (
+                <button
+                  onClick={() => setShortcut(id, DEFAULT_SHORTCUTS[id])}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Reset
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  setRecording(id);
+                  setError(null);
+                }}
+                className={cn(
+                  "min-w-28 rounded-md border px-2 py-1 text-xs",
+                  recording === id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-secondary text-foreground",
+                )}
+              >
+                {recording === id ? "Press shortcut…" : formatShortcut(shortcuts[id])}
+              </button>
+            </div>
+          </div>
+        ))}
+      </section>
+      <div className="flex min-h-8 items-center justify-between gap-3">
+        <p className={cn("text-xs", error ? "text-destructive" : "text-muted-foreground")}>
+          {error ?? "Select a shortcut, then press its new key combination. Escape cancels."}
+        </p>
+        <Button variant="outline" size="sm" onClick={resetShortcuts}>Reset all</Button>
+      </div>
+    </div>
+  );
+}
+
 export function SettingsPage() {
   const [section, setSection] = useState<Section>("general");
 
@@ -124,16 +240,18 @@ export function SettingsPage() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
 
-  const sidebarOpen = useUIStore((s) => s.sidebarOpen);
-  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const workspacePanelOpen = useUIStore((s) => s.workspacePanelOpen);
   const toggleWorkspacePanel = useUIStore((s) => s.toggleWorkspacePanel);
+  const sidebarOpen = useUIStore((s) => s.sidebarOpen);
+  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const sidebarWidth = useUIStore((s) => s.sidebarWidth);
+  const setSidebarWidth = useUIStore((s) => s.setSidebarWidth);
+  const workspacePanelWidth = useUIStore((s) => s.workspacePanelWidth);
+  const setWorkspacePanelWidth = useUIStore((s) => s.setWorkspacePanelWidth);
   const workspaceTab = useUIStore((s) => s.workspaceTab);
   const setWorkspaceTab = useUIStore((s) => s.setWorkspaceTab);
   const theme = useUIStore((s) => s.theme);
   const setTheme = useUIStore((s) => s.setTheme);
-  const sendOnEnter = useUIStore((s) => s.sendOnEnter);
-  const setSendOnEnter = useUIStore((s) => s.setSendOnEnter);
   const selectedModel = useUIStore((s) => s.selectedModel);
   const setSelectedModel = useUIStore((s) => s.setSelectedModel);
   const fontSize = useUIStore((s) => s.fontSize);
@@ -156,14 +274,19 @@ export function SettingsPage() {
   const setConfirmBeforeDelete = useUIStore((s) => s.setConfirmBeforeDelete);
   const maxSteps = useUIStore((s) => s.maxSteps);
   const setMaxSteps = useUIStore((s) => s.setMaxSteps);
-  const sidebarWidth = useUIStore((s) => s.sidebarWidth);
-  const setSidebarWidth = useUIStore((s) => s.setSidebarWidth);
+  const maxRunMinutes = useUIStore((s) => s.maxRunMinutes);
+  const setMaxRunMinutes = useUIStore((s) => s.setMaxRunMinutes);
+  const toolApprovalPolicy = useUIStore((s) => s.toolApprovalPolicy);
+  const setToolApprovalPolicy = useUIStore((s) => s.setToolApprovalPolicy);
+  const autoCheckUpdates = useUIStore((s) => s.autoCheckUpdates);
+  const setAutoCheckUpdates = useUIStore((s) => s.setAutoCheckUpdates);
 
   const { data: conversations = [] } = useConversations();
   const deleteConversation = useDeleteConversation();
   const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
 
   const { data: profile } = useProfile();
+  const displayName = profile?.username || user?.email || "?";
   const updateProfile = useUpdateProfile();
   const deactivateAccount = useDeactivateAccount();
   const deleteAccount = useDeleteAccount();
@@ -175,6 +298,53 @@ export function SettingsPage() {
   useEffect(() => {
     if (profile?.username) setNameInput(profile.username);
   }, [profile?.username]);
+
+  const [appVersion, setAppVersion] = useState("");
+  const [updateStatus, setUpdateStatus] = useState<"idle" | "checking" | "current" | "available" | "error">(
+    "idle",
+  );
+  const [availableUpdate, setAvailableUpdate] = useState<Update | null>(null);
+  const [installingUpdate, setInstallingUpdate] = useState(false);
+
+  useEffect(() => {
+    getVersion().then(setAppVersion);
+  }, []);
+
+  async function handleCheckForUpdates() {
+    setUpdateStatus("checking");
+    try {
+      const update = await check();
+      setAvailableUpdate(update);
+      setUpdateStatus(update ? "available" : "current");
+    } catch {
+      setUpdateStatus("error");
+    }
+  }
+
+  async function handleInstallUpdate() {
+    if (!availableUpdate) return;
+    setInstallingUpdate(true);
+    await availableUpdate.downloadAndInstall();
+    await relaunch();
+  }
+
+  async function handleExportData() {
+    const { data: messages, error } = await supabase
+      .from("messages")
+      .select("id,conversation_id,role,content,persona,created_at")
+      .order("created_at");
+    if (error) throw error;
+    const exportedConversations = conversations.map(({ messages: _lastMessage, ...conversation }) => conversation);
+    const blob = new Blob([JSON.stringify({ exported_at: new Date().toISOString(), conversations: exportedConversations, messages }, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `kiro-export-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 
   const [pastedCode, setPastedCode] = useState("");
   const [codeVerifier, setCodeVerifier] = useState<string | null>(null);
@@ -240,31 +410,50 @@ export function SettingsPage() {
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-background text-foreground">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-sidebar p-3">
-        <Link
-          to="/"
-          className="mb-4 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Link>
-        <nav className="space-y-0.5">
-          {NAV.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setSection(id)}
-              className={cn(
-                "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors",
-                section === id
-                  ? "bg-accent text-foreground"
-                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              {label}
-            </button>
+      <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-sidebar">
+        <nav className="flex-1 space-y-5 overflow-y-auto px-3 pb-3 pt-1">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label}>
+              <p className="px-2.5 pb-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
+                {group.label}
+              </p>
+              <div className="space-y-0.5">
+                {group.items.map(({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    onClick={() => setSection(id)}
+                    aria-current={section === id ? "page" : undefined}
+                    className={cn(
+                      "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition-colors",
+                      section === id
+                        ? "bg-accent font-medium text-foreground"
+                        : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
+                    )}
+                  >
+                    <Icon
+                      className={cn("h-4 w-4 shrink-0", section === id && "text-primary")}
+                    />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
+
+        <button
+          onClick={() => setSection("account")}
+          className="flex items-center gap-2.5 border-t border-border px-4 py-3 text-left transition-colors hover:bg-accent/60"
+        >
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-sm font-semibold text-foreground">
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} className="h-full w-full object-cover" />
+            ) : (
+              displayName.charAt(0).toUpperCase()
+            )}
+          </div>
+          <span className="min-w-0 truncate text-sm text-foreground/90">{displayName}</span>
+        </button>
       </aside>
 
       <div className="flex-1 overflow-y-auto">
@@ -278,18 +467,6 @@ export function SettingsPage() {
               <div>
                 <SectionHeading>Message input</SectionHeading>
                 <section className="divide-y divide-border rounded-lg border border-border bg-card">
-                  <Row
-                    as="label"
-                    title="Send with Enter"
-                    description={
-                      sendOnEnter
-                        ? "Enter sends, Shift+Enter for a new line."
-                        : "Cmd/Ctrl+Enter sends, Enter for a new line."
-                    }
-                  >
-                    <Checkbox checked={sendOnEnter} onChange={() => setSendOnEnter(!sendOnEnter)} />
-                  </Row>
-
                   <Row
                     as="label"
                     title="Send dictation automatically"
@@ -349,6 +526,44 @@ export function SettingsPage() {
                   </Row>
                 </section>
               </div>
+
+              <div>
+                <SectionHeading>Updates</SectionHeading>
+                <section className="rounded-lg border border-border bg-card">
+                  <Row as="label" title="Check automatically" description="Checks once whenever Kiro starts.">
+                    <Checkbox checked={autoCheckUpdates} onChange={() => setAutoCheckUpdates(!autoCheckUpdates)} />
+                  </Row>
+                  <Row
+                    title="Version"
+                    description={
+                      updateStatus === "current"
+                        ? "You're on the latest version."
+                        : updateStatus === "error"
+                          ? "Couldn't check for updates."
+                          : updateStatus === "available"
+                            ? `Version ${availableUpdate?.version} is available.`
+                            : `KiroBots ${appVersion}`
+                    }
+                  >
+                    {updateStatus === "available" ? (
+                      <Button size="sm" onClick={handleInstallUpdate} disabled={installingUpdate}>
+                        {installingUpdate && <Spinner className="h-4 w-4" />}
+                        {installingUpdate ? "Installing…" : "Install and restart"}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCheckForUpdates}
+                        disabled={updateStatus === "checking"}
+                      >
+                        {updateStatus === "checking" && <Spinner className="h-4 w-4" />}
+                        {updateStatus === "checking" ? "Checking…" : "Check for updates"}
+                      </Button>
+                    )}
+                  </Row>
+                </section>
+              </div>
             </div>
           )}
 
@@ -357,6 +572,13 @@ export function SettingsPage() {
               <div>
                 <SectionHeading>Run limits</SectionHeading>
                 <section className="divide-y divide-border rounded-lg border border-border bg-card">
+                  <Row title="Tool approval" description="Choose when the agent must ask before acting.">
+                    <Select value={toolApprovalPolicy} onChange={(v) => setToolApprovalPolicy(v as typeof toolApprovalPolicy)}>
+                      <option value="risky">Ask for terminal commands</option>
+                      <option value="always">Ask for every tool</option>
+                      <option value="automatic">Run automatically</option>
+                    </Select>
+                  </Row>
                   <Row
                     title="Max steps per run"
                     description={`Model turns before the agent stops on its own (${MAX_STEPS_RANGE.min}–${MAX_STEPS_RANGE.max}).`}
@@ -374,6 +596,14 @@ export function SettingsPage() {
                         {maxSteps}
                       </span>
                     </div>
+                  </Row>
+                  <Row title="Run timeout" description="Stops a slow or stuck run.">
+                    <Select value={String(maxRunMinutes)} onChange={(v) => setMaxRunMinutes(Number(v))}>
+                      <option value="5">5 minutes</option>
+                      <option value="10">10 minutes</option>
+                      <option value="20">20 minutes</option>
+                      <option value="30">30 minutes</option>
+                    </Select>
                   </Row>
                 </section>
               </div>
@@ -398,7 +628,7 @@ export function SettingsPage() {
                 <SectionHeading>Skills</SectionHeading>
                 <section className="space-y-3 rounded-lg border border-border bg-card p-5">
                   <p className="text-xs text-muted-foreground">
-                    Install a Claude-style SKILL.md from GitHub — paste a raw.githubusercontent.com
+                    Install a Claude-style SKILL.md from GitHub. Paste a raw.githubusercontent.com
                     link, or a github.com/.../blob/... link. Its instructions are added to every
                     agent run.
                   </p>
@@ -687,10 +917,26 @@ export function SettingsPage() {
                 <section className="divide-y divide-border rounded-lg border border-border bg-card">
                   <Row
                     as="label"
-                    title="Open sidebar by default"
-                    description="Show the conversation list on launch."
+                    title="Keep sidebar expanded"
+                    description="Show chat names instead of the icon-only sidebar."
                   >
                     <Checkbox checked={sidebarOpen} onChange={toggleSidebar} />
+                  </Row>
+
+                  <Row title="Sidebar width" description="Width of the expanded chat sidebar.">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="range"
+                        min={260}
+                        max={520}
+                        value={sidebarWidth}
+                        onChange={(e) => setSidebarWidth(Number(e.target.value))}
+                        className="w-32 accent-primary"
+                      />
+                      <span className="w-12 text-right text-sm tabular-nums text-foreground/90">
+                        {sidebarWidth}px
+                      </span>
+                    </div>
                   </Row>
 
                   <Row
@@ -715,15 +961,20 @@ export function SettingsPage() {
                     </Select>
                   </Row>
 
-                  <Row title="Sidebar width" description={`${sidebarWidth}px. Drag its edge too.`}>
-                    <input
-                      type="range"
-                      min={260}
-                      max={520}
-                      value={sidebarWidth}
-                      onChange={(e) => setSidebarWidth(Number(e.target.value))}
-                      className="w-32 accent-primary"
-                    />
+                  <Row title="Workspace panel width" description="Width of files, terminal, and agent activity.">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="range"
+                        min={300}
+                        max={640}
+                        value={workspacePanelWidth}
+                        onChange={(e) => setWorkspacePanelWidth(Number(e.target.value))}
+                        className="w-32 accent-primary"
+                      />
+                      <span className="w-12 text-right text-sm tabular-nums text-foreground/90">
+                        {workspacePanelWidth}px
+                      </span>
+                    </div>
                   </Row>
                 </section>
               </div>
@@ -733,24 +984,7 @@ export function SettingsPage() {
           {section === "shortcuts" && (
             <div>
               <SectionHeading>Keyboard shortcuts</SectionHeading>
-              <section className="divide-y divide-border rounded-lg border border-border bg-card">
-                <div className="flex items-center justify-between p-4">
-                  <span className="text-sm text-foreground/90">Send message</span>
-                  <kbd className="rounded-md border border-border bg-secondary px-2 py-1 text-xs">
-                    {sendOnEnter ? "Enter" : "Cmd/Ctrl + Enter"}
-                  </kbd>
-                </div>
-                <div className="flex items-center justify-between p-4">
-                  <span className="text-sm text-foreground/90">New line in message</span>
-                  <kbd className="rounded-md border border-border bg-secondary px-2 py-1 text-xs">
-                    {sendOnEnter ? "Shift + Enter" : "Enter"}
-                  </kbd>
-                </div>
-                <div className="flex items-center justify-between p-4">
-                  <span className="text-sm text-foreground/90">Cancel renaming a chat</span>
-                  <kbd className="rounded-md border border-border bg-secondary px-2 py-1 text-xs">Escape</kbd>
-                </div>
-              </section>
+              <ShortcutEditor />
             </div>
           )}
 
@@ -908,6 +1142,14 @@ export function SettingsPage() {
 
           {section === "data" && (
             <div className="space-y-6">
+              <div>
+                <SectionHeading>Export</SectionHeading>
+                <section className="rounded-lg border border-border bg-card">
+                  <Row title="Export conversations" description="Download your conversations and messages as JSON.">
+                    <Button variant="outline" size="sm" onClick={handleExportData}>Export JSON</Button>
+                  </Row>
+                </section>
+              </div>
               <div>
                 <SectionHeading>Cache</SectionHeading>
                 <section className="flex items-center justify-between rounded-lg border border-border bg-card p-5">

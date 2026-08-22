@@ -6,6 +6,8 @@ import { SignupPage } from "@/pages/SignupPage";
 import { SettingsPage } from "@/pages/SettingsPage";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { TitleBar } from "@/components/layout/TitleBar";
+import { UpdateToast } from "@/components/layout/UpdateToast";
+import { GlobalShortcuts } from "@/components/layout/GlobalShortcuts";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useUIStore, FONT_SIZE_PX } from "@/stores/useUIStore";
 
@@ -32,6 +34,7 @@ function App() {
 
   return (
     <HashRouter>
+      <GlobalShortcuts />
       <div className="flex h-screen w-screen flex-col overflow-hidden">
         <TitleBar />
         <div className="min-h-0 flex-1">
@@ -56,6 +59,7 @@ function App() {
             />
           </Routes>
         </div>
+        <UpdateToast />
       </div>
     </HashRouter>
   );
