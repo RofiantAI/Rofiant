@@ -9,7 +9,6 @@ MessageRole = Literal["user", "assistant", "system", "tool"]
 
 class MessageCreate(BaseModel):
     conversation_id: UUID
-    role: MessageRole
     content: str
 
 
@@ -19,4 +18,5 @@ class MessageOut(BaseModel):
     role: MessageRole
     content: str
     persona: str | None = None
+    duration_ms: int | None = None
     created_at: datetime

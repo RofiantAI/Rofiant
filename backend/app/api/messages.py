@@ -1,23 +1,25 @@
 import asyncio
 import json
 from collections.abc import AsyncIterator
+from typing import Literal
 from uuid import UUID
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.agent.models.anthropic import AnthropicProvider
 from app.agent.models.base import ModelProvider
 from app.agent.models.openrouter import OpenRouterProvider
-from app.agent.prompts import system_prompt_for
+from app.agent.prompts import CODE_FIDELITY_SUFFIX, system_prompt_for
 from app.agent.runner import MAX_STEPS, run_agent
 from app.agent.title import DEFAULT_TITLE, generate_title
 from app.api.auth import AuthContext, get_current_user
 from app.config import settings
 from app.schemas.message import MessageCreate, MessageOut
 from app.services.anthropic_oauth import get_access_token
-from app.services.supabase import get_user_client
+from app.services.supabase import get_admin_client, get_user_client
 from app.services.workspace import get_or_create_workspace
 
 router = APIRouter(prefix="/api/messages", tags=["messages"])
@@ -27,19 +29,24 @@ router = APIRouter(prefix="/api/messages", tags=["messages"])
 # tools and persist replies from the same history snapshot twice.
 _active_runs: set[str] = set()
 _active_runs_guard = asyncio.Lock()
+_pending_approvals: dict[str, tuple[str, asyncio.Future[bool]]] = {}
+_pending_approvals_guard = asyncio.Lock()
 
 
 @router.post("", response_model=MessageOut, status_code=status.HTTP_201_CREATED)
 async def create_message(body: MessageCreate, auth: AuthContext = Depends(get_current_user)):
     client = get_user_client(auth.access_token)
-    # No explicit ownership check needed here: the messages_insert_own RLS
-    # policy rejects the insert if this conversation isn't the caller's.
+    owned = client.table("conversations").select("id").eq("id", str(body.conversation_id)).maybe_single().execute()
+    if not owned.data:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    _validate_user_content(body.content)
+    admin = get_admin_client()
     resp = (
-        client.table("messages")
+        admin.table("messages")
         .insert(
             {
                 "conversation_id": str(body.conversation_id),
-                "role": body.role,
+                "role": "user",
                 "content": body.content,
             }
         )
@@ -53,6 +60,33 @@ async def create_message(body: MessageCreate, auth: AuthContext = Depends(get_cu
     return resp.data[0]
 
 
+def _validate_user_content(content: str) -> None:
+    if len(content) > 28_000_000:
+        raise HTTPException(status_code=413, detail="Message is too large")
+    try:
+        parsed = json.loads(content)
+    except json.JSONDecodeError:
+        if len(content) > 100_000:
+            raise HTTPException(status_code=413, detail="Message text is too large")
+        return
+    if not isinstance(parsed, dict) or parsed.get("kind") != "multimodal":
+        if len(content) > 100_000:
+            raise HTTPException(status_code=413, detail="Message text is too large")
+        return
+    images = parsed.get("images")
+    if not isinstance(images, list) or len(images) > 4:
+        raise HTTPException(status_code=400, detail="A message can contain at most 4 images")
+    for image in images:
+        if (
+            not isinstance(image, dict)
+            or not isinstance(image.get("media_type"), str)
+            or not image["media_type"].startswith("image/")
+            or not isinstance(image.get("data"), str)
+            or len(image["data"]) > 7_000_000
+        ):
+            raise HTTPException(status_code=400, detail="Invalid or oversized image attachment")
+
+
 class StreamRequest(BaseModel):
     conversation_id: UUID
     model: str | None = None
@@ -63,6 +97,25 @@ class StreamRequest(BaseModel):
     # chats only: when set, only these bots (intersected with the roster)
     # reply this turn instead of every bot.
     mentioned_personas: list[str] | None = None
+    tool_approval_policy: Literal["risky", "always", "automatic"] = "risky"
+    max_run_minutes: int = Field(default=10, ge=1, le=30)
+
+
+class ApprovalDecision(BaseModel):
+    approved: bool
+
+
+@router.post("/approvals/{approval_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def decide_approval(
+    approval_id: str, body: ApprovalDecision, auth: AuthContext = Depends(get_current_user)
+):
+    async with _pending_approvals_guard:
+        pending = _pending_approvals.get(approval_id)
+        if not pending or pending[0] != auth.user_id:
+            raise HTTPException(status_code=404, detail="Approval request not found")
+        _pending_approvals.pop(approval_id)
+    if not pending[1].done():
+        pending[1].set_result(body.approved)
 
 
 def _sse(event: str, data: dict) -> str:
@@ -75,6 +128,7 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
     reply and optionally call tools (in a lazily-created sandbox workspace),
     streaming every step to the client and persisting the results."""
     client = get_user_client(auth.access_token)
+    admin = get_admin_client()
     conversation_id = str(body.conversation_id)
 
     history_resp = (
@@ -135,22 +189,91 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             )
         _active_runs.add(conversation_id)
 
+    claim = admin.rpc(
+        "claim_conversation_run",
+        {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
+    ).execute()
+    if not claim.data:
+        async with _active_runs_guard:
+            _active_runs.discard(conversation_id)
+        raise HTTPException(status_code=409, detail="An agent run is already active for this conversation")
+
     async def event_stream() -> AsyncIterator[str]:
+        active_task: asyncio.Task | None = None
         try:
             yield _sse("agent.started", {})
             # Running history: each bot below sees every prior bot's reply
             # from this same turn, not just what was on disk when we started.
             history = list(history_resp.data)
             try:
+                async def approve_tool(call_id: str, tool: str, arguments: dict) -> bool:
+                    policy = body.tool_approval_policy
+                    needs_approval = policy == "always" or (policy == "risky" and tool == "terminal")
+                    if not needs_approval:
+                        return True
+                    approval_id = str(uuid4())
+                    future: asyncio.Future[bool] = asyncio.get_running_loop().create_future()
+                    async with _pending_approvals_guard:
+                        _pending_approvals[approval_id] = (auth.user_id, future)
+                    await approval_events.put(_sse("tool.approval_required", {
+                        "approval_id": approval_id, "id": call_id, "tool": tool, "arguments": arguments
+                    }))
+                    try:
+                        return await asyncio.wait_for(future, timeout=120)
+                    except TimeoutError:
+                        return False
+                    finally:
+                        async with _pending_approvals_guard:
+                            _pending_approvals.pop(approval_id, None)
+
+                approval_events: asyncio.Queue[str] = asyncio.Queue()
+
+                deadline = max(1, min(body.max_run_minutes, 30)) * 60
+                started = asyncio.get_running_loop().time()
                 for persona in bots:
-                    system_prompt = system_prompt_for(persona) + skills_suffix
-                    async for event in run_agent(
-                        history=history,
-                        provider=provider,
-                        get_sandbox_id=get_sandbox_id,
-                        max_steps=body.max_steps,
-                        system_prompt=system_prompt,
-                    ):
+                    bot_started = asyncio.get_running_loop().time()
+                    agent_events: asyncio.Queue = asyncio.Queue()
+
+                    async def run_bot() -> None:
+                        try:
+                            system_prompt = system_prompt_for(persona) + skills_suffix + CODE_FIDELITY_SUFFIX
+                            async for event in run_agent(
+                                history=history, provider=provider, get_sandbox_id=get_sandbox_id,
+                                max_steps=body.max_steps, system_prompt=system_prompt, approve_tool=approve_tool,
+                            ):
+                                await agent_events.put(event)
+                        except Exception as exc:
+                            await agent_events.put(exc)
+                        finally:
+                            await agent_events.put(None)
+
+                    task = asyncio.create_task(run_bot())
+                    active_task = task
+                    while True:
+                        remaining = deadline - (asyncio.get_running_loop().time() - started)
+                        if remaining <= 0:
+                            task.cancel()
+                            raise TimeoutError("Run timed out")
+                        approval_get = asyncio.create_task(approval_events.get())
+                        agent_get = asyncio.create_task(agent_events.get())
+                        done, pending = await asyncio.wait(
+                            {approval_get, agent_get}, timeout=remaining, return_when=asyncio.FIRST_COMPLETED
+                        )
+                        for pending_task in pending:
+                            pending_task.cancel()
+                        if not done:
+                            task.cancel()
+                            raise TimeoutError("Run timed out")
+                        if approval_get in done:
+                            yield approval_get.result()
+                            if agent_get not in done:
+                                continue
+                        event = agent_get.result()
+                        if isinstance(event, Exception):
+                            raise event
+                        if event is None:
+                            await task
+                            break
                         data = (
                             {**event.data, "persona": persona}
                             if event.type in ("assistant.delta", "assistant.completed")
@@ -159,18 +282,22 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                         yield _sse(event.type, data)
 
                         if event.type == "assistant.completed":
-                            client.table("messages").insert(
+                            duration_ms = round(
+                                (asyncio.get_running_loop().time() - bot_started) * 1000
+                            )
+                            admin.table("messages").insert(
                                 {
                                     "conversation_id": conversation_id,
                                     "role": "assistant",
                                     "content": event.data["content"],
                                     "persona": persona,
+                                    "duration_ms": duration_ms,
                                 }
                             ).execute()
                             history.append({"role": "assistant", "content": event.data["content"]})
                             usage = event.data.get("usage") or {}
                             if usage.get("input_tokens") or usage.get("output_tokens"):
-                                client.table("usage_events").insert(
+                                admin.table("usage_events").insert(
                                     {
                                         "user_id": auth.user_id,
                                         "conversation_id": conversation_id,
@@ -180,8 +307,9 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                                     }
                                 ).execute()
                         elif event.type in ("tool.completed", "tool.failed"):
-                            client.table("tool_calls").insert(
+                            admin.table("tool_calls").insert(
                                 {
+                                    "provider_call_id": event.data["id"],
                                     "conversation_id": conversation_id,
                                     "tool_name": event.data["tool"],
                                     "arguments": event.data["arguments"],
@@ -199,14 +327,22 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             if current_title == DEFAULT_TITLE and first_user_message:
                 title = await generate_title(provider, first_user_message)
                 if title:
-                    client.table("conversations").update({"title": title}).eq(
+                    admin.table("conversations").update({"title": title}).eq(
                         "id", conversation_id
                     ).execute()
                     yield _sse("conversation.titled", {"title": title})
 
             yield _sse("agent.completed", {})
         finally:
-            async with _active_runs_guard:
-                _active_runs.discard(conversation_id)
+            if active_task and not active_task.done():
+                active_task.cancel()
+            try:
+                admin.rpc(
+                    "release_conversation_run",
+                    {"target_conversation_id": conversation_id, "target_user_id": auth.user_id},
+                ).execute()
+            finally:
+                async with _active_runs_guard:
+                    _active_runs.discard(conversation_id)
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")

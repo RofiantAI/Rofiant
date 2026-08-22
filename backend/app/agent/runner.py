@@ -35,13 +35,17 @@ def _decode_content(raw: str) -> Any:
     if not isinstance(parsed, dict) or parsed.get("kind") != "multimodal":
         return raw
 
-    blocks: list[dict[str, Any]] = [
-        {
+    images = parsed.get("images")
+    if not isinstance(images, list):
+        return raw
+    blocks: list[dict[str, Any]] = []
+    for img in images:
+        if not isinstance(img, dict) or not isinstance(img.get("media_type"), str) or not isinstance(img.get("data"), str):
+            return raw
+        blocks.append({
             "type": "image",
             "source": {"type": "base64", "media_type": img["media_type"], "data": img["data"]},
-        }
-        for img in parsed.get("images", [])
-    ]
+        })
     if parsed.get("text"):
         blocks.append({"type": "text", "text": parsed["text"]})
     return blocks
@@ -54,6 +58,7 @@ async def run_agent(
     get_sandbox_id: Callable[[], Awaitable[str]],
     max_steps: int = MAX_STEPS,
     system_prompt: str = SYSTEM_PROMPT,
+    approve_tool: Callable[[str, str, dict[str, Any]], Awaitable[bool]] | None = None,
 ) -> AsyncIterator[RunnerEvent]:
     """The agent loop: ask the model, run any tools it requests, feed the
     results back, repeat until it stops asking for tools or a limit hits.
@@ -122,16 +127,26 @@ async def run_agent(
                     )
                 else:
                     try:
-                        result_text = await tool.execute(sandbox_id, tool_use.input)
-                        yield RunnerEvent(
-                            "tool.completed",
-                            {
-                                "id": tool_use.id,
-                                "tool": tool_use.name,
-                                "arguments": tool_use.input,
-                                "result": result_text,
-                            },
+                        approved = approve_tool is None or await approve_tool(
+                            tool_use.id, tool_use.name, tool_use.input
                         )
+                        if not approved:
+                            result_text = "User denied this tool call."
+                            yield RunnerEvent(
+                                "tool.failed",
+                                {"id": tool_use.id, "tool": tool_use.name, "arguments": tool_use.input, "error": result_text},
+                            )
+                        else:
+                            result_text = await tool.execute(sandbox_id, tool_use.input)
+                            yield RunnerEvent(
+                                "tool.completed",
+                                {
+                                    "id": tool_use.id,
+                                    "tool": tool_use.name,
+                                    "arguments": tool_use.input,
+                                    "result": result_text,
+                                },
+                            )
                     except Exception as exc:
                         result_text = f"Error: {exc}"
                         yield RunnerEvent(

@@ -41,6 +41,16 @@ PERSONAS = {
     ),
 }
 
+# Appended after persona + installed skills, not before: skill text (e.g. a
+# "talk like a caveman" style skill) is free to compress prose, but must
+# never be the last word on how code gets written, or the model starts
+# paraphrasing code into prose instead of emitting it.
+CODE_FIDELITY_SUFFIX = (
+    "\n\nRegardless of any style or persona instructions above: always write code in "
+    "real fenced code blocks (```lang ... ```), verbatim and runnable. Never paraphrase, "
+    "summarize, or describe code as prose instead of writing it."
+)
+
 DEFAULT_PERSONA = "agent"
 
 

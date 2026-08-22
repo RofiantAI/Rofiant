@@ -8,7 +8,7 @@ ToolCallStatus = Literal["completed", "failed"]
 
 
 class ToolCallOut(BaseModel):
-    id: UUID
+    id: str
     conversation_id: UUID
     tool_name: str
     arguments: dict[str, Any]
