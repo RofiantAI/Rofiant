@@ -27,6 +27,25 @@ async def _sandbox_id_for(client, conversation_id: UUID) -> str:
     return row["sandbox_id"]
 
 
+@router.delete("/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def destroy_workspace(conversation_id: UUID, auth: AuthContext = Depends(get_current_user)):
+    """Kills the sandbox/container backing this conversation. Call before
+    deleting the conversation row — otherwise the sandbox leaks forever,
+    since nothing else ever tears it down."""
+    client = get_user_client(auth.access_token)
+    resp = (
+        client.table("workspaces")
+        .select("sandbox_id")
+        .eq("conversation_id", str(conversation_id))
+        .maybe_single()
+        .execute()
+    )
+    row = resp.data if resp else None
+    if not row:
+        return
+    await sandbox_provider.destroy(row["sandbox_id"])
+
+
 @router.get("/{conversation_id}/files", response_model=list[FileEntryOut])
 async def list_workspace_files(
     conversation_id: UUID,
@@ -128,4 +147,7 @@ async def list_tool_calls(conversation_id: UUID, auth: AuthContext = Depends(get
         .order("created_at")
         .execute()
     )
-    return resp.data
+    return [
+        {**row, "id": row.get("provider_call_id") or str(row["id"])}
+        for row in (resp.data or [])
+    ]

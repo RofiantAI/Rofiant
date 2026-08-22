@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 import { DEFAULT_PERSONA } from "@/lib/personas";
 import type { Conversation, ConversationWithLastMessage } from "@/types/chat";
 
@@ -79,6 +80,9 @@ export function useDeleteConversation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      // Best-effort: kill the sandbox before the row goes away, otherwise it
+      // leaks (nothing else destroys it). Deletion proceeds even if this fails.
+      await apiFetch(`/api/workspaces/${id}`, { method: "DELETE" }).catch(() => {});
       const { error } = await supabase.from("conversations").delete().eq("id", id);
       if (error) throw error;
     },
