@@ -369,7 +369,9 @@ export function Sidebar() {
         ) : (
           <>
         {filtered.length === 0 && (
-          <p className="px-2.5 py-6 text-center text-sm text-muted-foreground">No chats yet</p>
+          <p className="px-2.5 py-6 text-center text-sm text-muted-foreground">
+            {query.trim() ? "No matching chats" : "No chats yet"}
+          </p>
         )}
         <ul className="space-y-0.5">
           {filtered.map((c) => (

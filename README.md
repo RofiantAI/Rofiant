@@ -1,4 +1,4 @@
-# KiroBots
+# KiroBot
 
 Cross-platform desktop AI agent app. Chat, projects, files, sandboxed terminal, Git, browser control.
 
@@ -370,7 +370,7 @@ not streamed).
 Added to `backend/.env`:
 
 ```text
-FLY_API_TOKEN=                          # flyctl auth token, e.g. `fly tokens create org kirobots`
+FLY_API_TOKEN=                          # flyctl auth token, e.g. `fly tokens create org KiroBot`
 FLY_ORG=                                # your Fly org slug
 FLY_APP=kirobots-machines               # shared app all user Machines live under
 FLY_REGION=yyz                          # Fly region code, e.g. yyz = Toronto

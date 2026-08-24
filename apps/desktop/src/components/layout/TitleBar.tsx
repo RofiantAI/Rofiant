@@ -121,6 +121,8 @@ export function TitleBar() {
           </div>
           <button
             onClick={toggleWorkspacePanel}
+            aria-label="Workspace panel"
+            aria-pressed={workspacePanelOpen}
             className={cn(
               "flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
               workspacePanelOpen && "bg-accent text-foreground",

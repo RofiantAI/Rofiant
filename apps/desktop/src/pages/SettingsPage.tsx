@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import { check, type Update } from "@tauri-apps/plugin-updater";
@@ -23,7 +24,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select } from "@/components/ui/select";
-import { useProviderStatus, useAnthropicOAuth, useOpenAIKey, useGeminiKey } from "@/hooks/useProviderConnections";
+import { useProviderStatus, useAnthropicOAuth, useDeleteProviderKey } from "@/hooks/useProviderConnections";
 import { useSkills, useInstallSkill, useDeleteSkill } from "@/hooks/useSkills";
 import { useProfile, useUpdateProfile, useDeactivateAccount, useDeleteAccount } from "@/hooks/useAccount";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -227,7 +228,10 @@ function ShortcutEditor() {
 }
 
 export function SettingsPage() {
-  const [section, setSection] = useState<Section>("general");
+  const location = useLocation();
+  const [section, setSection] = useState<Section>(
+    location.state?.section === "providers" ? "providers" : "general",
+  );
 
   const { data: status } = useProviderStatus();
   const { data: skills } = useSkills();
@@ -235,8 +239,8 @@ export function SettingsPage() {
   const deleteSkill = useDeleteSkill();
   const [skillUrl, setSkillUrl] = useState("");
   const anthropic = useAnthropicOAuth();
-  const openai = useOpenAIKey();
-  const gemini = useGeminiKey();
+  const deleteOpenAIKey = useDeleteProviderKey("openai");
+  const deleteGeminiKey = useDeleteProviderKey("gemini");
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
 
@@ -284,6 +288,8 @@ export function SettingsPage() {
   const { data: conversations = [] } = useConversations();
   const deleteConversation = useDeleteConversation();
   const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
+  const [deleteAllError, setDeleteAllError] = useState(false);
 
   const { data: profile } = useProfile();
   const displayName = profile?.username || user?.email || "?";
@@ -305,6 +311,7 @@ export function SettingsPage() {
   );
   const [availableUpdate, setAvailableUpdate] = useState<Update | null>(null);
   const [installingUpdate, setInstallingUpdate] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   useEffect(() => {
     getVersion().then(setAppVersion);
@@ -312,6 +319,7 @@ export function SettingsPage() {
 
   async function handleCheckForUpdates() {
     setUpdateStatus("checking");
+    setUpdateError(null);
     try {
       const update = await check();
       setAvailableUpdate(update);
@@ -324,8 +332,14 @@ export function SettingsPage() {
   async function handleInstallUpdate() {
     if (!availableUpdate) return;
     setInstallingUpdate(true);
-    await availableUpdate.downloadAndInstall();
-    await relaunch();
+    setUpdateError(null);
+    try {
+      await availableUpdate.downloadAndInstall();
+      await relaunch();
+    } catch {
+      setUpdateError("Couldn't install the update. Try again.");
+      setInstallingUpdate(false);
+    }
   }
 
   async function handleExportData() {
@@ -348,8 +362,6 @@ export function SettingsPage() {
 
   const [pastedCode, setPastedCode] = useState("");
   const [codeVerifier, setCodeVerifier] = useState<string | null>(null);
-  const [openaiKeyInput, setOpenaiKeyInput] = useState("");
-  const [geminiKeyInput, setGeminiKeyInput] = useState("");
 
   // While waiting for the user to approve in the browser, auto-fill the
   // code from the clipboard as soon as the app window regains focus,
@@ -388,9 +400,17 @@ export function SettingsPage() {
     window.location.reload();
   }
 
-  function handleDeleteAllConversations() {
-    conversations.forEach((c) => deleteConversation.mutate(c.id));
-    setConfirmDeleteAll(false);
+  async function handleDeleteAllConversations() {
+    setDeletingAll(true);
+    setDeleteAllError(false);
+    try {
+      await Promise.all(conversations.map((c) => deleteConversation.mutateAsync(c.id)));
+      setConfirmDeleteAll(false);
+    } catch {
+      setDeleteAllError(true);
+    } finally {
+      setDeletingAll(false);
+    }
   }
 
   async function handleAvatarChange(file: File | undefined) {
@@ -536,13 +556,13 @@ export function SettingsPage() {
                   <Row
                     title="Version"
                     description={
-                      updateStatus === "current"
+                      updateError ?? (updateStatus === "current"
                         ? "You're on the latest version."
                         : updateStatus === "error"
                           ? "Couldn't check for updates."
                           : updateStatus === "available"
                             ? `Version ${availableUpdate?.version} is available.`
-                            : `KiroBots ${appVersion}`
+                            : `KiroBot ${appVersion}`)
                     }
                   >
                     {updateStatus === "available" ? (
@@ -742,93 +762,29 @@ export function SettingsPage() {
                 )}
               </section>
 
-              <section className="space-y-3 rounded-lg border border-border bg-card p-5">
-                <div>
-                  <h2 className="text-sm font-semibold">OpenAI</h2>
-                  <p className="text-xs text-muted-foreground">
-                    Paste your own OpenAI API key from platform.openai.com.
-                  </p>
-                </div>
-
-                {status?.openai_api_key ? (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-foreground/90">Key saved</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openai.disconnect.mutate()}
-                      disabled={openai.disconnect.isPending}
-                    >
-                      Remove
-                    </Button>
+              {(status?.openai_api_key || status?.gemini_api_key) && (
+                <section className="space-y-3 rounded-lg border border-border bg-card p-5">
+                  <div>
+                    <h2 className="text-sm font-semibold">Unused provider keys</h2>
+                    <p className="text-xs text-muted-foreground">
+                      These providers aren't supported by the agent yet. Remove any previously saved keys.
+                    </p>
                   </div>
-                ) : (
                   <div className="flex gap-2">
-                    <Input
-                      type="password"
-                      value={openaiKeyInput}
-                      onChange={(e) => setOpenaiKeyInput(e.target.value)}
-                      placeholder="sk-..."
-                      className="flex-1"
-                    />
-                    <Button
-                      size="sm"
-                      disabled={!openaiKeyInput.trim() || openai.save.isPending}
-                      onClick={() => {
-                        openai.save.mutate(openaiKeyInput.trim());
-                        setOpenaiKeyInput("");
-                      }}
-                    >
-                      {openai.save.isPending && <Spinner className="h-4 w-4" />}
-                      Save
-                    </Button>
+                    {status.openai_api_key && (
+                      <Button variant="outline" size="sm" onClick={() => deleteOpenAIKey.mutate()} disabled={deleteOpenAIKey.isPending}>
+                        Remove OpenAI key
+                      </Button>
+                    )}
+                    {status.gemini_api_key && (
+                      <Button variant="outline" size="sm" onClick={() => deleteGeminiKey.mutate()} disabled={deleteGeminiKey.isPending}>
+                        Remove Gemini key
+                      </Button>
+                    )}
                   </div>
-                )}
-              </section>
+                </section>
+              )}
 
-              <section className="space-y-3 rounded-lg border border-border bg-card p-5">
-                <div>
-                  <h2 className="text-sm font-semibold">Google Gemini</h2>
-                  <p className="text-xs text-muted-foreground">
-                    Paste your own Gemini API key from Google AI Studio.
-                  </p>
-                </div>
-
-                {status?.gemini_api_key ? (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-foreground/90">Key saved</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => gemini.disconnect.mutate()}
-                      disabled={gemini.disconnect.isPending}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <Input
-                      type="password"
-                      value={geminiKeyInput}
-                      onChange={(e) => setGeminiKeyInput(e.target.value)}
-                      placeholder="AIza..."
-                      className="flex-1"
-                    />
-                    <Button
-                      size="sm"
-                      disabled={!geminiKeyInput.trim() || gemini.save.isPending}
-                      onClick={() => {
-                        gemini.save.mutate(geminiKeyInput.trim());
-                        setGeminiKeyInput("");
-                      }}
-                    >
-                      {gemini.save.isPending && <Spinner className="h-4 w-4" />}
-                      Save
-                    </Button>
-                  </div>
-                )}
-              </section>
             </div>
           )}
 
@@ -1187,19 +1143,23 @@ export function SettingsPage() {
                     <p className="text-xs text-muted-foreground">
                       Permanently deletes every chat ({conversations.length}) for this account. Can't be undone.
                     </p>
+                    {deleteAllError && (
+                      <p role="alert" className="text-xs text-destructive">Some chats couldn't be deleted. Try again.</p>
+                    )}
                   </div>
                   {confirmDeleteAll ? (
                     <div className="flex shrink-0 gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => setConfirmDeleteAll(false)}>
+                      <Button variant="ghost" size="sm" onClick={() => setConfirmDeleteAll(false)} disabled={deletingAll}>
                         Cancel
                       </Button>
                       <Button
                         variant="destructive"
                         size="sm"
                         onClick={handleDeleteAllConversations}
-                        disabled={conversations.length === 0}
+                        disabled={conversations.length === 0 || deletingAll}
                       >
-                        Confirm delete
+                        {deletingAll && <Spinner className="h-4 w-4" />}
+                        {deletingAll ? "Deleting…" : "Confirm delete"}
                       </Button>
                     </div>
                   ) : (
@@ -1207,7 +1167,10 @@ export function SettingsPage() {
                       variant="outline"
                       size="sm"
                       className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
-                      onClick={() => setConfirmDeleteAll(true)}
+                      onClick={() => {
+                        setDeleteAllError(false);
+                        setConfirmDeleteAll(true);
+                      }}
                       disabled={conversations.length === 0}
                     >
                       Delete all

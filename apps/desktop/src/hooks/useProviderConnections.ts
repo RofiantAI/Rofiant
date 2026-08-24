@@ -52,48 +52,10 @@ export function useAnthropicOAuth() {
   return { start, exchange, disconnect };
 }
 
-export function useOpenAIKey() {
+export function useDeleteProviderKey(provider: "openai" | "gemini") {
   const queryClient = useQueryClient();
-
-  const save = useMutation({
-    mutationFn: async (apiKey: string) => {
-      await apiFetch("/api/providers/openai/key", {
-        method: "POST",
-        body: JSON.stringify({ api_key: apiKey }),
-      });
-    },
+  return useMutation({
+    mutationFn: () => apiFetch(`/api/providers/${provider}`, { method: "DELETE" }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
   });
-
-  const disconnect = useMutation({
-    mutationFn: async () => {
-      await apiFetch("/api/providers/openai", { method: "DELETE" });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
-  });
-
-  return { save, disconnect };
-}
-
-export function useGeminiKey() {
-  const queryClient = useQueryClient();
-
-  const save = useMutation({
-    mutationFn: async (apiKey: string) => {
-      await apiFetch("/api/providers/gemini/key", {
-        method: "POST",
-        body: JSON.stringify({ api_key: apiKey }),
-      });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
-  });
-
-  const disconnect = useMutation({
-    mutationFn: async () => {
-      await apiFetch("/api/providers/gemini", { method: "DELETE" });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
-  });
-
-  return { save, disconnect };
 }

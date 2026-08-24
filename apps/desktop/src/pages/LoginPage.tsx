@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField } from "@/components/auth/AuthField";
+import { Turnstile } from "@/components/auth/Turnstile";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const signIn = useAuthStore((s) => s.signIn);
   const error = useAuthStore((s) => s.error);
@@ -18,10 +21,15 @@ export function LoginPage() {
 
   async function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
+    if (!captchaToken) return;
     setSubmitting(true);
-    await signIn(email, password);
+    await signIn(email, password, captchaToken);
     setSubmitting(false);
     if (useAuthStore.getState().session) navigate("/", { replace: true });
+    else {
+      setCaptchaToken("");
+      setCaptchaReset((value) => value + 1);
+    }
   }
 
   return (
@@ -66,11 +74,17 @@ export function LoginPage() {
           }
         />
 
+        <Turnstile onTokenChange={setCaptchaToken} resetKey={captchaReset} />
+
         {error && (
-          <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
+          <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
         )}
 
-        <Button type="submit" className="h-11 w-full rounded-xl text-sm" disabled={submitting}>
+        <Button
+          type="submit"
+          className="h-11 w-full rounded-xl text-sm"
+          disabled={submitting || !captchaToken}
+        >
           {submitting && <Spinner className="h-4 w-4" />}
           {submitting ? "Logging in..." : "Log in"}
         </Button>

@@ -1,7 +1,11 @@
-# Tauri + React + Typescript
+# KiroBot Desktop
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Cross-platform desktop AI agent for chat, files, code, and sandboxed tools.
 
-## Recommended IDE Setup
+Built with Tauri 2, React, TypeScript, and Tailwind CSS. See the
+[repository README](../../README.md) for setup, architecture, and release details.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+```bash
+pnpm install
+pnpm tauri dev
+```

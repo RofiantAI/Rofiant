@@ -9,7 +9,7 @@ from typing import Any
 from app.agent.tools.base import WORKSPACE_ROOT
 from app.services.sandbox import sandbox_provider
 
-MIRROR_ROOT = Path(tempfile.gettempdir()) / "kirobots-lsp"
+MIRROR_ROOT = Path(tempfile.gettempdir()) / "KiroBot-lsp"
 
 # Language servers speak newline-agnostic stdio JSON-RPC (LSP's own
 # Content-Length framing), not the browser's WebSocket framing — the WS

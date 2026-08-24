@@ -16,6 +16,7 @@ export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(
         ref={ref}
         className={cn("h-11 rounded-xl pl-10", endAdornment && "pr-10", className)}
         {...props}
+        aria-label={props["aria-label"] ?? props.placeholder}
       />
       {endAdornment && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">{endAdornment}</div>

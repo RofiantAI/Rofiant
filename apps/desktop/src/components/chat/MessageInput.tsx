@@ -3,7 +3,7 @@ import { ArrowUp, ChevronRight, Mic, Plus, Square, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/useUIStore";
 import { useSendMessage } from "@/hooks/useMessages";
-import { useConversations } from "@/hooks/useConversations";
+import { useConversations, useCreateConversation } from "@/hooks/useConversations";
 import { useProviderStatus } from "@/hooks/useProviderConnections";
 import { useTranscribeAudio } from "@/hooks/useTranscription";
 import { useUsageFetch } from "@/hooks/useUsage";
@@ -12,7 +12,7 @@ import { CLAUDE_MODELS, FREE_MODELS } from "@/lib/models";
 import { Spinner } from "@/components/ui/spinner";
 import { Select } from "@/components/ui/select";
 import { PersonaFace } from "@/components/personas/PersonaFace";
-import { personaFor } from "@/lib/personas";
+import { DEFAULT_PERSONA, personaFor } from "@/lib/personas";
 import { useRunningStore } from "@/stores/useRunningStore";
 import { stopAgentRun } from "@/hooks/useAgentRun";
 import { FOCUS_COMPOSER_EVENT, matchesShortcut } from "@/lib/shortcuts";
@@ -187,7 +187,7 @@ export function MessageInput({
   onSent,
   conversationTitle,
 }: {
-  onSent: (mentionedPersonas?: string[]) => void | Promise<void>;
+  onSent: (conversationId: string, mentionedPersonas?: string[]) => void | Promise<void>;
   conversationTitle?: string;
 }) {
   const [value, setValue] = useState("");
@@ -204,13 +204,15 @@ export function MessageInput({
   const currentConversationRef = useRef<string | null>(null);
 
   const activeConversationId = useUIStore((s) => s.activeConversationId);
+  const selectConversation = useUIStore((s) => s.selectConversation);
   const agentRunning = useRunningStore((s) =>
     activeConversationId ? !!s.runs[activeConversationId]?.running : false,
   );
   const sendShortcut = useUIStore((s) => s.shortcuts.sendMessage);
   const selectedModel = useUIStore((s) => s.selectedModel);
   const setSelectedModel = useUIStore((s) => s.setSelectedModel);
-  const sendMessage = useSendMessage(activeConversationId);
+  const sendMessage = useSendMessage();
+  const createConversation = useCreateConversation();
   const transcribeAudio = useTranscribeAudio();
   const fetchUsage = useUsageFetch();
   const { data: installedSkills = [] } = useSkills();
@@ -218,6 +220,7 @@ export function MessageInput({
   const { data: conversations = [] } = useConversations();
   const models = providerStatus?.anthropic_oauth ? [...CLAUDE_MODELS, ...FREE_MODELS] : FREE_MODELS;
   const autoSendOnDictation = useUIStore((s) => s.autoSendOnDictation);
+  const submitting = createConversation.isPending || sendMessage.isPending;
   const isEmpty = !value.trim() && images.length === 0;
   currentConversationRef.current = activeConversationId;
 
@@ -284,7 +287,7 @@ export function MessageInput({
   async function submit(text: string = value) {
     const trimmed = text.trim();
 
-    if (trimmed.startsWith("/") && activeConversationId) {
+    if (trimmed.startsWith("/")) {
       const [command, ...rest] = trimmed.slice(1).split(/\s+/);
       const arg = rest.join(" ");
 
@@ -301,6 +304,11 @@ export function MessageInput({
       }
 
       if (command === "usage") {
+        if (!activeConversationId) {
+          setCommandNotice("Start a chat to view its usage.");
+          setValue("");
+          return;
+        }
         setCommandNotice("Checking usage...");
         setValue("");
         try {
@@ -316,7 +324,7 @@ export function MessageInput({
       }
     }
 
-    if ((!trimmed && images.length === 0) || !activeConversationId || agentRunning) return;
+    if ((!trimmed && images.length === 0) || agentRunning || submitting) return;
     setCommandNotice(null);
     setInputError(null);
 
@@ -330,21 +338,25 @@ export function MessageInput({
         : text.trim();
 
     try {
-      await sendMessage.mutateAsync(content);
+      const conversationId = activeConversationId ?? (await createConversation.mutateAsync({
+        title: personaFor(DEFAULT_PERSONA).name,
+      })).id;
+      if (!activeConversationId) selectConversation(conversationId);
+      await sendMessage.mutateAsync({ conversationId, content });
+
+      const mentioned = mentionedIn(trimmed, roster);
+      setValue("");
+      if (textareaRef.current) textareaRef.current.style.height = "auto";
+      setMentionQuery(null);
+      images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+      setImages([]);
+      void onSent(conversationId, mentioned.length > 0 ? mentioned : undefined);
     } catch (err) {
       // Keep the draft and attachments intact so a transient send failure
       // does not destroy content the user has not successfully submitted.
       setInputError(err instanceof Error ? err.message : "Message failed to send.");
       return;
     }
-
-    const mentioned = mentionedIn(trimmed, roster);
-    setValue("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
-    setMentionQuery(null);
-    images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
-    setImages([]);
-    void onSent(mentioned.length > 0 ? mentioned : undefined);
   }
 
   async function handleFiles(files: FileList | null) {
@@ -539,7 +551,7 @@ export function MessageInput({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             aria-label="Attach images"
-            disabled={!activeConversationId || agentRunning}
+            disabled={agentRunning || submitting}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <Plus className="h-4 w-4" />
@@ -584,7 +596,7 @@ export function MessageInput({
                 : "Message the agent..."
             }
             rows={1}
-            disabled={!activeConversationId || agentRunning}
+            disabled={agentRunning || submitting}
             className="max-h-40 min-w-0 flex-1 resize-none overflow-y-auto bg-transparent py-1.5 text-[0.9375rem] leading-5 text-foreground placeholder:text-[#777777] focus:outline-none disabled:cursor-not-allowed"
           />
 
@@ -612,7 +624,7 @@ export function MessageInput({
               type="button"
               onClick={toggleListening}
               aria-label={listening ? "Stop recording" : "Start dictation"}
-              disabled={!activeConversationId || agentRunning || transcribeAudio.isPending}
+              disabled={agentRunning || submitting || transcribeAudio.isPending}
               className={cn(
                 "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-black transition-all active:scale-90 disabled:opacity-40",
                 listening && "bg-destructive text-destructive-foreground",
@@ -633,10 +645,10 @@ export function MessageInput({
             <button
               type="submit"
               aria-label="Send message"
-              disabled={isEmpty || !activeConversationId || sendMessage.isPending}
+              disabled={isEmpty || submitting}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all active:scale-90 disabled:opacity-40"
             >
-              {sendMessage.isPending ? (
+              {submitting ? (
                 <Spinner className="h-4 w-4 text-primary-foreground" />
               ) : (
                 <ArrowUp className="h-4 w-4" />

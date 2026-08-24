@@ -19,18 +19,17 @@ export function useMessages(conversationId: string | null) {
   });
 }
 
-export function useSendMessage(conversationId: string | null) {
+export function useSendMessage() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (content: string) => {
-      if (!conversationId) throw new Error("No active conversation");
+    mutationFn: async ({ conversationId, content }: { conversationId: string; content: string }) => {
       const response = await apiFetch("/api/messages", {
         method: "POST",
         body: JSON.stringify({ conversation_id: conversationId, content }),
       });
       return (await response.json()) as Message;
     },
-    onSuccess: () => {
+    onSuccess: (_, { conversationId }) => {
       queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },

@@ -1,7 +1,10 @@
 {
-  "name": "KiroBots",
+  "name": "KiroBot",
+  "description": "Cross-platform desktop AI agent for chat, files, code, and sandboxed tools.",
+  "author": "RofiantAI",
+  "repository": "https://github.com/RofiantAI/KiroBots",
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "scripts": {
     "dev": "vite",

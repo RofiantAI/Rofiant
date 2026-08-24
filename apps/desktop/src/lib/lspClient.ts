@@ -46,18 +46,23 @@ export class LspClient {
     const token = data.session?.access_token;
     if (!token) throw new Error("Not authenticated");
 
-    const wsUrl = `${API_URL.replace(/^http/, "ws")}/api/workspaces/${this.conversationId}/lsp/${this.route}?token=${encodeURIComponent(token)}`;
+    const wsUrl = `${API_URL.replace(/^http/, "ws")}/api/workspaces/${this.conversationId}/lsp/${this.route}`;
 
     await new Promise<void>((resolve, reject) => {
       const ws = new WebSocket(wsUrl);
       this.ws = ws;
-      ws.onerror = () => reject(new Error("LSP connection failed"));
-      ws.onclose = () => this.rejectAllPending(new Error("LSP connection closed"));
-
       let gotRoot = false;
+      ws.onopen = () => ws.send(JSON.stringify({ type: "auth", token }));
+      ws.onerror = () => reject(new Error("LSP connection failed"));
+      ws.onclose = () => {
+        const error = new Error("LSP connection closed");
+        this.rejectAllPending(error);
+        if (!gotRoot) reject(error);
+      };
+
       ws.onmessage = (evt) => {
         const message = JSON.parse(evt.data);
-        if (!gotRoot && message.kirobots === "mirrorRoot") {
+        if (!gotRoot && (message.KiroBot === "mirrorRoot" || message.kirobots === "mirrorRoot")) {
           this.mirrorRoot = message.root;
           gotRoot = true;
           ws.onmessage = (e) => this.handleMessage(JSON.parse(e.data));

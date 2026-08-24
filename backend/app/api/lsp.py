@@ -7,6 +7,7 @@ from jwt import PyJWTError
 
 from app.api.auth import verify_jwt
 from app.api.workspaces import _sandbox_id_for
+from app.rate_limit import RateLimiter
 from app.services.lsp import (
     LANGUAGE_SERVERS,
     read_lsp_message,
@@ -18,6 +19,7 @@ from app.services.supabase import get_user_client
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/workspaces", tags=["lsp"])
+lsp_connection_limiter = RateLimiter(limit=10, window_seconds=60)
 
 
 @router.websocket("/{conversation_id}/lsp/{language}")
@@ -26,13 +28,33 @@ async def lsp_bridge(websocket: WebSocket, conversation_id: UUID, language: str)
         await websocket.close(code=4404, reason=f"No language server for {language!r}")
         return
 
+    # New clients authenticate in the first frame so access tokens never land
+    # in URLs or proxy logs. Keep query auth during the desktop rollout so old
+    # releases continue to connect; remove it after their compatibility window.
     token = websocket.query_params.get("token")
+    accepted = False
+    if not token:
+        await websocket.accept()
+        accepted = True
+        try:
+            auth_message = await asyncio.wait_for(websocket.receive_json(), timeout=5)
+            if isinstance(auth_message, dict) and auth_message.get("type") == "auth":
+                candidate = auth_message.get("token")
+                token = candidate if isinstance(candidate, str) else None
+        except WebSocketDisconnect:
+            return
+        except (TimeoutError, ValueError, TypeError):
+            token = None
     try:
         if not token:
             raise ValueError("missing token")
         auth = verify_jwt(token)
     except (HTTPException, PyJWTError, ValueError):
         await websocket.close(code=4401, reason="Unauthorized")
+        return
+
+    if lsp_connection_limiter.retry_after(auth.user_id) is not None:
+        await websocket.close(code=4429, reason="Rate limit exceeded")
         return
 
     client = get_user_client(auth.access_token)
@@ -42,12 +64,15 @@ async def lsp_bridge(websocket: WebSocket, conversation_id: UUID, language: str)
         await websocket.close(code=4404, reason="No workspace for this conversation yet")
         return
 
-    await websocket.accept()
+    if not accepted:
+        await websocket.accept()
     mirror_root = await sync_workspace_mirror(str(conversation_id), sandbox_id)
     # Not an LSP message — a one-off preamble so the browser client knows
     # what local path to build file:// URIs against, since the language
     # server's project root lives on this backend's disk, not the client's.
-    await websocket.send_json({"kirobots": "mirrorRoot", "root": str(mirror_root)})
+    await websocket.send_json(
+        {"kirobots": "mirrorRoot", "KiroBot": "mirrorRoot", "root": str(mirror_root)}
+    )
     process = await spawn_language_server(language)
     assert process.stdin and process.stdout
 

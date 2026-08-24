@@ -80,9 +80,9 @@ export function useDeleteConversation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      // Best-effort: kill the sandbox before the row goes away, otherwise it
-      // leaks (nothing else destroys it). Deletion proceeds even if this fails.
-      await apiFetch(`/api/workspaces/${id}`, { method: "DELETE" }).catch(() => {});
+      // The row owns the sandbox lookup. Never delete it until teardown
+      // succeeds, or the sandbox becomes unreachable and leaks permanently.
+      await apiFetch(`/api/workspaces/${id}`, { method: "DELETE" });
       const { error } = await supabase.from("conversations").delete().eq("id", id);
       if (error) throw error;
     },

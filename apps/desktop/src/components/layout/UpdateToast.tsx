@@ -12,6 +12,7 @@ export function UpdateToast() {
   const [update, setUpdate] = useState<Update | null>(null);
   const [installing, setInstalling] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!autoCheckUpdates) return;
@@ -22,8 +23,14 @@ export function UpdateToast() {
 
   const install = async () => {
     setInstalling(true);
-    await update.downloadAndInstall();
-    await relaunch();
+    setError(false);
+    try {
+      await update.downloadAndInstall();
+      await relaunch();
+    } catch {
+      setError(true);
+      setInstalling(false);
+    }
   };
 
   return (
@@ -32,7 +39,7 @@ export function UpdateToast() {
         <div>
           <p className="text-sm font-medium">Update available</p>
           <p className="text-xs text-muted-foreground">
-            Version {update.version} is ready to install.
+            {error ? "Couldn't install the update. Try again." : `Version ${update.version} is ready to install.`}
           </p>
         </div>
         <button

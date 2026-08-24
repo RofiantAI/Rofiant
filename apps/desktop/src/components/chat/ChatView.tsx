@@ -141,7 +141,7 @@ export function ChatView() {
         </div>
       </div>
       <MessageInput
-        onSent={agentRun.run}
+        onSent={(conversationId, mentionedPersonas) => agentRun.run(mentionedPersonas, conversationId)}
         conversationTitle={
           activeConversation && activeConversation.persona !== DEFAULT_PERSONA
             ? personaFor(activeConversation.persona).name

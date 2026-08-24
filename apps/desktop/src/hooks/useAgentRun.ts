@@ -53,21 +53,22 @@ export function useAgentRun(conversationId: string | null) {
   const updateRun = useRunningStore((s) => s.updateRun);
 
   const run = useCallback(
-    async (mentionedPersonas?: string[]) => {
-    if (!conversationId) return;
-    if (useRunningStore.getState().runs[conversationId]?.running) return;
-    setRun(conversationId, { ...EMPTY_AGENT_RUN, running: true });
-    setRunning(conversationId, true);
+    async (mentionedPersonas?: string[], conversationIdOverride?: string) => {
+    const id = conversationIdOverride ?? conversationId;
+    if (!id) return;
+    if (useRunningStore.getState().runs[id]?.running) return;
+    setRun(id, { ...EMPTY_AGENT_RUN, running: true });
+    setRunning(id, true);
     let failed = false;
     const controller = new AbortController();
-    controllers.set(conversationId, controller);
+    controllers.set(id, controller);
 
     try {
       const res = await apiFetch("/api/messages/stream", {
         method: "POST",
         signal: controller.signal,
         body: JSON.stringify({
-          conversation_id: conversationId,
+          conversation_id: id,
           model: selectedModel,
           max_steps: maxSteps,
           max_run_minutes: maxRunMinutes,
@@ -94,11 +95,11 @@ export function useAgentRun(conversationId: string | null) {
           const payload = JSON.parse(data);
 
           if (event === "assistant.delta") {
-            updateRun(conversationId, (s) => ({ ...s, draft: s.draft + payload.text, draftPersona: payload.persona ?? null }));
+            updateRun(id, (s) => ({ ...s, draft: s.draft + payload.text, draftPersona: payload.persona ?? null }));
           } else if (event === "assistant.completed") {
             // Group chat: next bot's turn starts a fresh draft, not this
             // bot's leftover text.
-            updateRun(conversationId, (s) => ({ ...s, draft: "", draftPersona: null }));
+            updateRun(id, (s) => ({ ...s, draft: "", draftPersona: null }));
           } else if (event === "tool.approval_required") {
             const detail = payload.tool === "terminal"
               ? String(payload.arguments?.command ?? JSON.stringify(payload.arguments))
@@ -109,13 +110,13 @@ export function useAgentRun(conversationId: string | null) {
               body: JSON.stringify({ approved }),
             });
           } else if (event === "tool.started") {
-            updateRun(conversationId, (s) => ({
+            updateRun(id, (s) => ({
               ...s,
               liveToolCalls: [
                 ...s.liveToolCalls,
                 {
                   id: payload.id,
-                  conversation_id: conversationId,
+                  conversation_id: id,
                   tool_name: payload.tool,
                   arguments: payload.arguments,
                   result: null,
@@ -126,7 +127,7 @@ export function useAgentRun(conversationId: string | null) {
             }));
           } else if (event === "tool.completed" || event === "tool.failed") {
             const status = event === "tool.completed" ? "completed" : "failed";
-            updateRun(conversationId, (s) => ({
+            updateRun(id, (s) => ({
               ...s,
               liveToolCalls: s.liveToolCalls.map((t) =>
                 t.id === payload.id
@@ -134,31 +135,31 @@ export function useAgentRun(conversationId: string | null) {
                   : t,
               ),
             }));
-            queryClient.invalidateQueries({ queryKey: ["tool-calls", conversationId] });
+            queryClient.invalidateQueries({ queryKey: ["tool-calls", id] });
           } else if (event === "conversation.titled") {
             queryClient.invalidateQueries({ queryKey: ["conversations"] });
           } else if (event === "workspace.created") {
-            queryClient.invalidateQueries({ queryKey: ["workspace-files", conversationId] });
+            queryClient.invalidateQueries({ queryKey: ["workspace-files", id] });
           } else if (event === "agent.failed") {
             failed = true;
-            updateRun(conversationId, (s) => ({ ...s, error: payload.error ?? "Agent run failed" }));
-            notifyIfEnabled(queryClient, conversationId, payload.error ?? "Needs your input");
+            updateRun(id, (s) => ({ ...s, error: payload.error ?? "Agent run failed" }));
+            notifyIfEnabled(queryClient, id, payload.error ?? "Needs your input");
           }
         }
       }
 
-      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
-      if (!failed) notifyIfEnabled(queryClient, conversationId, "Finished responding");
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
+      if (!failed) notifyIfEnabled(queryClient, id, "Finished responding");
     } catch (err) {
       const stopped = err instanceof DOMException && err.name === "AbortError";
       if (!stopped) {
-        updateRun(conversationId, (s) => ({ ...s, error: err instanceof Error ? err.message : "Agent run failed" }));
+        updateRun(id, (s) => ({ ...s, error: err instanceof Error ? err.message : "Agent run failed" }));
       }
-      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     } finally {
-      controllers.delete(conversationId);
-      updateRun(conversationId, (s) => ({ ...s, running: false, draft: "" }));
-      setRunning(conversationId, false);
+      controllers.delete(id);
+      updateRun(id, (s) => ({ ...s, running: false, draft: "" }));
+      setRunning(id, false);
     }
   }, [conversationId, queryClient, selectedModel, maxSteps, maxRunMinutes, toolApprovalPolicy, setRunning, setRun, updateRun]);
 

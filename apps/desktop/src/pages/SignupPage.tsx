@@ -5,25 +5,35 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField } from "@/components/auth/AuthField";
+import { Turnstile } from "@/components/auth/Turnstile";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const signUp = useAuthStore((s) => s.signUp);
   const error = useAuthStore((s) => s.error);
   const navigate = useNavigate();
+  const passwordsMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
   async function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
+    if (password !== confirmPassword || !captchaToken) return;
     setSubmitting(true);
-    await signUp(email, password);
+    await signUp(email, password, captchaToken);
     setSubmitting(false);
     const { error: signUpError, session } = useAuthStore.getState();
-    if (signUpError) return;
+    if (signUpError) {
+      setCaptchaToken("");
+      setCaptchaReset((value) => value + 1);
+      return;
+    }
     if (session) navigate("/");
     else setDone(true);
   }
@@ -94,12 +104,34 @@ export function SignupPage() {
             </button>
           }
         />
+        <AuthField
+          icon={Lock}
+          type={showPassword ? "text" : "password"}
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          minLength={6}
+          required
+          aria-invalid={passwordsMismatch}
+        />
 
-        {error && (
-          <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
+        {passwordsMismatch && (
+          <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            Passwords do not match.
+          </p>
         )}
 
-        <Button type="submit" className="h-11 w-full rounded-xl text-sm" disabled={submitting}>
+        <Turnstile onTokenChange={setCaptchaToken} resetKey={captchaReset} />
+
+        {error && (
+          <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
+        )}
+
+        <Button
+          type="submit"
+          className="h-11 w-full rounded-xl text-sm"
+          disabled={submitting || !confirmPassword || passwordsMismatch || !captchaToken}
+        >
           {submitting && <Spinner className="h-4 w-4" />}
           {submitting ? "Creating account..." : "Sign up"}
         </Button>

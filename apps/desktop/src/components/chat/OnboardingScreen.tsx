@@ -16,7 +16,7 @@ const FEATURES = [
   {
     icon: KeyRound,
     title: "Use your own account",
-    body: "Connect Claude Pro/Max or your OpenAI key in Settings so it runs on your subscription.",
+    body: "Connect Claude Pro/Max in Settings so it runs on your subscription.",
   },
 ] as const;
 
@@ -55,7 +55,7 @@ export function OnboardingScreen() {
         Meet the bots
       </button>
       <button
-        onClick={() => navigate("/settings")}
+        onClick={() => navigate("/settings", { state: { section: "providers" } })}
         className="mt-3 text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
         Or connect your own AI account first

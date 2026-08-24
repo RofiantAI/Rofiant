@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "KiroBots",
-  "version": "0.1.2",
+  "productName": "KiroBot",
+  "version": "0.1.3",
   "identifier": "com.rofiant.kirobots",
   "build": {
     "beforeDevCommand": "pnpm dev",
@@ -21,12 +21,15 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data: blob: https:; connect-src 'self' ipc: http://ipc.localhost http://localhost:8000 ws://localhost:8000 ws://localhost:1421 https://xovrsykaklfydrnvicps.supabase.co https://kirobots-backend-production.up.railway.app wss://kirobots-backend-production.up.railway.app https://api.web3forms.com https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'"
     }
   },
   "bundle": {
     "active": true,
     "targets": "all",
+    "publisher": "RofiantAI",
+    "shortDescription": "A cross-platform desktop AI agent.",
+    "longDescription": "KiroBot combines AI chat with file editing, code tools, and sandboxed command execution in one desktop app.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
