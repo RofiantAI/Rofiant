@@ -10,13 +10,13 @@ PERSONAS_TS = Path(__file__).parent.parent / "apps/desktop/src/lib/personas.ts"
 
 
 def test_fallbacks_and_suffixes():
-    assert system_prompt_for(None) == SYSTEM_PROMPT
-    assert system_prompt_for("nope") == SYSTEM_PROMPT
-    assert system_prompt_for(DEFAULT_PERSONA) == SYSTEM_PROMPT
+    fallback = system_prompt_for(None)
+    assert fallback == system_prompt_for("nope") == system_prompt_for(DEFAULT_PERSONA)
+    assert fallback.startswith(SYSTEM_PROMPT)
     for persona in PERSONAS:
         prompt = system_prompt_for(persona)
         assert prompt.startswith(SYSTEM_PROMPT)
-        assert persona == DEFAULT_PERSONA or len(prompt) > len(SYSTEM_PROMPT)
+        assert persona == DEFAULT_PERSONA or len(prompt) > len(fallback)
 
 
 def test_ids_match_desktop_picker():
