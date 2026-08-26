@@ -6,6 +6,7 @@ from typing import Any
 from app.agent.models.base import ChatMessage, ModelProvider, TextDelta, TurnComplete
 from app.agent.prompts import SYSTEM_PROMPT
 from app.agent.tools import ALL_TOOLS, TOOLS_BY_NAME
+from app.rate_limit import RateLimiter
 
 # Protections against runaway agent loops (spec: max_steps, max_tool_calls).
 # ponytail: no wall-clock max_runtime yet — add if a run ever needs killing
@@ -14,6 +15,9 @@ MAX_STEPS = 8
 # Hard ceiling a client-supplied max_steps is clamped to.
 MAX_STEPS_CEILING = 16
 MAX_TOOL_CALLS = 20
+# ponytail: per-process limit matches today's single Railway worker; move to a
+# shared store before adding workers or replicas.
+web_search_limiter = RateLimiter(limit=10, window_seconds=3600)
 
 
 @dataclass
@@ -56,6 +60,7 @@ async def run_agent(
     history: list[dict[str, str]],
     provider: ModelProvider,
     get_sandbox_id: Callable[[], Awaitable[str]],
+    user_id: str,
     max_steps: int = MAX_STEPS,
     system_prompt: str = SYSTEM_PROMPT,
     approve_tool: Callable[[str, str, dict[str, Any]], Awaitable[bool]] | None = None,
@@ -137,16 +142,36 @@ async def run_agent(
                                 {"id": tool_use.id, "tool": tool_use.name, "arguments": tool_use.input, "error": result_text},
                             )
                         else:
-                            result_text = await tool.execute(sandbox_id, tool_use.input)
-                            yield RunnerEvent(
-                                "tool.completed",
-                                {
-                                    "id": tool_use.id,
-                                    "tool": tool_use.name,
-                                    "arguments": tool_use.input,
-                                    "result": result_text,
-                                },
+                            retry_after = (
+                                web_search_limiter.retry_after(user_id)
+                                if tool_use.name == "web_search"
+                                else None
                             )
+                            if retry_after is not None:
+                                result_text = (
+                                    "Web search limit reached. "
+                                    f"Try again in {retry_after} seconds."
+                                )
+                                yield RunnerEvent(
+                                    "tool.failed",
+                                    {
+                                        "id": tool_use.id,
+                                        "tool": tool_use.name,
+                                        "arguments": tool_use.input,
+                                        "error": result_text,
+                                    },
+                                )
+                            else:
+                                result_text = await tool.execute(sandbox_id, tool_use.input)
+                                yield RunnerEvent(
+                                    "tool.completed",
+                                    {
+                                        "id": tool_use.id,
+                                        "tool": tool_use.name,
+                                        "arguments": tool_use.input,
+                                        "result": result_text,
+                                    },
+                                )
                     except Exception as exc:
                         result_text = f"Error: {exc}"
                         yield RunnerEvent(

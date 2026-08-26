@@ -275,7 +275,8 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                             system_prompt = system_prompt_for(persona, body.timezone) + skills_suffix + CODE_FIDELITY_SUFFIX
                             async for event in run_agent(
                                 history=history, provider=provider, get_sandbox_id=get_sandbox_id,
-                                max_steps=body.max_steps, system_prompt=system_prompt, approve_tool=approve_tool,
+                                user_id=auth.user_id, max_steps=body.max_steps,
+                                system_prompt=system_prompt, approve_tool=approve_tool,
                             ):
                                 await agent_events.put(event)
                         except Exception as exc:
