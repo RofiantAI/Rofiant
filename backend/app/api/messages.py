@@ -327,7 +327,8 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                     async def run_bot() -> None:
                         try:
                             system_prompt = system_prompt_for(
-                                persona, body.timezone, custom_instructions
+                                persona, body.timezone, custom_instructions,
+                                composio_enabled=bool(settings.composio_api_key),
                             ) + skills_suffix + CODE_FIDELITY_SUFFIX
                             async for event in run_agent(
                                 history=history, provider=provider, get_sandbox_id=get_sandbox_id,

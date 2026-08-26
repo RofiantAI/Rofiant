@@ -1,8 +1,6 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from app.config import settings
-
 TITLE_PROMPT = (
     "Write a short title, 2 to 6 words, for a chat that starts with the message below. "
     "Reply with the title only — no quotes, no punctuation at the end, no explanation."
@@ -74,6 +72,7 @@ def system_prompt_for(
     persona: str | None,
     tz_name: str | None = None,
     custom_instructions: str = "",
+    composio_enabled: bool = False,
 ) -> str:
     """Full system prompt for a conversation's persona. Unknown or missing
     persona falls back to the plain agent prompt. `tz_name` is the client's
@@ -101,5 +100,5 @@ def system_prompt_for(
         if custom_instructions
         else ""
     )
-    composio_suffix = COMPOSIO_SUFFIX if settings.composio_api_key else ""
+    composio_suffix = COMPOSIO_SUFFIX if composio_enabled else ""
     return SYSTEM_PROMPT + current_time + composio_suffix + PERSONAS.get(persona or DEFAULT_PERSONA, "") + custom_suffix
