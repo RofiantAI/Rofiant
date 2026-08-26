@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthField } from "@/components/auth/AuthField";
-import { Turnstile } from "@/components/auth/Turnstile";
+import { Captcha } from "@/components/auth/Captcha";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export function LoginPage() {
@@ -74,7 +74,7 @@ export function LoginPage() {
           }
         />
 
-        <Turnstile onTokenChange={setCaptchaToken} resetKey={captchaReset} />
+        <Captcha onTokenChange={setCaptchaToken} resetKey={captchaReset} />
 
         {error && (
           <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>

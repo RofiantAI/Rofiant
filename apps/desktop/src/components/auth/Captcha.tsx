@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-const siteKey = "0x4AAAAAADvOCuoC0kyZ4Fq0";
+const siteKey = import.meta.env.VITE_HCAPTCHA_SITE_KEY;
 
-type TurnstileApi = {
+type HCaptchaApi = {
   render: (
     container: HTMLElement,
     options: {
@@ -10,25 +10,22 @@ type TurnstileApi = {
       theme: "light" | "dark";
       callback: (token: string) => void;
       "expired-callback": () => void;
-      "error-callback": () => void;
+      "error-callback": (errorCode: string) => void;
     },
   ) => string;
   remove: (widgetId: string) => void;
 };
 
 const getApi = () =>
-  (window as typeof window & { turnstile?: TurnstileApi }).turnstile;
+  (window as typeof window & { hcaptcha?: HCaptchaApi }).hcaptcha;
 
-// Turnstile's own "auto" theme reads the OS media query, not our app-level
-// theme override, so it can render its default light widget inside our dark
-// UI. Mirror index.css's resolution order (data-theme wins, else OS) instead.
 const resolveTheme = (): "light" | "dark" => {
   const dataTheme = document.documentElement.dataset.theme;
   if (dataTheme === "light" || dataTheme === "dark") return dataTheme;
   return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
 };
 
-export function Turnstile({
+export function Captcha({
   onTokenChange,
   resetKey,
 }: {
@@ -42,7 +39,7 @@ export function Turnstile({
   useEffect(() => {
     let cancelled = false;
     let script = document.querySelector<HTMLScriptElement>(
-      'script[src^="https://challenges.cloudflare.com/turnstile/v0/api.js"]',
+      'script[src^="https://js.hcaptcha.com/1/api.js"]',
     );
 
     const render = () => {
@@ -56,17 +53,21 @@ export function Turnstile({
           setError(null);
         },
         "expired-callback": () => onTokenChange(""),
-        "error-callback": () => {
+        "error-callback": (errorCode) => {
           onTokenChange("");
-          setError("Verification failed. Try again.");
+          setError(`Verification failed (${errorCode}). Try again.`);
         },
       });
     };
     const fail = () => setError("Verification failed to load. Try again.");
 
+    if (!siteKey) {
+      setError("Verification is not configured.");
+      return;
+    }
     if (!script) {
       script = document.createElement("script");
-      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.src = "https://js.hcaptcha.com/1/api.js?render=explicit";
       script.async = true;
       script.defer = true;
     }
@@ -86,7 +87,7 @@ export function Turnstile({
 
   return (
     <>
-      <div ref={container} className="flex min-h-[65px] justify-center" />
+      <div ref={container} className="flex min-h-[78px] justify-center" />
       {error && (
         <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
