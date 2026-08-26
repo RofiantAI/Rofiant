@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
 import { DEFAULT_PERSONA } from "@/lib/personas";
+import { useUIStore } from "@/stores/useUIStore";
 import type { Conversation, ConversationWithLastMessage } from "@/types/chat";
 
 export function useConversations() {
@@ -39,7 +40,13 @@ export function useCreateConversation() {
 
       const { data, error } = await supabase
         .from("conversations")
-        .insert({ user_id: userId, title, persona, personas: personas ?? null })
+        .insert({
+          user_id: userId,
+          title,
+          persona,
+          personas: personas ?? null,
+          notifications_enabled: useUIStore.getState().defaultNotifications,
+        })
         .select()
         .single();
       if (error) throw error;

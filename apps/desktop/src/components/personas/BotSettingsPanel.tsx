@@ -17,6 +17,23 @@ export function BotSettingsPanel({
   const [subtitle, setSubtitle] = useState(conversation.subtitle ?? "");
   const [description, setDescription] = useState(conversation.description ?? "");
   const [addingBot, setAddingBot] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(conversation.notifications_enabled);
+
+  useEffect(() => {
+    setNotificationsEnabled(conversation.notifications_enabled);
+  }, [conversation.notifications_enabled]);
+
+  function toggleNotifications() {
+    const next = !notificationsEnabled;
+    setNotificationsEnabled(next);
+    // Permission prompts only work from a real click. Requesting it here
+    // (not later when a run finishes) is the only time it can succeed.
+    if (next && Notification.permission === "default") Notification.requestPermission();
+    updateConversation.mutate(
+      { id: conversation.id, notifications_enabled: next },
+      { onError: () => setNotificationsEnabled(!next) },
+    );
+  }
 
   const isGroup = (conversation.personas?.length ?? 0) > 1;
   const roster = conversation.personas ?? [];
@@ -188,20 +205,15 @@ export function BotSettingsPanel({
               </div>
               <button
                 role="switch"
-                aria-checked={conversation.notifications_enabled}
-                onClick={() =>
-                  updateConversation.mutate({
-                    id: conversation.id,
-                    notifications_enabled: !conversation.notifications_enabled,
-                  })
-                }
-                className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
-                  conversation.notifications_enabled ? "bg-primary" : "bg-secondary"
+                aria-checked={notificationsEnabled}
+                onClick={toggleNotifications}
+                className={`relative h-5 w-9 shrink-0 overflow-hidden rounded-full transition-colors ${
+                  notificationsEnabled ? "bg-primary" : "bg-secondary"
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-transform ${
-                    conversation.notifications_enabled ? "translate-x-4" : "translate-x-0.5"
+                  className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-background transition-transform ${
+                    notificationsEnabled ? "translate-x-4" : "translate-x-0"
                   }`}
                 />
               </button>

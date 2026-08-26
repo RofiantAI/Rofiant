@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select } from "@/components/ui/select";
 import { useProviderStatus, useAnthropicOAuth, useDeleteProviderKey } from "@/hooks/useProviderConnections";
+import { CustomProviderModal } from "@/components/settings/CustomProviderModal";
 import { useSkills, useInstallSkill, useDeleteSkill } from "@/hooks/useSkills";
 import { useProfile, useUpdateProfile, useDeactivateAccount, useDeleteAccount } from "@/hooks/useAccount";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -109,6 +110,58 @@ function Row({
       </div>
       <div className="shrink-0">{children}</div>
     </Tag>
+  );
+}
+
+/** Modal confirmation for a destructive action, same focus-trap/Escape
+ * pattern as FilesPanel's delete-file dialog. */
+function ConfirmDialog({
+  title,
+  description,
+  confirmLabel,
+  pending,
+  onConfirm,
+  onCancel,
+}: {
+  title: string;
+  description: string;
+  confirmLabel: string;
+  pending: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onCancel();
+        if (e.key !== "Tab") return;
+        const controls = Array.from(e.currentTarget.querySelectorAll<HTMLElement>("button"));
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }}
+    >
+      <div role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title" className="w-80 rounded-xl border border-border bg-card p-4">
+        <p id="confirm-dialog-title" className="text-sm font-medium text-foreground">{title}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button variant="ghost" size="sm" autoFocus onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button variant="destructive" size="sm" disabled={pending} onClick={onConfirm}>
+            {pending && <Spinner className="h-4 w-4" />}
+            {confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -241,6 +294,8 @@ export function SettingsPage() {
   const anthropic = useAnthropicOAuth();
   const deleteOpenAIKey = useDeleteProviderKey("openai");
   const deleteGeminiKey = useDeleteProviderKey("gemini");
+  const deleteCustomProvider = useDeleteProviderKey("custom");
+  const [customProviderModalOpen, setCustomProviderModalOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
 
@@ -284,6 +339,14 @@ export function SettingsPage() {
   const setToolApprovalPolicy = useUIStore((s) => s.setToolApprovalPolicy);
   const autoCheckUpdates = useUIStore((s) => s.autoCheckUpdates);
   const setAutoCheckUpdates = useUIStore((s) => s.setAutoCheckUpdates);
+  const spellCheck = useUIStore((s) => s.spellCheck);
+  const setSpellCheck = useUIStore((s) => s.setSpellCheck);
+  const wrapCodeBlocks = useUIStore((s) => s.wrapCodeBlocks);
+  const setWrapCodeBlocks = useUIStore((s) => s.setWrapCodeBlocks);
+  const notificationSound = useUIStore((s) => s.notificationSound);
+  const setNotificationSound = useUIStore((s) => s.setNotificationSound);
+  const defaultNotifications = useUIStore((s) => s.defaultNotifications);
+  const setDefaultNotifications = useUIStore((s) => s.setDefaultNotifications);
 
   const { data: conversations = [] } = useConversations();
   const deleteConversation = useDeleteConversation();
@@ -497,6 +560,13 @@ export function SettingsPage() {
                       onChange={() => setAutoSendOnDictation(!autoSendOnDictation)}
                     />
                   </Row>
+                  <Row
+                    as="label"
+                    title="Spellcheck"
+                    description="Underline misspelled words while typing a message."
+                  >
+                    <Checkbox checked={spellCheck} onChange={() => setSpellCheck(!spellCheck)} />
+                  </Row>
                 </section>
               </div>
 
@@ -505,7 +575,13 @@ export function SettingsPage() {
                 <section className="divide-y divide-border rounded-lg border border-border bg-card">
                   <Row title="Default model" description="Used for every new message until changed.">
                     <Select value={selectedModel} onChange={setSelectedModel}>
-                      {(status?.anthropic_oauth ? [...CLAUDE_MODELS, ...FREE_MODELS] : FREE_MODELS).map(
+                      {[
+                        ...(status?.anthropic_oauth ? CLAUDE_MODELS : []),
+                        ...FREE_MODELS,
+                        ...(status?.custom_provider
+                          ? [{ id: "custom", label: status.custom_provider_model ?? "Custom", logo: "/custom-provider.svg" }]
+                          : []),
+                      ].map(
                         (m) => (
                           <option key={m.id} value={m.id}>
                             <span className="flex items-center gap-1.5">
@@ -542,6 +618,26 @@ export function SettingsPage() {
                     <Checkbox
                       checked={clipboardAutoFill}
                       onChange={() => setClipboardAutoFill(!clipboardAutoFill)}
+                    />
+                  </Row>
+                  <Row
+                    as="label"
+                    title="Notifications for new chats"
+                    description="Whether a newly created chat starts with desktop notifications on."
+                  >
+                    <Checkbox
+                      checked={defaultNotifications}
+                      onChange={() => setDefaultNotifications(!defaultNotifications)}
+                    />
+                  </Row>
+                  <Row
+                    as="label"
+                    title="Play a sound with notifications"
+                    description="Plays a short beep alongside any desktop notification."
+                  >
+                    <Checkbox
+                      checked={notificationSound}
+                      onChange={() => setNotificationSound(!notificationSound)}
                     />
                   </Row>
                 </section>
@@ -762,6 +858,41 @@ export function SettingsPage() {
                 )}
               </section>
 
+              <section className="space-y-3 rounded-lg border border-border bg-card p-5">
+                <div>
+                  <h2 className="text-sm font-semibold">Custom provider</h2>
+                  <p className="text-xs text-muted-foreground">
+                    Any OpenAI-compatible endpoint: self-hosted, or a third-party API.
+                  </p>
+                </div>
+
+                {status?.custom_provider ? (
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm text-foreground/90">{status.custom_provider_model}</p>
+                      <p className="truncate text-xs text-muted-foreground">{status.custom_provider_base_url}</p>
+                    </div>
+                    <div className="flex shrink-0 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setCustomProviderModalOpen(true)}>
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => deleteCustomProvider.mutate()}
+                        disabled={deleteCustomProvider.isPending}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <Button size="sm" onClick={() => setCustomProviderModalOpen(true)}>
+                    Add custom provider
+                  </Button>
+                )}
+              </section>
+
               {(status?.openai_api_key || status?.gemini_api_key) && (
                 <section className="space-y-3 rounded-lg border border-border bg-card p-5">
                   <div>
@@ -849,8 +980,8 @@ export function SettingsPage() {
 
                   <Row
                     as="label"
-                    title="Show timestamps on every message"
-                    description="Off shows them on your own messages only."
+                    title="Show timestamps"
+                    description="Shown above the first message after a 10+ minute gap, not on every message."
                   >
                     <Checkbox
                       checked={showTimestamps}
@@ -864,6 +995,14 @@ export function SettingsPage() {
                     description="Turns off message and menu animations."
                   >
                     <Checkbox checked={reduceMotion} onChange={() => setReduceMotion(!reduceMotion)} />
+                  </Row>
+
+                  <Row
+                    as="label"
+                    title="Wrap long lines in code blocks"
+                    description="Off scrolls horizontally instead of wrapping."
+                  >
+                    <Checkbox checked={wrapCodeBlocks} onChange={() => setWrapCodeBlocks(!wrapCodeBlocks)} />
                   </Row>
                 </section>
               </div>
@@ -1031,30 +1170,23 @@ export function SettingsPage() {
                         support to reactivate.
                       </p>
                     </div>
-                    {confirmDeactivate ? (
-                      <div className="flex shrink-0 gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => setConfirmDeactivate(false)}>
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          disabled={deactivateAccount.isPending}
-                          onClick={() => deactivateAccount.mutate()}
-                        >
-                          {deactivateAccount.isPending && <Spinner className="h-4 w-4" />}
-                          Confirm deactivate
-                        </Button>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
-                        onClick={() => setConfirmDeactivate(true)}
-                      >
-                        Deactivate
-                      </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
+                      onClick={() => setConfirmDeactivate(true)}
+                    >
+                      Deactivate
+                    </Button>
+                    {confirmDeactivate && (
+                      <ConfirmDialog
+                        title="Deactivate account?"
+                        description="Locks you out and signs you out everywhere. Your data is kept. Contact support to reactivate."
+                        confirmLabel="Confirm deactivate"
+                        pending={deactivateAccount.isPending}
+                        onCancel={() => setConfirmDeactivate(false)}
+                        onConfirm={() => deactivateAccount.mutate()}
+                      />
                     )}
                   </div>
 
@@ -1065,30 +1197,23 @@ export function SettingsPage() {
                         Permanently deletes your account and every chat. Can't be undone.
                       </p>
                     </div>
-                    {confirmDeleteAccount ? (
-                      <div className="flex shrink-0 gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => setConfirmDeleteAccount(false)}>
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          disabled={deleteAccount.isPending}
-                          onClick={() => deleteAccount.mutate()}
-                        >
-                          {deleteAccount.isPending && <Spinner className="h-4 w-4" />}
-                          Confirm delete
-                        </Button>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
-                        onClick={() => setConfirmDeleteAccount(true)}
-                      >
-                        Delete account
-                      </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0 border-destructive/40 text-destructive hover:bg-destructive/10"
+                      onClick={() => setConfirmDeleteAccount(true)}
+                    >
+                      Delete account
+                    </Button>
+                    {confirmDeleteAccount && (
+                      <ConfirmDialog
+                        title="Delete account?"
+                        description="Permanently deletes your account and every chat. Can't be undone."
+                        confirmLabel="Confirm delete"
+                        pending={deleteAccount.isPending}
+                        onCancel={() => setConfirmDeleteAccount(false)}
+                        onConfirm={() => deleteAccount.mutate()}
+                      />
                     )}
                   </div>
                 </section>
@@ -1182,6 +1307,13 @@ export function SettingsPage() {
           )}
         </div>
       </div>
+      {customProviderModalOpen && (
+        <CustomProviderModal
+          defaultBaseUrl={status?.custom_provider_base_url ?? ""}
+          defaultModel={status?.custom_provider_model ?? ""}
+          onClose={() => setCustomProviderModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

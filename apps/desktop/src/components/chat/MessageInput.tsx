@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUp, ChevronRight, Mic, Plus, Square, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/stores/useUIStore";
-import { useSendMessage } from "@/hooks/useMessages";
+import { useSendMessage, useClearMessages } from "@/hooks/useMessages";
 import { useConversations, useCreateConversation } from "@/hooks/useConversations";
 import { useProviderStatus } from "@/hooks/useProviderConnections";
 import { useTranscribeAudio } from "@/hooks/useTranscription";
@@ -52,7 +52,7 @@ function transcriptionErrorMessage(error: unknown): string {
 
   return noSpeech
     ? "I didn't hear anything. Try again and speak after tapping the microphone."
-    : "Voice transcription isn't available right now. Please try again shortly.";
+    : "Voice transcription unavailable. Try again in a moment.";
 }
 
 // The Web Speech API isn't implemented in Tauri's webview on any platform,
@@ -72,6 +72,7 @@ const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const SLASH_COMMANDS = [
   { name: "model", usage: "/model <name>", description: "Switch the model for this chat", takesArgument: true },
   { name: "usage", usage: "/usage", description: "Show token usage for this chat", takesArgument: false },
+  { name: "clear", usage: "/clear", description: "Clear this chat's messages", takesArgument: false },
 ] as const;
 
 // Agent effort: a friendlier 3-position face on the existing maxSteps knob
@@ -212,20 +213,32 @@ export function MessageInput({
   const selectedModel = useUIStore((s) => s.selectedModel);
   const setSelectedModel = useUIStore((s) => s.setSelectedModel);
   const sendMessage = useSendMessage();
+  const clearMessages = useClearMessages();
   const createConversation = useCreateConversation();
   const transcribeAudio = useTranscribeAudio();
   const fetchUsage = useUsageFetch();
   const { data: installedSkills = [] } = useSkills();
   const { data: providerStatus } = useProviderStatus();
   const { data: conversations = [] } = useConversations();
-  const models = providerStatus?.anthropic_oauth ? [...CLAUDE_MODELS, ...FREE_MODELS] : FREE_MODELS;
+  const models = [
+    ...(providerStatus?.anthropic_oauth ? CLAUDE_MODELS : []),
+    ...FREE_MODELS,
+    ...(providerStatus?.custom_provider
+      ? [{ id: "custom", label: providerStatus.custom_provider_model ?? "Custom", logo: "/custom-provider.svg" }]
+      : []),
+  ];
   const autoSendOnDictation = useUIStore((s) => s.autoSendOnDictation);
+  const spellCheck = useUIStore((s) => s.spellCheck);
   const submitting = createConversation.isPending || sendMessage.isPending;
   const isEmpty = !value.trim() && images.length === 0;
   currentConversationRef.current = activeConversationId;
 
   useEffect(() => {
-    if (providerStatus && !providerStatus.anthropic_oauth && selectedModel.startsWith("claude-")) {
+    if (!providerStatus) return;
+    if (
+      (!providerStatus.anthropic_oauth && selectedModel.startsWith("claude-")) ||
+      (!providerStatus.custom_provider && selectedModel === "custom")
+    ) {
       setSelectedModel(FREE_MODELS[0].id);
     }
   }, [providerStatus, selectedModel, setSelectedModel]);
@@ -322,6 +335,22 @@ export function MessageInput({
         }
         return;
       }
+
+      if (command === "clear") {
+        if (!activeConversationId) {
+          setCommandNotice("Start a chat to clear it.");
+          setValue("");
+          return;
+        }
+        setValue("");
+        try {
+          await clearMessages.mutateAsync(activeConversationId);
+          setCommandNotice("Chat cleared.");
+        } catch {
+          setCommandNotice("Couldn't clear chat.");
+        }
+        return;
+      }
     }
 
     if ((!trimmed && images.length === 0) || agentRunning || submitting) return;
@@ -409,8 +438,18 @@ export function MessageInput({
     }
 
     // The backend transcodes whatever container arrives through ffmpeg, so
-    // no need to chase a mimeType Gemini would accept directly here.
-    const recorder = new MediaRecorder(stream);
+    // no need to chase a mimeType Gemini would accept directly here. Some
+    // webviews (older WebKitGTK builds) grant the mic but have no codec
+    // MediaRecorder can use at all — that surfaces as a synchronous throw
+    // from either the constructor or start(), not a promise rejection.
+    let recorder: MediaRecorder;
+    try {
+      recorder = new MediaRecorder(stream);
+    } catch {
+      stream.getTracks().forEach((track) => track.stop());
+      setInputError("Voice input isn't supported on this device.");
+      return;
+    }
     const recordingConversationId = activeConversationId;
     chunksRef.current = [];
     recorder.ondataavailable = (e) => chunksRef.current.push(e.data);
@@ -438,8 +477,14 @@ export function MessageInput({
         setInputError(transcriptionErrorMessage(err));
       }
     };
+    try {
+      recorder.start();
+    } catch {
+      stream.getTracks().forEach((track) => track.stop());
+      setInputError("Voice input isn't supported on this device.");
+      return;
+    }
     mediaRecorderRef.current = recorder;
-    recorder.start();
     setListening(true);
   }
 
@@ -559,6 +604,7 @@ export function MessageInput({
 
           <textarea
             ref={textareaRef}
+            spellCheck={spellCheck}
             value={value}
             onChange={(e) => {
               setValue(e.target.value);

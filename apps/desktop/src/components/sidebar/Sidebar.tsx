@@ -74,6 +74,10 @@ export function Sidebar() {
   const [renameValue, setRenameValue] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<ConversationWithLastMessage | null>(null);
   const confirmBeforeDelete = useUIStore((s) => s.confirmBeforeDelete);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [lastClickedId, setLastClickedId] = useState<string | null>(null);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +151,69 @@ export function Sidebar() {
     setDeleteTarget(null);
   }
 
+  // Ctrl/Cmd toggles one chat; Shift selects the range since the last
+  // clicked one (both against the currently filtered/sorted order, so a
+  // search doesn't select chats the user can't see). A plain click while
+  // some are selected clears the selection instead of opening a chat --
+  // least surprising, matches file-manager multi-select conventions.
+  function handleRowClick(event: React.MouseEvent, c: ConversationWithLastMessage) {
+    if (event.shiftKey && lastClickedId) {
+      const ids = filtered.map((x) => x.id);
+      const from = ids.indexOf(lastClickedId);
+      const to = ids.indexOf(c.id);
+      if (from !== -1 && to !== -1) {
+        const [start, end] = from < to ? [from, to] : [to, from];
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          for (let i = start; i <= end; i++) next.add(ids[i]);
+          return next;
+        });
+      }
+      return;
+    }
+    if (event.ctrlKey || event.metaKey) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(c.id)) next.delete(c.id);
+        else next.add(c.id);
+        return next;
+      });
+      setLastClickedId(c.id);
+      return;
+    }
+    if (selectedIds.size > 0) {
+      setSelectedIds(new Set());
+      return;
+    }
+    setLastClickedId(c.id);
+    selectConversation(c.id);
+  }
+
+  async function confirmBulkDelete() {
+    setBulkDeleting(true);
+    try {
+      await Promise.all([...selectedIds].map((id) => deleteConversation.mutateAsync(id)));
+      if (activeConversationId && selectedIds.has(activeConversationId)) {
+        const next = conversations.find((c) => !selectedIds.has(c.id));
+        if (next) selectConversation(next.id);
+        else clearActiveConversation();
+      }
+      setSelectedIds(new Set());
+      setBulkDeleteOpen(false);
+    } finally {
+      setBulkDeleting(false);
+    }
+  }
+
+  useEffect(() => {
+    if (selectedIds.size === 0) return;
+    function onEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") setSelectedIds(new Set());
+    }
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, [selectedIds]);
+
   useEffect(() => {
     if (!activeConversationId && conversations.length > 0) {
       selectConversation(conversations[0].id);
@@ -171,6 +238,36 @@ export function Sidebar() {
         <div className="mt-4 flex justify-end gap-2">
           <button onClick={() => setDeleteTarget(null)} autoFocus className="rounded-lg px-3 py-1.5 text-sm text-foreground hover:bg-accent">Cancel</button>
           <button onClick={confirmDelete} className="rounded-lg bg-destructive px-3 py-1.5 text-sm text-destructive-foreground hover:opacity-90">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const bulkDeleteDialog = bulkDeleteOpen && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onKeyDown={(e) => {
+      if (e.key === "Escape" && !bulkDeleting) setBulkDeleteOpen(false);
+    }}>
+      <div role="dialog" aria-modal="true" aria-labelledby="bulk-delete-title" className="w-80 rounded-xl border border-border bg-card p-4">
+        <p id="bulk-delete-title" className="text-sm font-medium text-foreground">
+          Delete {selectedIds.size} chat{selectedIds.size === 1 ? "" : "s"}?
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">This can't be undone.</p>
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            onClick={() => setBulkDeleteOpen(false)}
+            disabled={bulkDeleting}
+            autoFocus
+            className="rounded-lg px-3 py-1.5 text-sm text-foreground hover:bg-accent disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={confirmBulkDelete}
+            disabled={bulkDeleting}
+            className="rounded-lg bg-destructive px-3 py-1.5 text-sm text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+          >
+            {bulkDeleting ? "Deleting..." : "Delete"}
+          </button>
         </div>
       </div>
     </div>
@@ -373,15 +470,37 @@ export function Sidebar() {
             {query.trim() ? "No matching chats" : "No chats yet"}
           </p>
         )}
+        {selectedIds.size > 0 && (
+          <div className="mb-1 flex items-center justify-between rounded-lg bg-secondary px-3 py-2">
+            <span className="text-xs text-muted-foreground">{selectedIds.size} selected</span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSelectedIds(new Set())}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setBulkDeleteOpen(true)}
+                className="flex items-center gap-1 text-xs text-destructive hover:opacity-80"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
         <ul className="space-y-0.5">
           {filtered.map((c) => (
             <li key={c.id} className="group/row relative">
               <button
-                onClick={() => selectConversation(c.id)}
+                onClick={(e) => handleRowClick(e, c)}
                 aria-label={`Open ${c.title}`}
+                aria-pressed={selectedIds.has(c.id)}
                 className={cn(
                   "flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition-colors hover:bg-accent",
                   c.id === activeConversationId && "bg-accent",
+                  selectedIds.has(c.id) && "bg-primary/10 ring-1 ring-inset ring-primary/40",
                 )}
               >
                 <ConversationAvatar conversation={c} size={40} working={running.has(c.id)} />
@@ -525,6 +644,7 @@ export function Sidebar() {
 
       {contactOpen && <ContactModal email={user?.email} onClose={() => setContactOpen(false)} />}
       {deleteDialog}
+      {bulkDeleteDialog}
     </aside>
   );
 }

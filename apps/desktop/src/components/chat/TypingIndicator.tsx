@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 // The "Working…" spinner from RofiantDesktop (Dotm3x3_20 + grad-sunset),
 // rebuilt as plain CSS instead of porting its dot-matrix engine. An L-shaped
 // corner glyph rotates 90° per 180ms step through a 3x3 grid; each dot's
@@ -6,8 +8,30 @@
 // Delay is in steps: 0 = top-left pair, 3 = the last corner to light.
 const DOT_STEP_DELAY = [0, 0, 1, 3, null, 1, 3, 2, 2];
 
-export function TypingIndicator({ size = 14, dotSize = 3 }: { size?: number; dotSize?: number }) {
+function useElapsedSeconds(startedAt: number | null): number {
+  const [seconds, setSeconds] = useState(() => (startedAt ? Math.floor((Date.now() - startedAt) / 1000) : 0));
+
+  useEffect(() => {
+    if (!startedAt) return;
+    setSeconds(Math.floor((Date.now() - startedAt) / 1000));
+    const id = window.setInterval(() => setSeconds(Math.floor((Date.now() - startedAt) / 1000)), 1000);
+    return () => window.clearInterval(id);
+  }, [startedAt]);
+
+  return seconds;
+}
+
+export function TypingIndicator({
+  size = 14,
+  dotSize = 3,
+  startedAt = null,
+}: {
+  size?: number;
+  dotSize?: number;
+  startedAt?: number | null;
+}) {
   const gap = (size - 3 * dotSize) / 2;
+  const seconds = useElapsedSeconds(startedAt);
 
   return (
     <div className="flex animate-in fade-in items-center gap-2 px-1 py-2 text-xs text-muted-foreground duration-300">
@@ -27,7 +51,7 @@ export function TypingIndicator({ size = 14, dotSize = 3 }: { size?: number; dot
           />
         ))}
       </div>
-      Working…
+      {startedAt ? `Working for ${seconds}s` : "Working…"}
     </div>
   );
 }

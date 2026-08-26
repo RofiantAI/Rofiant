@@ -154,12 +154,12 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-/* "Working…" dot-matrix spinner (TypingIndicator). Sunset gradient and the
-   0.09/0.88 opacity range come from RofiantDesktop's grad-sunset preset; the
-   0.6s cycle is its 180ms step x 4 turns at speed 1.2. */
+/* "Working…" dot-matrix spinner (TypingIndicator). Grey to match the
+   monochrome palette; the 0.09/0.88 opacity range and 0.6s cycle (180ms
+   step x 4 turns at speed 1.2) still come from RofiantDesktop's original. */
 .dot-spin {
   border-radius: 999px;
-  background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 52%, #ffe29a 100%);
+  background: hsl(var(--foreground));
   animation: dot-spin 0.6s linear infinite;
 }
 

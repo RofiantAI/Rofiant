@@ -1,12 +1,20 @@
 import { create } from "zustand";
 import type { ToolCall } from "@/types/chat";
 
+export interface PendingApproval {
+  approvalId: string;
+  tool: string;
+  detail: string;
+}
+
 export interface AgentRunState {
   running: boolean;
   draft: string;
   draftPersona: string | null;
   error: string | null;
   liveToolCalls: ToolCall[];
+  pendingApproval: PendingApproval | null;
+  startedAt: number | null;
 }
 
 export const EMPTY_AGENT_RUN: AgentRunState = {
@@ -15,6 +23,8 @@ export const EMPTY_AGENT_RUN: AgentRunState = {
   draftPersona: null,
   error: null,
   liveToolCalls: [],
+  pendingApproval: null,
+  startedAt: null,
 };
 
 // Which conversations have an agent run in flight right now, so the

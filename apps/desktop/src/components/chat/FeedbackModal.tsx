@@ -146,7 +146,7 @@ export function FeedbackModal({
               aria-label="Feedback details"
               className="w-full resize-y rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring"
             />
-            <p className="text-xs text-muted-foreground">Your feedback is sent to the Kiro team through Web3Forms.</p>
+            <p className="text-xs text-muted-foreground">Your feedback is sent to the KiroBot team.</p>
             {status === "error" && (
               <p role="alert" className="text-sm text-destructive">Couldn't send your feedback. Please try again.</p>
             )}

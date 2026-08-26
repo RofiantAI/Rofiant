@@ -5,6 +5,20 @@ import { useUIStore } from "@/stores/useUIStore";
 import { EMPTY_AGENT_RUN, useRunningStore } from "@/stores/useRunningStore";
 import type { ConversationWithLastMessage } from "@/types/chat";
 
+// Short synthesized beep, no audio asset needed.
+function playNotificationSound() {
+  const ctx = new AudioContext();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.15, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
+  osc.onended = () => ctx.close();
+}
+
 // Only worth interrupting the user if they've looked away, and only for
 // bots they opted in to (BotSettingsPanel's Notifications toggle).
 function notifyIfEnabled(queryClient: ReturnType<typeof useQueryClient>, conversationId: string, body: string) {
@@ -14,7 +28,10 @@ function notifyIfEnabled(queryClient: ReturnType<typeof useQueryClient>, convers
     ?.find((c) => c.id === conversationId);
   if (!conversation?.notifications_enabled) return;
 
-  const fire = () => new Notification(conversation.title, { body });
+  const fire = () => {
+    new Notification(conversation.title, { body });
+    if (useUIStore.getState().notificationSound) playNotificationSound();
+  };
   if (Notification.permission === "granted") fire();
   else Notification.requestPermission().then((p) => p === "granted" && fire());
 }
@@ -39,6 +56,16 @@ export function stopAgentRun(conversationId: string) {
   controllers.get(conversationId)?.abort();
 }
 
+// Resolves the promise a pending tool-approval dialog is awaiting, keyed
+// the same way as `controllers` so the ApprovalDialog component (which has
+// no access to this closure) can answer it.
+const approvalResolvers = new Map<string, (approved: boolean) => void>();
+
+export function resolveApproval(approvalId: string, approved: boolean) {
+  approvalResolvers.get(approvalId)?.(approved);
+  approvalResolvers.delete(approvalId);
+}
+
 export function useAgentRun(conversationId: string | null) {
   const queryClient = useQueryClient();
   const state = useRunningStore((s) =>
@@ -57,7 +84,7 @@ export function useAgentRun(conversationId: string | null) {
     const id = conversationIdOverride ?? conversationId;
     if (!id) return;
     if (useRunningStore.getState().runs[id]?.running) return;
-    setRun(id, { ...EMPTY_AGENT_RUN, running: true });
+    setRun(id, { ...EMPTY_AGENT_RUN, running: true, startedAt: Date.now() });
     setRunning(id, true);
     let failed = false;
     const controller = new AbortController();
@@ -74,6 +101,7 @@ export function useAgentRun(conversationId: string | null) {
           max_run_minutes: maxRunMinutes,
           tool_approval_policy: toolApprovalPolicy,
           mentioned_personas: mentionedPersonas?.length ? mentionedPersonas : undefined,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         }),
       });
 
@@ -104,7 +132,14 @@ export function useAgentRun(conversationId: string | null) {
             const detail = payload.tool === "terminal"
               ? String(payload.arguments?.command ?? JSON.stringify(payload.arguments))
               : JSON.stringify(payload.arguments, null, 2);
-            const approved = window.confirm(`Allow ${payload.tool} to run?\n\n${detail}`);
+            const approved = await new Promise<boolean>((resolve) => {
+              approvalResolvers.set(payload.approval_id, resolve);
+              updateRun(id, (s) => ({
+                ...s,
+                pendingApproval: { approvalId: payload.approval_id, tool: payload.tool, detail },
+              }));
+            });
+            updateRun(id, (s) => ({ ...s, pendingApproval: null }));
             await apiFetch(`/api/messages/approvals/${payload.approval_id}`, {
               method: "POST",
               body: JSON.stringify({ approved }),

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronRight, Eye, File, Folder, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Eye, File, Folder, FolderDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { open as openFolderDialog } from "@tauri-apps/plugin-dialog";
+import { invoke } from "@tauri-apps/api/core";
 import Prism from "prismjs";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-bash";
@@ -100,6 +102,19 @@ async function renameEntry(conversationId: string, path: string, newName: string
   );
 }
 
+async function collectFiles(conversationId: string, path = "."): Promise<{ path: string; content: string }[]> {
+  const entries = await listFiles(conversationId, path);
+  const files: { path: string; content: string }[] = [];
+  for (const entry of entries) {
+    if (entry.is_dir) {
+      files.push(...(await collectFiles(conversationId, entry.path)));
+    } else {
+      files.push({ path: entry.path, content: await readFile(conversationId, entry.path) });
+    }
+  }
+  return files;
+}
+
 export function FilesPanel() {
   const activeConversationId = useUIStore((s) => s.activeConversationId);
   const [childrenByPath, setChildrenByPath] = useState<Record<string, FileEntry[]>>({});
@@ -115,6 +130,23 @@ export function FilesPanel() {
   const confirmBeforeDelete = useUIStore((s) => s.confirmBeforeDelete);
   const editHighlightRef = useRef<HTMLPreElement>(null);
   const readRequestRef = useRef(0);
+  const [exporting, setExporting] = useState(false);
+
+  async function saveToFolder() {
+    if (!activeConversationId) return;
+    const dest = await openFolderDialog({ directory: true, multiple: false, title: "Save workspace to folder" });
+    if (!dest || typeof dest !== "string") return;
+    setExporting(true);
+    try {
+      const files = await collectFiles(activeConversationId);
+      await invoke("save_workspace_files", { dest, files });
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save workspace to folder");
+    } finally {
+      setExporting(false);
+    }
+  }
 
   const loadDir = useCallback(
     async (path: string) => {
@@ -226,7 +258,18 @@ export function FilesPanel() {
 
   return (
     <div className="flex h-full">
-      <div className="w-56 shrink-0 overflow-y-auto border-r border-border p-2">
+      <div className="flex w-56 shrink-0 flex-col border-r border-border">
+        {activeConversationId && rootEntries && rootEntries.length > 0 && (
+          <button
+            onClick={saveToFolder}
+            disabled={exporting}
+            className="flex shrink-0 items-center gap-1.5 border-b border-border px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-50"
+          >
+            <FolderDown className="h-3.5 w-3.5" />
+            {exporting ? "Saving..." : "Save to folder..."}
+          </button>
+        )}
+        <div className="flex-1 overflow-y-auto p-2">
         {!activeConversationId ? (
           <p className="p-2 text-xs text-muted-foreground">No conversation selected.</p>
         ) : error ? (
@@ -256,6 +299,7 @@ export function FilesPanel() {
             }}
           />
         )}
+        </div>
       </div>
       <div className="flex flex-1 flex-col overflow-hidden">
         {selected && (

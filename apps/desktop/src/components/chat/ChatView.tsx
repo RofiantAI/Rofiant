@@ -1,17 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageInput } from "@/components/chat/MessageInput";
 import { TypingIndicator } from "@/components/chat/TypingIndicator";
+import { AgentTimeline } from "@/components/chat/AgentTimeline";
 import { OnboardingScreen } from "@/components/chat/OnboardingScreen";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUIStore } from "@/stores/useUIStore";
 import { useMessages } from "@/hooks/useMessages";
+import { useToolCalls } from "@/hooks/useToolCalls";
 import { useConversations } from "@/hooks/useConversations";
 import { DEFAULT_PERSONA, personaFor } from "@/lib/personas";
 import { PersonaFace } from "@/components/personas/PersonaFace";
 import { useAgentRun } from "@/hooks/useAgentRun";
-import type { Conversation } from "@/types/chat";
+import { ApprovalDialog } from "@/components/chat/ApprovalDialog";
+import type { Conversation, ToolCall } from "@/types/chat";
 
 function MessageSkeleton() {
   return (
@@ -60,7 +63,47 @@ export function ChatView() {
   const activeConversationId = useUIStore((s) => s.activeConversationId);
   const { data: messages = [], isLoading: messagesLoading, error: messagesError } = useMessages(activeConversationId);
   const { data: conversations = [], error: conversationsError } = useConversations();
+  const { data: allToolCalls = [] } = useToolCalls(activeConversationId);
   const agentRun = useAgentRun(activeConversationId);
+
+  // A tool call carries no message id — only a conversation id and a
+  // timestamp — so a completed message's own trace is the calls that
+  // landed between it and the previous message, not a real foreign key.
+  const toolCallsByMessageId = useMemo(() => {
+    const map = new Map<string, ToolCall[]>();
+    let since = -Infinity;
+    for (const m of messages) {
+      const at = Date.parse(m.created_at);
+      if (m.role === "assistant") {
+        map.set(
+          m.id,
+          allToolCalls.filter((t) => {
+            const t_at = Date.parse(t.created_at);
+            return t_at > since && t_at <= at;
+          }),
+        );
+      }
+      since = at;
+    }
+    return map;
+  }, [messages, allToolCalls]);
+
+  const showTimestampsSetting = useUIStore((s) => s.showTimestamps);
+  // A timestamp above every message is clutter — only mark the first
+  // message of a new burst (a gap of 10+ minutes since the previous one).
+  const TIMESTAMP_GAP_MS = 10 * 60 * 1000;
+  const messagesWithTimestamp = useMemo(() => {
+    const ids = new Set<string>();
+    if (!showTimestampsSetting) return ids;
+    let prevAt = -Infinity;
+    for (const m of messages) {
+      const at = Date.parse(m.created_at);
+      if (at - prevAt > TIMESTAMP_GAP_MS) ids.add(m.id);
+      prevAt = at;
+    }
+    return ids;
+  }, [messages, showTimestampsSetting]);
+
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -114,24 +157,33 @@ export function ChatView() {
           ) : (
             <>
               {messages.map((m) => (
-                <MessageBubble key={m.id} message={m} group={isGroup} />
+                <MessageBubble
+                  key={m.id}
+                  message={m}
+                  group={isGroup}
+                  toolCalls={toolCallsByMessageId.get(m.id)}
+                  showTimestamp={messagesWithTimestamp.has(m.id)}
+                />
               ))}
-              {agentRun.running &&
-                (agentRun.draft ? (
-                  <MessageBubble
-                    group={isGroup}
-                    message={{
-                      id: "draft",
-                      conversation_id: activeConversationId ?? "",
-                      role: "assistant",
-                      content: agentRun.draft,
-                      persona: agentRun.draftPersona,
-                      created_at: new Date().toISOString(),
-                    }}
-                  />
-                ) : (
-                  <TypingIndicator />
-                ))}
+              {agentRun.running && (
+                <>
+                  <AgentTimeline calls={agentRun.liveToolCalls} thinking={!agentRun.draft} />
+                  {agentRun.draft && (
+                    <MessageBubble
+                      group={isGroup}
+                      message={{
+                        id: "draft",
+                        conversation_id: activeConversationId ?? "",
+                        role: "assistant",
+                        content: agentRun.draft,
+                        persona: agentRun.draftPersona,
+                        created_at: new Date().toISOString(),
+                      }}
+                    />
+                  )}
+                  <TypingIndicator startedAt={agentRun.startedAt} />
+                </>
+              )}
             </>
           )}
           {agentRun.error && (
@@ -148,6 +200,7 @@ export function ChatView() {
             : activeConversation?.title
         }
       />
+      {agentRun.pendingApproval && <ApprovalDialog approval={agentRun.pendingApproval} />}
     </div>
   );
 }

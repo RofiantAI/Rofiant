@@ -8,6 +8,7 @@ from app.api.auth import AuthContext, get_current_user
 from app.schemas.provider_connection import (
     AnthropicAuthExchange,
     AnthropicAuthStart,
+    CustomProviderSave,
     GeminiKeySave,
     OpenAIKeySave,
     ProviderConnectionStatus,
@@ -22,7 +23,7 @@ router = APIRouter(prefix="/api/providers", tags=["providers"])
 @router.get("/status", response_model=ProviderConnectionStatus)
 async def get_status(auth: AuthContext = Depends(get_current_user)):
     client = get_user_client(auth.access_token)
-    resp = client.table("provider_connections").select("provider,refresh_token,expires_at").execute()
+    resp = client.table("provider_connections").select("provider,refresh_token,expires_at,base_url,model").execute()
     connected = {row["provider"] for row in resp.data}
 
     anthropic_row = next((r for r in resp.data if r["provider"] == "anthropic_oauth"), None)
@@ -30,11 +31,15 @@ async def get_status(auth: AuthContext = Depends(get_current_user)):
         datetime.fromisoformat(anthropic_row["expires_at"]) > datetime.now(timezone.utc)
         or bool(anthropic_row.get("refresh_token"))
     )
+    custom_row = next((r for r in resp.data if r["provider"] == "custom_openai"), None)
 
     return ProviderConnectionStatus(
         anthropic_oauth=anthropic_connected,
         openai_api_key="openai_api_key" in connected,
         gemini_api_key="gemini_api_key" in connected,
+        custom_provider=custom_row is not None,
+        custom_provider_base_url=custom_row.get("base_url") if custom_row else None,
+        custom_provider_model=custom_row.get("model") if custom_row else None,
     )
 
 
@@ -102,3 +107,24 @@ async def save_gemini_key(body: GeminiKeySave, auth: AuthContext = Depends(get_c
 async def gemini_disconnect(auth: AuthContext = Depends(get_current_user)):
     client = get_user_client(auth.access_token)
     client.table("provider_connections").delete().eq("provider", "gemini_api_key").execute()
+
+
+@router.post("/custom", status_code=status.HTTP_204_NO_CONTENT)
+async def save_custom_provider(body: CustomProviderSave, auth: AuthContext = Depends(get_current_user)):
+    client = get_user_client(auth.access_token)
+    client.table("provider_connections").upsert(
+        {
+            "user_id": auth.user_id,
+            "provider": "custom_openai",
+            "api_key": body.api_key,
+            "base_url": body.base_url,
+            "model": body.model,
+        },
+        on_conflict="user_id,provider",
+    ).execute()
+
+
+@router.delete("/custom", status_code=status.HTTP_204_NO_CONTENT)
+async def custom_provider_disconnect(auth: AuthContext = Depends(get_current_user)):
+    client = get_user_client(auth.access_token)
+    client.table("provider_connections").delete().eq("provider", "custom_openai").execute()

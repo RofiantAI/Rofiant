@@ -11,7 +11,7 @@ const FEATURES = [
   {
     icon: FolderCode,
     title: "It can do real work",
-    body: "It reads and writes files and runs commands in its own sandbox. Nothing touches your machine.",
+    body: "It reads and writes files and runs terminal commands in its own sandbox.",
   },
   {
     icon: KeyRound,

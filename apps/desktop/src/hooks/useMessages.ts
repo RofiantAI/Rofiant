@@ -19,6 +19,20 @@ export function useMessages(conversationId: string | null) {
   });
 }
 
+export function useClearMessages() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (conversationId: string) => {
+      await apiFetch(`/api/messages?conversation_id=${conversationId}`, { method: "DELETE" });
+    },
+    onSuccess: (_, conversationId) => {
+      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+      queryClient.invalidateQueries({ queryKey: ["tool-calls", conversationId] });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+  });
+}
+
 export function useSendMessage() {
   const queryClient = useQueryClient();
   return useMutation({

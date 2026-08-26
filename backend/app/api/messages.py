@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 from app.agent.models.anthropic import AnthropicProvider
 from app.agent.models.base import ModelProvider
+from app.agent.models.custom_openai import CustomOpenAIProvider
 from app.agent.models.openrouter import OpenRouterProvider
 from app.agent.prompts import CODE_FIDELITY_SUFFIX, system_prompt_for
 from app.agent.runner import MAX_STEPS, run_agent
@@ -157,8 +158,9 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
         # isn't the caller's — either way, don't distinguish the two.
         raise HTTPException(status_code=404, detail="Conversation not found")
 
-    # Claude models run on the user's own connected subscription; everything
-    # else falls back to the app-paid free OpenRouter tier. A non-free,
+    # Claude models run on the user's own connected subscription, "custom"
+    # on the user's own OpenAI-compatible endpoint, and everything else
+    # falls back to the app-paid free OpenRouter tier. A non-free,
     # non-Claude id in the body is ignored rather than trusted.
     provider: ModelProvider
     if body.model and body.model.startswith("claude-"):
@@ -167,6 +169,19 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             raise HTTPException(status_code=400, detail="Claude account not connected")
         provider = AnthropicProvider(model=body.model, oauth_access_token=token)
         provider_model = body.model
+    elif body.model == "custom":
+        custom_resp = (
+            client.table("provider_connections")
+            .select("api_key,base_url,model")
+            .eq("provider", "custom_openai")
+            .maybe_single()
+            .execute()
+        )
+        custom = custom_resp.data if custom_resp else None
+        if not custom:
+            raise HTTPException(status_code=400, detail="Custom provider not connected")
+        provider = CustomOpenAIProvider(base_url=custom["base_url"], api_key=custom["api_key"], model=custom["model"])
+        provider_model = custom["model"]
     else:
         wants_free = bool(body.model) and body.model.endswith(":free")
         provider_model = body.model if wants_free else settings.openrouter_model

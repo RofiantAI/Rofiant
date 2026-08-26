@@ -163,7 +163,9 @@ async def run_agent(
     # Step limit hit mid-tool-use: last_turn.text is empty (the model's last
     # turn was tool calls, no closing text). An empty content string would
     # persist as a permanently blank bubble, so fall back to a visible note.
-    content = (last_turn.text if last_turn else "") or "Hit the step limit before finishing a reply."
+    content = (last_turn.text if last_turn else "") or (
+        f"Ran out of steps ({max_steps}) before finishing. Raise Effort in the composer and try again."
+    )
     yield RunnerEvent(
         "assistant.completed",
         {

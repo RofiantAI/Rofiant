@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Prism from "prismjs";
@@ -18,9 +19,11 @@ import "prismjs/components/prism-sql";
 import "prismjs/themes/prism-tomorrow.css";
 import { Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUIStore } from "@/stores/useUIStore";
 
 function CodeBlock({ lang, code }: { lang: string | undefined; code: string }) {
   const [copied, setCopied] = useState(false);
+  const wrap = useUIStore((s) => s.wrapCodeBlocks);
   const grammar = lang && Prism.languages[lang];
   const html = grammar ? Prism.highlight(code, grammar, lang) : undefined;
 
@@ -41,7 +44,12 @@ function CodeBlock({ lang, code }: { lang: string | undefined; code: string }) {
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
         </button>
       </div>
-      <pre className="overflow-x-auto p-3 font-mono text-[0.85em] leading-normal">
+      <pre
+        className={cn(
+          "p-3 font-mono text-[0.85em] leading-normal",
+          wrap ? "whitespace-pre-wrap break-words" : "overflow-x-auto",
+        )}
+      >
         {html ? (
           <code dangerouslySetInnerHTML={{ __html: html }} />
         ) : (
@@ -71,7 +79,19 @@ export function Markdown({ children, className }: { children: string; className?
           strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
           em: ({ children }) => <em className="italic">{children}</em>,
           a: ({ children, href }) => (
-            <a href={href} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+            <a
+              href={href}
+              rel="noreferrer"
+              className="underline underline-offset-2"
+              onClick={(e) => {
+                // A plain target="_blank" anchor inside the Tauri webview
+                // doesn't reliably route to the OS default browser (it can
+                // launch whatever the platform associates with http(s), e.g.
+                // an installed app) — openUrl always goes to the real browser.
+                e.preventDefault();
+                if (href) openUrl(href);
+              }}
+            >
               {children}
             </a>
           ),

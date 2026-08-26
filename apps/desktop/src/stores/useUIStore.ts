@@ -33,6 +33,10 @@ interface UIState {
   autoOpenPanelOnTool: boolean;
   clipboardAutoFill: boolean;
   confirmBeforeDelete: boolean;
+  spellCheck: boolean;
+  wrapCodeBlocks: boolean;
+  notificationSound: boolean;
+  defaultNotifications: boolean;
   maxSteps: number;
   maxRunMinutes: number;
   toolApprovalPolicy: ToolApprovalPolicy;
@@ -51,6 +55,10 @@ interface UIState {
   setAutoOpenPanelOnTool: (value: boolean) => void;
   setClipboardAutoFill: (value: boolean) => void;
   setConfirmBeforeDelete: (value: boolean) => void;
+  setSpellCheck: (value: boolean) => void;
+  setWrapCodeBlocks: (value: boolean) => void;
+  setNotificationSound: (value: boolean) => void;
+  setDefaultNotifications: (value: boolean) => void;
   setMaxSteps: (steps: number) => void;
   setMaxRunMinutes: (minutes: number) => void;
   setToolApprovalPolicy: (policy: ToolApprovalPolicy) => void;
@@ -89,6 +97,10 @@ export const useUIStore = create<UIState>()(
       autoOpenPanelOnTool: false,
       clipboardAutoFill: true,
       confirmBeforeDelete: true,
+      spellCheck: true,
+      wrapCodeBlocks: false,
+      notificationSound: true,
+      defaultNotifications: true,
       maxSteps: 4,
       maxRunMinutes: 10,
       toolApprovalPolicy: "risky",
@@ -107,6 +119,10 @@ export const useUIStore = create<UIState>()(
       setAutoOpenPanelOnTool: (autoOpenPanelOnTool) => set({ autoOpenPanelOnTool }),
       setClipboardAutoFill: (clipboardAutoFill) => set({ clipboardAutoFill }),
       setConfirmBeforeDelete: (confirmBeforeDelete) => set({ confirmBeforeDelete }),
+      setSpellCheck: (spellCheck) => set({ spellCheck }),
+      setWrapCodeBlocks: (wrapCodeBlocks) => set({ wrapCodeBlocks }),
+      setNotificationSound: (notificationSound) => set({ notificationSound }),
+      setDefaultNotifications: (defaultNotifications) => set({ defaultNotifications }),
       setMaxSteps: (steps) =>
         set({ maxSteps: Math.min(MAX_STEPS_RANGE.max, Math.max(MAX_STEPS_RANGE.min, Math.round(steps))) }),
       setMaxRunMinutes: (minutes) => set({ maxRunMinutes: Math.min(30, Math.max(1, Math.round(minutes))) }),
@@ -154,6 +170,10 @@ export const useUIStore = create<UIState>()(
         autoOpenPanelOnTool: s.autoOpenPanelOnTool,
         clipboardAutoFill: s.clipboardAutoFill,
         confirmBeforeDelete: s.confirmBeforeDelete,
+        spellCheck: s.spellCheck,
+        wrapCodeBlocks: s.wrapCodeBlocks,
+        notificationSound: s.notificationSound,
+        defaultNotifications: s.defaultNotifications,
         maxSteps: s.maxSteps,
         maxRunMinutes: s.maxRunMinutes,
         toolApprovalPolicy: s.toolApprovalPolicy,

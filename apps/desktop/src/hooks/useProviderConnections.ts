@@ -5,6 +5,9 @@ interface ConnectionStatus {
   anthropic_oauth: boolean;
   openai_api_key: boolean;
   gemini_api_key: boolean;
+  custom_provider: boolean;
+  custom_provider_base_url: string | null;
+  custom_provider_model: string | null;
 }
 
 interface AnthropicAuthStart {
@@ -52,10 +55,19 @@ export function useAnthropicOAuth() {
   return { start, exchange, disconnect };
 }
 
-export function useDeleteProviderKey(provider: "openai" | "gemini") {
+export function useDeleteProviderKey(provider: "openai" | "gemini" | "custom") {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => apiFetch(`/api/providers/${provider}`, { method: "DELETE" }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
+  });
+}
+
+export function useSaveCustomProvider() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: { base_url: string; api_key: string; model: string }) =>
+      apiFetch("/api/providers/custom", { method: "POST", body: JSON.stringify(body) }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-status"] }),
   });
 }

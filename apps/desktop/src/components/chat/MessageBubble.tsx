@@ -1,22 +1,14 @@
 import { useState } from "react";
 import { Check, Copy, ThumbsDown, ThumbsUp } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDuration } from "@/lib/utils";
 import { Markdown } from "@/components/chat/Markdown";
-import { useUIStore } from "@/stores/useUIStore";
+import { AgentTimeline } from "@/components/chat/AgentTimeline";
 import { personaFor } from "@/lib/personas";
 import { FeedbackModal, type FeedbackRating } from "@/components/chat/FeedbackModal";
-import type { Message } from "@/types/chat";
+import type { Message, ToolCall } from "@/types/chat";
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-}
-
-function formatDuration(durationMs: number) {
-  const seconds = Math.max(1, Math.round(durationMs / 1000));
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  const remainder = seconds % 60;
-  return remainder ? `${minutes}m ${remainder}s` : `${minutes}m`;
 }
 
 function parseMultimodal(content: string): { text: string; images: { media_type: string; data: string }[] } | null {
@@ -31,10 +23,19 @@ function parseMultimodal(content: string): { text: string; images: { media_type:
   return null;
 }
 
-export function MessageBubble({ message, group = false }: { message: Message; group?: boolean }) {
+export function MessageBubble({
+  message,
+  group = false,
+  toolCalls = [],
+  showTimestamp = false,
+}: {
+  message: Message;
+  group?: boolean;
+  toolCalls?: ToolCall[];
+  showTimestamp?: boolean;
+}) {
   const isUser = message.role === "user";
   const multimodal = parseMultimodal(message.content);
-  const showTimestamps = useUIStore((s) => s.showTimestamps);
   const [copied, setCopied] = useState(false);
   const [feedbackRating, setFeedbackRating] = useState<FeedbackRating | null>(null);
 
@@ -49,10 +50,15 @@ export function MessageBubble({ message, group = false }: { message: Message; gr
       {!isUser && group && message.persona && (
         <p className="text-xs font-medium text-muted-foreground">{personaFor(message.persona).name}</p>
       )}
-      {showTimestamps && (
+      {showTimestamp && (
         <p className="text-center text-xs text-muted-foreground">
           {formatTime(message.created_at)}
         </p>
+      )}
+      {!isUser && toolCalls.length > 0 && (
+        <div className="pl-1">
+          <AgentTimeline calls={toolCalls} />
+        </div>
       )}
       <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
         <div
@@ -77,15 +83,23 @@ export function MessageBubble({ message, group = false }: { message: Message; gr
               )}
               {multimodal.text && <p className="whitespace-pre-wrap">{multimodal.text}</p>}
             </div>
-          ) : isUser ? (
-            // What the user typed, verbatim. No markdown pass, so stray
-            // asterisks or underscores in their text stay as written.
-            <p className="whitespace-pre-wrap">{message.content}</p>
           ) : (
             <Markdown>{message.content}</Markdown>
           )}
         </div>
       </div>
+      {isUser && (
+        <div className="flex justify-end pr-1 text-xs text-muted-foreground">
+          <button
+            type="button"
+            onClick={copyResponse}
+            aria-label={copied ? "Copied message" : "Copy message"}
+            className="flex items-center gap-1.5 rounded-md px-1.5 py-1 transition-colors hover:bg-accent hover:text-foreground"
+          >
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+      )}
       {!isUser && message.id !== "draft" && (
         <div className="flex items-center gap-3 pl-1 text-xs text-muted-foreground">
           <button
