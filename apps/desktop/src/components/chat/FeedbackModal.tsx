@@ -62,8 +62,8 @@ export function FeedbackModal({
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: `Kiro AI response feedback: ${rating === "up" ? "Helpful" : "Unhelpful"}`,
-          from_name: "Kiro desktop app",
+          subject: `Rofiant AI response feedback: ${rating === "up" ? "Helpful" : "Unhelpful"}`,
+          from_name: "Rofiant desktop app",
           email,
           rating: rating === "up" ? "Helpful" : "Unhelpful",
           reasons: selected.join(", ") || "No reason selected",
@@ -146,7 +146,7 @@ export function FeedbackModal({
               aria-label="Feedback details"
               className="w-full resize-y rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring"
             />
-            <p className="text-xs text-muted-foreground">Your feedback is sent to the KiroBot team.</p>
+            <p className="text-xs text-muted-foreground">Your feedback is sent to the Rofiant team.</p>
             {status === "error" && (
               <p role="alert" className="text-sm text-destructive">Couldn't send your feedback. Please try again.</p>
             )}

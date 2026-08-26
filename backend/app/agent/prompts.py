@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from app.config import settings
+
 TITLE_PROMPT = (
     "Write a short title, 2 to 6 words, for a chat that starts with the message below. "
     "Reply with the title only — no quotes, no punctuation at the end, no explanation."
@@ -55,14 +57,29 @@ CODE_FIDELITY_SUFFIX = (
     "summarize, or describe code as prose instead of writing it."
 )
 
+# Only true when COMPOSIO_API_KEY is set -- see app/agent/tools/__init__.py,
+# which registers composio_action/composio_connect_account under the same flag.
+COMPOSIO_SUFFIX = (
+    "\n\nYou can also connect and act on the user's third-party apps (Gmail, Slack, "
+    "GitHub, Notion, and more) via Composio: composio_connect_account starts a "
+    "connection and gives the user a link to authorize, composio_action then runs "
+    "actions on it. Proactively mention this when the user asks for something one of "
+    "these apps could do, even if they didn't name Composio."
+)
+
 DEFAULT_PERSONA = "agent"
 
 
-def system_prompt_for(persona: str | None, tz_name: str | None = None) -> str:
+def system_prompt_for(
+    persona: str | None,
+    tz_name: str | None = None,
+    custom_instructions: str = "",
+) -> str:
     """Full system prompt for a conversation's persona. Unknown or missing
     persona falls back to the plain agent prompt. `tz_name` is the client's
     IANA timezone (e.g. "America/Denver"), sent per-request since the server
-    has no other way to know it; an unrecognized value just falls back to UTC."""
+    has no other way to know it; an unrecognized value just falls back to UTC.
+    User-owned custom instructions follow the persona when present."""
     now_utc = datetime.now(timezone.utc)
     local = None
     if tz_name:
@@ -79,4 +96,10 @@ def system_prompt_for(persona: str | None, tz_name: str | None = None) -> str:
     else:
         now = now_utc.strftime("%Y-%m-%d %H:%M UTC")
         current_time = f"\n\nCurrent date/time: {now}. The user's local timezone isn't known, but this is an accurate anchor for relative-time questions (\"in 18 hours\", \"what day is it\")."
-    return SYSTEM_PROMPT + current_time + PERSONAS.get(persona or DEFAULT_PERSONA, "")
+    custom_suffix = (
+        f"\n\n## Custom instructions\n{custom_instructions}"
+        if custom_instructions
+        else ""
+    )
+    composio_suffix = COMPOSIO_SUFFIX if settings.composio_api_key else ""
+    return SYSTEM_PROMPT + current_time + composio_suffix + PERSONAS.get(persona or DEFAULT_PERSONA, "") + custom_suffix

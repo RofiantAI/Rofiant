@@ -49,8 +49,8 @@ export function ContactModal({ email = "", onClose }: ContactModalProps) {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: `Kiro support request: ${category}`,
-          from_name: "Kiro desktop app",
+          subject: `Rofiant support request: ${category}`,
+          from_name: "Rofiant desktop app",
           email,
           category,
           message,

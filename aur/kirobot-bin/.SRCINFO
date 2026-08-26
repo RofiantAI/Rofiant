@@ -1,0 +1,15 @@
+pkgbase = kirobot-bin
+	pkgdesc = Cross-platform desktop AI agent for chat, files, code, and sandboxed tools
+	pkgver = 0.1.4
+	pkgrel = 1
+	url = https://github.com/RofiantAI/Rofiant
+	arch = x86_64
+	license = custom
+	depends = webkit2gtk-4.1
+	depends = gtk3
+	provides = kirobot
+	conflicts = kirobot
+	source = https://github.com/RofiantAI/Rofiant/releases/download/desktop-v0.1.4/KiroBot_0.1.4_amd64.deb
+	sha256sums = fa22e89ce190760e1a051e122450c685e5ee515d417710e6680d09628e0a8041
+
+pkgname = kirobot-bin

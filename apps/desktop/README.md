@@ -1,4 +1,4 @@
-# KiroBot Desktop
+# Rofiant Desktop
 
 Cross-platform desktop AI agent for chat, files, code, and sandboxed tools.
 

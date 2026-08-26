@@ -21,7 +21,7 @@ from app.api import (
 from app.rate_limit import RateLimiter
 
 logger = logging.getLogger(__name__)
-app = FastAPI(title="KiroBot API")
+app = FastAPI(title="Rofiant API")
 
 # ponytail: per-process limits match today's single Railway worker; use a
 # shared store before adding workers or replicas.

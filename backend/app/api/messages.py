@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from collections.abc import AsyncIterator
 from typing import Literal
 from uuid import UUID
@@ -18,6 +19,8 @@ from app.agent.runner import MAX_STEPS, run_agent
 from app.agent.title import DEFAULT_TITLE, generate_title
 from app.api.auth import AuthContext, get_current_user
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 from app.schemas.message import MessageCreate, MessageOut
 from app.services.anthropic_oauth import get_access_token
 from app.services.supabase import get_admin_client, get_user_client
@@ -32,6 +35,14 @@ _active_runs: set[str] = set()
 _active_runs_guard = asyncio.Lock()
 _pending_approvals: dict[str, tuple[str, asyncio.Future[bool]]] = {}
 _pending_approvals_guard = asyncio.Lock()
+# Results for tools the desktop app runs itself (real local filesystem
+# access) instead of the backend -- keyed by tool_use.id, same
+# register/resolve shape as _pending_approvals.
+_pending_client_tool_results: dict[str, tuple[str, asyncio.Future[str]]] = {}
+_pending_client_tool_results_guard = asyncio.Lock()
+# Tools that touch the user's real computer always need a yes/no, regardless
+# of tool_approval_policy -- there's no sandbox boundary to fall back on.
+_ALWAYS_RISKY_TOOLS = {"terminal", "local_read_file", "local_write_file", "local_list_dir"}
 
 
 @router.post("", response_model=MessageOut, status_code=status.HTTP_201_CREATED)
@@ -133,6 +144,23 @@ async def decide_approval(
         pending[1].set_result(body.approved)
 
 
+class ClientToolResult(BaseModel):
+    result: str
+
+
+@router.post("/tool-results/{call_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def submit_tool_result(
+    call_id: str, body: ClientToolResult, auth: AuthContext = Depends(get_current_user)
+):
+    async with _pending_client_tool_results_guard:
+        pending = _pending_client_tool_results.get(call_id)
+        if not pending or pending[0] != auth.user_id:
+            raise HTTPException(status_code=404, detail="No pending local tool call with that id")
+        _pending_client_tool_results.pop(call_id)
+    if not pending[1].done():
+        pending[1].set_result(body.result)
+
+
 def _sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
@@ -206,6 +234,17 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
 
     skills_resp = client.table("skills").select("name,content").execute()
     skills_suffix = "".join(f"\n\n## Skill: {s['name']}\n{s['content']}" for s in skills_resp.data or [])
+    profile_resp = (
+        client.table("profiles")
+        .select("custom_instructions")
+        .eq("id", auth.user_id)
+        .execute()
+    )
+    custom_instructions = (
+        profile_resp.data[0].get("custom_instructions", "")
+        if profile_resp.data
+        else ""
+    )
 
     async def get_sandbox_id() -> str:
         return await get_or_create_workspace(client, auth.user_id, conversation_id)
@@ -244,7 +283,7 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             try:
                 async def approve_tool(call_id: str, tool: str, arguments: dict) -> bool:
                     policy = body.tool_approval_policy
-                    needs_approval = policy == "always" or (policy == "risky" and tool == "terminal")
+                    needs_approval = policy == "always" or (policy == "risky" and tool in _ALWAYS_RISKY_TOOLS)
                     if not needs_approval:
                         return True
                     approval_id = str(uuid4())
@@ -262,6 +301,21 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                         async with _pending_approvals_guard:
                             _pending_approvals.pop(approval_id, None)
 
+                async def run_client_tool(call_id: str, tool: str, arguments: dict) -> str:
+                    future: asyncio.Future[str] = asyncio.get_running_loop().create_future()
+                    async with _pending_client_tool_results_guard:
+                        _pending_client_tool_results[call_id] = (auth.user_id, future)
+                    await approval_events.put(_sse("tool.client_exec_required", {
+                        "id": call_id, "tool": tool, "arguments": arguments
+                    }))
+                    try:
+                        return await asyncio.wait_for(future, timeout=120)
+                    except TimeoutError:
+                        return "Error: timed out waiting for the desktop app to run this."
+                    finally:
+                        async with _pending_client_tool_results_guard:
+                            _pending_client_tool_results.pop(call_id, None)
+
                 approval_events: asyncio.Queue[str] = asyncio.Queue()
 
                 deadline = max(1, min(body.max_run_minutes, 30)) * 60
@@ -272,11 +326,14 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
 
                     async def run_bot() -> None:
                         try:
-                            system_prompt = system_prompt_for(persona, body.timezone) + skills_suffix + CODE_FIDELITY_SUFFIX
+                            system_prompt = system_prompt_for(
+                                persona, body.timezone, custom_instructions
+                            ) + skills_suffix + CODE_FIDELITY_SUFFIX
                             async for event in run_agent(
                                 history=history, provider=provider, get_sandbox_id=get_sandbox_id,
                                 user_id=auth.user_id, max_steps=body.max_steps,
                                 system_prompt=system_prompt, approve_tool=approve_tool,
+                                run_client_tool=run_client_tool,
                             ):
                                 await agent_events.put(event)
                         except Exception as exc:
@@ -354,7 +411,9 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                             ).execute()
                         yield _sse(event.type, data)
             except Exception as exc:
-                yield _sse("agent.failed", {"error": str(exc)})
+                logger.exception("Agent run failed for conversation %s", conversation_id)
+                detail = str(exc) if isinstance(exc, TimeoutError) else "Agent run failed"
+                yield _sse("agent.failed", {"error": detail})
                 return
 
             # Name the chat from its opening message, once, after the reply is

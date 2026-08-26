@@ -40,6 +40,7 @@ interface UIState {
   maxSteps: number;
   maxRunMinutes: number;
   toolApprovalPolicy: ToolApprovalPolicy;
+  skipFullAccessConfirm: boolean;
   autoCheckUpdates: boolean;
   shortcuts: ShortcutBindings;
   botGalleryOpen: boolean;
@@ -62,6 +63,7 @@ interface UIState {
   setMaxSteps: (steps: number) => void;
   setMaxRunMinutes: (minutes: number) => void;
   setToolApprovalPolicy: (policy: ToolApprovalPolicy) => void;
+  setSkipFullAccessConfirm: (value: boolean) => void;
   setAutoCheckUpdates: (value: boolean) => void;
   setShortcut: (id: ShortcutId, binding: string) => void;
   resetShortcuts: () => void;
@@ -104,6 +106,7 @@ export const useUIStore = create<UIState>()(
       maxSteps: 4,
       maxRunMinutes: 10,
       toolApprovalPolicy: "risky",
+      skipFullAccessConfirm: false,
       autoCheckUpdates: true,
       shortcuts: { ...DEFAULT_SHORTCUTS },
       botGalleryOpen: false,
@@ -127,6 +130,7 @@ export const useUIStore = create<UIState>()(
         set({ maxSteps: Math.min(MAX_STEPS_RANGE.max, Math.max(MAX_STEPS_RANGE.min, Math.round(steps))) }),
       setMaxRunMinutes: (minutes) => set({ maxRunMinutes: Math.min(30, Math.max(1, Math.round(minutes))) }),
       setToolApprovalPolicy: (toolApprovalPolicy) => set({ toolApprovalPolicy }),
+      setSkipFullAccessConfirm: (skipFullAccessConfirm) => set({ skipFullAccessConfirm }),
       setAutoCheckUpdates: (autoCheckUpdates) => set({ autoCheckUpdates }),
       setShortcut: (id, binding) => set((state) => ({ shortcuts: { ...state.shortcuts, [id]: binding } })),
       resetShortcuts: () => set({ shortcuts: { ...DEFAULT_SHORTCUTS } }),
@@ -177,6 +181,7 @@ export const useUIStore = create<UIState>()(
         maxSteps: s.maxSteps,
         maxRunMinutes: s.maxRunMinutes,
         toolApprovalPolicy: s.toolApprovalPolicy,
+        skipFullAccessConfirm: s.skipFullAccessConfirm,
         autoCheckUpdates: s.autoCheckUpdates,
         shortcuts: s.shortcuts,
       }),

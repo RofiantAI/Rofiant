@@ -1,7 +1,7 @@
 [project]
 name = "backend"
 version = "0.1.0"
-description = "KiroBot FastAPI backend"
+description = "Rofiant FastAPI backend"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",

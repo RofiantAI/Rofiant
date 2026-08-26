@@ -283,7 +283,9 @@ function ShortcutEditor() {
 export function SettingsPage() {
   const location = useLocation();
   const [section, setSection] = useState<Section>(
-    location.state?.section === "providers" ? "providers" : "general",
+    location.state?.section === "providers" || location.state?.section === "agent"
+      ? location.state.section
+      : "general",
   );
 
   const { data: status } = useProviderStatus();
@@ -357,16 +359,22 @@ export function SettingsPage() {
   const { data: profile } = useProfile();
   const displayName = profile?.username || user?.email || "?";
   const updateProfile = useUpdateProfile();
+  const updateCustomInstructions = useUpdateProfile();
   const deactivateAccount = useDeactivateAccount();
   const deleteAccount = useDeleteAccount();
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [nameInput, setNameInput] = useState("");
+  const [customInstructions, setCustomInstructions] = useState("");
   const [confirmDeactivate, setConfirmDeactivate] = useState(false);
   const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
   useEffect(() => {
     if (profile?.username) setNameInput(profile.username);
   }, [profile?.username]);
+
+  useEffect(() => {
+    if (profile) setCustomInstructions(profile.custom_instructions);
+  }, [profile]);
 
   const [appVersion, setAppVersion] = useState("");
   const [updateStatus, setUpdateStatus] = useState<"idle" | "checking" | "current" | "available" | "error">(
@@ -418,7 +426,7 @@ export function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `kiro-export-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.download = `rofiant-export-${new Date().toISOString().slice(0, 10)}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -646,7 +654,7 @@ export function SettingsPage() {
               <div>
                 <SectionHeading>Updates</SectionHeading>
                 <section className="rounded-lg border border-border bg-card">
-                  <Row as="label" title="Check automatically" description="Checks once whenever Kiro starts.">
+                  <Row as="label" title="Check automatically" description="Checks once whenever Rofiant starts.">
                     <Checkbox checked={autoCheckUpdates} onChange={() => setAutoCheckUpdates(!autoCheckUpdates)} />
                   </Row>
                   <Row
@@ -658,7 +666,7 @@ export function SettingsPage() {
                           ? "Couldn't check for updates."
                           : updateStatus === "available"
                             ? `Version ${availableUpdate?.version} is available.`
-                            : `KiroBot ${appVersion}`)
+                            : `Rofiant ${appVersion}`)
                     }
                   >
                     {updateStatus === "available" ? (
@@ -685,6 +693,47 @@ export function SettingsPage() {
 
           {section === "agent" && (
             <div className="space-y-6">
+              <div>
+                <SectionHeading>Custom instructions</SectionHeading>
+                <section className="space-y-3 rounded-lg border border-border bg-card p-5">
+                  <p className="text-xs text-muted-foreground">
+                    Tell the assistant how to respond. Applied to every agent run.
+                  </p>
+                  <textarea
+                    aria-label="Custom instructions"
+                    value={customInstructions}
+                    onChange={(e) => setCustomInstructions(e.target.value)}
+                    placeholder="For example: Keep answers concise and explain unfamiliar terms."
+                    rows={5}
+                    maxLength={10_000}
+                    disabled={!profile || updateCustomInstructions.isPending}
+                    className="w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50"
+                  />
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs text-muted-foreground">
+                      {customInstructions.length.toLocaleString()} / 10,000
+                    </p>
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        updateCustomInstructions.mutate({ custom_instructions: customInstructions })
+                      }
+                      disabled={
+                        !profile ||
+                        customInstructions === profile.custom_instructions ||
+                        updateCustomInstructions.isPending
+                      }
+                    >
+                      {updateCustomInstructions.isPending && <Spinner className="h-4 w-4" />}
+                      Save
+                    </Button>
+                  </div>
+                  {updateCustomInstructions.isError && (
+                    <p className="text-xs text-destructive">Couldn't save custom instructions.</p>
+                  )}
+                </section>
+              </div>
+
               <div>
                 <SectionHeading>Run limits</SectionHeading>
                 <section className="divide-y divide-border rounded-lg border border-border bg-card">

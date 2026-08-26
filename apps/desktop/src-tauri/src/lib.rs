@@ -33,6 +33,44 @@ fn save_workspace_files(dest: String, files: Vec<WorkspaceFile>) -> Result<(), S
     Ok(())
 }
 
+// Local filesystem tools for the agent: unlike save_workspace_files above,
+// these deliberately have no path confinement -- the user chose "full
+// access, safety via the approval system" over folder-scoping (every call
+// here is already gated by the desktop app's tool-approval flow before it
+// reaches Rust). `path` is whatever absolute path the model supplied.
+#[tauri::command]
+fn local_read_file(path: String) -> Result<String, String> {
+    let bytes = std::fs::read(&path).map_err(|e| format!("Error reading {}: {}", path, e))?;
+    Ok(String::from_utf8_lossy(&bytes).into_owned())
+}
+
+#[tauri::command]
+fn local_write_file(path: String, content: String) -> Result<String, String> {
+    let target = std::path::Path::new(&path);
+    if let Some(parent) = target.parent() {
+        std::fs::create_dir_all(parent).map_err(|e| format!("Error writing {}: {}", path, e))?;
+    }
+    std::fs::write(target, content).map_err(|e| format!("Error writing {}: {}", path, e))?;
+    Ok(format!("Wrote {}", path))
+}
+
+#[tauri::command]
+fn local_list_dir(path: String) -> Result<String, String> {
+    let entries = std::fs::read_dir(&path).map_err(|e| format!("Error listing {}: {}", path, e))?;
+    let mut lines = Vec::new();
+    for entry in entries {
+        let entry = entry.map_err(|e| format!("Error listing {}: {}", path, e))?;
+        let name = entry.file_name().to_string_lossy().into_owned();
+        let is_dir = entry.file_type().map(|t| t.is_dir()).unwrap_or(false);
+        lines.push(format!("{} {}", if is_dir { "d" } else { "f" }, name));
+    }
+    if lines.is_empty() {
+        return Ok("(empty directory)".to_string());
+    }
+    lines.sort();
+    Ok(lines.join("\n"))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -41,7 +79,13 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![greet, save_workspace_files])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            save_workspace_files,
+            local_read_file,
+            local_write_file,
+            local_list_dir
+        ])
         .setup(|_app| {
             // WebKitGTK denies every getUserMedia call unless something answers
             // its permission-request signal, so mic access (voice input) is

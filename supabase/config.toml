@@ -244,32 +244,32 @@ otp_expiry = 3600
 # sender_name = "Admin"
 
 [auth.email.template.confirmation]
-subject = "Confirm your KiroBot account"
+subject = "Confirm your Rofiant account"
 content_path = "./supabase/templates/confirmation.html"
 
 [auth.email.template.invite]
-subject = "You are invited to KiroBot"
+subject = "You are invited to Rofiant"
 content_path = "./supabase/templates/invite.html"
 
 [auth.email.template.magic_link]
-subject = "Your KiroBot sign-in link"
+subject = "Your Rofiant sign-in link"
 content_path = "./supabase/templates/magic_link.html"
 
 [auth.email.template.recovery]
-subject = "Reset your KiroBot password"
+subject = "Reset your Rofiant password"
 content_path = "./supabase/templates/recovery.html"
 
 [auth.email.template.email_change]
-subject = "Confirm your new KiroBot email"
+subject = "Confirm your new Rofiant email"
 content_path = "./supabase/templates/email_change.html"
 
 [auth.email.template.reauthentication]
-subject = "Your KiroBot verification code"
+subject = "Your Rofiant verification code"
 content_path = "./supabase/templates/reauthentication.html"
 
 [auth.email.notification.password_changed]
 enabled = true
-subject = "Your KiroBot password was changed"
+subject = "Your Rofiant password was changed"
 content_path = "./supabase/templates/password_changed.html"
 
 [auth.sms]

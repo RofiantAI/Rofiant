@@ -23,6 +23,11 @@ class AgentTool(ABC):
     name: str
     description: str
     input_schema: dict[str, Any]
+    # True for tools that run on the user's own machine (via the desktop
+    # app) instead of the E2B sandbox -- the backend has no way to execute
+    # these itself, so the runner dispatches them to run_client_tool instead
+    # of calling execute().
+    client_executed: bool = False
 
     @abstractmethod
     async def execute(self, sandbox_id: str, arguments: dict[str, Any]) -> str:

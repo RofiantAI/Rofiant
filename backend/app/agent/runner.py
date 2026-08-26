@@ -64,6 +64,7 @@ async def run_agent(
     max_steps: int = MAX_STEPS,
     system_prompt: str = SYSTEM_PROMPT,
     approve_tool: Callable[[str, str, dict[str, Any]], Awaitable[bool]] | None = None,
+    run_client_tool: Callable[[str, str, dict[str, Any]], Awaitable[str]] | None = None,
 ) -> AsyncIterator[RunnerEvent]:
     """The agent loop: ask the model, run any tools it requests, feed the
     results back, repeat until it stops asking for tools or a limit hits.
@@ -105,10 +106,6 @@ async def run_agent(
                 },
             )
             return
-
-        if sandbox_id is None:
-            sandbox_id = await get_sandbox_id()
-            yield RunnerEvent("workspace.created", {"sandbox_id": sandbox_id})
 
         tool_results = []
         for tool_use in turn.tool_uses:
@@ -161,7 +158,33 @@ async def run_agent(
                                         "error": result_text,
                                     },
                                 )
+                            elif getattr(tool, "client_executed", False):
+                                if run_client_tool is None:
+                                    result_text = "Local filesystem access isn't available from this client."
+                                    yield RunnerEvent(
+                                        "tool.failed",
+                                        {
+                                            "id": tool_use.id,
+                                            "tool": tool_use.name,
+                                            "arguments": tool_use.input,
+                                            "error": result_text,
+                                        },
+                                    )
+                                else:
+                                    result_text = await run_client_tool(tool_use.id, tool_use.name, tool_use.input)
+                                    yield RunnerEvent(
+                                        "tool.completed",
+                                        {
+                                            "id": tool_use.id,
+                                            "tool": tool_use.name,
+                                            "arguments": tool_use.input,
+                                            "result": result_text,
+                                        },
+                                    )
                             else:
+                                if sandbox_id is None:
+                                    sandbox_id = await get_sandbox_id()
+                                    yield RunnerEvent("workspace.created", {"sandbox_id": sandbox_id})
                                 result_text = await tool.execute(sandbox_id, tool_use.input)
                                 yield RunnerEvent(
                                     "tool.completed",

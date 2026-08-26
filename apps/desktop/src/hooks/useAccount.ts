@@ -7,6 +7,7 @@ interface Profile {
   id: string;
   username: string | null;
   avatar_url: string | null;
+  custom_instructions: string;
 }
 
 export function useProfile() {
@@ -16,7 +17,7 @@ export function useProfile() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, username, avatar_url")
+        .select("id, username, avatar_url, custom_instructions")
         .eq("id", userId)
         .single();
       if (error) throw error;
@@ -30,7 +31,11 @@ export function useUpdateProfile() {
   const userId = useAuthStore((s) => s.user?.id);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (patch: { username?: string; avatar_url?: string }) => {
+    mutationFn: async (patch: {
+      username?: string;
+      avatar_url?: string;
+      custom_instructions?: string;
+    }) => {
       const { error } = await supabase.from("profiles").update(patch).eq("id", userId);
       if (error) throw error;
     },

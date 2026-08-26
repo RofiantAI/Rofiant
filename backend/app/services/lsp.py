@@ -1,5 +1,6 @@
 import asyncio
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -10,6 +11,7 @@ from app.agent.tools.base import WORKSPACE_ROOT
 from app.services.sandbox import sandbox_provider
 
 MIRROR_ROOT = Path(tempfile.gettempdir()) / "KiroBot-lsp"
+_CONVERSATION_ID_RE = re.compile(r"^[a-f0-9-]{36}$")  # uuid only -- blocks path traversal
 
 # Language servers speak newline-agnostic stdio JSON-RPC (LSP's own
 # Content-Length framing), not the browser's WebSocket framing — the WS
@@ -30,7 +32,19 @@ def _resolve_command(argv: list[str]) -> list[str]:
 
 
 def mirror_dir(conversation_id: str) -> Path:
+    if not _CONVERSATION_ID_RE.match(conversation_id):
+        raise ValueError(f"Invalid conversation id: {conversation_id!r}")
     return MIRROR_ROOT / conversation_id
+
+
+def _safe_local_path(root: Path, rel: str) -> Path:
+    """Join `rel` onto `root` and reject anything that escapes it (mirrors
+    the containment check in machine-agent/agent.py's _bot_dir)."""
+    local_path = (root / rel).resolve()
+    root_resolved = root.resolve()
+    if local_path != root_resolved and root_resolved not in local_path.parents:
+        raise ValueError(f"Path escapes mirror root: {rel}")
+    return local_path
 
 
 async def sync_workspace_mirror(conversation_id: str, sandbox_id: str) -> Path:
@@ -48,7 +62,7 @@ async def sync_workspace_mirror(conversation_id: str, sandbox_id: str) -> Path:
         entries = await sandbox_provider.list_files(sandbox_id, sandbox_path)
         for entry in entries:
             rel = entry.path[len(WORKSPACE_ROOT):].lstrip("/")
-            local_path = root / rel
+            local_path = _safe_local_path(root, rel)
             if entry.is_dir:
                 local_path.mkdir(parents=True, exist_ok=True)
                 await walk(entry.path)
@@ -69,7 +83,7 @@ def sync_file_to_mirror(conversation_id: str, workspace_path: str, content: str)
     if not root.exists():
         return
     rel = workspace_path.lstrip("/")
-    local_path = root / rel
+    local_path = _safe_local_path(root, rel)
     local_path.parent.mkdir(parents=True, exist_ok=True)
     local_path.write_text(content)
 

@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, ChevronRight, Mic, Plus, Square, X } from "lucide-react";
+import { createPortal } from "react-dom";
+import { AlertCircle, ArrowUp, Check, ChevronRight, CircleCheck, Hand, Mic, Plus, Square, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useUIStore } from "@/stores/useUIStore";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useUIStore, type ToolApprovalPolicy } from "@/stores/useUIStore";
 import { useSendMessage, useClearMessages } from "@/hooks/useMessages";
 import { useConversations, useCreateConversation } from "@/hooks/useConversations";
 import { useProviderStatus } from "@/hooks/useProviderConnections";
@@ -170,6 +173,196 @@ function EffortPopover() {
           </p>
           <EffortSlider index={index} onChange={(i) => setMaxSteps(EFFORT_STEPS[i])} />
         </div>
+      )}
+    </div>
+  );
+}
+
+const APPROVAL_OPTIONS: {
+  value: ToolApprovalPolicy;
+  label: string;
+  description: string;
+  icon: typeof Hand;
+  warning?: boolean;
+}[] = [
+  {
+    value: "always",
+    label: "Ask for approval",
+    description: "Always ask to edit external files and use the internet",
+    icon: Hand,
+  },
+  {
+    value: "risky",
+    label: "Approve for me",
+    description: "Only ask for actions detected as potentially unsafe",
+    icon: CircleCheck,
+  },
+  {
+    value: "automatic",
+    label: "Full access",
+    description: "Unrestricted access to the internet and any file on your computer",
+    icon: AlertCircle,
+    warning: true,
+  },
+];
+
+// Same button+panel pattern as EffortPopover, opening upward from the
+// composer. Reuses toolApprovalPolicy (already wired end-to-end to the
+// backend's tool_approval_policy) so picking an option here actually
+// changes what the agent asks permission for.
+// Full access removes the safety net entirely, so picking it needs an
+// explicit second confirmation unless the user has opted out of seeing it.
+function FullAccessConfirmModal({
+  onCancel,
+  onConfirm,
+}: {
+  onCancel: () => void;
+  onConfirm: (dontShowAgain: boolean) => void;
+}) {
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+  const previousFocus = useRef(document.activeElement as HTMLElement | null);
+
+  useEffect(() => () => previousFocus.current?.focus(), []);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onCancel();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onCancel]);
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6" onClick={onCancel}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="full-access-title"
+        className="w-full max-w-sm rounded-2xl border border-border bg-card p-4 shadow-xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500/10 text-orange-500">
+            <AlertCircle className="h-4 w-4" />
+          </span>
+          <div className="min-w-0 pt-0.5">
+            <h2 id="full-access-title" className="text-sm font-semibold text-foreground">
+              Enable full access?
+            </h2>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              The agent edits files and uses the internet without asking first.
+            </p>
+          </div>
+        </div>
+
+        <label className="mt-3.5 flex cursor-pointer items-center gap-2 border-t border-border pt-3 text-xs text-muted-foreground">
+          <Checkbox checked={dontShowAgain} onChange={() => setDontShowAgain((v) => !v)} />
+          Don't show this again
+        </label>
+
+        <div className="mt-4 flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            autoFocus
+            onClick={() => onConfirm(dontShowAgain)}
+            className="border-orange-500/40 bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 hover:text-orange-500"
+          >
+            Enable full access
+          </Button>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function ApprovalPolicyPopover() {
+  const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const toolApprovalPolicy = useUIStore((s) => s.toolApprovalPolicy);
+  const setToolApprovalPolicy = useUIStore((s) => s.setToolApprovalPolicy);
+  const skipFullAccessConfirm = useUIStore((s) => s.skipFullAccessConfirm);
+  const setSkipFullAccessConfirm = useUIStore((s) => s.setSkipFullAccessConfirm);
+  const current = APPROVAL_OPTIONS.find((o) => o.value === toolApprovalPolicy) ?? APPROVAL_OPTIONS[1];
+
+  function selectOption(value: ToolApprovalPolicy) {
+    setOpen(false);
+    if (value === "automatic" && !skipFullAccessConfirm) {
+      setConfirmOpen(true);
+      return;
+    }
+    setToolApprovalPolicy(value);
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    function onClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative shrink-0">
+      <button
+        type="button"
+        aria-label="Action approval settings"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          "flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-secondary pl-2.5 pr-3 text-xs font-medium transition-colors hover:bg-accent",
+          current.warning ? "text-orange-500 hover:text-orange-500" : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        <current.icon className="h-3.5 w-3.5" />
+        {current.label}
+      </button>
+
+      {open && (
+        <div className="absolute bottom-full left-0 z-40 mb-2 w-[360px] rounded-2xl border border-border bg-popover p-3 shadow-lg">
+          <p className="mb-1.5 text-[13px] text-muted-foreground">How should agent actions be approved?</p>
+          {APPROVAL_OPTIONS.map((option) => {
+            const selected = option.value === toolApprovalPolicy;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => selectOption(option.value)}
+                className="-mx-1 flex w-[calc(100%+0.5rem)] items-center gap-2.5 rounded-lg px-1 py-1 text-left hover:bg-accent"
+              >
+                <option.icon
+                  className={cn("h-3.5 w-3.5 shrink-0", option.warning ? "text-orange-500" : "text-muted-foreground")}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className={cn("block text-xs font-medium", option.warning ? "text-orange-500" : "text-foreground")}>
+                    {option.label}
+                  </span>
+                  <span className={cn("block text-[11px] leading-4", option.warning ? "text-orange-500/80" : "text-muted-foreground")}>
+                    {option.description}
+                  </span>
+                </span>
+                {selected && <Check className="h-3.5 w-3.5 shrink-0 text-foreground" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {confirmOpen && (
+        <FullAccessConfirmModal
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={(dontShowAgain) => {
+            if (dontShowAgain) setSkipFullAccessConfirm(true);
+            setToolApprovalPolicy("automatic");
+            setConfirmOpen(false);
+          }}
+        />
       )}
     </div>
   );
@@ -601,6 +794,8 @@ export function MessageInput({
           >
             <Plus className="h-4 w-4" />
           </button>
+
+          <ApprovalPolicyPopover />
 
           <textarea
             ref={textareaRef}

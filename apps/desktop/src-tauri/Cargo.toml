@@ -3,7 +3,7 @@ name = "desktop"
 version = "0.1.4"
 description = "Cross-platform desktop AI agent for chat, files, code, and sandboxed tools"
 authors = ["RofiantAI"]
-repository = "https://github.com/RofiantAI/KiroBots"
+repository = "https://github.com/RofiantAI/Rofiant"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

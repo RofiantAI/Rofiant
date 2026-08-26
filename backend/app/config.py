@@ -24,6 +24,12 @@ class Settings(BaseSettings):
     e2b_api_key: str | None = None
     brave_api_key: str | None = None
 
+    # Composio (composio.dev): third-party integration actions (Gmail, Slack,
+    # GitHub, ...). composio_user_id identifies which connected accounts to
+    # use -- set up via the Composio dashboard, not this app.
+    composio_api_key: str | None = None
+    composio_user_id: str = "default"
+
     # "e2b" runs the agent's workspace in a cloud microVM; "local" runs it in a
     # container on this machine (docker or podman, whichever is on PATH), so
     # nothing leaves the user's computer. The local image needs `sh`; add git,

@@ -13,7 +13,7 @@ import { useConversations } from "@/hooks/useConversations";
 import { DEFAULT_PERSONA, personaFor } from "@/lib/personas";
 import { PersonaFace } from "@/components/personas/PersonaFace";
 import { useAgentRun } from "@/hooks/useAgentRun";
-import { ApprovalDialog } from "@/components/chat/ApprovalDialog";
+import { ApprovalBar } from "@/components/chat/ApprovalDialog";
 import type { Conversation, ToolCall } from "@/types/chat";
 
 function MessageSkeleton() {
@@ -192,6 +192,7 @@ export function ChatView() {
           <div ref={bottomRef} />
         </div>
       </div>
+      {agentRun.pendingApproval && <ApprovalBar approval={agentRun.pendingApproval} />}
       <MessageInput
         onSent={(conversationId, mentionedPersonas) => agentRun.run(mentionedPersonas, conversationId)}
         conversationTitle={
@@ -200,7 +201,6 @@ export function ChatView() {
             : activeConversation?.title
         }
       />
-      {agentRun.pendingApproval && <ApprovalDialog approval={agentRun.pendingApproval} />}
     </div>
   );
 }

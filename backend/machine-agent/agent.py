@@ -42,7 +42,7 @@ HEARTBEAT_INTERVAL_S = 30
 DISPLAY = os.environ.get("DISPLAY_NUM", ":99")
 BOT_ID_RE = re.compile(r"^[a-f0-9-]{36}$")  # uuid only -- blocks path traversal
 
-app = FastAPI(title="KiroBot machine agent")
+app = FastAPI(title="Rofiant machine agent")
 # Concurrent `import` calls against Xvfb were enough to wedge the display
 # under load (multiple pollers, multiple browser tabs) -- one capture at a
 # time, full stop.

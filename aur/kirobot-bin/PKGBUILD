@@ -1,0 +1,17 @@
+# Maintainer: RofiantAI
+pkgname=kirobot-bin
+pkgver=0.1.4
+pkgrel=1
+pkgdesc="Cross-platform desktop AI agent for chat, files, code, and sandboxed tools"
+arch=('x86_64')
+url="https://github.com/RofiantAI/Rofiant"
+license=('custom')
+depends=('webkit2gtk-4.1' 'gtk3')
+provides=('kirobot')
+conflicts=('kirobot')
+source=("https://github.com/RofiantAI/Rofiant/releases/download/desktop-v${pkgver}/KiroBot_${pkgver}_amd64.deb")
+sha256sums=('fa22e89ce190760e1a051e122450c685e5ee515d417710e6680d09628e0a8041')
+
+package() {
+    tar -xf data.tar.gz -C "$pkgdir"
+}

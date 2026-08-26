@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { invoke } from "@tauri-apps/api/core";
 import { apiFetch } from "@/lib/api";
 import { useUIStore } from "@/stores/useUIStore";
 import { EMPTY_AGENT_RUN, useRunningStore } from "@/stores/useRunningStore";
@@ -34,6 +35,31 @@ function notifyIfEnabled(queryClient: ReturnType<typeof useQueryClient>, convers
   };
   if (Notification.permission === "granted") fire();
   else Notification.requestPermission().then((p) => p === "granted" && fire());
+}
+
+const LOCAL_TOOLS = new Set(["local_read_file", "local_write_file", "local_list_dir"]);
+
+/** Runs a client_executed tool (see AgentTool.client_executed on the
+ * backend) against the user's real filesystem via the Tauri commands in
+ * src-tauri/src/lib.rs, and returns the plain-text result the model sees. */
+async function runLocalTool(tool: string, args: Record<string, unknown>): Promise<string> {
+  try {
+    switch (tool) {
+      case "local_read_file":
+        return await invoke<string>("local_read_file", { path: String(args.path) });
+      case "local_write_file":
+        return await invoke<string>("local_write_file", {
+          path: String(args.path),
+          content: String(args.content ?? ""),
+        });
+      case "local_list_dir":
+        return await invoke<string>("local_list_dir", { path: String(args.path) });
+      default:
+        return `Unknown local tool: ${tool}`;
+    }
+  } catch (err) {
+    return err instanceof Error ? err.message : String(err);
+  }
 }
 
 /** Parses one `event: ...\ndata: ...\n\n` SSE frame into its parts. */
@@ -129,9 +155,12 @@ export function useAgentRun(conversationId: string | null) {
             // bot's leftover text.
             updateRun(id, (s) => ({ ...s, draft: "", draftPersona: null }));
           } else if (event === "tool.approval_required") {
-            const detail = payload.tool === "terminal"
-              ? String(payload.arguments?.command ?? JSON.stringify(payload.arguments))
-              : JSON.stringify(payload.arguments, null, 2);
+            const detail =
+              payload.tool === "terminal"
+                ? String(payload.arguments?.command ?? JSON.stringify(payload.arguments))
+                : LOCAL_TOOLS.has(payload.tool)
+                  ? String(payload.arguments?.path ?? JSON.stringify(payload.arguments))
+                  : JSON.stringify(payload.arguments, null, 2);
             const approved = await new Promise<boolean>((resolve) => {
               approvalResolvers.set(payload.approval_id, resolve);
               updateRun(id, (s) => ({
@@ -143,6 +172,16 @@ export function useAgentRun(conversationId: string | null) {
             await apiFetch(`/api/messages/approvals/${payload.approval_id}`, {
               method: "POST",
               body: JSON.stringify({ approved }),
+            });
+          } else if (event === "tool.client_exec_required") {
+            // Already past approval (either the user said yes to
+            // tool.approval_required above, or the policy is "automatic") --
+            // this just does the real local file I/O and reports the result
+            // back so the agent loop can continue.
+            const result = await runLocalTool(payload.tool, payload.arguments);
+            await apiFetch(`/api/messages/tool-results/${payload.id}`, {
+              method: "POST",
+              body: JSON.stringify({ result }),
             });
           } else if (event === "tool.started") {
             updateRun(id, (s) => ({

@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "KiroBot",
+  "productName": "Rofiant",
   "version": "0.1.4",
   "identifier": "com.rofiant.kirobot",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Kiro",
+        "title": "Rofiant",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -29,7 +29,7 @@
     "targets": "all",
     "publisher": "RofiantAI",
     "shortDescription": "A cross-platform desktop AI agent.",
-    "longDescription": "KiroBot combines AI chat with file editing, code tools, and sandboxed command execution in one desktop app.",
+    "longDescription": "Rofiant combines AI chat with file editing, code tools, and sandboxed command execution in one desktop app.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -42,7 +42,7 @@
   "plugins": {
     "updater": {
       "endpoints": [
-        "https://github.com/RofiantAI/KiroBots/releases/latest/download/latest.json"
+        "https://github.com/RofiantAI/Rofiant/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZGRkUzRDc3QzBEQzIzQUYKUldTdkk5ekFkejMrYjZydGNPZWRtZmtIZHZFMklONE9BeWxITmhuOEVHMDlzK0Rsb2dLbWJySG8K"
     }

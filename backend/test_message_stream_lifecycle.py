@@ -34,6 +34,8 @@ class Table:
             return Result([{"title": "Existing", "persona": "agent", "personas": None}])
         if self.name == "skills":
             return Result([])
+        if self.name == "profiles":
+            return Result([{"custom_instructions": "Answer in haiku."}])
         return Result([])
 
     def insert(self, _row):
@@ -66,8 +68,10 @@ class Admin(Client):
 class Provider:
     def __init__(self):
         self.closed = False
+        self.messages = []
 
-    async def generate(self, _messages, tools=None):
+    async def generate(self, messages, tools=None):
+        self.messages = messages
         yield TurnComplete(text="done", raw_content=[])
 
     async def close(self):
@@ -107,5 +111,6 @@ def test_completion_is_persisted_before_it_is_streamed(monkeypatch):
         return saw_completion
 
     assert asyncio.run(consume())
+    assert "## Custom instructions\nAnswer in haiku." in provider.messages[0].content
     assert provider.closed
     assert not messages._active_runs

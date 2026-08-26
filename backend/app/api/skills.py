@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlsplit
 from uuid import UUID
 
 import httpx
@@ -56,8 +57,8 @@ async def list_skills(auth: AuthContext = Depends(get_current_user)):
 @router.post("", response_model=SkillOut, status_code=status.HTTP_201_CREATED)
 async def install_skill(body: SkillCreate, auth: AuthContext = Depends(get_current_user)):
     raw_url = _to_raw_url(body.source_url)
-    host = httpx.URL(raw_url).host
-    if httpx.URL(raw_url).scheme != "https" or host not in _ALLOWED_HOSTS:
+    parsed = urlsplit(raw_url)
+    if parsed.scheme != "https" or parsed.hostname not in _ALLOWED_HOSTS:
         raise HTTPException(
             status_code=400,
             detail="source_url must be a raw.githubusercontent.com (or github.com blob) URL",

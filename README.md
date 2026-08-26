@@ -1,4 +1,4 @@
-# KiroBot
+# Rofiant
 
 Cross-platform desktop AI agent app. Chat, projects, files, sandboxed terminal, Git, browser control.
 

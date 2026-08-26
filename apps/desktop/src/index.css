@@ -149,6 +149,15 @@ button {
   animation: sidebar-collapse 200ms ease-out;
 }
 
+@keyframes approval-bar-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.approval-bar-in {
+  animation: approval-bar-in 160ms ease-out;
+}
+
 button:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
