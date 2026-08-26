@@ -60,6 +60,17 @@ async def create_message(body: MessageCreate, auth: AuthContext = Depends(get_cu
     return resp.data[0]
 
 
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+async def clear_messages(conversation_id: UUID, auth: AuthContext = Depends(get_current_user)):
+    client = get_user_client(auth.access_token)
+    owned = client.table("conversations").select("id").eq("id", str(conversation_id)).maybe_single().execute()
+    if not owned.data:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    admin = get_admin_client()
+    admin.table("messages").delete().eq("conversation_id", str(conversation_id)).execute()
+    admin.table("tool_calls").delete().eq("conversation_id", str(conversation_id)).execute()
+
+
 def _validate_user_content(content: str) -> None:
     if len(content) > 28_000_000:
         raise HTTPException(status_code=413, detail="Message is too large")

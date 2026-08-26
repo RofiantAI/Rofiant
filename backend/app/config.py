@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     openrouter_model: str = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
 
     e2b_api_key: str | None = None
+    brave_api_key: str | None = None
 
     # "e2b" runs the agent's workspace in a cloud microVM; "local" runs it in a
     # container on this machine (docker or podman, whichever is on PATH), so
