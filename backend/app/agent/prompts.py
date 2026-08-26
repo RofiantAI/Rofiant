@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 TITLE_PROMPT = (
     "Write a short title, 2 to 6 words, for a chat that starts with the message below. "
@@ -57,9 +58,25 @@ CODE_FIDELITY_SUFFIX = (
 DEFAULT_PERSONA = "agent"
 
 
-def system_prompt_for(persona: str | None) -> str:
+def system_prompt_for(persona: str | None, tz_name: str | None = None) -> str:
     """Full system prompt for a conversation's persona. Unknown or missing
-    persona falls back to the plain agent prompt."""
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    current_time = f"\n\nCurrent date/time: {now}. The user's local timezone isn't known, but this is an accurate anchor for relative-time questions (\"in 18 hours\", \"what day is it\")."
+    persona falls back to the plain agent prompt. `tz_name` is the client's
+    IANA timezone (e.g. "America/Denver"), sent per-request since the server
+    has no other way to know it; an unrecognized value just falls back to UTC."""
+    now_utc = datetime.now(timezone.utc)
+    local = None
+    if tz_name:
+        try:
+            local = now_utc.astimezone(ZoneInfo(tz_name))
+        except ZoneInfoNotFoundError:
+            local = None
+
+    if local:
+        current_time = (
+            f"\n\nCurrent date/time: {local.strftime('%Y-%m-%d %H:%M')} ({tz_name}), "
+            f"an accurate anchor for relative-time questions (\"in 18 hours\", \"what day is it\")."
+        )
+    else:
+        now = now_utc.strftime("%Y-%m-%d %H:%M UTC")
+        current_time = f"\n\nCurrent date/time: {now}. The user's local timezone isn't known, but this is an accurate anchor for relative-time questions (\"in 18 hours\", \"what day is it\")."
     return SYSTEM_PROMPT + current_time + PERSONAS.get(persona or DEFAULT_PERSONA, "")

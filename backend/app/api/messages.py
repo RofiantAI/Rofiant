@@ -110,6 +110,9 @@ class StreamRequest(BaseModel):
     mentioned_personas: list[str] | None = None
     tool_approval_policy: Literal["risky", "always", "automatic"] = "risky"
     max_run_minutes: int = Field(default=10, ge=1, le=30)
+    # IANA name (e.g. "America/Denver") from the client's Intl API, so the
+    # system prompt can state local time instead of UTC-only.
+    timezone: str | None = None
 
 
 class ApprovalDecision(BaseModel):
@@ -254,7 +257,7 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
 
                     async def run_bot() -> None:
                         try:
-                            system_prompt = system_prompt_for(persona) + skills_suffix + CODE_FIDELITY_SUFFIX
+                            system_prompt = system_prompt_for(persona, body.timezone) + skills_suffix + CODE_FIDELITY_SUFFIX
                             async for event in run_agent(
                                 history=history, provider=provider, get_sandbox_id=get_sandbox_id,
                                 max_steps=body.max_steps, system_prompt=system_prompt, approve_tool=approve_tool,
