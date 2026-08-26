@@ -1,3 +1,5 @@
+import html
+import re
 from typing import Any
 
 import httpx
@@ -7,6 +9,14 @@ from app.config import settings
 
 BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
 MAX_RESULTS = 5
+_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def _strip_html(text: str) -> str:
+    """Brave wraps matched query terms in the title/description with
+    <strong> tags -- strip that markup so neither the model nor the UI
+    that renders this tool's plain-text result sees raw HTML."""
+    return html.unescape(_TAG_RE.sub("", text))
 
 
 class WebSearchTool(AgentTool):
@@ -39,6 +49,6 @@ class WebSearchTool(AgentTool):
             return f"No results for: {query}"
 
         return "\n\n".join(
-            f"{r.get('title', '(untitled)')}\n{r.get('url', '')}\n{r.get('description', '')}"
+            f"{_strip_html(r.get('title', '(untitled)'))}\n{r.get('url', '')}\n{_strip_html(r.get('description', ''))}"
             for r in results[:MAX_RESULTS]
         )
