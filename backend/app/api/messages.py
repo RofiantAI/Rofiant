@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import re
 from collections.abc import AsyncIterator
 from typing import Literal
 from uuid import UUID
@@ -19,6 +20,7 @@ from app.agent.runner import MAX_STEPS, run_agent
 from app.agent.title import DEFAULT_TITLE, generate_title
 from app.api.auth import AuthContext, get_current_user
 from app.config import settings
+from app.services.plan_access import can_access_tool
 
 logger = logging.getLogger(__name__)
 from app.schemas.message import MessageCreate, MessageOut
@@ -232,8 +234,21 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
             bots = mentioned
     first_user_message = next((m["content"] for m in history_resp.data if m["role"] == "user"), None)
 
+    # Skills only apply when the user explicitly invokes one in this turn's
+    # message (e.g. "/caveman ..."), not on every message just for being
+    # installed -- otherwise an installed skill silently colors every future
+    # reply with no way to tell it's active.
     skills_resp = client.table("skills").select("name,content").execute()
-    skills_suffix = "".join(f"\n\n## Skill: {s['name']}\n{s['content']}" for s in skills_resp.data or [])
+    last_user_message = next(
+        (m["content"] for m in reversed(history_resp.data) if m["role"] == "user"), ""
+    )
+    invoked = re.match(r"^/(\S+)", last_user_message.strip())
+    skills_suffix = ""
+    if invoked:
+        skill_name = invoked.group(1).lower()
+        matched = next((s for s in skills_resp.data or [] if s["name"].lower() == skill_name), None)
+        if matched:
+            skills_suffix = f"\n\n## Skill: {matched['name']}\n{matched['content']}"
     profile_resp = (
         client.table("profiles")
         .select("custom_instructions")
@@ -328,7 +343,8 @@ async def stream_reply(body: StreamRequest, auth: AuthContext = Depends(get_curr
                         try:
                             system_prompt = system_prompt_for(
                                 persona, body.timezone, custom_instructions,
-                                composio_enabled=bool(settings.composio_api_key),
+                                composio_enabled=bool(settings.composio_api_key)
+                                and can_access_tool(auth.plan, "workflows"),
                             ) + skills_suffix + CODE_FIDELITY_SUFFIX
                             async for event in run_agent(
                                 history=history, provider=provider, get_sandbox_id=get_sandbox_id,

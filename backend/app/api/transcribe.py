@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from app.api.auth import AuthContext, get_current_user
 from app.config import settings
+from app.services.plan_access import require_tool
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/transcribe", tags=["transcribe"])
@@ -69,6 +70,8 @@ async def _transcode_to_wav(data: bytes) -> bytes:
 async def transcribe_audio(
     audio: UploadFile = File(...), auth: AuthContext = Depends(get_current_user)
 ):
+    require_tool(auth.plan, "voice")
+
     if not settings.gemini_api_key:
         raise HTTPException(status_code=500, detail="Voice input isn't configured on this server")
 

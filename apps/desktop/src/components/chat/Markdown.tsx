@@ -46,7 +46,7 @@ function CodeBlock({ lang, code }: { lang: string | undefined; code: string }) {
       </div>
       <pre
         className={cn(
-          "p-3 font-mono text-[0.85em] leading-normal",
+          "p-3 font-mono text-[0.85em] leading-normal text-white/90",
           wrap ? "whitespace-pre-wrap break-words" : "overflow-x-auto",
         )}
       >
@@ -58,6 +58,47 @@ function CodeBlock({ lang, code }: { lang: string | undefined; code: string }) {
       </pre>
     </div>
   );
+}
+
+// Model output is supposed to fence all code (see backend prompts.py), but it
+// occasionally slips and emits raw code as a plain paragraph — remark then
+// reads things like `__name__` as bold emphasis instead of a dunder. Catch
+// paragraphs that are mostly code-shaped lines and fence them before parsing,
+// so they still get the CodeBlock box + copy button below.
+const CODE_LINE_RE =
+  /^\s*(def |class |import |from |return\b|if |elif |for |while |print\(|function |const |let |var |public |private |#include|package |func |fn |try:|except|catch\s*\(|switch\s*\(|\}|\{|;\s*$|=>|->)/;
+
+function looksLikeCode(text: string): boolean {
+  const lines = text.split("\n").filter((l) => l.trim().length > 0);
+  if (lines.length < 2) return false;
+  const hits = lines.filter((l) => CODE_LINE_RE.test(l) || /^\s{2,}\S/.test(l)).length;
+  return hits / lines.length >= 0.6;
+}
+
+function guessLang(text: string): string {
+  if (/^\s*(def|import|from|print|elif|class)\b/m.test(text)) return "python";
+  if (/\b(function|const|let|=>|console\.log)\b/.test(text)) return "javascript";
+  if (/#include|std::/.test(text)) return "cpp";
+  if (/\bfunc \w+\(/.test(text)) return "go";
+  if (/\bfn \w+\(/.test(text)) return "rust";
+  return "";
+}
+
+function fenceUnfencedCode(markdown: string): string {
+  return markdown
+    .split(/(```[\s\S]*?```)/)
+    .map((part, i) => {
+      if (i % 2 === 1) return part; // already-fenced block, leave untouched
+      return part
+        .split(/(\n{2,})/)
+        .map((chunk) => {
+          const trimmed = chunk.trim();
+          if (!trimmed || !looksLikeCode(trimmed)) return chunk;
+          return "```" + guessLang(trimmed) + "\n" + trimmed + "\n```";
+        })
+        .join("");
+    })
+    .join("");
 }
 
 // Element styles live here rather than in a typography plugin: only these
@@ -127,7 +168,7 @@ export function Markdown({ children, className }: { children: string; className?
           td: ({ children }) => <td className="border border-current/20 px-2 py-1">{children}</td>,
         }}
       >
-        {children}
+        {fenceUnfencedCode(children)}
       </ReactMarkdown>
     </div>
   );

@@ -23,6 +23,7 @@ class AuthContext(BaseModel):
     user_id: str
     email: str | None
     access_token: str
+    plan: str = "free"
 
 
 def get_current_user(
@@ -68,4 +69,5 @@ def verify_jwt(token: str) -> AuthContext:
             detail="Token missing subject claim",
         )
 
-    return AuthContext(user_id=user_id, email=payload.get("email"), access_token=token)
+    plan = (payload.get("app_metadata") or {}).get("plan", "free")
+    return AuthContext(user_id=user_id, email=payload.get("email"), access_token=token, plan=plan)

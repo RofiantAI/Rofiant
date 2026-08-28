@@ -14,14 +14,14 @@ export function TerminalPanel() {
 
   if (calls.length === 0) {
     return (
-      <div className="h-full overflow-y-auto bg-black/40 p-3 font-mono text-xs text-muted-foreground">
+      <div className="h-full overflow-y-auto bg-muted p-3 font-mono text-xs text-muted-foreground">
         No terminal output yet.
       </div>
     );
   }
 
   return (
-    <div className="h-full space-y-3 overflow-y-auto bg-black/40 p-3 font-mono text-xs">
+    <div className="h-full space-y-3 overflow-y-auto bg-muted p-3 font-mono text-xs">
       {calls.map((call) => (
         <pre
           key={call.id}

@@ -105,7 +105,7 @@ function EffortSlider({ index, onChange }: { index: number; onChange: (index: nu
       className="relative h-10 w-full shrink-0"
       title={`Effort: ${EFFORT_LABELS[index]}`}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-1 h-8 overflow-hidden rounded-full bg-muted">
+      <div className="pointer-events-none absolute inset-x-0 top-1 h-8 overflow-hidden rounded-full border border-border bg-muted">
         <div
           className="h-full bg-primary transition-[width] duration-200 ease-out"
           style={{ width: position }}
@@ -113,11 +113,11 @@ function EffortSlider({ index, onChange }: { index: number; onChange: (index: nu
       </div>
       <div className="pointer-events-none absolute inset-x-0 top-1 flex h-8 items-center justify-between px-4">
         {EFFORT_STEPS.map((step) => (
-          <span key={step} className="h-1 w-1 rounded-full bg-white/30" />
+          <span key={step} className="h-1 w-1 rounded-full bg-white mix-blend-difference" />
         ))}
       </div>
       <span
-        className="pointer-events-none absolute top-0 h-10 w-10 -translate-x-1/2 rounded-full bg-foreground shadow-md transition-[left] duration-200 ease-out"
+        className="pointer-events-none absolute top-0 h-10 w-10 -translate-x-1/2 rounded-full bg-foreground shadow-md ring-2 ring-background transition-[left] duration-200 ease-out"
         style={{ left: position }}
       />
       <input

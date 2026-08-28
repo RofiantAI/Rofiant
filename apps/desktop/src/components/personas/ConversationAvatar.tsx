@@ -24,7 +24,7 @@ function WorkingDot({ size }: { size: number }) {
   return (
     <span
       className="absolute rounded-full bg-emerald-500 ring-2 ring-sidebar"
-      style={{ width: dot, height: dot, bottom: 0, right: 0, zIndex: 10 }}
+      style={{ width: dot, height: dot, bottom: -dot * 0.4, right: -dot * 0.4, zIndex: 10 }}
     />
   );
 }

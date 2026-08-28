@@ -307,6 +307,7 @@ export function SettingsPage() {
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const sidebarWidth = useUIStore((s) => s.sidebarWidth);
   const setSidebarWidth = useUIStore((s) => s.setSidebarWidth);
+  const clearActiveConversation = useUIStore((s) => s.clearActiveConversation);
   const workspacePanelWidth = useUIStore((s) => s.workspacePanelWidth);
   const setWorkspacePanelWidth = useUIStore((s) => s.setWorkspacePanelWidth);
   const workspaceTab = useUIStore((s) => s.workspaceTab);
@@ -366,6 +367,8 @@ export function SettingsPage() {
   const [nameInput, setNameInput] = useState("");
   const [customInstructions, setCustomInstructions] = useState("");
   const [confirmDeactivate, setConfirmDeactivate] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmClearCache, setConfirmClearCache] = useState(false);
   const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
   useEffect(() => {
@@ -476,6 +479,7 @@ export function SettingsPage() {
     setDeleteAllError(false);
     try {
       await Promise.all(conversations.map((c) => deleteConversation.mutateAsync(c.id)));
+      clearActiveConversation();
       setConfirmDeleteAll(false);
     } catch {
       setDeleteAllError(true);
@@ -1211,8 +1215,8 @@ export function SettingsPage() {
               <div>
                 <SectionHeading>Danger zone</SectionHeading>
                 <section className="divide-y divide-destructive/40 rounded-lg border border-destructive/40 bg-card">
-                  <div className="flex items-center justify-between p-5">
-                    <div>
+                  <div className="flex items-center justify-between gap-4 p-5">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm text-foreground/90">Deactivate account</p>
                       <p className="text-xs text-muted-foreground">
                         Locks you out and signs you out everywhere. Your data is kept. Contact
@@ -1239,8 +1243,8 @@ export function SettingsPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between p-5">
-                    <div>
+                  <div className="flex items-center justify-between gap-4 p-5">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm text-foreground/90">Delete account</p>
                       <p className="text-xs text-muted-foreground">
                         Permanently deletes your account and every chat. Can't be undone.
@@ -1289,9 +1293,22 @@ export function SettingsPage() {
                       Wipes cached conversations and status. Nothing on the server is deleted.
                     </p>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => queryClient.clear()}>
+                  <Button variant="outline" size="sm" onClick={() => setConfirmClearCache(true)}>
                     Clear
                   </Button>
+                  {confirmClearCache && (
+                    <ConfirmDialog
+                      title="Clear local cache?"
+                      description="Wipes cached conversations and status. Nothing on the server is deleted."
+                      confirmLabel="Confirm clear"
+                      pending={false}
+                      onCancel={() => setConfirmClearCache(false)}
+                      onConfirm={() => {
+                        queryClient.clear();
+                        setConfirmClearCache(false);
+                      }}
+                    />
+                  )}
                 </section>
               </div>
 
@@ -1302,9 +1319,19 @@ export function SettingsPage() {
                     title="Reset settings to defaults"
                     description="Restores every preference on this page. Chats are untouched."
                   >
-                    <Button variant="outline" size="sm" onClick={handleResetPreferences}>
+                    <Button variant="outline" size="sm" onClick={() => setConfirmReset(true)}>
                       Reset
                     </Button>
+                    {confirmReset && (
+                      <ConfirmDialog
+                        title="Reset settings to defaults?"
+                        description="Restores every preference on this page. Chats are untouched."
+                        confirmLabel="Confirm reset"
+                        pending={false}
+                        onCancel={() => setConfirmReset(false)}
+                        onConfirm={handleResetPreferences}
+                      />
+                    )}
                   </Row>
                 </section>
               </div>
