@@ -41,10 +41,11 @@ modules:
       - install -Dm644 apps/desktop/src-tauri/icons/icon.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/com.rofiant.kirobot.png
       - install -Dm644 com.rofiant.kirobot.desktop ${FLATPAK_DEST}/share/applications/com.rofiant.kirobot.desktop
       - install -Dm644 com.rofiant.kirobot.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.rofiant.kirobot.metainfo.xml
+      - install -Dm644 LICENSE ${FLATPAK_DEST}/share/licenses/com.rofiant.kirobot/LICENSE
     sources:
       - type: git
         url: https://github.com/RofiantAI/Rofiant.git
-        commit: e583ed26e97077f355c17369eb14ab7be2b9ed4d
+        commit: 76b4b6dd5f7a389b6312ab5b9d08af0dd8a1a688
       - type: archive
         url: https://github.com/pnpm/pnpm/releases/download/v11.3.0/pnpm-linux-x64.tar.gz
         sha256: 6eb506b53297eb1186ba0cbff1577bb26d17713835a01a5342dcafae550827ce
