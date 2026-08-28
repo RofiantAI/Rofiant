@@ -8,3 +8,7 @@ target/
 .codegraph/
 __pycache__/
 *.pyc
+flatpak/build-dir/
+flatpak/export-repo/
+flatpak/.flatpak-builder/
+flatpak/*.flatpak
