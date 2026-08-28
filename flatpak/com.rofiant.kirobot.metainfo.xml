@@ -21,15 +21,15 @@
   <url type="bugtracker">https://github.com/RofiantAI/Rofiant/issues</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/RofiantAI/KiroBots/master/flatpak/screenshots/01-welcome.png</image>
+      <image>https://raw.githubusercontent.com/RofiantAI/Rofiant/master/flatpak/screenshots/01-welcome.png</image>
       <caption>Welcome screen</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/RofiantAI/KiroBots/master/flatpak/screenshots/02-builder.png</image>
+      <image>https://raw.githubusercontent.com/RofiantAI/Rofiant/master/flatpak/screenshots/02-builder.png</image>
       <caption>Agent writing code with a live file preview</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/RofiantAI/KiroBots/master/flatpak/screenshots/03-search.png</image>
+      <image>https://raw.githubusercontent.com/RofiantAI/Rofiant/master/flatpak/screenshots/03-search.png</image>
       <caption>Agent activity panel showing a web search in progress</caption>
     </screenshot>
   </screenshots>
