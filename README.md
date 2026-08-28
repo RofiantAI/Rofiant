@@ -237,39 +237,6 @@ without a key. Plain chat with no tool use works fine without it. The rest
 (`OPENAI_API_KEY`, `GEMINI_API_KEY`, `SENTRY_DSN`) are still unused, reserved
 for later phases.
 
-## Roadmap
-
-Phase 1 (done): desktop shell, layout, mock UI state.
-Phase 2 (done): Supabase auth (signup/login/logout), protected routes.
-Phase 3 (done): conversations/messages schema + RLS, live-wired chat list and
-message history via TanStack Query.
-Phase 4 (done): FastAPI backend: `/health`, JWT-verified `/api/conversations`
-and `/api/messages`, RLS-scoped Postgrest client, Dockerfile + railway.toml.
-Phase 5 (done): `ModelProvider` abstraction + Anthropic implementation,
-`/api/messages/stream` SSE endpoint, live-streamed assistant replies in the
-desktop chat view.
-Off-roadmap, done at user request: Settings page, Anthropic Claude Pro/Max
-OAuth sign-in (unofficial, see above) and OpenAI bring-your-own-API-key;
-custom window titlebar (real macOS-style traffic lights); UI restyle; bot
-personas (`conversations.persona`, migration 0006): "new chat" opens a bot
-gallery (Agent / Builder / Reviewer / Explainer / Rubber Duck) and picking one
-is what creates the conversation, titled after the bot and fixed to it for
-life — the persona appends a paragraph to the system prompt on every run, so a
-mid-chat switch would rewrite the premise of the existing history. An empty
-chat shows the bot's card instead of a greeting message row. Each bot
-has an animated CSS face (`components/personas/PersonaFace.tsx`: colored shape,
-idle bob, blinking eyes) that replaces the old initial-based conversation
-avatar in the sidebar and titlebar. Prompt text
-lives in `backend/app/agent/prompts.py`, the picker's labels in
-`apps/desktop/src/lib/personas.ts`; `backend/test_personas.py` fails if the two
-id lists drift apart.
-Phase 6/7 (done): real agent loop with tool calls (`runner.py`), E2B-backed
-sandboxed tools (read_file, write_file, list_files, terminal, git_status,
-git_diff), workspaces + tool_calls tables, Agent Activity / Files / Terminal
-wired to real data instead of mock state.
-Phase 8+: agent_runs table + run status/cancel endpoint, Git panel proper
-(not just the two read-only tools), browser automation.
-
 ## Cloud Computer (persistent per-user VM)
 
 Separate from the per-conversation E2B/local sandboxes above: every Supabase
@@ -283,43 +250,43 @@ Desktop -> FastAPI (Railway) -> Supabase (auth + user_machines/bots) -> Fly Mach
 ```
 
 **Database** (`supabase/migrations/0012_user_machines.sql`): `user_machines`
-(one row per user, `user_id` UNIQUE -- this is both the "exactly one VM"
+(one row per user, `user_id` UNIQUE, both the "exactly one VM"
 constraint and the concurrency lock for provisioning), `bots`, `machine_jobs`
 (outbox of start/stop/restart commands sent to the agent), `machine_events`
 (inbox: heartbeats, provisioning results). RLS: users can only `select` their
-own `user_machines` row (provider ids, status) -- no insert/update/delete
+own `user_machines` row (provider ids, status). No insert/update/delete
 policy exists for `authenticated` at all, so only the service-role backend
 can write it. `bots` gets full owner CRUD policies like `conversations`.
 
 **Backend**:
-- `app/services/fly.py` -- `FlyProvider`, a thin wrapper over the Fly
+- `app/services/fly.py`: `FlyProvider`, a thin wrapper over the Fly
   Machines API (create/start/stop/restart/delete a Machine, create/delete a
   Volume). `FLY_API_TOKEN` never leaves this file.
-- `app/services/machine.py` -- owns every write to `user_machines`.
-  `ensure_machine()` is the idempotent entry point: it does an
+- `app/services/machine.py`: owns every write to `user_machines`.
+  `ensure_machine()` is the idempotent entry point. It does an
   `INSERT ... ON CONFLICT (user_id) DO NOTHING` first, so under concurrent
   requests exactly one caller's insert lands and does the real provisioning
-  (create volume -> create machine -> wait for started); everyone else just
+  (create volume, create machine, wait for started); everyone else just
   reads back the (possibly still-provisioning) row. Any failure mid-flight
-  sets `status='error'` with `error_message` -- it never leaves the row
+  sets `status='error'` with `error_message`; it never leaves the row
   claiming `running` after a failed provision.
-- `app/services/machine_agent_client.py` -- backend -> agent calls. The
+- `app/services/machine_agent_client.py`: backend-to-agent calls. The
   backend runs on Railway, off Fly's private 6PN network, so it calls the
   Machine over the Fly App's public edge (`<app>.fly.dev`) targeting the
   right instance with the `fly-force-instance-id` header. Every request
-  (both directions -- also used for the agent's heartbeat back to the
+  (both directions, also used for the agent's heartbeat back to the
   backend) is HMAC-signed with `MACHINE_AGENT_SIGNING_SECRET` over
   `machine_id:timestamp:sha256(body)`, checked with `hmac.compare_digest`
   and a 60s replay window. There is no Fly API token, no SSH, no shell
   endpoint anywhere in this path.
-- `app/api/machine.py` -- `GET/POST /api/machine{,/ensure,/start,/stop,/restart}`
+- `app/api/machine.py`: `GET/POST /api/machine{,/ensure,/start,/stop,/restart}`
   (JWT-authenticated, user-scoped) plus `POST /api/machine/agent/heartbeat`
   (HMAC-authenticated, called by the agent, not the browser).
-- `app/api/bots.py` -- `POST/GET /api/bots`, `DELETE /api/bots/{id}`.
+- `app/api/bots.py`: `POST/GET /api/bots`, `DELETE /api/bots/{id}`.
   Creating a bot calls `ensure_machine()` first (reuses the existing VM if
   there is one), inserts the `bots` row, then forwards a `start_bot` job to
   the agent if the machine is already running. Deleting a bot stops it on
-  the agent and marks the row `deleted` -- it never touches the machine
+  the agent and marks the row `deleted`; it never touches the machine
   itself.
 
 **Machine agent** (`backend/machine-agent/`, deployed as the VM image, not
@@ -337,7 +304,7 @@ filesystem) get restarted. On shutdown it stops every bot child first.
 (Debian-based), non-root `agent` user (uid 1000) runs the daemon and every
 bot process it spawns. `entrypoint.sh` runs as root only long enough to
 `chown` the freshly-mounted volume, then `exec su`s down to `agent` before
-starting uvicorn -- nothing in the actual daemon or bot processes runs as
+starting uvicorn. Nothing in the actual daemon or bot processes runs as
 root. Persistent layout on the volume, mounted at `/workspace`:
 
 ```text
@@ -348,7 +315,7 @@ root. Persistent layout on the volume, mounted at `/workspace`:
 ```
 
 **Resource model**: all Machines live under one shared Fly App
-(`FLY_APP`, default `kirobots-machines`) -- a Fly App is a
+(`FLY_APP`, default `kirobots-machines`): a Fly App is a
 networking/namespace unit, not the VM itself; the Machine is the VM, and
 each user gets exactly one Machine. No per-user Fly App, no per-bot Machine.
 Users never supply a Fly resource id themselves; every route resolves the
@@ -359,7 +326,7 @@ Machine from the authenticated user's `user_machines` row.
 timer is a later cron/job, not added here since the prompt said don't
 implement aggressive auto-shutdown yet), a real bot runtime/template system
 (a bot's `config.command` is currently caller-supplied and just gets
-`exec`'d as-is by the agent -- fine as the plumbing, but a real product
+`exec`'d as-is by the agent. Fine as the plumbing, but a real product
 would resolve bot "kind" to a fixed, server-approved command server-side
 rather than trusting whatever list of strings the client sends), and
 WebSocket log streaming (logs are polled via `GET /bots/{id}/logs` today,
@@ -380,7 +347,7 @@ MACHINE_AGENT_SIGNING_SECRET=           # random string, e.g. `openssl rand -hex
 
 `MACHINE_AGENT_SIGNING_SECRET` must be identical in the backend's env and
 baked into every Machine (it's injected per-Machine via `env` in
-`FlyProvider.create_machine`, so setting it once in Railway is enough --
+`FlyProvider.create_machine`, so setting it once in Railway is enough;
 nothing extra to configure on the Fly side).
 
 ### Fly.io setup
@@ -401,7 +368,7 @@ fly deploy --build-only --push
 
 Add the six env vars above to the existing backend service's variables (same
 place `SUPABASE_*`/`E2B_API_KEY` already live). No new Railway service is
-needed -- the machine agent isn't deployed to Railway, it's baked into the
+needed. The machine agent isn't deployed to Railway; it's baked into the
 Fly image and runs on Fly Machines.
 
 ### Local development
